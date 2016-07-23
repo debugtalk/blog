@@ -1,7 +1,7 @@
 ---
 title: Android App持续集成性能测试：使用Python实现UI自动化
 permalink: post/Android-performance-test-UI-Automation-with-Python
-tags: [Android, UI, Automation, Python]
+tags: [Android, UI, AutomationTest, Python]
 ---
 
 在进行Android App持续集成性能测试的时候，需要自动化实现UI层面的一些操作，常见的几种场景包括：

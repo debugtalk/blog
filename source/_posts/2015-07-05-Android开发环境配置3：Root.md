@@ -1,7 +1,7 @@
 ---
 title: Android开发环境配置3：Root
 permalink: post/android-development-environment-root
-tags: [Android, root]
+tags: [Android, root, 环境搭建]
 ---
 
 ## What is root

@@ -1,7 +1,7 @@
 ---
 title: Android开发环境配置1：详解Bootloader
 permalink: post/android-development-environment-bootloader
-tags: [Android, bootloader]
+tags: [Android, bootloader, 环境搭建]
 ---
 
 在刚接触Android开发时，通常需要对设备进行root操作，而在root之前，必须要做的一步就是先对设备的Bootloader进行解锁。那么什么是Bootloader？为什么必须要对Bootloader进行解锁？如何对Bootloader进行解锁？本文便围绕着几个问题展开进行介绍。

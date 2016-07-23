@@ -1,7 +1,7 @@
 ---
 title: Android开发环境配置2：详解Recovery
 permalink: post/android-development-environment-recovery
-tags: [Android, recovery]
+tags: [Android, recovery, 环境搭建]
 ---
 
 不管是尝试对Android手机进行刷机的普通用户，还是刚接触Android应用开发的开发者，都会接触到Recovery。本文将从什么是Recovery，怎么在Android设备中安装Recovery环境，如何使用Recovery几个方面对Android Recovery进行介绍。

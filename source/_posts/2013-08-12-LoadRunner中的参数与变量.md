@@ -1,7 +1,7 @@
 ---
 title: LoadRuner中的参数与变量
 permalink: post/loadrunner-parameter-variable
-tags: [脚本开发, 参数, 变量, LoadRunner]
+tags: [脚本开发, LoadRunner]
 ---
 
 在LoadRunner脚本开发中，经常会遇到参数与变量相互转换的情况，本文对常见的转换情形进行了方法总结。

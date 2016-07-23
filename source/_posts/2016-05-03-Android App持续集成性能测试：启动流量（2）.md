@@ -1,7 +1,7 @@
 ---
 title: Android App持续集成性能测试：启动流量（2）
 permalink: post/Android-performance-test-start-traffic-tcpdump-wireshark
-tags: [Android, traffic, tcpdump, wireshark]
+tags: [Android, 流量测试, tcpdump, wireshark]
 ---
 
 在上一篇文章中，介绍了一种测试Android App启动流量的方法。当时也提到了，通过读取`/proc/uid_stat/<UID>/`目录下的`tcp_rcv`和`tcp_snd`文件，只能得到App的流量总值，无法得到更细化的数据。

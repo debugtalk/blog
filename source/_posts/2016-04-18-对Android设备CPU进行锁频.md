@@ -1,7 +1,7 @@
 ---
 title: 对Android设备CPU进行锁频
 permalink: post/Android-CPU-lock-frequency
-tags: [Android, CPU, frequency]
+tags: [Android, CPU]
 ---
 
 本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。

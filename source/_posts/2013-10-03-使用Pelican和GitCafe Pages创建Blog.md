@@ -1,7 +1,7 @@
 ---
 title: 使用 Pelican + GitCafe Pages 创建 Blog
 permalink: post/Create-Blog-with-Pelican-and-GitCafe-Pages
-tags: [BlogDevelop, Pelican, Git]
+tags: [Pelican, Git]
 ---
 
 

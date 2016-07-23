@@ -1,7 +1,7 @@
 ---
 title: 敏捷团队协作：Confluence简易教程
 permalink: post/confluence-simple-tutorial
-tags: [Confluence]
+tags: [Confluence, 敏捷团队]
 ---
 
 ## 0、Confluence简介

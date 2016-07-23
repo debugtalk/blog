@@ -1,7 +1,7 @@
 ---
 title: Android开发环境配置4：配置Android设备
 permalink: post/android-development-environment-device-configuration
-tags: [Android, configuration]
+tags: [Android, 环境搭建]
 ---
 
 对于用于持续集成性能测试（或者自动化测试）的Android设备，在刷机之后需要进行一些配置。不同的Android系统版本在设置上会有些差异，但基本上都应包含的设置项都类似，如下是以Nexus 5为例进行说明。

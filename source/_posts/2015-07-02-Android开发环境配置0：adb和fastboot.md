@@ -1,7 +1,7 @@
 ---
 title: Android开发环境配置0：adb和fastboot
 permalink: post/android-development-environment-adb-and-fastboot
-tags: [Android, adb, fastboot]
+tags: [Android, adb, fastboot, 环境搭建]
 ---
 
 ## 1、安装adb和fastboot

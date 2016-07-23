@@ -1,7 +1,7 @@
 ---
 title: Android App持续集成性能测试：启动流量（1）
 permalink: post/Android-performance-test-start-traffic-uid-stat
-tags: [Android, traffic]
+tags: [Android, 流量测试]
 ---
 
 本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。

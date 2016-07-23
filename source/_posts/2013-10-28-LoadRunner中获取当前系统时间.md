@@ -1,7 +1,7 @@
 ---
 title: LoadRunner中获取当前系统时间
 permalink: post/loadrunner-get-system-time
-tags: [脚本开发, 系统时间, LoadRunner]
+tags: [脚本开发, LoadRunner]
 ---
 
 

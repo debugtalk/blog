@@ -1,7 +1,7 @@
 ---
 title: HTML字符实体(Character Entity)
 permalink: post/html-character-entity
-tags: Encoding
+tags: [Encoding, HTML]
 ---
 
 
