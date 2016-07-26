@@ -77,7 +77,7 @@ Jenkins有非常多的插件，可以实现各种功能的扩展。
 - 如果`Repository URL`是`HTTPS URL`形式的，那么`Credentials`就要采用GitHub用户名密码的校验方式；而且，如果在GitHub中开启了`2FA（two-factor authentication）`，那么还需要在GitHub中创建一个`Personal access token`，输入密码时将这个`Personal access token`作为密码进行输入。
 - 如果`Repository URL`是`SSH URL`形式的，那么就需要先在Jenkins所在的服务器上创建一个`SSH`秘钥对，并将公钥添加到GitHub的`SSH keys`中，然后在填写`Credentials`时，选择`SSH Username with private key`的校验方式，填入GitHub Username、SSH私钥、以及创建`SSH`秘钥对时设置的`Passphrase`。
 
-如果对Git权限校验的概念还比较模糊，可以参考《深入浅出Git权限校验》。
+如果对Git权限校验的概念还比较模糊，可以参考[《深入浅出Git权限校验》](/post/head-first-git-authority-verification)。
 
 在配置`Branches to build`时，可以采用多种形式，包括分支名称（`branchName`）、`tagName`、`commitId`等。其中分支名称的形式用的最多，例如，若是构建`master`分支，则填写`refs/heads/master`，若是构建`develop`分支，则填写`refs/heads/develop`。
 
@@ -169,7 +169,7 @@ Jenkins成功完成安装包上传后，`pgyer/fir.im`平台会生成一个二�
 
 这里需要用到另外一个插件，`description setter plugin`。安装该插件后，在`【Post-build Actions】`栏目中会多出`description setter`功能，可以实现构建完成后设置当次build的描述信息。这个描述信息不仅会显示在build页面中，同时也会显示在历史构建列表中。
 
-有了这个前提，要将二维码图片展示在历史构建列表中貌似就可以实现了，能直观想到的方式就是采用`HTML`的`img`标签，将`<img url='qr_code_url'>`写入到build描述信息中。
+有了这个前提，要将二维码图片展示在历史构建列表中貌似就可以实现了，能直观想到的方式就是采用`HTML`的`img`标签，将`<img src='qr_code_url'>`写入到build描述信息中。
 
 这个方法的思路是正确的，不过这么做以后并不会实现我们预期的效果。
 
@@ -181,7 +181,7 @@ Jenkins成功完成安装包上传后，`pgyer/fir.im`平台会生成一个二�
 
 另外还需要补充一个点。如果是使用`蒲公英（pyger）`平台，会发现每次上传安装包后返回的二维码图片是一个短链接，神奇的是这个短连接居然是固定的（对同一个账号而言）。这个短连接总是指向最近生成的二维码图片，但是对于二维码图片的唯一URL地址，平台并没有在响应中进行返回。在这种情况下，我们每次构建完成后保存二维码图片的URL链接就没有意义了。
 
-应对的做法是，每次上传完安装包后，通过返回的二维码图片短链接将二维码图片下载并保存到本地，然后在build描述信息中引用该图片的Jenkins地址即可。
+应对的做法是，每次上传完安装包后，通过返回的二维码图片短链接将二维码图片下载并保存到本地，然后在build描述信息中引用该图片在Jenkins中的地址即可。
 
 ### 收集编译成果物（Artifacts）
 
@@ -200,4 +200,4 @@ Jenkins成功完成安装包上传后，`pgyer/fir.im`平台会生成一个二�
 
 为了实现真正的`开箱即用`，我将Jenkins的配置文件和构建脚本抽离出来形成一套模板，只需要导入到Jenkins中，然后针对具体的项目修改少量配置信息，即可将这一套持续集成打包平台运行起来，实现和文章开头插图中完全相同的功能效果。
 
-详细内容请阅读《关于持续集成打包平台的Jenkins配置和构建脚本实现细节》。
+详细内容请阅读[《关于持续集成打包平台的Jenkins配置和构建脚本实现细节》](/post/iOS-Android-Packing-with-Jenkins-details)。
