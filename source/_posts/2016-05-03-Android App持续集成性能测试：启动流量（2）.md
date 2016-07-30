@@ -54,7 +54,7 @@ tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 2621
 
 好在`wireshark`有非常强大的筛选功能。对于本案例，我们可以先确定出美国服务器的host或IP，例如host为`ucus.ucweb.com`，那么我们就可以在筛选器中通过`http.host == "ucus.ucweb.com"`语句，即可筛选出所有本地与美国服务器的通讯交互数据。
 
-![](/images/wireshark_host_filter.png)
+![wireshark host filter](/images/wireshark_host_filter.png)
 
 对于更丰富的筛选功能，大家可以根据实际需求查询`wireshark`的帮助文档，在此就不再进行展开。
 
@@ -62,11 +62,11 @@ tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 2621
 
 首先，找出该次请求的`TCP Stream`。
 
-![](/images/wireshark_tcp_stream_menu.png)
+![wireshark tcp stream menu](/images/wireshark_tcp_stream_menu.png)
 
 在筛选出的`TCP Stream`中，将各条记录的Length进行求和，即可得到总的大小。
 
-![](/images/wireshark_tcp_stream_data.png)
+![wireshark tcp stream data](/images/wireshark_tcp_stream_data.png)
 
 例如，发送流量的总和，即`100.84.126.160`->`168.235.199.134`的总和，加和总值为3722bytes；接收流量的总和，即`168.235.199.134`->`100.84.126.160`的总和，加和总值为6300bytes。
 
@@ -74,11 +74,11 @@ tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 2621
 
 【Statistics】->【Endpoints】
 
-![](/images/wireshark_endpoints_menu.png)
+![wireshark endpoints menu](/images/wireshark_endpoints_menu.png)
 
 在Endpoints界面中，选择`TCP` tab，勾选“Limit to display filter”，即可看到通讯流量汇总数据。
 
-![](/images/wireshark_tcp_stream_data.png)
+![wireshark tcp stream data](/images/wireshark_tcp_stream_data.png)
 
 可以看出，这个的汇总数值与前面计算得到的数值完全相同。
 

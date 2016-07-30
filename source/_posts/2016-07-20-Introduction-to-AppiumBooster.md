@@ -14,11 +14,11 @@ You can write testcases in any table tools, including MS Excel and iWork Numbers
 
 Take DJI+ Discover's login and logout function as an example.
 
-![](/images/preview_login_and_logout.png)
+![preview of login and logout](/images/preview_login_and_logout.png)
 
 In order to test these functions above, you can write testcases in tables like this.
 
-![](/images/testcase_login_and_logout.png)
+![testcases of login and logout](/images/testcase_login_and_logout.png)
 
 After the testcases are finished, export to CSV format, and put the csv files under `ios/testcases/` directory.
 

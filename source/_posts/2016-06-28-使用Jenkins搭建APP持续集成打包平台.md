@@ -12,8 +12,8 @@ tags: [Jenkins, iOS, Android, CI]
 
 首先，先给大家展示下平台建设完成后的整体效果：
 
-![](/images/Jenkins_Job_Overview.jpg)
-![](/images/Jenkins_Job_Build_View.jpg)
+![Overview of Jenkins Job](/images/Jenkins_Job_Overview.jpg)
+![Build view of Jenkins Job](/images/Jenkins_Job_Build_View.jpg)
 
 该平台主要实现的功能有3点：
 

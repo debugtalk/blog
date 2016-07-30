@@ -62,11 +62,11 @@ Confluence内置了大量的模板，可辅助用于项目工作的各个环节�
 
 创建空间的方式很简单，可以从顶部菜单进行创建：【Spaces】->【Create Space】；也可以从Dashboard页面的Spaces页面中进行创建。
 
-![](/images/Confluence_Dashboard.png)
+![Confluence Dashboard](/images/Confluence_Dashboard.png)
 
 进入创建空间页面后，需要选择空间类型。这个需要根据空间的用途进行选择，对于团队协作的空间，推荐选择“Team Space”，如果实在不知道选择什么类型，选择“Blank Space”也是可以的。
 
-![](/images/Confluence_Create_Space.png)
+![Create space in Confluence](/images/Confluence_Create_Space.png)
 
 然后是填写空间的基本信息。所有类型的空间都有两个必填字段，Space name和Space key。Space key可以理解为空间的ID，不同空间的Space key不能重复，但Space name是可以重复的。
 
@@ -74,7 +74,7 @@ Confluence内置了大量的模板，可辅助用于项目工作的各个环节�
 
 需要说明的是，空间创建完成后，Space key字段是不能修改的，其它字段以及团队成员都可以进行修改。
 
-![](/images/Confluence_Create_Team_Space.png)
+![Create team space in Confluence](/images/Confluence_Create_Team_Space.png)
 
 ### 配置空间权限
 
@@ -82,11 +82,11 @@ Confluence内置了大量的模板，可辅助用于项目工作的各个环节�
 
 操作方式如下：首先进入空间的页面，在空间左下角中，【Space tools】->【Permissions】，进入权限管理页面。
 
-![](/images/Confluence_Permissions_menu.png)
+![Permissions menu of Confluence](/images/Confluence_Permissions_menu.png)
 
 Confluence的权限控制比较完善，可以根据团队规范进行较为精细粒度的设置。
 
-![](/images/Confluence_Permissions_Setting.png)
+![Permissions settings of Confluence](/images/Confluence_Permissions_Setting.png)
 
 ### 添加文档
 
@@ -94,7 +94,7 @@ Confluence的权限控制比较完善，可以根据团队规范进行较为精�
 
 推荐的创建方式是，先进入父目录的页面，然后再点击【Create】进行创建。在创建文档页面中，可以看到新建文档的“Parent”，表示新文档创建后将位于“Parent”文件的下一个层级中。
 
-![](/images/Confluence_Create_Page.png)
+![Create page in Confluence](/images/Confluence_Create_Page.png)
 
 在新建文档时，需要选择文档模板。这个就根据文档的实际类型或用途进行选择即可，如果觉得都不合适，就选择“Blank page”。
 
@@ -104,7 +104,7 @@ Confluence的权限控制比较完善，可以根据团队规范进行较为精�
 
 Confluence也集成了许多编辑工具，可以很方便地插入图表、链接、附件、代办列表等等。如果还不满足需求，可以点击【Insert】->【Other macros】，查找更多的扩展插件。
 
-![](/images/Confluence_Edit_Page.png)
+![Edit page of Confluence](/images/Confluence_Edit_Page.png)
 
 例如，Confluence默认是不支持Markdown编辑模式的，如果想采用Markdown来编写文档，就可以通过上述方式到插件市场寻找Markdown的插件。
 
@@ -116,8 +116,8 @@ Confluence也集成了许多编辑工具，可以很方便地插入图表、链�
 
 操作方式如下：先进入到待移动的文档页面中，点击页面右上角的【...】->【Move】；
 
-![](/images/Confluence_Move_Page_menu.png)
+![Move page menu of Confluence](/images/Confluence_Move_Page_menu.png)
 
 然后选择新的目录即可。
 
-![](/images/Confluence_Move_Page.png)
+![Move page of Confluence](/images/Confluence_Move_Page.png)
