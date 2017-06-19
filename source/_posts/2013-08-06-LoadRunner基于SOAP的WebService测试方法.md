@@ -4,7 +4,6 @@ permalink: post/LoadRunner-SOAP-WebService
 tags: [LoadRunner, WebService, SOAP]
 ---
 
-
 在《LoadRunner基于WSDL的WebService测试方法》一文中，`52test.org`基于案例[天气预报WebService服务](
 http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx)，详细讲解了在只获悉WSDL的情况下，如何采用LoadRunner对WebService进行测试。
 
@@ -30,7 +29,7 @@ SOAP是Simple Object Access Protocol的缩写，从字面上就可以知道它�
 
 本文中采用的LoadRunner版本为V11.0，不同版本可能会存在一定差异。
 
-## 1. 获取SOAP报文
+## 获取SOAP报文
 
 基于SOAP对WebService进行测试，第一步当然是要先获取到被测接口的SOAP报文，通常可在被测系统的接口设计说明文档（如果有的话）中查询得到，也可直接找开发人员获取。
 
@@ -64,7 +63,7 @@ SOAPAction: "http://WebXml.com.cn/getWeatherbyCityName"
 - Service的URL为`/WebServices/WeatherWebService.asmx`，加上被测系统的域名后得到完整的URL为http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx
 - SOAPAction: "http://WebXml.com.cn/getWeatherbyCityName"
 
-## 2. 在LoadRunner中导入SOAP报文
+## 在LoadRunner中导入SOAP报文
 
 在LoadRunner的Web Services协议中，点击【Import SOAP】，加载之前准备好的SOAP报文，即xml文件；加载完成后，在URL和SOAP Action中分别填入获取得到的地址信息；在Response Parameter中填写存储返回内容的参数名称；如下图所示。
 
@@ -76,7 +75,7 @@ SOAPAction: "http://WebXml.com.cn/getWeatherbyCityName"
 
 通过上图可知，SOAP报文中的全部内容已成功转换为LoadRunner的soap_request函数。
 
-## 3. 回放脚本，查看结果
+## 回放脚本，查看结果
 
 将脚本中的字段theCityName赋值为“广州”；在“Run-time Settings”中打开日志“Extended log”，勾选“Parameter substitution”和“Data returned by server”。运行脚本后，查看“Replay Log”，如下图所示。
 

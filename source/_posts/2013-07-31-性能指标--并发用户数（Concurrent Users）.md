@@ -4,15 +4,14 @@ permalink: post/performance-index-concurrent-users
 tags: [性能指标, 并发用户数]
 ---
 
-
 **并发用户数**是指：在某一时间点，与被测目标系统同时进行交互的客户端用户的数量。
 
 并发用户数有以下几种含义：
 
-### 1. 并发虚拟用户数（Concurrent Virtual Users，Users_CVU）
+### 并发虚拟用户数（Concurrent Virtual Users，Users_CVU）
 在使用专用的测试工具（如Loadrunner、Jmeter）时用于模拟客户端用户的进程或线程的数量；该参数是针对*客户端*（generator）而言的。
 
-### 2. 有效并发虚拟用户数（Effective Concurrent Virtual Users，Users_ECVU）
+### 有效并发虚拟用户数（Effective Concurrent Virtual Users，Users_ECVU）
 被评估目标系统实际感受到的等效于业务请求压力的无思考时间的并发用户数；该参数是针对被评估的*目标系统*（Target System）而言的。
 
 如果使用测试工具对目标系统进行压力加载时设定了思考时间（Think Time），那么实际有效的并发虚拟用户数可使用如下公式计算得出：
@@ -29,7 +28,7 @@ Users_ECVU=Users_CVU*Time_ART/(Time_ART+Time_TotalThinkTime)
 - 增加思考时间意味着减少对目标系统的业务请求压力；
 - 当思考时间为零时，有效并发虚拟用户数与并发虚拟用户数相等。
 
-### 3. 内在并发用户数（Limited Concurrent Users，Users_LCU）
+### 内在并发用户数（Limited Concurrent Users，Users_LCU）
 
 目标系统内部能够同时并行处理的客户端用户数。
 
@@ -39,7 +38,7 @@ Users_ECVU=Users_CVU*Time_ART/(Time_ART+Time_TotalThinkTime)
 
 当 Users_ECVU>Users_LCU 时，目标系统会利用内部的请求调度机制将多出的请求进行排队并在所有的用户请求之间进行任务切换处理，外在表现就是被加载交易的响应时间开始延长。
 
-### 4. 并发在线用户数（Concurrent Online Users，Users_COU）
+### 并发在线用户数（Concurrent Online Users，Users_COU）
 
 一般是指实际生产系统中已经和目标系统建立了会话连接的用户总数，并发在线用户数通常是指实际的客户端操作员的数量，是人工发起的业务会话的数量。
 

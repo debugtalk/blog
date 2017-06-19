@@ -6,7 +6,7 @@ tags: [脚本开发, LoadRunner]
 
 在LoadRunner脚本开发中，经常会遇到参数与变量相互转换的情况，本文对常见的转换情形进行了方法总结。
 
-## 1、变量的赋值
+## 变量的赋值
 ```C
 //将字符串赋值给变量
 char strTemp[30];
@@ -30,8 +30,7 @@ int x = 10;
  */
 ```
 
-
-## 2、参数的赋值
+## 参数的赋值
 ```C
 //将字符串赋值给参数
 lr_save_string("Hello World!!","paraStr");
@@ -49,8 +48,7 @@ int num = 10;
 lr_save_int(num*2, "paraNum");
 ```
 
-
-## 3、参数的取值
+## 参数的取值
 ```C
 //从参数中进行取值，不管参数是字符串还是数值
 lr_eval_string("{paraStr}");
@@ -59,8 +57,7 @@ lr_eval_string("{paraNum}");
 lr_output_message("%s", lr_eval_string("{paraNum}"));
 ```
 
-
-## 4、参数=>变量
+## 参数=>变量
 ```C
 //将参数转换为字符串变量，参数paraStr中的值为"Hello World!!"
 char strTemp[30];
@@ -79,8 +76,7 @@ sprintf(varRandomSeatPref, "{SeatPrefList_%d}", 1+rand()%SeatPrefListCount);
 sprintf(varRandomDepartDate, "%d/%d/%d", 1+rand()%12, 1+rand()%28, 2009+rand()%6);
 ```
 
-
-## 5、参数=>参数
+## 参数=>参数
 ```C
 //参数的复制：将参数paraStr_1的值复制到参数paraStr_2
 lr_save_string(lr_eval_string("{paraStr_1}"),"paraStr_2");

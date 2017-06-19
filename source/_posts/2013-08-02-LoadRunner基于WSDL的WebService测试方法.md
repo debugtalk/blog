@@ -16,13 +16,13 @@ http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx)。
 
 本文中采用的LoadRunner版本为V11.0，不同版本可能会存在一定差异。
 
-## 1、选择Web Services协议
+## 选择Web Services协议
 
 采用Loadrunner测试WebService时，在单协议里面选择Web Services即可。当然，这并不意味着Loadrunner测试WebService只能采用Web Services协议，在后续的文章中将向大家介绍如何通过HTTP协议来测试WebService。
 
 ![](/images/130802_01.png)
 
-## 2、导入WebService的描述信息WSDL
+## 导入WebService的描述信息WSDL
 
 WSDL 是基于 XML 的用于描述 WebService 以及如何访问 WebService 的语言，它对具体的 WebService 进行了描述，规定了服务的位置，以及此服务所提供的操作（或方法，或服务调用接口API）。如果你熟悉WSDL的文档结构，可以直接阅读WSDL获取相关信息。
 
@@ -61,7 +61,7 @@ WSDL 是基于 XML 的用于描述 WebService 以及如何访问 WebService 的�
 
 明白了两种导入方式的特点之后，大家可以根据实际需求进行选择。
 
-## 3、查看WebService服务接口
+## 查看WebService服务接口
 
 在成功导入WSDL以后，在【Operation】栏目下即可看到所有可供调用的接口。值得注意的是，在本测试案例中，每个接口均包含2个`Port Name`，这是因为该WebService为每个服务接口提供了SOAP1.1和SOAP1.2两个版本的SOAP调用方式。
 
@@ -71,7 +71,7 @@ WSDL 是基于 XML 的用于描述 WebService 以及如何访问 WebService 的�
 
 ![](/images/130802_07.png)
 
-## 4、创建调用函数web_service_call
+## 创建调用函数web_service_call
 
 在LoadRunner中导入WSDL之后，便可以对WebService接口进行调用。
 
@@ -103,7 +103,7 @@ LoadRunner提供的调用函数为web_service_call。调用该函数时，可以
 
 通过上图可知，之前我们在可视化界面的所有设置均已转换至web_service_call函数。
 
-## 5、回放脚本，查看结果
+## 回放脚本，查看结果
 在“Run-time Settings”中打开日志“Extended log”，勾选“Parameter substitution”和“Data  returned by server”。运行脚本后，查看“Replay Log”，如下图所示。
 
 ![](/images/130802_12.png)
@@ -120,7 +120,7 @@ theWeatherInfo = <getWeatherbyCityNameResult XmlType="DynamicParameter"><string>
 
 通过对比LoadRunner的Replay Log和浏览器的返回页面可知，LoadRunner对Web Service进行了正确的调用。
 
-## 6、完善脚本
+## 完善脚本
 
 脚本虽已调试成功，可以得到正确的结果。但若要进行性能测试，我们还需对脚本进行参数化，如下图所示。
 

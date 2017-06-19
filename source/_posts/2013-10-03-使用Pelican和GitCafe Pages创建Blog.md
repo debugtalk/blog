@@ -4,7 +4,6 @@ permalink: post/Create-Blog-with-Pelican-and-GitCafe-Pages
 tags: [Pelican, Git]
 ---
 
-
 ## 博客系统的技术实现
 
 博客系统采用 Pelican + GitCafe Pages 的技术架构。
@@ -12,7 +11,6 @@ tags: [Pelican, Git]
 其中，Pelican是一个由Python开发的用于生成静态页面的程序，可以将markdown等格式的文本生成模版格式化的html静态页面；而GitCafe提供的Pages服务可以通过项目的形式对Pelican生成的html文件进行托管，并可通过域名绑定的形式实现独立域名。
 
 这种实现方式与 Jekyll + Github Pages 的实现方式大致相同，差别在于不同的静态页面生成系统和不同的托管平台。而为什么选择GitCafe而非GitHub，是因为GitHub服务器在国外，访问速度较慢，且存在偶尔无法访问的情况。
-
 
 ## 博客系统的初始化
 
@@ -28,7 +26,6 @@ pelican-quickstart
 ```
 
 根据提示一步步输入相应的配置项，完成配置后在Blog目录下会生成配置文件pelicanconf.py。但通过pelican-quickstart配置的选项较少，更多的配置选项可以参照Pelican官方网站中的教程对pelicanconf.py进行编辑。
-
 
 ## 配置GitCafe
 
@@ -98,7 +95,6 @@ Hi USERNAME! You've successfully authenticated, but GitCafe does not provide she
 
 测试通过后，就可以通过Git客户端向GitCafe服务器上传博客内容了。
 
-
 ## 撰写文章
 
 在 content 目录下用 Markdown 语法来写一篇文章，格式大致如下所示，文件保存后缀为`.md`。
@@ -111,7 +107,6 @@ Slug: my-first-post #URL
 文章内容
 ```
 
-
 ## 生成html静态页面
 
 创建输出目录
@@ -123,7 +118,6 @@ mkdir leolee
 ```shell
 pelican -s pelicanconf.py content -o leolee
 ```
-
 
 ## 上传到 GitCafe
 
@@ -168,7 +162,6 @@ git push -u origin gitcafe-pages
 push 完成以后就可以在访问 GitCafe Pages 地址了。 http://leolee.gitcafe.com
 
 注：不要用 make html 来构建 Blog ，它会删除输出目录后重新生成 Blog ，这意味着会删除 .git 库。
-
 
 ## 更新博客
 
@@ -228,7 +221,6 @@ $ make serve
 ```
 
 然后在浏览器中访问 http://localhost:8000 即可进行本地预览。
-
 
 ## 参考文章
 ```url

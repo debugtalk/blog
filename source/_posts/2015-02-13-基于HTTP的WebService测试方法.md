@@ -4,7 +4,6 @@ permalink: post/WebService-Test-Based-On-HTTP
 tags: [HTTP, WebService, Fiddler, LoadRunner]
 ---
 
-
 在《基于WSDL或SOAP的WebService测试方法--对原理的思考》一文中写道：
 
 > 从通讯协议层面上来看，SOAP报文只是对传输的内容进行了格式封装，具体传输实现还是依赖于其它应用层协议（如HTTP）。因此我们在测试WebService时，完全可以抛开WSDL和SOAP，直接从HTTP协议层面获取请求和响应的内容，然后采用测试工具构造HTTP请求，实现对WebService的调用。

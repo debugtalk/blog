@@ -60,8 +60,8 @@ http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx?WSDL)对服�
 
 后续，[52test.org](http://52test.org)将基于WeatherWebService天气服务，分3篇文章分别对采用LoadRunner测试WebService的方法进行详细介绍，并进行案例演示。
 
-- LoadRunner基于WSDL的WebService测试方法
-- LoadRunner基于SOAP的WebService测试方法
-- LoadRunner基于HTTP的WebService测试方法
+- 《LoadRunner基于WSDL的WebService测试方法》
+- 《LoadRunner基于SOAP的WebService测试方法》
+- 《LoadRunner基于HTTP的WebService测试方法》
 
 敬请期待！

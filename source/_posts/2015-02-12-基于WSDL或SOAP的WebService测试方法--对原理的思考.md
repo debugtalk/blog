@@ -4,7 +4,6 @@ permalink: post/Introspection-on-WebService-Test
 tags: [WebService, WSDL, SOAP]
 ---
 
-
 截止至今，我们已经总结了两种WebService测试方法，分别对应了两种应用场景：
 
 - 在只获知WSDL的情况下，如何采用LoadRunner测试WebService

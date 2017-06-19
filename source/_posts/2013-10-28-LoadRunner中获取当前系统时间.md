@@ -4,7 +4,6 @@ permalink: post/loadrunner-get-system-time
 tags: [脚本开发, LoadRunner]
 ---
 
-
 ## 引言
 
 在测试场景中，常会遇到需要提交系统时间的情况。本文对使用LoadRunner获取系统时间的几种方法进行探讨。
@@ -16,14 +15,13 @@ tags: [脚本开发, LoadRunner]
 - 方法三：使用C语言标准函数库中的time()和ctime()
 - 方法四：使用C语言的tm结构，把时间分解成若干元素，再根据需求进行重组
 
-
 ## 方法一：使用LR的参数化功能
 
 操作步骤：
 
-1、在Parameter List窗口中新建一个参数localtime_now，Parameter type选择为【Date/Time】  
-2、设置Date/Time format，具体格式可参照帮助手册，例如%Y-%m-%d %H:%M:%S对应的是2013-10-28 16:43:06  
-3、在脚本中，利用函数lr_eval_string将参数localtime_now转换为变量tt_1  
+1、在Parameter List窗口中新建一个参数localtime_now，Parameter type选择为【Date/Time】
+2、设置Date/Time format，具体格式可参照帮助手册，例如%Y-%m-%d %H:%M:%S对应的是2013-10-28 16:43:06
+3、在脚本中，利用函数lr_eval_string将参数localtime_now转换为变量tt_1
 4、在脚本中引用变量tt_1
 
 对应的脚本如下：
@@ -36,7 +34,6 @@ lr_message("系统当前的时间为：%s", tt_1);
 
 运行结果：
 系统当前的时间为：2013-10-28 16:43:06
-
 
 ## 方法二：使用LR函数lr_save_datetime()
 
@@ -53,7 +50,6 @@ lr_message("系统当前的时间为：%s", tt_2);
 运行结果：
 系统当前的时间为：2013-10-28 17:43:16
 
-
 ## 方法三：使用C语言标准函数库中的time()和ctime()
 
 对应的脚本如下：
@@ -66,7 +62,6 @@ lr_message("系统当前的时间为：%s", ctime(&tt_3));
 
 运行结果：
 系统当前的时间为：Mon Oct 28 17:43:16 2013
-
 
 ## 方法四：tm结构分解
 
