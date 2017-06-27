@@ -233,6 +233,111 @@ script:
 
 ![](/images/travis-status-image-url.jpg)
 
+## 为项目添加单元测试覆盖率检查（coveralls）
+
+对项目添加持续集成构建检查以后，就能完全保证我们提交的代码运行没问题么？
+
+答案是并不能。试想，假如我们整个项目中就只有一条单元测试用例，甚至这一条单元测试用例还是个假用例，即没有调用任何代码，那么可想而知，我们的持续集成构建检查总是成功的，并没有起到检查的作用。
+
+因此，这里还涉及到一个单元测试覆盖率的问题。
+
+怎么理解单元测试覆盖率呢？简单地说，就是我们在执行单元测试时运行代码的行数，与项目总代码数的比值。
+
+对于主流的编程语言，都存在大量的覆盖率检查工具，可以帮助我们快速统计单元测试覆盖率。在Python中，用的最多的覆盖率检查工具是[`coverage`][coverage]。
+
+要使用[`coverage`][coverage]，需要先进行安装，采用`pip`的安装方式如下：
+
+```bash
+$ pip install coverage
+```
+
+然后，我们就可以采用如下命令执行单元测试。
+
+```bash
+$ coverage run --source=ate -m unittest discover
+```
+
+这里需要说明的是，`--source`参数的作用是指定统计的目录，如果不指定该参数，则会将所有依赖库也计算进去，但由于很多依赖库在安装时是没有包含测试代码的，因此会造成统计得到的单元测试覆盖率远低于实际的情况。在上面的命令中，就只统计了`ate`目录下的单元测试覆盖率；如果要统计当前项目的覆盖率，那么可以指定`--source=.`（即当前目录下的所有子文夹）。
+
+采用上述命令执行完单元测试后，会在当前目录下生成一个统计结果文件，`.coverage`，里面包含了详细的统计结果。
+
+```text
+cat .coverage
+!coverage.py: This is a private format, don't read it directly!{"lines":{"/Users/Leo/MyProjects/ApiTestEngine/ate/__init__.py":[1],"/Users/Leo/MyProjects/
+ApiTestEngine/ate/testcase.py":[1,2,4,6,9,15,42,7,12,40,46,64,67,68,69,70,48,49,62,72,74,13,65,51,52,53,56,60,58,54,55],"/Users/Leo/MyProjects/ApiTestEngi
+ne/ate/exception.py":[2,4,5,9,12,15,16,6,7],"/Users/Leo/MyProjects/ApiTestEngine/ate/utils.py":[1,2,3,4,5,7,9,11,12,14,15,18,22,25,47,51,55,65,77,90,129,1
+41,27,31,32,19,20,23,34,41,43,45,56,57,59,60,48,49,154,163,166,170,172,173,174,176,177,181,182,183,186,187,189,91,92,66,67,72,73,74,94,95,97,98,101,102,78
+,80,81,82,84,85,88,103,104,106,108,110,115,121,122,124,125,127,58,52,53,184,185,109,116,118,119,112,113,132,134,135,136,137,139,63,164,155,157,158,159,161
+,167,168,192,68,69],"/Users/Leo/MyProjects/ApiTestEngine/ate/context.py":[1,3,5,6,10,16,30,45,7,8,25,26,28,41,42,43,49,55,58,59,63,64,56,74,65,68,69,72,66
+,27,13,14,50,53,52,70],"/Users/Leo/MyProjects/ApiTestEngine/ate/main.py":[1,2,4,7,9,10,15,21,38,51,25,27,28,29,30,32,33,11,12,13,34,36,42,43,45,46,47,49],
+"/Users/Leo/MyProjects/ApiTestEngine/ate/runner.py":[1,3,4,5,8,10,15,46,68,97,135,11,12,13,35,36,38,39,41,42,44,82,63,65,66,84,86,87,88,92,93,94,95,124,12
+6,127,128,129,130,131,133,154]}}%
+```
+
+但是，这个结果就不是给人看的。要想直观地看到统计报告，需要再执行命令`coverage report -m`，执行完后，就可以看到详细的统计数据了。
+
+```bash
+➜  ApiTestEngine git:(master) ✗ coverage report -m
+Name               Stmts   Miss  Cover   Missing
+------------------------------------------------
+ate/__init__.py        0      0   100%
+ate/context.py        35      0   100%
+ate/exception.py      11      2    82%   10, 13
+ate/main.py           34      7    79%   18-19, 54-62
+ate/runner.py         44      2    95%   89-90
+ate/testcase.py       30      0   100%
+ate/utils.py         112      8    93%   13, 29, 36-39, 178-179
+------------------------------------------------
+TOTAL                266     19    93%
+```
+
+通过这个报告，可以看到项目整体的单元测试覆盖率为`93%`，并清晰地展示了每个源代码文件的具体覆盖率数据，以及没有覆盖到的代码行数。
+
+那要怎么将覆盖率检查添加到我们的持续集成（Travis CI）中呢？
+
+事实上，当前存在多个可选服务，可以与`Travis CI`配合使用。当前，使用得比较广泛的是[`coveralls`][coveralls]，针对Public类型的GitHub仓库，这也是一个免费服务。
+
+[`coveralls`][coveralls]的使用方式与[`Travis CI`][travis-ci]类似，也需要先在[`coveralls`][coveralls]网站上采用GitHub账号授权登录，然后开启需要进行检查的GitHub仓库。而要执行的命令，也可以在`.travis.yml`配置文件中指定。
+
+增加覆盖率检查后的`.travis.yml`配置文件内容如下。
+
+```yaml
+sudo: false
+language: python
+python:
+  - 2.7
+  - 3.3
+  - 3.4
+  - 3.5
+  - 3.6
+install:
+  - pip install -r requirements.txt
+  - pip install coverage
+  - pip install coveralls
+script:
+  - coverage run --source=. -m unittest discover
+after_success:
+  - coveralls
+```
+
+如上配置应该也很好理解，要使用`coveralls`的服务，需要先安装`coveralls`。在采用`coverage`执行完单元测试后，要将结果上报到[`coveralls`][coveralls]网站，需要再执行`coveralls`命令。由于`coveralls`命令只有在测试覆盖率检查成功以后运行才有意义，因此可将其放在`after_success`部分。
+
+配置完毕后，后续每次提交代码时，`GitHub`就会调用`Travis CI`实现构建检查，并同时统计得到单元测试覆盖率。
+
+下图是某次提交代码时的覆盖率检查。
+
+![](/images/coveralls-result.jpg)
+
+另外，我们在`GitHub`项目的`README.md`中也同样可以添加一个`Status Image`，实时显示项目的单元测试覆盖率。
+
+![](/images/github-coveralls-badge.jpg)
+
+配置方式也跟之前类似，在[`coveralls`][coveralls]中获取到项目`Status Image`的URL地址，然后添加到`README.md`即可。
+
+![](/images/coveralls-image-url.jpg)
+
+最后需要说明的是，项目的单元测试覆盖率只能起到参考作用，没有被单元测试覆盖到的代码我们不能说它肯定有问题，100%覆盖率的代码也并不能保证它肯定没有问题。归根结底，这还是要依赖于单元测试的策略实现，因此我们在写单元测试的时候也要尽可能多地覆盖到各种逻辑路径，以及兼顾到各种异常情况。
+
 ## 写在后面
 
 通过本文中的工作，我们就对项目搭建好了测试框架，并实现了持续集成构建检查机制。从下一篇开始，我们就将开始逐步实现接口自动化测试框架的核心功能特性了。
@@ -248,3 +353,5 @@ script:
 [api_server]: https://github.com/debugtalk/ApiTestEngine/blob/master/test/api_server.py
 [locust-test-webserver]: https://github.com/locustio/locust/blob/master/locust/test/test_web.py
 [travis-ci]: https://travis-ci.org/
+[coverage]: https://coverage.readthedocs.io
+[coveralls]: https://coveralls.io

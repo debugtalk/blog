@@ -1,6 +1,6 @@
 ---
 title: ApiTestEngine 演化之路（1）搭建基础框架
-permalink: post/ApiTestEngine-0-setup-basic-framework
+permalink: post/ApiTestEngine-1-setup-basic-framework
 tags:
   - 自动化测试
   - 测试框架
