@@ -5,6 +5,7 @@ tags:
   - 自动化测试
   - 测试框架
   - Mock
+  - ApiTestEngine
 ---
 
 在[《接口自动化测试的最佳工程实践（ApiTestEngine）》][ApiTestEngine-Intro]一文中，我详细介绍了[`ApiTestEngine`][ApiTestEngine]诞生的背景，并对其核心特性进行了详尽的剖析。
