@@ -1,5 +1,5 @@
 ---
-title: ApiTestEngine 演化之路（0）开发未动，测试先行
+title: ApiTestEngine 演进之路（0）开发未动，测试先行
 permalink: post/ApiTestEngine-0-setup-CI-test
 tags:
   - 自动化测试
@@ -10,7 +10,7 @@ tags:
 
 在[《接口自动化测试的最佳工程实践（ApiTestEngine）》][ApiTestEngine-Intro]一文中，我详细介绍了[`ApiTestEngine`][ApiTestEngine]诞生的背景，并对其核心特性进行了详尽的剖析。
 
-接下来，我将在《ApiTestEngine演化之路》系列文章中讲解[`ApiTestEngine`][ApiTestEngine]是如何从第一行代码开始，逐步实现接口自动化测试框架的核心功能特性的。
+接下来，我将在《ApiTestEngine演进之路》系列文章中讲解[`ApiTestEngine`][ApiTestEngine]是如何从第一行代码开始，逐步实现接口自动化测试框架的核心功能特性的。
 
 相信大家都有听说过`TDD`（`测试驱动开发`）这种开发模式，虽然网络上对该种开发模式存在异议，但我个人是非常推荐使用该种开发方式的。关于`TDD`的优势，我就不在此赘述了，我就只说下自己受益最深的两个方面。
 

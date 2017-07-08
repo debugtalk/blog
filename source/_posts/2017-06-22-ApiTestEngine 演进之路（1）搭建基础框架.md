@@ -1,5 +1,5 @@
 ---
-title: ApiTestEngine 演化之路（1）搭建基础框架
+title: ApiTestEngine 演进之路（1）搭建基础框架
 permalink: post/ApiTestEngine-1-setup-basic-framework
 tags:
   - 自动化测试
@@ -8,7 +8,7 @@ tags:
   - ApiTestEngine
 ---
 
-在[《ApiTestEngine 演化之路（0）开发未动，测试先行》][ApiTestEngine-dev-0]一文中，我对[`ApiTestEngine`][ApiTestEngine]项目正式开始前的准备工作进行了介绍，包括构建API接口服务（`Mock Server`）、搭建项目单元测试框架、实现持续集成构建检查机制（[`Travis CI`][travis-ci]）等。
+在[《ApiTestEngine 演进之路（0）开发未动，测试先行》][ApiTestEngine-dev-0]一文中，我对[`ApiTestEngine`][ApiTestEngine]项目正式开始前的准备工作进行了介绍，包括构建API接口服务（`Mock Server`）、搭建项目单元测试框架、实现持续集成构建检查机制（[`Travis CI`][travis-ci]）等。
 
 接下来，我们就开始构建[`ApiTestEngine`][ApiTestEngine]项目的基础框架，实现基本功能吧。
 
@@ -241,7 +241,7 @@ def diff_json(current_json, expected_json):
 ## 阅读更多
 
 - [《接口自动化测试的最佳工程实践（ApiTestEngine）》][ApiTestEngine-Intro]
-- [《ApiTestEngine 演化之路（0）开发未动，测试先行》][ApiTestEngine-dev-0]
+- [《ApiTestEngine 演进之路（0）开发未动，测试先行》][ApiTestEngine-dev-0]
 - [`ApiTestEngine` GitHub源码][ApiTestEngine]
 
 
