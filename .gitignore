@@ -8,6 +8,7 @@ public/
 .sync/*
 
 .me_configs.data
+.python-version
 
 .z_sync_configs.data
 
