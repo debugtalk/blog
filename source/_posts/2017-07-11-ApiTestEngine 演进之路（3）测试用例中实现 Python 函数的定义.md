@@ -320,7 +320,7 @@ print(varA) # => I am varA
 
 我采取的做法是，在测试用例中新增一个`import_module_functions`模块，里面可填写多个模块的路径。而测试用例中所有需要使用的函数，都定义在对应路径的模块中。
 
-我们再回到之前的案例，在测试用例中需要用到`gen_random_string`和`gen_md5`这两个函数函数，那么就可以将其定义在一个模块中，假设模块名称为`custom_functions.py`，相对于项目根目录的路径为`test/data/custom_functions.py`。
+我们再回到之前的案例，在测试用例中需要用到`gen_random_string`和`gen_md5`这两个函数函数，那么就可以将其定义在一个模块中，假设模块名称为`custom_functions.py`，相对于项目根目录的路径为`tests/data/custom_functions.py`。
 
 ```python
 import hashlib
@@ -337,7 +337,7 @@ def gen_md5(*args):
 
 需要注意的是，这里的模块文件可以放置在系统的任意路径下，但是一定要保证它可作为`Python`的模块进行访问，也就是说在该文件的所有父目录中，都包含`__init__.py`文件。这是`Python`的语法要求，如不理解可查看官方文档。
 
-然后，在`YAML/JSON`测试用例描述的`import_module_functions`栏目中，我们就可以写为`test.data.custom_functions`。
+然后，在`YAML/JSON`测试用例描述的`import_module_functions`栏目中，我们就可以写为`tests.data.custom_functions`。
 
 新的用例描述形式就变成了如下样子。
 
@@ -345,7 +345,7 @@ def gen_md5(*args):
 - test:
     name: create user which does not exist
     import_module_functions:
-        - test.data.custom_functions
+        - tests.data.custom_functions
     variable_binds:
         - TOKEN: debugtalk
         - json: {"name": "user", "password": "123456"}

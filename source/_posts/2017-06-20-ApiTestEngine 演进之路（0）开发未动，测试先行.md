@@ -102,9 +102,9 @@ def update_user(uid):
 接口服务就绪后，按照`Flask`官方文档，可以通过如下方式进行启动：
 
 ```text
-$ export FLASK_APP=test/api_server.py
+$ export FLASK_APP=tests/api_server.py
 $ flask run
- * Serving Flask app "test.api_server"
+ * Serving Flask app "tests.api_server"
  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 ```
 
@@ -131,7 +131,7 @@ API接口服务（`Mock Server`）已经有了，但是如果每次运行单元�
 推荐的做法是，制作一个`ApiServerUnittest`基类，在其中添加`setUpClass`类方法，用于启动API接口服务（`Mock Server`）；添加`tearDownClass`类方法，用于停止API接口服务。由于`setUpClass`会在单元测试用例集初始化的时候执行一次，所以可以保证单元测试用例在运行的时候API服务处于可用状态；而`tearDownClass`会在单元测试用例集执行完毕后运行一次，停止API接口服务，从而避免对下一次启动产生影响。
 
 ```python
-# test/base.py
+# tests/base.py
 import multiprocessing
 import time
 import unittest
@@ -163,7 +163,7 @@ class ApiServerUnittest(unittest.TestCase):
 例如，下例包含一个单元测试用例，测试“创建一个用户，该用户之前不存在”的场景。
 
 ```python
-# test/test_apiserver.py
+# tests/test_apiserver.py
 import requests
 from .base import ApiServerUnittest
 
@@ -351,7 +351,7 @@ after_success:
 [ApiTestEngine-Intro]: http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
 [ApiTestEngine]: https://github.com/debugtalk/ApiTestEngine
 [Flask]: http://flask.pocoo.org/
-[api_server]: https://github.com/debugtalk/ApiTestEngine/blob/master/test/api_server.py
+[api_server]: https://github.com/debugtalk/ApiTestEngine/blob/master/tests/api_server.py
 [locust-test-webserver]: https://github.com/locustio/locust/blob/master/locust/test/test_web.py
 [travis-ci]: https://travis-ci.org/
 [coverage]: https://coverage.readthedocs.io
