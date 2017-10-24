@@ -13,7 +13,7 @@ tags:
 但是在`YAML/JSON`文本中要怎样实现函数的调用和传参呢？
 
 ```yaml
-variable_binds:
+variables:
    - TOKEN: debugtalk
    - json: {}
    - random: ${gen_random_string(5)}
@@ -49,7 +49,7 @@ variable_binds:
     name: create user which does not exist
     import_module_functions:
         - tests.data.custom_functions
-    variable_binds:
+    variables:
         - TOKEN: debugtalk
         - json: {"name": "user", "password": "123456"}
         - random: ${gen_random_string(5)}
@@ -67,7 +67,7 @@ variable_binds:
         - {"check": "content.success", "comparator": "eq", "expected": true}
 ```
 
-在这里面有一个`variable_binds`模块，之前已经出现过很多次，也一直都没有讲解。但是，本文也不打算进行讲解，该部分内容将在下一篇讲解参数的定义和引用时再详细展开。
+在这里面有一个`variables`模块，之前已经出现过很多次，也一直都没有讲解。但是，本文也不打算进行讲解，该部分内容将在下一篇讲解参数的定义和引用时再详细展开。
 
 当前我们只需要知道，在该用例描述中，`${gen_random_string(5)}`和`${gen_md5($TOKEN, $json, $random)}`均实现了函数的传参和调用，而调用的函数正式之前我们定义的`gen_random_string`和`gen_md5`。
 

@@ -104,7 +104,7 @@ gen_md5(TOKEN, data, random) # => a83de0ff8d2e896dbd8efb81ba14e17d
     function_binds:
         gen_random_string: "lambda str_len: ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(str_len))"
         gen_md5: "lambda *str_args: hashlib.md5(''.join(str_args).encode('utf-8'))
-    variable_binds:
+    variables:
         - TOKEN: debugtalk
         - random: ${gen_random_string(5)}
         - json: {"name": "user", "password": "123456"}
@@ -157,7 +157,7 @@ NameError: global name 'random' is not defined
     function_binds:
         gen_random_string: "lambda str_len: ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(str_len))"
         gen_md5: "lambda *str_args: hashlib.md5(''.join(str_args).encode('utf-8'))
-    variable_binds:
+    variables:
         - TOKEN: debugtalk
         - random: ${gen_random_string(5)}
         - json: {"name": "user", "password": "123456"}
@@ -240,7 +240,7 @@ def import_requires(modules):
     function_binds:
         gen_random_string: "lambda str_len: ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(str_len))"
         gen_md5: "lambda *str_args: hashlib.md5(''.join(str_args).encode('utf-8')).hexdigest()"
-    variable_binds:
+    variables:
         - TOKEN: debugtalk
         - random: ${gen_random_string(5)}
         - data: '{"name": "user", "password": "123456"}'
@@ -346,7 +346,7 @@ def gen_md5(*args):
     name: create user which does not exist
     import_module_functions:
         - tests.data.custom_functions
-    variable_binds:
+    variables:
         - TOKEN: debugtalk
         - json: {"name": "user", "password": "123456"}
         - random: ${gen_random_string(5)}
@@ -427,7 +427,7 @@ def import_module_functions(self, modules, level="testcase"):
 到现在为止，我们已经清楚了如何在`YAML/JSON`测试用例中实现函数的定义，但是在`YAML/JSON`文本中要怎样实现函数的调用和传参呢？
 
 ```yaml
-variable_binds:
+variables:
    - TOKEN: debugtalk
    - json: {}
    - random: ${gen_random_string(5)}

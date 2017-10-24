@@ -93,7 +93,7 @@ tags:
 ```YAML
 - test:
     name: create user which does not exist
-    variable_binds:
+    variables:
         - TOKEN: debugtalk
         - random: ${gen_random_string(5)}
         - json: {"name": "user", "password": "123456"}
@@ -106,7 +106,7 @@ tags:
             authorization: $authorization
             random: $random
         json: $json
-    extract_binds:
+    extractors:
         user_uuid: content.uuid
     validators:
         - {"check": "status_code", "comparator": "eq", "expected": 201}
@@ -124,7 +124,7 @@ tags:
 
 可以确定的是，这种描述方式的好处非常明显，不仅可以实现复杂计算逻辑的函数调用，还可以实现变量的定义和引用。
 
-除了转义符，由于接口测试中经常需要对结果中的特定字段进行提取，作为后续接口请求的参数，因此我们实现了`extract_binds`这样一个结果提取器，只要返回结果是JSON类型，就可以将其中的任意字段进行提取，并保存到一个变量中，方便后续接口请求进行引用。
+除了转义符，由于接口测试中经常需要对结果中的特定字段进行提取，作为后续接口请求的参数，因此我们实现了`extractors`这样一个结果提取器，只要返回结果是JSON类型，就可以将其中的任意字段进行提取，并保存到一个变量中，方便后续接口请求进行引用。
 
 另外，为了更好地实现对接口响应结果的校验，我们废弃了先前的方式，实现了独立的结果校验器`validators`。这是因为，很多时候在比较响应结果时，并不能简单地按照字段值是否相等来进行校验，除此之外，我们可能还需要检查某个字段的长度是否为指定位数，元素列表个数是否大于某个数值，甚至某个字符串是否满足正则匹配等等。
 
