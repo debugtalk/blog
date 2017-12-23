@@ -5,7 +5,7 @@ tags:
   - 自动化测试
   - 测试框架
   - Python
-  - ApiTestEngine
+  - HttpRunner
 ---
 
 在[《测试用例中实现`Python`函数的定义》][ApiTestEngine-3]中，介绍了在`YAML/JSON`测试用例中实现`Python`函数定义的两种方法，以及它们各自适用的场景。

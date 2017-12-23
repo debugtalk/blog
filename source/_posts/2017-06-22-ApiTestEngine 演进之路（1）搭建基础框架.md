@@ -5,7 +5,7 @@ tags:
   - 自动化测试
   - 测试框架
   - HTTP
-  - ApiTestEngine
+  - HttpRunner
 ---
 
 在[《ApiTestEngine 演进之路（0）开发未动，测试先行》][ApiTestEngine-dev-0]一文中，我对[`ApiTestEngine`][ApiTestEngine]项目正式开始前的准备工作进行了介绍，包括构建API接口服务（`Mock Server`）、搭建项目单元测试框架、实现持续集成构建检查机制（[`Travis CI`][travis-ci]）等。

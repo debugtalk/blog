@@ -2,7 +2,7 @@
 title: 约定大于配置：ApiTestEngine实现热加载机制
 permalink: post/apitestengine-hot-plugin
 tags:
-  - ApiTestEngine
+  - HttpRunner
   - 热加载
   - debugtalk.py
 ---

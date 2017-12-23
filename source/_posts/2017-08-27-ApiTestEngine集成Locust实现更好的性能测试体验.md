@@ -2,7 +2,7 @@
 title: ApiTestEngine 集成 Locust 实现更好的性能测试体验
 permalink: post/apitestengine-supersede-locust
 tags:
-  - ApiTestEngine
+  - HttpRunner
   - Locust
 ---
 

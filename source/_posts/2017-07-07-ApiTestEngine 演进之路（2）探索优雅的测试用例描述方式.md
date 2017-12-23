@@ -5,7 +5,7 @@ tags:
   - 自动化测试
   - 测试框架
   - 测试用例
-  - ApiTestEngine
+  - HttpRunner
 ---
 
 在[《ApiTestEngine 演进之路（1）搭建基础框架》][ApiTestEngine-1]一文中，我们完成了[`ApiTestEngine`][ApiTestEngine]基础框架的搭建，并实现了简单接口的测试功能。

@@ -2,7 +2,7 @@
 title: ApiTestEngine 正式更名为 HttpRunner
 permalink: post/ApiTestEngine-rename-to-HttpRunner
 tags:
-  - ApiTestEngine
+  - HttpRunner
   - HttpRunner
 ---
 

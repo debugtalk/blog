@@ -2,7 +2,7 @@
 title: How to install a package from Github that has other github dependencies ?
 permalink: post/How-to-install-a-package-from-Github-that-has-other-github-dependencies
 tags:
-  - ApiTestEngine
+  - HttpRunner
   - Locust
   - setuptools
   - pip

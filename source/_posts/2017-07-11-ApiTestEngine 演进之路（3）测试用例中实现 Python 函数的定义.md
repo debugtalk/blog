@@ -6,7 +6,7 @@ tags:
   - 测试框架
   - Python
   - lambda
-  - ApiTestEngine
+  - HttpRunner
 ---
 
 在[《ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式》][ApiTestEngine-2]中，我们臆想了一种简洁优雅的用例描述方式，接下来，我们就从技术实现的角度，逐项进行深入讲解，将臆想变成现实。

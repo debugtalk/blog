@@ -2,7 +2,7 @@
 title: ApiTestEngine，不再局限于API的测试
 permalink: post/apitestengine-not-only-about-json-api
 tags:
-  - ApiTestEngine
+  - HttpRunner
   - JSON API
   - 正则表达式
 ---

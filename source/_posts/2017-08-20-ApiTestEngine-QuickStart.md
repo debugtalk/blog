@@ -2,7 +2,7 @@
 title: ApiTestEngine QuickStart
 permalink: post/apitestengine-quickstart
 tags:
-  - ApiTestEngine
+  - HttpRunner
 ---
 
 ## Introduction to Sample Interface Service
