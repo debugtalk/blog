@@ -1,0 +1,674 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在《测试用例中实现Python函数的定义》中，介绍了在YAML/JSON测试用例中实现Python函数定义的两种方法，以及它们各自适用的场景。
+但是在YAML/JSON文本中要怎样实现函数的调用和传参呢？
+12345variables:   - TOKEN: debugtalk   - json: &amp;#123;&amp;#125;   - random: $&amp;#123;gen_random_string(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用">
+<meta property="og:url" content="http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在《测试用例中实现Python函数的定义》中，介绍了在YAML/JSON测试用例中实现Python函数定义的两种方法，以及它们各自适用的场景。
+但是在YAML/JSON文本中要怎样实现函数的调用和传参呢？
+12345variables:   - TOKEN: debugtalk   - json: &amp;#123;&amp;#125;   - random: $&amp;#123;gen_random_string(">
+<meta property="og:updated_time" content="2017-12-23T07:18:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用">
+<meta name="twitter:description" content="在《测试用例中实现Python函数的定义》中，介绍了在YAML/JSON测试用例中实现Python函数定义的两种方法，以及它们各自适用的场景。
+但是在YAML/JSON文本中要怎样实现函数的调用和传参呢？
+12345variables:   - TOKEN: debugtalk   - json: &amp;#123;&amp;#125;   - random: $&amp;#123;gen_random_string(">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/ApiTestEngine-4-call-functions-in-yaml-testcases/" title="ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用" itemprop="url">ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2017-07-16T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-17</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数的调用形式"><span class="toc-number">1.</span> <span class="toc-text">函数的调用形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则表达式的妙用"><span class="toc-number">2.</span> <span class="toc-text">正则表达式的妙用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现函数的调用"><span class="toc-number">3.</span> <span class="toc-text">实现函数的调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关文章"><span class="toc-number">5.</span> <span class="toc-text">相关文章</span></a></li></ol>
+		
+		</div>
+		
+		<p>在<a href="http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/">《测试用例中实现<code>Python</code>函数的定义》</a>中，介绍了在<code>YAML/JSON</code>测试用例中实现<code>Python</code>函数定义的两种方法，以及它们各自适用的场景。</p>
+<p>但是在<code>YAML/JSON</code>文本中要怎样实现函数的调用和传参呢？</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">variables:</span></div><div class="line"><span class="attr">   - TOKEN:</span> debugtalk</div><div class="line"><span class="attr">   - json:</span> &#123;&#125;</div><div class="line"><span class="attr">   - random:</span> $&#123;gen_random_string(<span class="number">5</span>)&#125;</div><div class="line"><span class="attr">   - authorization:</span> $&#123;gen_md5($TOKEN, $json, $random)&#125;</div></pre></td></tr></table></figure>
+<p>例如上面的例子（YAML格式），<code>gen_random_string</code>和<code>gen_md5</code>都是已经定义好的函数，但<code>${gen_random_string(5)}</code>和<code>${gen_md5($TOKEN, $json, $random)}</code>终究只是文本字符串，程序是如何将其解析为实际的函数和参数，并实现调用的呢？</p>
+<p>本文将对此进行重点讲解。</p>
+<h2 id="函数的调用形式"><a href="#函数的调用形式" class="headerlink" title="函数的调用形式"></a>函数的调用形式</h2><p>在<code>Python</code>语言中，函数的调用形式包含如下四种形式：</p>
+<ul>
+<li>无参数：func()</li>
+<li>顺序参数：func(a, b)</li>
+<li>字典参数：func(a=1, b=2)</li>
+<li>混合类型参数：func(1, 2, a=3, b=4)</li>
+</ul>
+<p>之前在<a href="http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/">《探索优雅的测试用例描述方式》</a>中介绍过，我们选择使用<code>${}</code>作为函数转义符，在<code>YAML/JSON</code>用例描述中调用已经定义好的函数。</p>
+<p>于是，以上四种类型的函数定义在<code>YAML/JSON</code>中就会写成如下样子。</p>
+<ul>
+<li>无参数：${func()}</li>
+<li>顺序参数：${func(a, b)}</li>
+<li>字典参数：${func(a=1, b=2)}</li>
+<li>混合类型参数：${func(1, 2, a=3, b=4)}</li>
+</ul>
+<p>还是之前的例子：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> create user which does not exist</div><div class="line"><span class="attr">    import_module_functions:</span></div><div class="line"><span class="bullet">        -</span> tests.data.custom_functions</div><div class="line"><span class="attr">    variables:</span></div><div class="line"><span class="attr">        - TOKEN:</span> debugtalk</div><div class="line"><span class="attr">        - json:</span> &#123;<span class="string">"name"</span>: <span class="string">"user"</span>, <span class="string">"password"</span>: <span class="string">"123456"</span>&#125;</div><div class="line"><span class="attr">        - random:</span> $&#123;gen_random_string(<span class="number">5</span>)&#125;</div><div class="line"><span class="attr">        - authorization:</span> $&#123;gen_md5($TOKEN, $json, $random)&#125;</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/users/<span class="number">1000</span></div><div class="line"><span class="attr">        method:</span> POST</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Content-Type:</span> application/json</div><div class="line"><span class="attr">            authorization:</span> $authorization</div><div class="line"><span class="attr">            random:</span> $random</div><div class="line"><span class="attr">        json:</span> $json</div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expected"</span>: <span class="number">201</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"content.success"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expected"</span>: <span class="literal">true</span>&#125;</div></pre></td></tr></table></figure>
+<p>在这里面有一个<code>variables</code>模块，之前已经出现过很多次，也一直都没有讲解。但是，本文也不打算进行讲解，该部分内容将在下一篇讲解参数的定义和引用时再详细展开。</p>
+<p>当前我们只需要知道，在该用例描述中，<code>${gen_random_string(5)}</code>和<code>${gen_md5($TOKEN, $json, $random)}</code>均实现了函数的传参和调用，而调用的函数正式之前我们定义的<code>gen_random_string</code>和<code>gen_md5</code>。</p>
+<p>这里应该比较好理解，因为函数调用形式与在<code>Python</code>脚本中完全相同。但难点在于，这些描述在<code>YAML/JSON</code>中都是文本字符串形式，<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>在加载测试用例的时候，是怎么识别出函数并完成调用的呢？</p>
+<p>具体地，这里可以拆分为三个需求点：</p>
+<ul>
+<li>如何在<code>YAML/JSON</code>文本中识别函数？</li>
+<li>如何将文本字符串的函数拆分为函数名称和参数？</li>
+<li>如何使用函数名称和参数实现对应函数的调用？</li>
+</ul>
+<h2 id="正则表达式的妙用"><a href="#正则表达式的妙用" class="headerlink" title="正则表达式的妙用"></a>正则表达式的妙用</h2><p>对于第一个需求点，我们之前已经做好了铺垫，设计了<code>${}</code>作为函数的转义符；而当初之所以这么设计，也是为了在加载测试用例时便于解析识别，因为我们可以通过使用正则表达式，非常准确地将函数从文本格式的测试用例中提取出来。</p>
+<p>既然<code>Python</code>函数的调用形式是确定的，都是<code>函数名(参数)</code>的形式，那么使用正则表达式的分组匹配功能，我们就可以很好地实现函数名称与参数的匹配，也就实现了第二个需求点。</p>
+<p>例如，我们可以采用如下正则表达式，来对<code>YAML/JSON</code>中的每一个值（Value）进行匹配性检查。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">r&quot;^\$\&#123;(\w+)\((.*)\)\&#125;$&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; import re</div><div class="line">&gt;&gt;&gt; regex = r<span class="string">"^\$\&#123;(\w+)\((.*)\)\&#125;$"</span></div><div class="line">&gt;&gt;&gt; string = <span class="string">"<span class="variable">$&#123;func(3, 5)&#125;</span>"</span></div><div class="line">&gt;&gt;&gt; matched = re.match(regex, string)</div><div class="line">&gt;&gt;&gt; matched.group(1)</div><div class="line"><span class="string">'func'</span></div><div class="line">&gt;&gt;&gt; matched.group(2)</div><div class="line"><span class="string">'3, 5'</span></div><div class="line">&gt;&gt;&gt;</div><div class="line">&gt;&gt;&gt; string = <span class="string">"<span class="variable">$&#123;func(a=1, b=2)&#125;</span>"</span></div><div class="line">&gt;&gt;&gt; matched = re.match(regex, string)</div><div class="line">&gt;&gt;&gt; matched.group(1)</div><div class="line"><span class="string">'func'</span></div><div class="line">&gt;&gt;&gt; matched.group(2)</div><div class="line"><span class="string">'a=1, b=2'</span></div></pre></td></tr></table></figure>
+<p>可以看出，通过如上正则表达式，如果满足匹配条件，那么<code>matched.group(1)</code>就是函数的名称，<code>matched.group(2)</code>就是函数的参数。</p>
+<p>思路是完全可行的，不过我们在匹配参数部分的时候是采用<code>.*</code>的形式，也就是任意字符匹配，匹配的方式不是很严谨。考虑到正常的函数参数部分可能使用到的字符，我们可以采用如下更严谨的正则表达式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">r&quot;^\$\&#123;(\w+)\(([\$\w =,]*)\)\&#125;$&quot;</div></pre></td></tr></table></figure>
+<p>这里限定了五种可能用到的字符，<code>\w</code>代表任意字母或数字，<code>= ,</code>代表的是等号、空格和逗号，这些都是参数中可能用到的。而<code>\$</code>符号，大家应该还记得，这也是我们设计采用的变量转义符，<code>$var</code>将不再代表的是普遍的字符串，而是<code>var</code>变量的值。</p>
+<p>有了这个基础，实现如下<code>is_functon</code>函数，就可以判断某个字符串是否为函数调用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function_regexp = re.compile(<span class="string">r"^\$\&#123;(\w+)\(([\$\w =,]*)\)\&#125;$"</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_functon</span><span class="params">(content)</span>:</span></div><div class="line">    matched = function_regexp.match(content)</div><div class="line">    <span class="keyword">return</span> <span class="keyword">True</span> <span class="keyword">if</span> matched <span class="keyword">else</span> <span class="keyword">False</span></div></pre></td></tr></table></figure>
+<p>不过这里还有一个问题。通过上面的正则表达式，是可以将函数名称和参数部分拆分开了，但是在参数部分，还没法区分具体的参数类型。</p>
+<p>例如，在前面的例子中，从<code>${func(3, 5)}</code>解析出来的参数为<code>3, 5</code>，从<code>${func(a=1, b=2)}</code>解析出来的参数为<code>a=1, b=2</code>，我们通过肉眼可以识别出这分别对应着顺序参数和字典参数两种类型，但是程序就没法自动识别了，毕竟对于程序来说它们都只是字符串而已。</p>
+<p>所以，这里还需要再做一步操作，就是将参数字符串解析为对程序友好的形式。</p>
+<p>什么叫对程序友好的形式呢？这里就又要用到<a href="http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/">上一篇文章</a>讲到的可变参数和关键字参数形式了，也就是<code>func(*args, **kwargs)</code>的形式。</p>
+<p>试想，如果我们可以将所有顺序参数都转换为<code>args</code>列表，将所有字典参数都转换为<code>kwargs</code>字典，那么对于任意函数类型，我们都可以采用<code>func(*args, **kwargs)</code>的调用形式。</p>
+<p>于是，问题就转换为，如何将参数部分转换为<code>args</code>和<code>kwargs</code>两部分。</p>
+<p>这就比较简单了。因为在函数的参数部分，顺序参数必须位于字典参数前面，并且以逗号间隔；而字典参数呢，总是以<code>key=value</code>的形式出现，并且也以逗号间隔。</p>
+<p>那么我们就可以利用参数部分的这个特征，来进行字符串的处理。处理算法如下：</p>
+<ul>
+<li>采用逗号作为分隔符将字符串进行拆分；</li>
+<li>对每一部分进行判断，如果不包含等号，那么就是顺序参数，将其加入（<code>append</code>）到<code>args</code>列表；</li>
+<li>如果包含等号，那么就是字典参数，采用等号作为分隔符进行进一步拆分得到<code>key-value</code>键值对，然后再加入到<code>kwargs</code>字典。</li>
+</ul>
+<p>对应的<code>Python</code>代码实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_function</span><span class="params">(content)</span>:</span></div><div class="line">    function_meta = &#123;</div><div class="line">        <span class="string">"args"</span>: [],</div><div class="line">        <span class="string">"kwargs"</span>: &#123;&#125;</div><div class="line">    &#125;</div><div class="line">    matched = function_regexp.match(content)</div><div class="line">    function_meta[<span class="string">"func_name"</span>] = matched.group(<span class="number">1</span>)</div><div class="line"></div><div class="line">    args_str = matched.group(<span class="number">2</span>).replace(<span class="string">" "</span>, <span class="string">""</span>)</div><div class="line">    <span class="keyword">if</span> args_str == <span class="string">""</span>:</div><div class="line">        <span class="keyword">return</span> function_meta</div><div class="line"></div><div class="line">    args_list = args_str.split(<span class="string">','</span>)</div><div class="line">    <span class="keyword">for</span> arg <span class="keyword">in</span> args_list:</div><div class="line">        <span class="keyword">if</span> <span class="string">'='</span> <span class="keyword">in</span> arg:</div><div class="line">            key, value = arg.split(<span class="string">'='</span>)</div><div class="line">            function_meta[<span class="string">"kwargs"</span>][key] = parse_string_value(value)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            function_meta[<span class="string">"args"</span>].append(parse_string_value(arg))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> function_meta</div></pre></td></tr></table></figure>
+<p>可以看出，通过<code>parse_function</code>函数，可以将一个函数调用的字符串转换为函数的结构体。</p>
+<p>例如，<code>${func(1, 2, a=3, b=4)}</code>字符串，经过<code>parse_function</code>转换后，就可以得到该函数的名称和参数信息：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function_meta = &#123;</div><div class="line">    'func_name': 'func',</div><div class="line">    'args': [1, 2],</div><div class="line">    'kwargs': &#123;'a':3, 'b':4&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这也就彻底解决了第二个需求点。</p>
+<h2 id="实现函数的调用"><a href="#实现函数的调用" class="headerlink" title="实现函数的调用"></a>实现函数的调用</h2><p>在此基础上，我们再看第三个需求点，如何使用函数名称和参数实现对应函数的调用，其实也就很简单了。</p>
+<p>在<a href="http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/">上一篇文章</a>中，我们实现了对函数的定义，并且将所有定义好的函数都添加到了一个字典当中，假如字典名称为<code>custom_functions_dict</code>，那么根据以上的函数信息（<code>function_meta</code>），就可以采用如下方式进行调用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">func_name = function_meta[<span class="string">'func_name'</span>]</div><div class="line">args = function_meta[<span class="string">'args'</span>]</div><div class="line">kwargs = function_meta[<span class="string">'kwargs'</span>]</div><div class="line">custom_functions_dict[func_name]](*args, **kwargs)</div></pre></td></tr></table></figure>
+<p>具体的，在<code>ApiTestEngine</code>中对应的<code>Python</code>代码片段如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_eval_value</span><span class="params">(self, data)</span>:</span></div><div class="line">   <span class="string">""" evaluate data recursively, each variable in data will be evaluated.</span></div><div class="line">   """</div><div class="line">   <span class="keyword">if</span> isinstance(data, (list, tuple)):</div><div class="line">       <span class="keyword">return</span> [self.get_eval_value(item) <span class="keyword">for</span> item <span class="keyword">in</span> data]</div><div class="line"></div><div class="line">   <span class="keyword">if</span> isinstance(data, dict):</div><div class="line">       evaluated_data = &#123;&#125;</div><div class="line">       <span class="keyword">for</span> key, value <span class="keyword">in</span> data.items():</div><div class="line">           evaluated_data[key] = self.get_eval_value(value)</div><div class="line"></div><div class="line">       <span class="keyword">return</span> evaluated_data</div><div class="line"></div><div class="line">   <span class="keyword">if</span> isinstance(data, (int, float)):</div><div class="line">       <span class="keyword">return</span> data</div><div class="line"></div><div class="line">   <span class="comment"># data is in string format here</span></div><div class="line">   data = <span class="string">""</span> <span class="keyword">if</span> data <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">else</span> data.strip()</div><div class="line">   <span class="keyword">if</span> utils.is_variable(data):</div><div class="line">       <span class="comment"># variable marker: $var</span></div><div class="line">       variable_name = utils.parse_variable(data)</div><div class="line">       value = self.testcase_variables_mapping.get(variable_name)</div><div class="line">       <span class="keyword">if</span> value <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">           <span class="keyword">raise</span> exception.ParamsError(</div><div class="line">               <span class="string">"%s is not defined in bind variables!"</span> % variable_name)</div><div class="line">       <span class="keyword">return</span> value</div><div class="line"></div><div class="line">   <span class="keyword">elif</span> utils.is_functon(data):</div><div class="line">       <span class="comment"># function marker: $&#123;func(1, 2, a=3, b=4)&#125;</span></div><div class="line">       fuction_meta = utils.parse_function(data)</div><div class="line">       func_name = fuction_meta[<span class="string">'func_name'</span>]</div><div class="line">       args = fuction_meta.get(<span class="string">'args'</span>, [])</div><div class="line">       kwargs = fuction_meta.get(<span class="string">'kwargs'</span>, &#123;&#125;)</div><div class="line">       args = self.get_eval_value(args)</div><div class="line">       kwargs = self.get_eval_value(kwargs)</div><div class="line">       <span class="keyword">return</span> self.testcase_config[<span class="string">"functions"</span>][func_name](*args, **kwargs)</div><div class="line">   <span class="keyword">else</span>:</div><div class="line">       <span class="keyword">return</span> data</div></pre></td></tr></table></figure>
+<p>这里还用到了递归的概念，当参数是变量（例如<code>gen_md5($TOKEN, $json, $random)</code>），或者为列表、字典等嵌套类型时，也可以实现正常的解析。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到此为止，我们就解决了测试用例（<code>YAML/JSON</code>）中实现<code>Python</code>函数定义和调用的问题。</p>
+<p>还记得<a href="http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/">《探索优雅的测试用例描述方式》</a>末尾提到的用例模板引擎技术实现的三大块内容么？</p>
+<ul>
+<li>如何在用例描述（<code>YAML/JSON</code>）中实现函数的定义和调用</li>
+<li>如何在用例描述中实现参数的定义和引用，包括用例内部和用例集之间</li>
+<li>如何在用例描述中实现预期结果的描述和测试结果的校验</li>
+</ul>
+<p>第一块总算是讲完了，下一篇文章将开始讲解如何在用例描述中实现参数的定义和引用的问题。</p>
+<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><ul>
+<li><a href="http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/">《ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式》</a></li>
+<li><a href="http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/">《ApiTestEngine 演进之路（3）测试用例中实现<code>Python</code>函数的定义》</a></li>
+<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code> GitHub源码</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a><a href="/tags/自动化测试/">自动化测试</a><a href="/tags/测试框架/">测试框架</a><a href="/tags/HttpRunner/">HttpRunner</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/" data-title="ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/solve-Jenkins-can-not-show-html-css/" title="解决Jenkins中无法展示HTML样式的问题">
+  <strong>上一篇：</strong><br/>
+  <span>
+  解决Jenkins中无法展示HTML样式的问题</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/ApiTestEngine-3-define-functions-in-yaml-testcases/"  title="ApiTestEngine 演进之路（3）测试用例中实现 Python 函数的定义">
+ <strong>下一篇：</strong><br/> 
+ <span>ApiTestEngine 演进之路（3）测试用例中实现 Python 函数的定义
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数的调用形式"><span class="toc-number">1.</span> <span class="toc-text">函数的调用形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则表达式的妙用"><span class="toc-number">2.</span> <span class="toc-text">正则表达式的妙用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现函数的调用"><span class="toc-number">3.</span> <span class="toc-text">实现函数的调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关文章"><span class="toc-number">5.</span> <span class="toc-text">相关文章</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,664 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在上一篇文章中，我对本系列教程的项目背景进行了介绍，并对自动化测试平台的建设进行了规划。
+在本文中，我将在已准备就绪的iOS自动化测试环境的基础上，通过Appium调用模拟器运行iOS应用。内容很是基础，熟悉的同学可直接略过。
+iOS应用安装包的基础知识作为完全的iOS新手，困惑的第一个问题就是iOS安装包文件。
+在Android系统中，安装App的途径很多，除了各类应用市场，普通用户也经常直接下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">
+<meta property="og:url" content="http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在上一篇文章中，我对本系列教程的项目背景进行了介绍，并对自动化测试平台的建设进行了规划。
+在本文中，我将在已准备就绪的iOS自动化测试环境的基础上，通过Appium调用模拟器运行iOS应用。内容很是基础，熟悉的同学可直接略过。
+iOS应用安装包的基础知识作为完全的iOS新手，困惑的第一个问题就是iOS安装包文件。
+在Android系统中，安装App的途径很多，除了各类应用市场，普通用户也经常直接下">
+<meta property="og:image" content="http://debugtalk.com/images/Appium_iOS_Settings_init.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Appium_Inspector_Button.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Appium_iOS_Simulator_Console.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Appium_Inspector_Error.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Appium_iOS_Settings_bug.jpg">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">
+<meta name="twitter:description" content="在上一篇文章中，我对本系列教程的项目背景进行了介绍，并对自动化测试平台的建设进行了规划。
+在本文中，我将在已准备就绪的iOS自动化测试环境的基础上，通过Appium调用模拟器运行iOS应用。内容很是基础，熟悉的同学可直接略过。
+iOS应用安装包的基础知识作为完全的iOS新手，困惑的第一个问题就是iOS安装包文件。
+在Android系统中，安装App的途径很多，除了各类应用市场，普通用户也经常直接下">
+<meta name="twitter:image" content="http://debugtalk.com/images/Appium_iOS_Settings_init.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/" title="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用" itemprop="url">从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-05-20T16:00:00.000Z" itemprop="datePublished"> 发表于 2016-05-21</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS应用安装包的基础知识"><span class="toc-number">1.</span> <span class="toc-text">iOS应用安装包的基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#准备-app文件"><span class="toc-number">2.</span> <span class="toc-text">准备.app文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模拟器中运行iOS应用"><span class="toc-number">3.</span> <span class="toc-text">模拟器中运行iOS应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#经历的一个坑"><span class="toc-number">4.</span> <span class="toc-text">经历的一个坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#To-be-continued-…"><span class="toc-number">5.</span> <span class="toc-text">To be continued …</span></a></li></ol>
+		
+		</div>
+		
+		<p>在上一篇文章中，我对本系列教程的项目背景进行了介绍，并对自动化测试平台的建设进行了规划。</p>
+<p>在本文中，我将在已准备就绪的iOS自动化测试环境的基础上，通过Appium调用模拟器运行iOS应用。内容很是基础，熟悉的同学可直接略过。</p>
+<h2 id="iOS应用安装包的基础知识"><a href="#iOS应用安装包的基础知识" class="headerlink" title="iOS应用安装包的基础知识"></a>iOS应用安装包的基础知识</h2><p>作为完全的iOS新手，困惑的第一个问题就是iOS安装包文件。</p>
+<p>在Android系统中，安装App的途径很多，除了各类应用市场，普通用户也经常直接下载apk安装包文件后手动进行安装，因此大家对Android的安装包文件都比较熟悉。</p>
+<p>但是对于iOS系统就不一样了，由于我们普通用户在iOS上安装应用的时候基本上只能通过Apple Store进行安装（未越狱），没有机会接触原始的安装包文件，因此往往连iOS应用的安装包到底是什么格式后缀都不清楚。</p>
+<p>现在我们想在Appium App中通过模拟器运行被测应用，需要指定iOS app的安装包路径，因此需要首先获得一个iOS app安装包。</p>
+<p><img src="/images/Appium_iOS_Settings_init.jpg" alt="Appium initialize iOS Settings"></p>
+<p>那么iOS app的安装包长啥样呢？</p>
+<p>或者在这个问题之前，我们先来看下另一个问题：对于iOS设备来说，如果不通过Apple Store，我们可以怎样安装一个应用？</p>
+<p>针对这个问题，我搜了些资料，也请教了周围的同事，了解到的途径有如下几个：</p>
+<ul>
+<li>企业证书：该种方式适用于企业内部；通过企业证书编译出的iOS应用，无需上传至Apple Store，即可无限制的安装到企业员工的iOS设备中。只是需要解决的一个问题是，由于iOS设备没有文件管理器，没法将安装包拷贝到iOS设备中，因此常用的做法是将安装包（<code>.ipa</code>文件）上传至一些下载服务器（例如<code>fir.im</code>），并生成二维码，然后用户扫描二维码后即可通过浏览器下载安装包并进行安装。由此联想到另外一个方法，通过微信文件传输助手将安装包（<code>.ipa</code>）传输至iOS设备，然后再进行安装应该也是可以的吧？这种方法不知在原理上是否可行，因为在试验时由于安装包大于30M，微信无法传输，所以没能进行验证。</li>
+<li>Xcode：该种方式适用于iOS开发者；开发者在Xcode中连上iOS设备对源码进行编译，编译生成的应用会自动安装至iOS设备。当然，该种方式也是需要iOS开发者证书。</li>
+<li>PP助手：该种方式适用于普通用户；PP助手是一个非苹果官方的设备资源管理工具，可以实现对未越狱的iOS设备进行应用管理，也可以安装本地<code>.ipa</code>文件，前提是<code>.ipa</code>文件具有合适的签名。</li>
+</ul>
+<p>在上面列举的安装应用的途径中，反复提到了<code>.ipa</code>文件，那<code>.ipa</code>应该就是iOS应用程序的后缀了吧？暂且这么认为吧。</p>
+<p>再回到前面的场景，要在iOS模拟器中运行iOS应用，我们是否可以找研发人员要一个<code>.ipa</code>安装包文件，然后就能在模拟器中加载运行应用呢？</p>
+<p>刚开始的时候我是这么认为的。于是我获取到<code>.ipa</code>文件后，在<code>App Path</code>中填写该文件的路径，然后启动Appium Server；接着我再打开Inspector时，发现iOS模拟器启动了，但是在应用启动的时候就出问题了，始终无法正常启动，感觉像是启动崩溃，反复尝试多次仍然如此。</p>
+<p>再次经过Google，总算是明白出现问题的原因了，总结下来有如下几点：</p>
+<ul>
+<li>不管是从Apple Store或iTunes上下载的应用，还是在Xcode中针对真机设备编译生成的<code>.ipa</code>文件，都是面向于ARM处理器的iOS设备，只能在真机设备中进行安装；</li>
+<li>而在Mac OSX系统中运行的iOS模拟器，运行环境是基于Intel处理器的；</li>
+<li>因此，若是针对真机设备编译生成的<code>.ipa</code>文件，是无法在iOS模拟器中正常运行的，毕竟处理器架构都不一样；</li>
+<li>要想在iOS模拟器中运行应用，则必须在Xcode中编译时选择模拟器类型；编译生成的文件后缀为<code>.app</code>。</li>
+</ul>
+<h2 id="准备-app文件"><a href="#准备-app文件" class="headerlink" title="准备.app文件"></a>准备<code>.app</code>文件</h2><p>接下来，就说下如何获取<code>.app</code>文件。</p>
+<p>虽然是测试人员，不会对被测iOS项目贡献代码，但是也不能总是找研发帮忙编译生成<code>.app</code>文件。所以，在本地搭建完整的iOS项目开发环境还是很有必要的。</p>
+<p>对于iOS开发环境的搭建，当前社区中应该已经有了很多完整的教程，我在这儿就不详细描述了，只简单说下我搭建过程中涉及到的几个点。</p>
+<p>首先，Mac OSX、Xcode、Apple Developer Tools这些基础环境的安装，在上一篇文章中已经进行说明了；</p>
+<p>然后，申请项目源码的访问权限，<code>git clone</code>到本地；</p>
+<p>接着是项目依赖环境的问题；通常一个较大型的iOS项目都会引用许多第三方库，而这些依赖库并不会直接保存到项目仓库中，通常是采用<code>CocoaPods</code>进行管理；简单地说，<code>CocoaPods</code>是针对<code>Swift</code>和<code>Objective-C</code>项目的依赖管理器，类似于Java中的<code>Maven</code>，Ruby中的<code>Gem</code>，Python中的<code>pip</code>。</p>
+<p>当然，iOS项目的依赖管理工具也不是只有<code>CocoaPods</code>一个，如果是采用的别的依赖管理器，请自行查找对应的资料。</p>
+<p>采用<code>CocoaPods</code>管理的项目，在项目根目录下会包含<code>Podfile</code>和<code>Podfile.lock</code>文件，里面记录了当前项目依赖的第三方库以及对应的版本号。</p>
+<p>安装<code>CocoaPods</code>很简单，采用<code>gem</code>即可。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo gem install cocoapods</div></pre></td></tr></table></figure>
+<p>然后，进入到iOS项目的目录，执行<code>pod install</code>命令即可安装当前项目的所有依赖。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> Project_Folder</div><div class="line">$ pod install</div><div class="line">Re-creating CocoaPods due to major version update.</div><div class="line">Analyzing dependencies</div><div class="line">.....（略）</div><div class="line">Downloading dependencies</div><div class="line">.....（略）</div><div class="line">Generating Pods project</div><div class="line">Integrating client project</div><div class="line">Sending stats</div><div class="line">Pod installation complete! There are 27 dependencies from the Podfile and 28 total pods installed.</div></pre></td></tr></table></figure>
+<p>关于<code>CocoaPods</code>的更多信息，请自行查看<a href="https://cocoapods.org" target="_blank" rel="external">官方网站</a></p>
+<p>在依赖安装完成后，正常情况下，就可以在Xcode中编译项目了。</p>
+<p>没有别的需要注意的，将target选择为模拟器（iOS Simulator）即可。而且针对模拟器进行编译时，也不会涉及到开发者证书的问题，项目配置上会简单很多。待后续讲到真机上的自动化测试时，我再对证书方面的内容进行补充。</p>
+<p>编译完成后，在Products目录下，就可以看到<code>XXX.app</code>文件，这里的<code>XXX</code>就是项目名称；然后，选中<code>XXX.app</code>文件，【Show in Finder】，即可在文件目录中定位到该文件。</p>
+<p>接下来，将<code>XXX.app</code>文件拷贝出来，或者复制该文件的<code>Full path</code>，怎样都行，只要在<code>Appium</code>的<code>App Path</code>中能定位到该文件就行。</p>
+<h2 id="模拟器中运行iOS应用"><a href="#模拟器中运行iOS应用" class="headerlink" title="模拟器中运行iOS应用"></a>模拟器中运行iOS应用</h2><p>被测应用<code>.app</code>准备就绪后，接下来就可以在iOS模拟器中运行了。</p>
+<p>回到前面的那张图。启动<code>Appium app</code>后，对于模拟器运行的情况，在<code>iOS Settings</code>中必须设置的参数项就3个，<code>App Path</code>、<code>Force Device</code>和<code>Platform Version</code>。对于真机运行的情况，后续再单独进行说明。</p>
+<p>设置完毕后，点击【Launch】，启动<code>Appium Server</code>。</p>
+<p><img src="/images/Appium_Inspector_Button.jpg" alt="Appium inspector button"></p>
+<p>然后，点击图中红框处的按钮，即可通过<code>Inspector</code>启动模拟器，并在模拟器中加载iOS应用。</p>
+<p><img src="/images/Appium_iOS_Simulator_Console.jpg" alt="Appium iOS Simulator Console"></p>
+<p>在模拟器中，我们可以像在真机中一样，体验被测应用的各项功能；并且，在Appium的日志台中，可以实时查看到日志信息。</p>
+<h2 id="经历的一个坑"><a href="#经历的一个坑" class="headerlink" title="经历的一个坑"></a>经历的一个坑</h2><p>整个过程是挺简单的，不过，在探索过程中我还是有遇到一个坑。</p>
+<p>通过<code>Inspector</code>启动模拟器时，总是弹框报错，报错形式如下。</p>
+<p><img src="/images/Appium_Inspector_Error.jpg" alt="Appium Inspector Error"></p>
+<p>刚开始出现这问题时百思不得其解，因为提示的信息并不明显，Google了好一阵也没找到原因。最后只有详细去看日志信息，才发现问题所在。</p>
+<p>在日志中，发现的报错信息如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[iOS] Error: Could not find a device to launch. You requested &apos;iPhone 6 (8.4)&apos;, but the available devices were: [&quot;Apple TV 1080p (9.2) [98638D25-7C82-48DF-BDCA-7F682F951533] (Simulator)&quot;,&quot;iPad 2 (9.2) [5E22F53E-EAB3-45DF-A1DD-10F58E920679] (Simulator)&quot;,&quot;iPad 2 (9.3) [4B2D2F9A-C099-4C13-8DE9-27C826A521C2] (Simulator)&quot;,&quot;iPad Air (9.2) [825E4997-9CD8-4225-9977-4C7AE2C98389] (Simulator)&quot;,&quot;iPad Air (9.3) [E4523799-E35F-4499-832B-12CF33F09144] (Simulator)&quot;,&quot;iPad Air 2 (9.2) [8057039D-F848-453E-97EC-2F75CAEA2E77] (Simulator)&quot;,&quot;iPad Air 2 (9.3) [0B8F49DA-832A-4248-BA1D-9DA5D11E31FD] (Simulator)&quot;,&quot;iPad Pro (9.2) [AF1F2D06-3067-41B5-AC2B-4B0ED88BF5D9] (Simulator)&quot;,&quot;iPad Pro (9.3) [C39617A6-9D91-4C0B-B25B-741BD57B016C] (Simulator)&quot;,&quot;iPad Retina (9.2) [D3C694E1-E3B4-47BE-AB5E-80B3D4E22FC2] (Simulator)&quot;,&quot;iPad Retina (9.3) [907C7B06-ED2C-48AC-AC46-04E4AD6E0CA3] (Simulator)&quot;,&quot;iPhone 4s (9.2) [1A786195-94E3-4908-8309-7B66D84E4619] (Simulator)&quot;,&quot;iPhone 4s (9.3) [3F76F34B-5A8F-4FD1-928D-56F84C192DDD] (Simulator)&quot;,&quot;iPhone 5 (9.2) [0D79A4CA-71EB-48A6-9EE4-172BEF3EB4E0] (Simulator)&quot;,&quot;iPhone 5 (9.3) [04270D44-F831-4253-95F2-3D205D2BC0D9] (Simulator)&quot;,&quot;iPhone 5s (9.2) [13A16C07-3C5B-4B04-A94B-B40A63238958] (Simulator)&quot;,&quot;iPhone 5s (9.3) [D30A7B34-BA01-4203-80DA-FAEA436725F9] (Simulator)&quot;,&quot;iPhone 6 (9.2) [5D01650F-2A31-4D53-A47A-CCF7FD552ADD] (Simulator)&quot;,&quot;iPhone 6 (9.3) [2F0810F6-C73B-4BA4-93BA-06D4B6D96BDA] (Simulator)&quot;,&quot;iPhone 6 Plus (9.2) [9A840B78-E6CE-4D18-BE83-16B590411641] (Simulator)&quot;,&quot;iPhone 6 Plus (9.3) [27C6557A-B09D-4D8A-9846-DA8FE0A8E8D5] (Simulator)&quot;,&quot;iPhone 6s (9.2) [E7F5B8A5-0E85-404F-A4D4-191D63E7EC1B] (Simulator)&quot;,&quot;iPhone 6s (9.3) [6F702911-13C2-472C-9ECD-BADD4385CB77] (Simulator)&quot;,&quot;iPhone 6s (9.3) + Apple Watch - 38mm (2.2) [B63FFAA4-00A4-473B-9462-3664F41F9001] (Simulator)&quot;,&quot;iPhone 6s Plus (9.2) [58837F78-511A-4F0B-9DDF-782E3B9935BD] (Simulator)&quot;,&quot;iPhone 6s Plus (9.3) [C31003C6-DCE2-414D-AD7F-376F6FA995B0] (Simulator)&quot;,&quot;iPhone 6s Plus (9.3) + Apple Watch - 42mm (2.2) [E3154768-CA23-45CC-90E5-2D0386A57B7D] (Simulator)&quot;]</div></pre></td></tr></table></figure>
+<p>问题在于，我设置<code>iOS Settings</code>时，将<code>Force Device</code>设置为”iPhone 6”，将<code>Platform Version</code>设置为“8.4”，但是经过组合，<code>iPhone 6 (8.4)</code>并不在可用的模拟器设备列表中。</p>
+<p>再来看日志中提示的可用设备，发现“iPhone 6”设备对应的<code>Platform Version</code>只有“9.2”和“9.3”。然后回到<code>iOS Settings</code>，发现<code>Platform Version</code>的下拉框可选项就没有“9.2”和“9.3”，最新的一个可选版本也就是“8.4”。</p>
+<p><img src="/images/Appium_iOS_Settings_bug.jpg" alt="Appium iOS Settings bug"></p>
+<p>这应该是<code>Appium app</code>的一个bug吧。不过好在<code>Platform Version</code>参数虽然是通过下拉框选择，但是也可以在框内直接填写内容。于是我在<code>Platform Version</code>设置框内填写为“9.3”，然后再次启动时，发现iOS模拟器就可以正常启动了。</p>
+<h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>现在，我们已经成功地通过Appium Inspector调用模拟器并运行iOS应用，接下来，我们就要开始尝试编写自动化测试用例了。</p>
+<p>在下一篇文章中，我们将对Appium Inspector的功能进行熟悉，通过Inspector来查看iOS应用的UI元素信息，并尝试采用脚本语言与UI进行交互操作。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/AutomationTest/">AutomationTest</a><a href="/tags/Appium/">Appium</a><a href="/tags/F0T1/">F0T1</a><a href="/tags/iOS/">iOS</a><a href="/tags/Simulator/">Simulator</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/" data-title="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/" title="从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件">
+  <strong>上一篇：</strong><br/>
+  <span>
+  从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/"  title="从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划">
+ <strong>下一篇：</strong><br/> 
+ <span>从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS应用安装包的基础知识"><span class="toc-number">1.</span> <span class="toc-text">iOS应用安装包的基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#准备-app文件"><span class="toc-number">2.</span> <span class="toc-text">准备.app文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模拟器中运行iOS应用"><span class="toc-number">3.</span> <span class="toc-text">模拟器中运行iOS应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#经历的一个坑"><span class="toc-number">4.</span> <span class="toc-text">经历的一个坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#To-be-continued-…"><span class="toc-number">5.</span> <span class="toc-text">To be continued …</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

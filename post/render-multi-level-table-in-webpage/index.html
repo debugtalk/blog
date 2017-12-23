@@ -1,0 +1,635 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>测试结果报表展现：Web页面绘制多层级表格 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="背景描述在Android性能测试中，每一个测试任务都对应了1个测试用例、1台测试设备、一个测试包，并且在测试结果中包含了多个指标项。通常，我们希望能对两个不同版本测试包的测试结果进行对比，并能在Web页面上以表格的形式进行展现。
+很自然地，我们会想到采用如下形式展现对比结果。
+图1 三层表格
+对应地，采用如下数据结构存储结果数据。
+123456789101112131415161718192021">
+<meta property="og:type" content="article">
+<meta property="og:title" content="测试结果报表展现：Web页面绘制多层级表格">
+<meta property="og:url" content="http://debugtalk.com/post/render-multi-level-table-in-webpage/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="背景描述在Android性能测试中，每一个测试任务都对应了1个测试用例、1台测试设备、一个测试包，并且在测试结果中包含了多个指标项。通常，我们希望能对两个不同版本测试包的测试结果进行对比，并能在Web页面上以表格的形式进行展现。
+很自然地，我们会想到采用如下形式展现对比结果。
+图1 三层表格
+对应地，采用如下数据结构存储结果数据。
+123456789101112131415161718192021">
+<meta property="og:image" content="http://debugtalk.com/images/render_table_three_levels.png">
+<meta property="og:image" content="http://debugtalk.com/images/render_table_two_levels.png">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="测试结果报表展现：Web页面绘制多层级表格">
+<meta name="twitter:description" content="背景描述在Android性能测试中，每一个测试任务都对应了1个测试用例、1台测试设备、一个测试包，并且在测试结果中包含了多个指标项。通常，我们希望能对两个不同版本测试包的测试结果进行对比，并能在Web页面上以表格的形式进行展现。
+很自然地，我们会想到采用如下形式展现对比结果。
+图1 三层表格
+对应地，采用如下数据结构存储结果数据。
+123456789101112131415161718192021">
+<meta name="twitter:image" content="http://debugtalk.com/images/render_table_three_levels.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/render-multi-level-table-in-webpage/" title="测试结果报表展现：Web页面绘制多层级表格" itemprop="url">测试结果报表展现：Web页面绘制多层级表格</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-03-19T16:00:00.000Z" itemprop="datePublished"> 发表于 2016-03-20</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景描述"><span class="toc-number">1.</span> <span class="toc-text">背景描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一次尝试：绘制2层表格"><span class="toc-number">2.</span> <span class="toc-text">第一次尝试：绘制2层表格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二次尝试：绘制3层表格"><span class="toc-number">3.</span> <span class="toc-text">第二次尝试：绘制3层表格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重构：递归！"><span class="toc-number">4.</span> <span class="toc-text">重构：递归！</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在Android性能测试中，每一个测试任务都对应了1个测试用例、1台测试设备、一个测试包，并且在测试结果中包含了多个指标项。通常，我们希望能对两个不同版本测试包的测试结果进行对比，并能在Web页面上以表格的形式进行展现。</p>
+<p>很自然地，我们会想到采用如下形式展现对比结果。</p>
+<p><img src="/images/render_table_three_levels.png" alt="render table three levels"><br>图1 三层表格</p>
+<p>对应地，采用如下数据结构存储结果数据。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">data_hash = &#123;</div><div class="line">  "pkg_array": ["pkg1", "pkg2"],</div><div class="line">  "data": &#123;</div><div class="line">    "testcase1": &#123;</div><div class="line">      "device1": &#123;</div><div class="line">        "indicator1": ["value1", "value2"],</div><div class="line">        "indicator2": ["value3", "value4"],</div><div class="line">      &#125;,</div><div class="line">      "device2": &#123;</div><div class="line">        "indicator1": ["value5", "value6"],</div><div class="line">        "indicator2": ["value7", "value8"],</div><div class="line">      &#125;,</div><div class="line">    &#125;,</div><div class="line">    "testcase2": &#123;</div><div class="line">      "device1": &#123;</div><div class="line">        "indicator1": ["value9", "value10"],</div><div class="line">        "indicator2": ["value11", "value12"],</div><div class="line">      &#125;,</div><div class="line">      "device2": &#123;</div><div class="line">        "indicator1": ["value13", "value14"],</div><div class="line">        "indicator2": ["value15", "value16"],</div><div class="line">      &#125;,</div><div class="line">    &#125;,</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>想法明确了，那要怎么实现呢？</p>
+<p>对于像我这样没学过前端的人来说，最难的就是如何通过代码绘制层级表格的问题。</p>
+<h2 id="第一次尝试：绘制2层表格"><a href="#第一次尝试：绘制2层表格" class="headerlink" title="第一次尝试：绘制2层表格"></a>第一次尝试：绘制2层表格</h2><p>为了简化问题分析过程，先尝试对两层表格进行绘制。</p>
+<p><img src="/images/render_table_two_levels.png" alt="render table two levels"><br>图2 两层表格</p>
+<p>简化后的数据结构如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">two_level_data_hash = &#123;</div><div class="line">  "pkg_array": ["pkg1", "pkg2"],</div><div class="line">  "data": &#123;</div><div class="line">    "device1": &#123;</div><div class="line">      "indicator1": ["value1", "value2"],</div><div class="line">      "indicator2": ["value3", "value4"],</div><div class="line">    &#125;,</div><div class="line">    "device2": &#123;</div><div class="line">      "indicator1": ["value5", "value6"],</div><div class="line">      "indicator2": ["value7", "value8"],</div><div class="line">    &#125;,</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如上表格对应的html代码如下。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">"1"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">th</span>&gt;</span>Device<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">th</span>&gt;</span>Indicator<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">th</span>&gt;</span>Pkg1<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">th</span>&gt;</span>Pkg2<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">td</span> <span class="attr">rowspan</span>=<span class="string">"2"</span>&gt;</span>device1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">td</span>&gt;</span>indicator1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">td</span>&gt;</span>value1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">td</span>&gt;</span>value2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">td</span>&gt;</span>indicator2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">td</span>&gt;</span>value3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">td</span>&gt;</span>value4<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>可以看出，绘制层级表格的关键在于<code>tr</code>和<code>rowspan</code>的控制上。<br>因此，我们可以尝试采用如下JavaScript代码进行生成。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">render_two_level_table</span>(<span class="params">two_level_data_hash</span>)</span>&#123;</div><div class="line">  pkg_array = two_level_data_hash[<span class="string">"pkg_array"</span>];</div><div class="line">  table_header = <span class="string">"&lt;tr&gt;"</span>;</div><div class="line">  table_header += <span class="string">"&lt;th&gt;Device&lt;/th&gt;&lt;th colspan='1'&gt;Indicator&lt;/th&gt;"</span>;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> pkg_index <span class="keyword">in</span> pkg_array)&#123;</div><div class="line">    table_header += <span class="string">"&lt;th&gt;"</span> + pkg_array[pkg_index] + <span class="string">"&lt;/th&gt;"</span></div><div class="line">  &#125;</div><div class="line">  table_header += <span class="string">"&lt;/tr&gt;"</span>;</div><div class="line"></div><div class="line">  data = two_level_data_hash[<span class="string">"data"</span>];</div><div class="line">  table_body = <span class="string">""</span>;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> device <span class="keyword">in</span> data)&#123;</div><div class="line">    is_first_indicator_row = <span class="literal">true</span>;</div><div class="line">    table_body += <span class="string">"&lt;tr&gt;&lt;td rowspan='"</span> + data[device].length + <span class="string">"'&gt;"</span> + device + <span class="string">"&lt;/td&gt;"</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> indicator <span class="keyword">in</span> data[device])&#123;</div><div class="line">      <span class="keyword">if</span>(!is_first_indicator_row)&#123;</div><div class="line">        table_body += <span class="string">"&lt;tr&gt;"</span>;</div><div class="line">      &#125;</div><div class="line">      table_body += <span class="string">"&lt;td&gt;"</span> + indicator + <span class="string">"&lt;/td&gt;"</span>;</div><div class="line">      value_list = data[device][indicator];</div><div class="line">      <span class="keyword">for</span>(<span class="keyword">var</span> index <span class="keyword">in</span> value_list)&#123;</div><div class="line">        table_body += <span class="string">"&lt;td&gt;"</span> + value_list[index] + <span class="string">"&lt;/td&gt;"</span>;</div><div class="line">      &#125;</div><div class="line">      table_body += <span class="string">"&lt;/tr&gt;"</span>;</div><div class="line">      is_first_indicator_row = <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">    table_body += <span class="string">"&lt;/tr&gt;"</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  table_content = <span class="string">"&lt;table border='1'&gt;"</span> + table_header + table_body + <span class="string">"&lt;/table&gt;"</span>;</div><div class="line">  $(<span class="string">"#table"</span>).html(table_content);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在绘制indicator单元格的时候，为了判断当前indicator是否是当前device对应的第一个，即是否需要添加<code>&lt;tr&gt;</code>格式符，我们引入了<code>is_first_indicator_row</code>变量；<code>is_first_indicator_row</code>初始为true，绘制完第一个indicator以后变为false；绘制当前device剩余indicator的时候，由于<code>is_first_indicator_row</code>为false，因此每次都会加上<code>&lt;tr&gt;</code>格式符。</p>
+<p>在判断device单元格的行跨度(<code>rowspan</code>)时，由于indicator是device的key，因此我们可以通过当前device中key的数量来得到<code>rowspan</code>，即<code>two_level_data_hash[device].length</code>。</p>
+<p>绘制下一个device对应的数据时，再重复以上流程。</p>
+<p>可以看出，为了正确打印<code>&lt;tr&gt;</code>格式符，我们做了不少工作。两层表格的绘制方法解决了，那如何绘制三层表格呢？</p>
+<h2 id="第二次尝试：绘制3层表格"><a href="#第二次尝试：绘制3层表格" class="headerlink" title="第二次尝试：绘制3层表格"></a>第二次尝试：绘制3层表格</h2><p>回到背景描述里面的需求，若按照上面的思路，我们要绘制三层表格时，就需要引入两个变量，<code>is_first_device_row</code>和<code>is_first_indicator_row</code>，分别用于标记device和indicator是否第一次出现。</p>
+<p>那对于<code>rowspan</code>呢？这貌似就有点麻烦了。因为我们在绘制testcase单元格的时候，<code>rowspan</code>的取值应该是当前testcase包含的所有device各自包含的indicator的数量总和，而我们并不能像之前的方式那样直接得到这个数值。</p>
+<p>那要怎么处理呢？我们可以尝试写一个函数<code>row_num</code>，来计算得到给定JSON数据里面包含的子节点的总数。</p>
+<p>实现方式如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">render_three_level_table</span>(<span class="params">data_hash</span>)</span>&#123;</div><div class="line">  pkg_array = data_hash[<span class="string">"pkg_array"</span>];</div><div class="line">  table_header = <span class="string">"&lt;tr&gt;"</span>;</div><div class="line">  table_header += <span class="string">"&lt;th&gt;TestCase&lt;/th&gt;&lt;th&gt;Device&lt;/th&gt;&lt;th colspan='1'&gt;Indicator&lt;/th&gt;"</span>;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> pkg_index <span class="keyword">in</span> pkg_array)&#123;</div><div class="line">    table_header += <span class="string">"&lt;th&gt;"</span> + pkg_array[pkg_index] + <span class="string">"&lt;/th&gt;"</span>;</div><div class="line">  &#125;</div><div class="line">  table_header += <span class="string">"&lt;/tr&gt;"</span>;</div><div class="line"></div><div class="line">  data = data_hash[<span class="string">"data"</span>];</div><div class="line">  table_body = <span class="string">""</span>;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> testcase <span class="keyword">in</span> data)&#123;</div><div class="line">    is_first_row_device = <span class="literal">true</span>;</div><div class="line">    table_body += <span class="string">"&lt;tr&gt;&lt;td rowspan='"</span> + row_num(data[testcase]) + <span class="string">"'&gt;"</span> + testcase + <span class="string">"&lt;/td&gt;"</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> device <span class="keyword">in</span> data[testcase])&#123;</div><div class="line">      <span class="keyword">if</span>(!is_first_row_device)&#123;</div><div class="line">        table_body += <span class="string">"&lt;tr&gt;"</span>;</div><div class="line">      &#125;</div><div class="line">      table_body += <span class="string">"&lt;td rowspan='"</span> + row_num(data[testcase][device]) + <span class="string">"'&gt;"</span> + device + <span class="string">"&lt;/td&gt;"</span>;</div><div class="line"></div><div class="line">      is_first_row_indicator = <span class="literal">true</span>;</div><div class="line">      <span class="keyword">for</span>(<span class="keyword">var</span> indicator <span class="keyword">in</span> data[testcase][device])&#123;</div><div class="line">        <span class="keyword">if</span>(!is_first_row_indicator)&#123;</div><div class="line">          table_body += <span class="string">"&lt;tr&gt;"</span>;</div><div class="line">        &#125;</div><div class="line">        table_body += <span class="string">"&lt;td&gt;"</span> + indicator + <span class="string">"&lt;/td&gt;"</span>;</div><div class="line"></div><div class="line">        value_list = data[testcase][device][indicator];</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> index <span class="keyword">in</span> value_list)&#123;</div><div class="line">          table_body += <span class="string">"&lt;td&gt;"</span> + value_list[index] + <span class="string">"&lt;/td&gt;"</span>;</div><div class="line">        &#125;</div><div class="line">        table_body += <span class="string">"&lt;/tr&gt;"</span>;</div><div class="line">      &#125;</div><div class="line">      table_body += <span class="string">"&lt;/tr&gt;"</span>;</div><div class="line">      is_first_row_indicator = <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">    table_body += <span class="string">"&lt;/tr&gt;"</span>;</div><div class="line">    is_first_row_device = <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  table_content = <span class="string">"&lt;table border='1'&gt;"</span> + table_header + table_body + <span class="string">"&lt;/table&gt;"</span>;</div><div class="line">  $(<span class="string">"#table"</span>).html(table_content);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">row_num</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> counter = <span class="number">0</span>;</div><div class="line">  <span class="keyword">if</span>(data.constructor == <span class="built_in">Array</span>)&#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">for</span>(key <span class="keyword">in</span> data)&#123;</div><div class="line">    <span class="keyword">var</span> tmp = data[key];</div><div class="line">    <span class="keyword">if</span>(tmp.constructor == <span class="built_in">Array</span>)</div><div class="line">    &#123;</div><div class="line">      counter += <span class="number">1</span>;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">      counter += row_num(tmp);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> counter;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在计算<code>rowspan</code>时，我们用到了递归的方法，实现了对当前testcase或当前device所对应的indicator总数的计算。</p>
+<p>通过以上方式，我们实现了三层表格的绘制。可以看出，三层表格的判断逻辑比两层表格复杂了很多，那如果我们还想绘制更多层次的表格呢？显然，这种方法已不再适用，我们不可能每增加一层就新增加一个标识变量，而且对于数据层级不固定的情况，采用这种方式是完全无法实现自适应的。</p>
+<h2 id="重构：递归！"><a href="#重构：递归！" class="headerlink" title="重构：递归！"></a>重构：递归！</h2><p>回顾上面的代码，我们不难发现，三层表格的代码相比于两层表格的代码，存在着不少重复，而且可以预见，如果我们采用同样的方式去绘制更多层次表格的话，重复的代码会出现得更多。</p>
+<p>一定有更简洁的方法！对，递归！</p>
+<p>其实刚才我们在计算<code>rowspan</code>时已经体会到了递归的好处，它可以自适应多层次的数据结构。我们也完全可以将这个思想应用到表格层级的绘制上面。</p>
+<p>观察背景描述中的数据结构，不难发现，对比数据存储于Array中，而中间层的value都是Hash结构，因此，我们可以通过这个区别，编写递归调用方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">render_table</span>(<span class="params">data_hash</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> res = <span class="string">""</span>;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> data_hash)&#123;</div><div class="line">    <span class="keyword">var</span> tmp = data_hash[key];</div><div class="line">    <span class="keyword">if</span>(tmp.constructor == <span class="built_in">Array</span>)</div><div class="line">    &#123;</div><div class="line">      res += <span class="string">"&lt;tr&gt;&lt;td rowspan='"</span> + row_num(tmp)+ <span class="string">"'&gt;"</span> + key + <span class="string">"&lt;/td&gt;"</span>;</div><div class="line">      <span class="keyword">for</span>(value_index <span class="keyword">in</span> tmp)&#123;</div><div class="line">        <span class="keyword">var</span> value = tmp[value_index];</div><div class="line">        res += <span class="string">"&lt;td&gt;"</span> + value + <span class="string">"&lt;/td&gt;"</span>;</div><div class="line">      &#125;</div><div class="line">      res += <span class="string">"&lt;/tr&gt;"</span>;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">      res += <span class="string">"&lt;tr&gt;&lt;td rowspan='"</span> + row_num(tmp) + <span class="string">"'&gt;"</span> + key + <span class="string">"&lt;/td&gt;"</span> + <span class="string">"&lt;/tr&gt;"</span>;</div><div class="line">      res += render_table(tmp);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> res;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">row_num</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> counter = <span class="number">1</span>;</div><div class="line">  <span class="keyword">if</span>(data.constructor == <span class="built_in">Array</span>)&#123;</div><div class="line">    <span class="keyword">return</span> counter;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">for</span>(key <span class="keyword">in</span> data)&#123;</div><div class="line">    <span class="keyword">var</span> tmp = data[key];</div><div class="line">    <span class="keyword">if</span>(tmp.constructor == <span class="built_in">Array</span>)</div><div class="line">    &#123;</div><div class="line">      counter += <span class="number">1</span>;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">      counter += row_num(tmp);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> counter;</div><div class="line">&#125;</div><div class="line"></div><div class="line">table_body = <span class="string">""</span>;</div><div class="line">table_body += render_table(data_hash);</div></pre></td></tr></table></figure>
+<p>采用了递归的方式以后，我们就不用再关注表格的层级了，只要是传入数据的数据结构与背景描述里面的类似，那么就可以自动绘制出任意层级的表格。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/报表/">报表</a><a href="/tags/Javascript/">Javascript</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/render-multi-level-table-in-webpage/" data-title="测试结果报表展现：Web页面绘制多层级表格 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/cheat-in-wechat-moments-voting-activity/" title="微信朋友圈投票活动的刷票案例分析">
+  <strong>上一篇：</strong><br/>
+  <span>
+  微信朋友圈投票活动的刷票案例分析</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/developing-idea-production-data-picker/"  title="【灵感】线上数据采摘工具（ProductionDataPicker）">
+ <strong>下一篇：</strong><br/> 
+ <span>【灵感】线上数据采摘工具（ProductionDataPicker）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景描述"><span class="toc-number">1.</span> <span class="toc-text">背景描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一次尝试：绘制2层表格"><span class="toc-number">2.</span> <span class="toc-text">第一次尝试：绘制2层表格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二次尝试：绘制3层表格"><span class="toc-number">3.</span> <span class="toc-text">第二次尝试：绘制3层表格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重构：递归！"><span class="toc-number">4.</span> <span class="toc-text">重构：递归！</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

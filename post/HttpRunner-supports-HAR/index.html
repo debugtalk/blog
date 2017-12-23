@@ -1,0 +1,664 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>HttpRunner 支持 HAR 意味着什么？ | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="HttpRunner开始支持HAR啦！！！
+如果你还没有体会到这三个感叹号的含义，那们你可能对HAR还不了解。
+HAR 是什么？HAR的全称为HTTP Archive，是W3C(World Wide Web Consortium)发布的一个通用标准。简单地说，HAR是一个约定的JSON文件格式，用于记录HTTP请求交互的所有内容，包括请求响应的详细记录和性能度量数据。
+虽然当前HAR标准还处于Dr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HttpRunner 支持 HAR 意味着什么？">
+<meta property="og:url" content="http://debugtalk.com/post/HttpRunner-supports-HAR/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="HttpRunner开始支持HAR啦！！！
+如果你还没有体会到这三个感叹号的含义，那们你可能对HAR还不了解。
+HAR 是什么？HAR的全称为HTTP Archive，是W3C(World Wide Web Consortium)发布的一个通用标准。简单地说，HAR是一个约定的JSON文件格式，用于记录HTTP请求交互的所有内容，包括请求响应的详细记录和性能度量数据。
+虽然当前HAR标准还处于Dr">
+<meta property="og:updated_time" content="2017-11-14T16:23:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HttpRunner 支持 HAR 意味着什么？">
+<meta name="twitter:description" content="HttpRunner开始支持HAR啦！！！
+如果你还没有体会到这三个感叹号的含义，那们你可能对HAR还不了解。
+HAR 是什么？HAR的全称为HTTP Archive，是W3C(World Wide Web Consortium)发布的一个通用标准。简单地说，HAR是一个约定的JSON文件格式，用于记录HTTP请求交互的所有内容，包括请求响应的详细记录和性能度量数据。
+虽然当前HAR标准还处于Dr">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/HttpRunner-supports-HAR/" title="HttpRunner 支持 HAR 意味着什么？" itemprop="url">HttpRunner 支持 HAR 意味着什么？</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2017-11-13T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-11-14</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HAR-是什么？"><span class="toc-number">1.</span> <span class="toc-text">HAR 是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HAR-格式详解"><span class="toc-number">2.</span> <span class="toc-text">HAR 格式详解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#har2case"><span class="toc-number">3.</span> <span class="toc-text">har2case</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后续计划"><span class="toc-number">4.</span> <span class="toc-text">后续计划</span></a></li></ol>
+		
+		</div>
+		
+		<p><code>HttpRunner</code>开始支持<code>HAR</code>啦！！！</p>
+<p>如果你还没有体会到这三个感叹号的含义，那们你可能对<code>HAR</code>还不了解。</p>
+<h2 id="HAR-是什么？"><a href="#HAR-是什么？" class="headerlink" title="HAR 是什么？"></a>HAR 是什么？</h2><p><code>HAR</code>的全称为<code>HTTP Archive</code>，是<a href="https://www.w3.org/" target="_blank" rel="external"><code>W3C(World Wide Web Consortium)</code></a>发布的一个通用标准。简单地说，<code>HAR</code>是一个约定的<code>JSON</code>文件格式，用于记录<code>HTTP</code>请求交互的所有内容，包括请求响应的详细记录和性能度量数据。</p>
+<p>虽然当前<code>HAR</code>标准还处于<code>Draft</code>状态，但它已经被业界广泛地采用了，许多我们日常使用的工具都已支持<code>HAR</code>。在下面罗列的工具中，相信大家都已经比较熟悉了。</p>
+<ul>
+<li>Fiddler</li>
+<li>Charles Web Proxy</li>
+<li>Google Chrome</li>
+<li>Firebug</li>
+<li>HttpWatch</li>
+<li>Firefox</li>
+<li>Internet Explorer 9</li>
+<li>Microsoft Edge</li>
+<li>Paw</li>
+<li>Restlet Client</li>
+</ul>
+<p>可以看出，工具覆盖了主流的抓包工具、浏览器和接口测试工具。这些工具都支持<code>HAR</code>标准，可以将录制得到的数据包导出为<code>.har</code>的文件。</p>
+<p>假如我们可以将<code>HAR</code>格式转换为<code>HttpRunner</code>的自动化测试用例，这就相当于<code>HttpRunner</code>可以和非常多的工具结合使用，并获得了接口录制和用例生成功能，灵活性和易用性都将得到极大的提升。</p>
+<p>那么，将<code>HAR</code>格式转换为<code>HttpRunner</code>的自动化测试用例是否可行呢？</p>
+<p>我们不妨先研究下<code>HAR</code>的格式。</p>
+<h2 id="HAR-格式详解"><a href="#HAR-格式详解" class="headerlink" title="HAR 格式详解"></a>HAR 格式详解</h2><p>通过如上列出的任意一款工具，都可以将录制得到的数据包导出为<code>.har</code>的文件。我们采用文本编辑器打开<code>.har</code>文件后，会发现是一个<code>JSON</code>的数据结构。</p>
+<p>默认情况下，<code>.har</code>文件的<code>JSON</code>数据结构是经过压缩的，直接看可能不够直观。推荐大家可以在文本编辑器中安装<code>Prettify JSON</code>的插件，然后就可以将压缩后的<code>JSON</code>数据一键转换为美观的格式。</p>
+<p>更好的方式是，我们可以直接查看<code>W3C</code>编写的<a href="https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/HAR/Overview.html" target="_blank" rel="external"><code>HAR</code>格式标准</a>。</p>
+<p>通过文档可知，<code>HAR</code>是只有一个key的<code>JSON</code>数据结构，并且key值只能为<code>log</code>；而<code>log</code>的值也为一个<code>JSON</code>结构，里面的key包括：<code>version</code>、<code>creator</code>、<code>browser</code>、<code>pages</code>、<code>entries</code>、<code>comment</code>。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"log"</span>: &#123;</div><div class="line">        <span class="attr">"version"</span>: <span class="string">""</span>,</div><div class="line">        <span class="attr">"creator"</span>: &#123;&#125;,</div><div class="line">        <span class="attr">"browser"</span>: &#123;&#125;,</div><div class="line">        <span class="attr">"pages"</span>: [],</div><div class="line">        <span class="attr">"entries"</span>: [],</div><div class="line">        <span class="attr">"comment"</span>: <span class="string">""</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中，<code>version</code>、<code>creator</code>和<code>entries</code>是必有字段，不管是哪款工具导出的<code>.har</code>文件，肯定都会包含这三个字段。而我们在转换生成自动化测试用例时，只需获取HTTP请求和响应的内容，这些全都包含在<code>entries</code>里面，因此我们只需要关注<code>entries</code>的内容即可。</p>
+<p><code>entries</code>字段对应的值为一个列表型数据结构，里面的值按照请求时间进行排序，罗列出各个HTTP请求的详细内容。具体地，HTTP请求记录的信息如下所示：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">"entries": [</div><div class="line">    &#123;</div><div class="line">        "pageref": "page_0",</div><div class="line">        "startedDateTime": "2009-04-16T12:07:23.596Z",</div><div class="line">        "time": 50,</div><div class="line">        "request": &#123;...&#125;,</div><div class="line">        "response": &#123;...&#125;,</div><div class="line">        "cache": &#123;...&#125;,</div><div class="line">        "timings": &#123;&#125;,</div><div class="line">        "serverIPAddress": "10.0.0.1",</div><div class="line">        "connection": "52492",</div><div class="line">        "comment": ""</div><div class="line">    &#125;,</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>由此可见，记录的HTTP信息非常全面，包含了HTTP请求交互过程中的所有内容。</p>
+<p>而从生成自动化测试用例的角度来看，我们并不需要那么多信息，我们只需从中提取关键信息即可。</p>
+<p>编写自动化测试用例，最关键的信息是要知道接口的请求URL、请求方法、请求headers、请求数据等，这些都包含在<code>request</code>字段对应的字典中。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">"request": &#123;</div><div class="line">    "method": "GET",</div><div class="line">    "url": "http://www.example.com/path/?param=value",</div><div class="line">    "httpVersion": "HTTP/1.1",</div><div class="line">    "cookies": [],</div><div class="line">    "headers": [],</div><div class="line">    "queryString" : [],</div><div class="line">    "postData" : &#123;&#125;,</div><div class="line">    "headersSize" : 150,</div><div class="line">    "bodySize" : 0,</div><div class="line">    "comment" : ""</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>根据这些信息，我们就可以完成HTTP请求的构造。</p>
+<p>当请求发送出去后，我们要想实现自动化地判断接口响应是否正确，我们还需要设置一些断言。而与HTTP响应相关的所有信息全都包含在<code>response</code>字段对应的字典中。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">"response": &#123;</div><div class="line">    "status": 200,</div><div class="line">    "statusText": "OK",</div><div class="line">    "httpVersion": "HTTP/1.1",</div><div class="line">    "cookies": [],</div><div class="line">    "headers": [],</div><div class="line">    "content": &#123;&#125;,</div><div class="line">    "redirectURL": "",</div><div class="line">    "headersSize" : 160,</div><div class="line">    "bodySize" : 850,</div><div class="line">    "comment" : ""</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从通用性的角度考虑，我们会判断HTTP响应的状态码是否正确，这对应着<code>status</code>字段；如果我们还想在接口业务层面具有更多的判断，我们还会判断响应内容中的一些关键字段是否符合预期，这对应着<code>content</code>字段。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">"content": &#123;</div><div class="line">    "size": 33,</div><div class="line">    "compression": 0,</div><div class="line">    "mimeType": "text/html; charset=utf-8",</div><div class="line">    "text": "\n",</div><div class="line">    "comment": ""</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于<code>content</code>字段，可能会稍微复杂一些，因为接口响应内容的格式可能多种多样。</p>
+<p>例如，响应内容可能<code>text/html</code>页面的形式，也可能是<code>application/json</code>的形式，具体类型可以查看<code>mimeType</code>得到，而具体的内容存储在<code>text</code>字段中。</p>
+<p>另外，有时候响应数据还可能是经过编码的，用的最多的编码方式为<code>base64</code>。我们可以根据<code>encoding</code>字段获取得到具体的编码形式，然后采用对应的解码方式对<code>text</code>进行解码，最终获得原始的响应内容。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"content": &#123;</div><div class="line">    "size": 63,</div><div class="line">    "mimeType": "application/json; charset=utf-8",</div><div class="line">    "text": "eyJJc1N1Y2Nlc3MiOnRydWUsIkNvZGUiOjIwMCwiVmFsdWUiOnsiQmxuUmVzdWx0Ijp0cnVlfX0=",</div><div class="line">    "encoding": "base64"</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<p>以上面的<code>content</code>为例，我们通过<code>encoding</code>查看到编码形式为<code>base64</code>，并通过<code>text</code>字段获取到编码后的内容；那么我们就可以采用<code>base64</code>的解码函数，转换得到原始的内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; import base64</div><div class="line">&gt;&gt;&gt; base64.b64decode(text)</div><div class="line">b<span class="string">'&#123;"IsSuccess":true,"Code":200,"Value":&#123;"BlnResult":true&#125;&#125;'</span></div></pre></td></tr></table></figure>
+<p>同时，我们根据<code>mimeType</code>可以得到响应内容<code>application/json</code>数据类型，那么就可以对其再进行<code>json.loads</code>操作，最终得到可供程序处理的<code>JSON</code>数据结构。</p>
+<p>通过上述对<code>HAR</code>格式的详细介绍，可以看出<code>HAR</code>格式十分清晰，在对其充分了解的基础上，再编写测试用例转换工具就很简单了。</p>
+<h2 id="har2case"><a href="#har2case" class="headerlink" title="har2case"></a>har2case</h2><p>编码过程没有太多值得说的，直接看最终成品吧。</p>
+<p>最终产出的工具就是<a href="https://github.com/HttpRunner/har2case" target="_blank" rel="external"><code>har2case</code></a>，是一个命令行工具，可以直接将<code>.har</code>文件转换为<code>YAML</code>或<code>JSON</code>格式的自动化测试用例。</p>
+<p>当前<code>har2case</code>已经上传到<code>PYPI</code>上了，通过<code>pip</code>或<code>easy_install</code>即可安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ pip install har2<span class="keyword">case</span></div><div class="line"><span class="comment"># or</span></div><div class="line">$ easy_install har2<span class="keyword">case</span></div></pre></td></tr></table></figure>
+<p>使用方式很简单，只需在<code>har2case</code>命令后分别带上<code>HAR</code>源文件路径和目标生成的<code>YAML/JSON</code>路径即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ har2<span class="keyword">case</span> tests/data/demo.har demo.yml</div><div class="line">INFO:root:Generate YAML testset successfully: demo.yml</div><div class="line"></div><div class="line">$ har2<span class="keyword">case</span> tests/data/demo.har demo.json</div><div class="line">INFO:root:Generate JSON testset successfully: demo.json</div></pre></td></tr></table></figure>
+<p>可以看出，具体是生成<code>YAML</code>还是<code>JSON</code>格式的问题，取决于指定目标文件的后缀：后缀为<code>.yml</code>或<code>.yaml</code>则生成<code>YAML</code>文件，后缀为<code>.json</code>则生成<code>JSON</code>文件。</p>
+<p>如果不指定目标文件也行，则会默认生成<code>JSON</code>文件，文件名称和路径与<code>.har</code>源文件相同。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ har2<span class="keyword">case</span> tests/data/demo.har</div><div class="line">INFO:root:Generate JSON testset successfully: tests/data/demo.json</div></pre></td></tr></table></figure>
+<p>具体的使用方式可以通过执行<code>har2case -h</code>查看。</p>
+<p>在大多数情况下，生成的用例可直接在<code>HttpRunner</code>中使用，当然，是做接口自动化测试、接口性能测试，还是持续集成线上监控，这都取决于你。</p>
+<p>不过，假如录制的场景中包含动态关联的情况，即后续接口请求参数依赖于前面接口的响应，并且每次调用接口时参数都会动态变化，那么就需要人工再对生成的脚本进行关联处理，甚至包括编写一些自定义函数等。</p>
+<h2 id="后续计划"><a href="#后续计划" class="headerlink" title="后续计划"></a>后续计划</h2><p>读到这里，相信大家应该能体会到文章开头那三个感叹号的含义了，我也的确是带着难以言表的兴奋之情发布这个新功能的。</p>
+<p>经过小范围的实际使用，效果很是不错，接口自动化测试用例的编写效率得到了极大的提升。而且，由于<code>HAR</code>本身的开放性，留给用户的选择非常多。</p>
+<p>即便如此，我觉得<code>HttpRunner</code>的易用性还可以得到更大的提升。</p>
+<p>当前，我规划了两项新特性将在近期完成：</p>
+<ul>
+<li>支持<code>PostMan</code>：将<code>Postman Collection Format</code>格式转换为<code>HttpRunner</code>支持的<code>YAML/JSON</code>测试用例；</li>
+<li>支持<code>Swagger</code>：将<code>Swagger</code>定义的API转换为<code>HttpRunner</code>支持的<code>YAML/JSON</code>测试用例。</li>
+</ul>
+<p>等这两个新特性完成之后，相信<code>HttpRunner</code>会更上一个台阶。</p>
+<p>如果你们有什么更好的想法，欢迎联系我。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HttpRunner/">HttpRunner</a><a href="/tags/HAR/">HAR</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/HttpRunner-supports-HAR/" data-title="HttpRunner 支持 HAR 意味着什么？ | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/HttpRunner-validator-optimization/" title="HttpRunner 的结果校验器优化">
+  <strong>上一篇：</strong><br/>
+  <span>
+  HttpRunner 的结果校验器优化</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/ApiTestEngine-rename-to-HttpRunner/"  title="ApiTestEngine 正式更名为 HttpRunner">
+ <strong>下一篇：</strong><br/> 
+ <span>ApiTestEngine 正式更名为 HttpRunner
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HAR-是什么？"><span class="toc-number">1.</span> <span class="toc-text">HAR 是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HAR-格式详解"><span class="toc-number">2.</span> <span class="toc-text">HAR 格式详解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#har2case"><span class="toc-number">3.</span> <span class="toc-text">har2case</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后续计划"><span class="toc-number">4.</span> <span class="toc-text">后续计划</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

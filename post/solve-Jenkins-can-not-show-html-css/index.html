@@ -1,0 +1,668 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>解决Jenkins中无法展示HTML样式的问题 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="问题描述对于测试报告来说，除了内容的简洁精炼，样式的美观也很重要。常用的做法是，采用HTML格式的文档，并搭配CSS和JS，实现自定义的样式和动画效果（例如展开、折叠等）。
+在Jenkins中要展示HTML文档，通常采用的方式有两种：
+
+使用HTML Publisher Plugin；
+使用Files to archive功能，在Build Artifacts中显示HTML文档链接。
+
+第一种方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解决Jenkins中无法展示HTML样式的问题">
+<meta property="og:url" content="http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="问题描述对于测试报告来说，除了内容的简洁精炼，样式的美观也很重要。常用的做法是，采用HTML格式的文档，并搭配CSS和JS，实现自定义的样式和动画效果（例如展开、折叠等）。
+在Jenkins中要展示HTML文档，通常采用的方式有两种：
+
+使用HTML Publisher Plugin；
+使用Files to archive功能，在Build Artifacts中显示HTML文档链接。
+
+第一种方式">
+<meta property="og:updated_time" content="2017-09-04T05:28:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="解决Jenkins中无法展示HTML样式的问题">
+<meta name="twitter:description" content="问题描述对于测试报告来说，除了内容的简洁精炼，样式的美观也很重要。常用的做法是，采用HTML格式的文档，并搭配CSS和JS，实现自定义的样式和动画效果（例如展开、折叠等）。
+在Jenkins中要展示HTML文档，通常采用的方式有两种：
+
+使用HTML Publisher Plugin；
+使用Files to archive功能，在Build Artifacts中显示HTML文档链接。
+
+第一种方式">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/solve-Jenkins-can-not-show-html-css/" title="解决Jenkins中无法展示HTML样式的问题" itemprop="url">解决Jenkins中无法展示HTML样式的问题</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2017-07-23T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-24</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题描述"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题分析"><span class="toc-number">2.</span> <span class="toc-text">问题分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">3.</span> <span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#临时解决方案"><span class="toc-number">3.1.</span> <span class="toc-text">临时解决方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#永久解决方案"><span class="toc-number">3.2.</span> <span class="toc-text">永久解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阅读更多"><span class="toc-number">4.</span> <span class="toc-text">阅读更多</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>对于测试报告来说，除了内容的简洁精炼，样式的美观也很重要。常用的做法是，采用<code>HTML</code>格式的文档，并搭配<code>CSS</code>和<code>JS</code>，实现自定义的样式和动画效果（例如展开、折叠等）。</p>
+<p>在<code>Jenkins</code>中要展示<code>HTML</code>文档，通常采用的方式有两种：</p>
+<ul>
+<li>使用<a href="https://wiki.jenkins.io/display/JENKINS/HTML+Publisher+Plugin" target="_blank" rel="external"><code>HTML Publisher Plugin</code></a>；</li>
+<li>使用<code>Files to archive</code>功能，在<code>Build Artifacts</code>中显示<code>HTML</code>文档链接。</li>
+</ul>
+<p>第一种方式配合插件，可以通过图形化操作实现简易配置，并且展示效果也不错；而第二种方式的优势在于使用<code>Jenkins</code>自带的功能，不依赖插件也能实现基本的需求。</p>
+<p>然而，不管是采用哪种方式，都有可能会遇到一种情况，就是展示出来的<code>HTML</code>报告样式全无。在浏览器的<code>Network</code>中查看资源加载情况，会发现相关的<code>CSS</code>和<code>JS</code>都没法正常加载。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Refused to load the stylesheet &apos;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css&apos; because it violates the following Content Security Policy directive: &quot;style-src &apos;self&apos;&quot;.</div><div class="line">Refused to apply inline style because it violates the following Content Security Policy directive: &quot;style-src &apos;self&apos;&quot;. Either the &apos;unsafe-inline&apos; keyword, a hash (&apos;sha256-0EZqoz+oBhx7gF4nvY2bSqoGyy4zLjNF+SDQXGp/ZrY=&apos;), or a nonce (&apos;nonce-...&apos;) is required to enable inline execution.</div><div class="line">Blocked script execution in &apos;http://10.13.0.146:8888/job/SkyPixel-SmokeTest/34/artifact/reports/SkyPixel-smoketest/34.html&apos; because the document&apos;s frame is sandboxed and the &apos;allow-scripts&apos; permission is not set.</div><div class="line">Refused to load the stylesheet &apos;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css&apos; because it violates the following Content Security Policy directive: &quot;style-src &apos;self&apos;&quot;.</div></pre></td></tr></table></figure>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>出现该现象的原因在于<code>Jenkins</code>中配置的<code>CSP</code>（<code>Content Security Policy</code>）。</p>
+<p>简单地说，这是<code>Jenkins</code>的一个安全策略，默认会设置为一个非常严格的权限集，以防止Jenkins用户在<code>workspace</code>、<code>/userContent</code>、<code>archived artifacts</code>中受到恶意<code>HTML/JS</code>文件的攻击。</p>
+<p>默认地，该权限集会设置为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sandbox; default-src &apos;none&apos;; img-src &apos;self&apos;; style-src &apos;self&apos;;</div></pre></td></tr></table></figure>
+<p>在该配置下，只允许加载：</p>
+<ul>
+<li>Jenkins服务器上托管的<code>CSS</code>文件</li>
+<li>Jenkins服务器上托管的图片文件</li>
+</ul>
+<p>而如下形式的内容都会被禁止：</p>
+<ul>
+<li>JavaScript</li>
+<li>plugins (object/embed)</li>
+<li>HTML中的内联样式表（<code>Inline style sheets</code>），以及引用的外站CSS文件</li>
+<li>HTML中的内联图片（<code>Inline image definitions</code>），以及外站引用的图片文件</li>
+<li>frames</li>
+<li>web fonts</li>
+<li>XHR/AJAX</li>
+<li>etc.</li>
+</ul>
+<p>可以看出，这个限制非常严格，在此限制下也就不难理解为什么我们的<code>HTML</code>没法正常展示样式了。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="临时解决方案"><a href="#临时解决方案" class="headerlink" title="临时解决方案"></a>临时解决方案</h3><p>要解决该问题，方式也比较简单，就是修改<code>Content Security Policy</code>的默认配置。</p>
+<p>修改方式为，进入<code>Manage Jenkins</code>-&gt;<code>Script console</code>，输入如下命令并进行执行。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">System.setProperty(<span class="string">"hudson.model.DirectoryBrowserSupport.CSP"</span>, <span class="string">""</span>)</div></pre></td></tr></table></figure>
+<p>当看到如下结果后，则说明配置修改已经生效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Result</div><div class="line">Result:</div></pre></td></tr></table></figure>
+<p>再次进行构建，新生成的<code>HTML</code>就可以正常展示样式了。需要说明的是，该操作对之前构建生成的<code>HTML</code>报告无效。</p>
+<h3 id="永久解决方案"><a href="#永久解决方案" class="headerlink" title="永久解决方案"></a>永久解决方案</h3><p>不过，该方法还存在一个问题：该配置只是临时生效，当重启<code>Jenkins</code>后，<code>Content Security Policy</code>又会恢复为默认值，从而<code>HTML</code>样式又没法展示了。</p>
+<p>当前，<code>Jenkins</code>官方还没有相应的解决方法，我们只能在每次启动或重启<code>Jenkins</code>时，重新修改该安全策略。</p>
+<p>如果手工地来重复这项工作，也是可行，但并不是一个好的解决方案。</p>
+<p>回到刚才的<code>Script console</code>，会发现我们执行的命令其实就是一段<code>Groovy</code>代码；那么，如果我们可以实现在<code>Jenkins</code>每次启动时自动地执行该<code>Groovy</code>代码，那么也就同样能解决我们的问题了。</p>
+<p>好在<code>Jenkins</code>已经有相应的插件：</p>
+<ul>
+<li><a href="https://wiki.jenkins.io/display/JENKINS/Startup+Trigger" target="_blank" rel="external"><code>Startup Trigger</code></a>: 可实现在<code>Jenkins</code>节点(master/slave)启动时触发构建；</li>
+<li><a href="https://wiki.jenkins.io/display/JENKINS/Groovy+plugin" target="_blank" rel="external"><code>Groovy plugin</code></a>: 可实现直接执行<code>Groovy</code>代码。</li>
+</ul>
+<p>搜索安装<code>startup-trigger-plugin</code>和<code>Groovy</code>插件后，我们就可以进行配置了。</p>
+<p>配置方式如下：</p>
+<ul>
+<li>新建一个job，该job专门用于<code>Jenkins</code>启动时执行的配置命令；</li>
+<li>在<code>Build Triggers</code>模块下，勾选<code>Build when job nodes start</code>；</li>
+<li>在<code>Build</code>模块下，<code>Add build step</code>-&gt;<code>Execute system Groovy script</code>，在<code>Groovy Script</code>中输入配置命令，<code>System.setProperty(&quot;hudson.model.DirectoryBrowserSupport.CSP&quot;, &quot;&quot;)</code>。</li>
+</ul>
+<p>需要注意的是，添加构建步骤的时候，应该选择<code>Execute system Groovy script</code>，而不是<code>Execute Groovy script</code>。关于这两者之间的差异，简单地说，<code>Groovy Script</code>相当于是运行在<code>master/slave</code>系统<code>JVM</code>环境中，而<code>system groovy script</code>，则是运行在<code>Jenkins master</code>的<code>JVM</code>环境中，与前面提到的<code>Jenkins Script Console</code>功能相同。如需了解更多信息，可查看<a href="https://wiki.jenkins.io/display/JENKINS/Groovy+plugin" target="_blank" rel="external"><code>Groovy plugin</code>的详细说明</a>。</p>
+<p>至此，我们就彻底解决<code>HTML</code>样式展示异常的问题了。</p>
+<p>但还有一点需要格外注意，在本文的演示中，我们修改<code>CSP</code>（<code>Content Security Policy</code>）配置时关闭了的所有安全保护策略，即将<code>hudson.model.DirectoryBrowserSupport.CSP</code>设置为空，其实这是存在很大的安全隐患的。</p>
+<p>正确的做法，我们应该是结合项目的实际情况，选择对应的安全策略。例如，如果我们需要开启脚本文件加载，但是只限于Jenkins服务器上托管的<code>CSS</code>文件，那么就可以采用如下配置。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">System.setProperty(<span class="string">"hudson.model.DirectoryBrowserSupport.CSP"</span>, <span class="string">"sandbox; style-src 'self';"</span>)</div></pre></td></tr></table></figure>
+<p>除此之外，<code>CSP</code>可以实现非常精细的权限配置，详细配置可参考<a href="https://content-security-policy.com/" target="_blank" rel="external"><code>Content Security Policy Reference</code></a>。</p>
+<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
+<li><a href="https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy" target="_blank" rel="external">Configuring Content Security Policy</a></li>
+<li><a href="https://content-security-policy.com/" target="_blank" rel="external">Content Security Policy Reference</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Jenkins/">Jenkins</a><a href="/tags/Plugin/">Plugin</a><a href="/tags/测试报告/">测试报告</a><a href="/tags/持续集成/">持续集成</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/" data-title="解决Jenkins中无法展示HTML样式的问题 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/" title="How to install a package from Github that has other github dependencies ?">
+  <strong>上一篇：</strong><br/>
+  <span>
+  How to install a package from Github that has other github dependencies ?</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/ApiTestEngine-4-call-functions-in-yaml-testcases/"  title="ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用">
+ <strong>下一篇：</strong><br/> 
+ <span>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题描述"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题分析"><span class="toc-number">2.</span> <span class="toc-text">问题分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">3.</span> <span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#临时解决方案"><span class="toc-number">3.1.</span> <span class="toc-text">临时解决方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#永久解决方案"><span class="toc-number">3.2.</span> <span class="toc-text">永久解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阅读更多"><span class="toc-number">4.</span> <span class="toc-text">阅读更多</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

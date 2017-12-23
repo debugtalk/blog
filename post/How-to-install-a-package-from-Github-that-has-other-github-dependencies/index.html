@@ -1,0 +1,655 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>How to install a package from Github that has other github dependencies ? | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="最近在开发ApiTestEngine时遇到一个安装包依赖的问题，耗费了不少时间寻找解决方案，考虑到还算比较有普遍性，因此总结形成这篇文章。
+从 pip install 说起先不那么简单地描述下背景。
+ApiTestEngine作为一款接口测试工具，需要具有灵活的命令行调用方式，因此最好能在系统中进行安装并注册为一个CLI命令。
+在Python中，安装依赖库的最佳方式是采用pip，例如安装Locus">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to install a package from Github that has other github dependencies ?">
+<meta property="og:url" content="http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="最近在开发ApiTestEngine时遇到一个安装包依赖的问题，耗费了不少时间寻找解决方案，考虑到还算比较有普遍性，因此总结形成这篇文章。
+从 pip install 说起先不那么简单地描述下背景。
+ApiTestEngine作为一款接口测试工具，需要具有灵活的命令行调用方式，因此最好能在系统中进行安装并注册为一个CLI命令。
+在Python中，安装依赖库的最佳方式是采用pip，例如安装Locus">
+<meta property="og:updated_time" content="2017-12-23T07:18:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How to install a package from Github that has other github dependencies ?">
+<meta name="twitter:description" content="最近在开发ApiTestEngine时遇到一个安装包依赖的问题，耗费了不少时间寻找解决方案，考虑到还算比较有普遍性，因此总结形成这篇文章。
+从 pip install 说起先不那么简单地描述下背景。
+ApiTestEngine作为一款接口测试工具，需要具有灵活的命令行调用方式，因此最好能在系统中进行安装并注册为一个CLI命令。
+在Python中，安装依赖库的最佳方式是采用pip，例如安装Locus">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/" title="How to install a package from Github that has other github dependencies ?" itemprop="url">How to install a package from Github that has other github dependencies ?</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2017-08-04T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-08-05</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从-pip-install-说起"><span class="toc-number">1.</span> <span class="toc-text">从 pip install 说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题缘由"><span class="toc-number">2.</span> <span class="toc-text">问题缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">3.</span> <span class="toc-text">解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">4.</span> <span class="toc-text">后记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阅读更多"><span class="toc-number">5.</span> <span class="toc-text">阅读更多</span></a></li></ol>
+		
+		</div>
+		
+		<p>最近在开发<code>ApiTestEngine</code>时遇到一个安装包依赖的问题，耗费了不少时间寻找解决方案，考虑到还算比较有普遍性，因此总结形成这篇文章。</p>
+<h2 id="从-pip-install-说起"><a href="#从-pip-install-说起" class="headerlink" title="从 pip install 说起"></a>从 pip install 说起</h2><p>先不那么简单地描述下背景。</p>
+<p><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>作为一款接口测试工具，需要具有灵活的命令行调用方式，因此最好能在系统中进行安装并注册为一个<code>CLI</code>命令。</p>
+<p>在Python中，安装依赖库的最佳方式是采用<a href="https://pip.pypa.io/en/stable/" target="_blank" rel="external"><code>pip</code></a>，例如安装<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>时，就可以采用如下命令搞定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ pip install locustio</div><div class="line">Collecting locustio</div><div class="line">  Using cached locustio-0.7.5.tar.gz</div><div class="line">[...]</div><div class="line">Successfully installed locustio-0.7.5</div></pre></td></tr></table></figure>
+<p>但要想采用<code>pip install SomePackage</code>的方式，前提是<code>SomePackage</code>已经托管在<code>PyPI</code>。关于<code>PyPI</code>，可以理解为<code>Python</code>语言的第三方库的仓库索引，当前绝大多数流行的<code>Python</code>第三方库都托管在<code>PyPI</code>上。</p>
+<p>但是，这里存在一个问题。在<code>PyPI</code>当中，所有的包都是由其作者自行上传的。如果作者比较懒，那么可能托管在<code>PyPI</code>上的最新版本相较于最新代码就会比较滞后。</p>
+<p><code>Locust</code>就是一个典型的例子。从上面的安装过程可以看出，我们采用<code>pip install locustio</code>安装的<code>Locust</code>版本是<code>v0.7.5</code>，而在<code>Locust</code>的<code>Github</code>仓库中，<code>v0.7.5</code>已经是一年之前的版本了。也是因为这个原因，之前在我的博客里面介绍<code>Locust</code>的<a href="http://debugtalk.com/post/head-first-locust-user-guide/">图表展示功能</a>后，已经有不下5个人向我咨询为啥他们看不到这个图表模块。这是因为<code>Locust</code>的图表模块是在今年（2017）年初时添加的功能，master分支的代码版本也已经升级到<code>v0.8a2</code>了，但<code>PyPI</code>上的版本却一直没有更新。</p>
+<p>而要想使用到项目最新的功能，就只能采用源码进行安装。</p>
+<p>大多数编程语言在使用源码进行安装时，都需要先将源码下载到本地，然后通过命令进行编译，例如<code>Linux</code>中常见的<code>make &amp;&amp; make install</code>。对于<code>Python</code>项目来说，也可以采用类似的模式，先将项目<code>clone</code>到本地，然后进入到项目的根目录，执行<code>python setup.py install</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ git clone https://github.com/locustio/locust.git</div><div class="line">$ cd locust</div><div class="line">$ python setup.py install</div><div class="line">[...]</div><div class="line">Finished processing dependencies for locustio==0.8a2</div></pre></td></tr></table></figure>
+<p>不过，要想采用这种方式进行安装也是有前提的，那就是项目必须已经实现了基于<code>setuptools</code>的安装方式，并在项目的根目录下存在<code>setup.py</code>。</p>
+<p>可以看出，这种安装方式还是比较繁琐的，需要好几步才能完成安装。而且，对于大多数使用者来说，他们并不需要阅读项目源码，因此<code>clone</code>操作也实属多余。</p>
+<p>可喜的是，<code>pip</code>不仅支持安装<code>PyPI</code>上的包，也可以直接通过项目的<code>git</code>地址进行安装。还是以<code>Locust</code>项目为例，我们通过<code>pip</code>命令也可以实现一条命令安装<code>Github</code>项目源码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ pip install git+https://github.com/locustio/locust.git@master#egg=locustio</div><div class="line">Collecting locustio from git+https://github.com/locustio/locust.git@master#egg=locustio</div><div class="line">[...]</div><div class="line">Successfully installed locustio-0.8a2</div></pre></td></tr></table></figure>
+<p>对于项目地址来说，完整的描述应该是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install vcs+protocol://repo_url/#egg=pkg&amp;subdirectory=pkg_dir</div></pre></td></tr></table></figure>
+<p>这里的<code>vcs</code>也不仅限于<code>git</code>，<code>svn</code>和<code>hg</code>也是一样的，而<code>protocol</code>除了采用<code>SSH</code>形式的项目地址，也可以采用<code>HTTPS</code>的地址，在此不再展开。</p>
+<p>通过这种方式，我们就总是可以使用到项目的最新功能特性了。当然，前提条件也是一样的，需要项目中已经实现了<code>setup.py</code>。</p>
+<p>考虑到<code>ApiTestEngine</code>还处于频繁的新特性开发阶段，因此这种途径无疑是让用户安装使用最新代码的最佳方式。</p>
+<h2 id="问题缘由"><a href="#问题缘由" class="headerlink" title="问题缘由"></a>问题缘由</h2><p>在<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>中，存在测试结果报告展示这一部分的功能，而这部分的功能是需要依赖于另外一个托管在GitHub上的项目，<a href="https://github.com/debugtalk/PyUnitReport" target="_blank" rel="external"><code>PyUnitReport</code></a>。</p>
+<p>于是，问题就变为：如何构造<code>ApiTestEngine</code>项目的<code>setup.py</code>，可以实现用户在安装<code>ApiTestEngine</code>时自动安装<code>PyUnitReport</code>依赖。</p>
+<p>对于这个需求，已经确定可行的办法：先通过<code>pip</code>安装依赖的库（<code>PyUnitReport</code>），然后再安装当前项目（<code>ApiTestEngine</code>）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ pip install git+https://github.com/debugtalk/PyUnitReport.git#egg=PyUnitReport</div><div class="line">$ pip install git+https://github.com/debugtalk/ApiTestEngine.git#egg=ApiTestEngine</div></pre></td></tr></table></figure>
+<p>这种方式虽然可行，但是需要执行两条命令，显然不是我们想要的效果。</p>
+<p>经过搜索，发现针对该需求，可以在<code>setuptools.setup()</code>中通过<code>install_requires</code>和<code>dependency_links</code>这两个配置项组合实现。</p>
+<p>具体地，配置方式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">install_requires=[</div><div class="line">   &quot;requests&quot;,</div><div class="line">   &quot;flask&quot;,</div><div class="line">   &quot;PyYAML&quot;,</div><div class="line">   &quot;coveralls&quot;,</div><div class="line">   &quot;coverage&quot;,</div><div class="line">   &quot;PyUnitReport&quot;</div><div class="line">],</div><div class="line">dependency_links=[</div><div class="line">   &quot;git+https://github.com/debugtalk/PyUnitReport.git#egg=PyUnitReport&quot;</div><div class="line">],</div></pre></td></tr></table></figure>
+<p>这里有一点需要格外注意，那就是指定的依赖包如果存在于<code>PyPI</code>，那么只需要在<code>install_requires</code>中指定包名和版本号即可（不指定版本号时，默认安装最新版本）；而对于以仓库URL地址存在的依赖包，那么不仅需要在<code>dependency_links</code>中指定，同时也要在<code>install_requires</code>中指定。</p>
+<p>然后，就可以直接通过<code>ApiTestEngine</code>项目的git地址一键进行安装了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pip install git+https://github.com/debugtalk/ApiTestEngine.git#egg=ApiTestEngine</div></pre></td></tr></table></figure>
+<p>虽然在寻找解决办法的过程中，看到大家都在说<code>dependency_links</code>由于安全性的问题，即将被弃用，而且在<code>setuptools</code>的官方文章中的确也没有看到<code>dependency_links</code>的描述。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DEPRECATION: Dependency Links processing has been deprecated and will be removed in a future release.</div></pre></td></tr></table></figure>
+<p>不过在我本地的<code>macOS</code>系统上尝试发现，该种方式的确是可行的，因此就采用这种方式进行发布了。</p>
+<p>但是当我后续在<code>Linux</code>服务器上安装时，却无法成功，总是在安装<code>PyUnitReport</code>依赖库的时候报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ pip install git+https://github.com/debugtalk/ApiTestEngine.git#egg=ApiTestEngine</div><div class="line">[...]</div><div class="line">Collecting PyUnitReport (from ApiTestEngine)</div><div class="line">  Could not find a version that satisfies the requirement PyUnitReport (from ApiTestEngine) (from versions: )</div><div class="line">No matching distribution found for PyUnitReport (from ApiTestEngine)</div></pre></td></tr></table></figure>
+<p>另外，同时也有多个用户反馈了同样的问题，这才发现这种方式在<code>Linux</code>和<code>Windows</code>下是不行的。</p>
+<p>然后，再次经过大量的搜索，却始终没有特别明确的答案，搞得我也在怀疑，<code>dependency_links</code>到底是不是真的已经弃用了，但是就算是弃用了，也应该有新的替代方案啊，但也并没有找到。</p>
+<p>这个问题就这么放了差不多一个星期的样子。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>今天周末在家，想来想去，不解决始终不爽，虽然只是多执行一条命令的问题。</p>
+<p>于是又是经过大量搜索，幸运的是终于从<code>pypa/pip</code>的<code>issues</code>中找到一条<a href="https://github.com/pypa/pip/issues/3610" target="_blank" rel="external"><code>issue</code></a>，作者是<a href="https://github.com/pypa/pip/issues/3610#issue-147115114" target="_blank" rel="external"><code>Dominik Neise</code></a>，他详细描述了他遇到的问题和尝试过的方法，看到他的描述我真是惊呆了，跟我的情况完全一模一样不说，连尝试的思路也完全一致。</p>
+<p>然后，在下面的回复中，看到了<a href="https://github.com/pypa/pip/issues/3610#issuecomment-283578756" target="_blank" rel="external"><code>Gary Wu</code></a>和<a href="https://github.com/pypa/pip/issues/3610#issuecomment-317281367" target="_blank" rel="external"><code>kbuilds</code></a>的解答，总算是找到了问题的原因和解决方案。</p>
+<p>问题在于，在<code>dependency_links</code>中指定仓库URL地址的时候，在指定<code>egg</code>信息时，<code>pip</code>还同时需要一个版本号（<code>version number</code>），并且以短横线<code>-</code>分隔，然后执行的时候再加上<code>--process-dependency-links</code>参数。</p>
+<p>回到之前的<code>dependency_links</code>，我们应该写成如下形式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dependency_links=[</div><div class="line">   &quot;git+https://github.com/debugtalk/PyUnitReport.git#egg=PyUnitReport-0&quot;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>在这里，短横线<code>-</code>后面我并没有填写<code>PyUnitReport</code>实际的版本号，因为经过尝试发现，这里填写任意数值都是成功的，因此我就填写为<code>0</code>了，省得后续在升级<code>PyUnitReport</code>以后还要来修改这个地方。</p>
+<p>然后，就可以通过如下命令进行安装了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pip install --process-dependency-links git+https://github.com/debugtalk/ApiTestEngine.git#egg=ApiTestEngine</div></pre></td></tr></table></figure>
+<p>至此，问题总算解决了。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>那么，<code>dependency_links</code>到底是不是要废弃了呢？</p>
+<p>从<code>pip</code>的<code>GitHub</code>项目中看到这么一个<a href="https://github.com/pypa/pip/issues/4187" target="_blank" rel="external"><code>issue</code></a>，<code>--process-dependency-links</code>之前废弃了一段时间，但是又给加回来了，因为当前还没有更好的可替代的方案。因此，在出现替代方案之前，<code>dependency_links</code>应该是最好的方式了吧。</p>
+<p>最后再感叹下，老外提问时描述问题的专业性和细致程度真是令人佩服，大家可以再仔细看下这个<a href="https://github.com/pypa/pip/issues/3610#issue-147115114" target="_blank" rel="external"><code>issue</code></a>好好感受下。</p>
+<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
+<li><a href="http://setuptools.readthedocs.io/en/latest/setuptools.html#dependencies-that-aren-t-in-pypi" target="_blank" rel="external">http://setuptools.readthedocs.io/en/latest/setuptools.html#dependencies-that-aren-t-in-pypi</a></li>
+<li><a href="https://pip.pypa.io/en/stable/reference/pip_install/" target="_blank" rel="external">https://pip.pypa.io/en/stable/reference/pip_install/</a></li>
+<li><a href="https://github.com/pypa/pip/issues/3610" target="_blank" rel="external">https://github.com/pypa/pip/issues/3610</a></li>
+<li><a href="https://github.com/pypa/pip/issues/4187" target="_blank" rel="external">https://github.com/pypa/pip/issues/4187</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Locust/">Locust</a><a href="/tags/setuptools/">setuptools</a><a href="/tags/pip/">pip</a><a href="/tags/HttpRunner/">HttpRunner</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/" data-title="How to install a package from Github that has other github dependencies ? | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/d-test-hire-info/" title="【大疆内推】岗位描述我只想这么写">
+  <strong>上一篇：</strong><br/>
+  <span>
+  【大疆内推】岗位描述我只想这么写</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/solve-Jenkins-can-not-show-html-css/"  title="解决Jenkins中无法展示HTML样式的问题">
+ <strong>下一篇：</strong><br/> 
+ <span>解决Jenkins中无法展示HTML样式的问题
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从-pip-install-说起"><span class="toc-number">1.</span> <span class="toc-text">从 pip install 说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题缘由"><span class="toc-number">2.</span> <span class="toc-text">问题缘由</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-number">3.</span> <span class="toc-text">解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">4.</span> <span class="toc-text">后记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阅读更多"><span class="toc-number">5.</span> <span class="toc-text">阅读更多</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

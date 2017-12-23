@@ -1,0 +1,675 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ApiTestEngine 集成 Locust 实现更好的性能测试体验 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="ApiTestEngine不是接口测试框架么，也能实现性能测试？
+是的，你没有看错，ApiTestEngine集成了Locust性能测试框架，只需一份测试用例，就能同时实现接口自动化测试和接口性能测试，在不改变Locust任何特性的情况下，甚至比Locust本身更易用。
+如果你还没有接触过Locust这款性能测试工具，那么这篇文章可能不适合你。但我还是强烈推荐你了解一下这款工具。简单地说，Locu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ApiTestEngine 集成 Locust 实现更好的性能测试体验">
+<meta property="og:url" content="http://debugtalk.com/post/apitestengine-supersede-locust/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="ApiTestEngine不是接口测试框架么，也能实现性能测试？
+是的，你没有看错，ApiTestEngine集成了Locust性能测试框架，只需一份测试用例，就能同时实现接口自动化测试和接口性能测试，在不改变Locust任何特性的情况下，甚至比Locust本身更易用。
+如果你还没有接触过Locust这款性能测试工具，那么这篇文章可能不适合你。但我还是强烈推荐你了解一下这款工具。简单地说，Locu">
+<meta property="og:image" content="http://debugtalk.com/images/locust-start.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/locusts-full-speed.jpg">
+<meta property="og:updated_time" content="2017-12-23T07:18:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ApiTestEngine 集成 Locust 实现更好的性能测试体验">
+<meta name="twitter:description" content="ApiTestEngine不是接口测试框架么，也能实现性能测试？
+是的，你没有看错，ApiTestEngine集成了Locust性能测试框架，只需一份测试用例，就能同时实现接口自动化测试和接口性能测试，在不改变Locust任何特性的情况下，甚至比Locust本身更易用。
+如果你还没有接触过Locust这款性能测试工具，那么这篇文章可能不适合你。但我还是强烈推荐你了解一下这款工具。简单地说，Locu">
+<meta name="twitter:image" content="http://debugtalk.com/images/locust-start.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/apitestengine-supersede-locust/" title="ApiTestEngine 集成 Locust 实现更好的性能测试体验" itemprop="url">ApiTestEngine 集成 Locust 实现更好的性能测试体验</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2017-08-26T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-08-27</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#灵感来源"><span class="toc-number">1.</span> <span class="toc-text">灵感来源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#灵感初探"><span class="toc-number">2.</span> <span class="toc-text">灵感初探</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化1：自动生成locustfile"><span class="toc-number">3.</span> <span class="toc-text">优化1：自动生成locustfile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化2：一键启动多个locust实例"><span class="toc-number">4.</span> <span class="toc-text">优化2：一键启动多个locust实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最终实现效果"><span class="toc-number">5.</span> <span class="toc-text">最终实现效果</span></a></li></ol>
+		
+		</div>
+		
+		<p><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>不是接口测试框架么，也能实现性能测试？</p>
+<p>是的，你没有看错，<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>集成了<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>性能测试框架，只需一份测试用例，就能同时实现接口自动化测试和接口性能测试，在不改变<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>任何特性的情况下，甚至比<code>Locust</code>本身更易用。</p>
+<p>如果你还没有接触过<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>这款性能测试工具，那么这篇文章可能不适合你。但我还是强烈推荐你了解一下这款工具。简单地说，<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>是一款采用<code>Python</code>语言编写实现的开源性能测试工具，简洁、轻量、高效，并发机制基于<code>gevent</code>协程，可以实现单机模拟生成较高的并发压力。关于<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的特性介绍和使用教程，我之前已经写过不少，你们可以在我的博客中找到<a href="http://debugtalk.com/tags/Locust/">对应文章</a>。</p>
+<p>如果你对实现的过程没有兴趣，可以直接跳转到文章底部，看<code>最终实现效果</code>章节。</p>
+<h2 id="灵感来源"><a href="#灵感来源" class="headerlink" title="灵感来源"></a>灵感来源</h2><p>在当前市面上的测试工具中，接口测试和性能测试基本上是两个泾渭分明的领域。这也意味着，针对同一个系统的服务端接口，我们要对其实现接口自动化测试和接口性能测试时，通常都是采用不同的工具，分别维护两份测试脚本或用例。</p>
+<p>之前我也是这么做的。但是在做了一段时间后我就在想，不管是接口功能测试，还是接口性能测试，核心都是要模拟对接口发起请求，然后对接口响应内容进行解析和校验；唯一的差异在于，接口性能测试存在并发的概念，相当于模拟了大量用户同时在做接口测试。</p>
+<p>既然如此，那接口自动化测试用例和接口性能测试脚本理应可以合并为一套，这样就可以避免重复的脚本开发工作了。</p>
+<p>在开发<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的过程中，之前的文章也说过，<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>完全基于<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external"><code>Python-Requests</code></a>库实现HTTP的请求处理，可以在编写接口测试用例时复用到<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external"><code>Python-Requests</code></a>的所有功能特性。而之前在学习<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的源码时，发现<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>在实现HTTP请求的时候，也完全是基于<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external"><code>Python-Requests</code></a>库。</p>
+<p>在这一层关系的基础上，我提出一个大胆的设想，能否通过一些方式或手段，可以使<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>中编写的<code>YAML/JSON</code>格式的接口测试用例，也能直接让<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>直接调用呢？</p>
+<h2 id="灵感初探"><a href="#灵感初探" class="headerlink" title="灵感初探"></a>灵感初探</h2><p>想法有了以后，就开始探索实现的方法了。</p>
+<p>首先，我们可以看下<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的脚本形式。如下例子是一个比较简单的场景（截取自官网首页）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> HttpLocust, TaskSet, task</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteTasks</span><span class="params">(TaskSet)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_start</span><span class="params">(self)</span>:</span></div><div class="line">        self.client.post(<span class="string">"/login"</span>, &#123;</div><div class="line">            <span class="string">"username"</span>: <span class="string">"test_user"</span>,</div><div class="line">            <span class="string">"password"</span>: <span class="string">""</span></div><div class="line">        &#125;)</div><div class="line"></div><div class="line"><span class="meta">    @task</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(self)</span>:</span></div><div class="line">        self.client.get(<span class="string">"/"</span>)</div><div class="line"></div><div class="line"><span class="meta">    @task</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">about</span><span class="params">(self)</span>:</span></div><div class="line">        self.client.get(<span class="string">"/about/"</span>)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></div><div class="line">    task_set = WebsiteTasks</div><div class="line">    min_wait = <span class="number">5000</span></div><div class="line">    max_wait = <span class="number">15000</span></div></pre></td></tr></table></figure>
+<p>在<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的脚本中，我们会在<code>TaskSet</code>子类中描述单个用户的行为，每一个带有<code>@task</code>装饰器的方法都对应着一个HTTP请求场景。而<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的一个很大特点就是，所有的测试用例脚本都是<code>Python</code>文件，因此我们可以采用Python实现各种复杂的场景。</p>
+<p>等等！模拟单个用户请求，而且还是纯粹的Python语言，我们不是在接口测试中已经实现的功能么？</p>
+<p>例如，下面的代码就是从单元测试中截取的测试用例。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_run_testset</span><span class="params">(self)</span>:</span></div><div class="line">    testcase_file_path = os.path.join(</div><div class="line">        os.getcwd(), <span class="string">'examples/quickstart-demo-rev-3.yml'</span>)</div><div class="line">    testsets = utils.load_testcases_by_path(testcase_file_path)</div><div class="line">    results = self.test_runner.run_testset(testsets[<span class="number">0</span>])</div></pre></td></tr></table></figure>
+<p><code>test_runner.run_testset</code>是已经在<code>ApiTestEngine</code>中实现的方法，作用是传入测试用例（<code>YAML/JSON</code>）的路径，然后就可以加载测试用例，运行整个测试场景。并且，由于我们在测试用例<code>YAML/JSON</code>中已经描述了<code>validators</code>，即接口的校验部分，因此我们也无需再对接口响应结果进行校验描述了。</p>
+<p>接下来，实现方式就非常简单了。</p>
+<p>我们只需要制作一个<code>locustfile.py</code>的模板文件，内容如下。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#coding: utf-8</span></div><div class="line"><span class="keyword">import</span> zmq</div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> HttpLocust, TaskSet, task</div><div class="line"><span class="keyword">from</span> ate <span class="keyword">import</span> utils, runner</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebPageTasks</span><span class="params">(TaskSet)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_start</span><span class="params">(self)</span>:</span></div><div class="line">        self.test_runner = runner.Runner(self.client)</div><div class="line">        self.testset = self.locust.testset</div><div class="line"></div><div class="line"><span class="meta">    @task</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_specified_scenario</span><span class="params">(self)</span>:</span></div><div class="line">       self.test_runner.run_testset(self.testset)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebPageUser</span><span class="params">(HttpLocust)</span>:</span></div><div class="line">    host = <span class="string">''</span></div><div class="line">    task_set = WebPageTasks</div><div class="line">    min_wait = <span class="number">1000</span></div><div class="line">    max_wait = <span class="number">5000</span></div><div class="line"></div><div class="line">    testcase_file_path = os.path.join(os.getcwd(), <span class="string">'skypixel.yml'</span>)</div><div class="line">    testsets = utils.load_testcases_by_path(testcase_file_path)</div><div class="line">    testset = testsets[<span class="number">0</span>]</div></pre></td></tr></table></figure>
+<p>可以看出，整个文件中，只有测试用例文件的路径是与具体测试场景相关的，其它内容全都可以不变。</p>
+<p>于是，针对不同的测试场景，我们只需要将<code>testcase_file_path</code>替换为接口测试用例文件的路径，即可实现对应场景的接口性能测试。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">➜  ApiTestEngine git:(master) ✗ locust <span class="_">-f</span> locustfile.py</div><div class="line">[2017-08-27 11:30:01,829] bogon/INFO/locust.main: Starting web monitor at *:8089</div><div class="line">[2017-08-27 11:30:01,831] bogon/INFO/locust.main: Starting Locust 0.8a2</div></pre></td></tr></table></figure>
+<p>后面的操作就完全是<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的内容了，使用方式完全一样。</p>
+<p><img src="/images/locust-start.jpg" alt=""></p>
+<h2 id="优化1：自动生成locustfile"><a href="#优化1：自动生成locustfile" class="headerlink" title="优化1：自动生成locustfile"></a>优化1：自动生成locustfile</h2><p>通过前面的探索实践，我们基本上就实现了一份测试用例同时兼具接口自动化测试和接口性能测试的功能。</p>
+<p>然而，在使用上还不够便捷，主要有两点：</p>
+<ul>
+<li>需要手工修改模板文件中的<code>testcase_file_path</code>路径；</li>
+<li><code>locustfile.py</code>模板文件的路径必须放在<code>ApiTestEngine</code>的项目根目录下。</li>
+</ul>
+<p>于是，我产生了让<code>ApiTestEngine</code>框架本身自动生成<code>locustfile.py</code>文件的想法。</p>
+<p>在实现这个想法的过程中，我想过两种方式。</p>
+<p>第一种，通过分析<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的源码，可以看到<code>Locust</code>在<code>main.py</code>中具有一个<code>load_locustfile</code>方法，可以加载Python格式的文件，并提取出其中的<code>locust_classes</code>（也就是<code>Locust</code>的子类）；后续，就是将<code>locust_classes</code>作为参数传给<code>Locust</code>的<code>Runner</code>了。</p>
+<p>若采用这种思路，我们就可以实现一个类似<code>load_locustfile</code>的方法，将<code>YAML/JSON</code>文件中的内容动态生成<code>locust_classes</code>，然后再传给<code>Locust</code>的<code>Runner</code>。这里面会涉及到动态地创建类和添加方法，好处是不需要生成<code>locustfile.py</code>中间文件，并且可以实现最大的灵活性，但缺点在于需要改变<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的源码，即重新实现<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的<code>main.py</code>中的多个函数。虽然难度不会太大，但考虑到后续需要与<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的更新保持一致，具有一定的维护工作量，便放弃了该种方案。</p>
+<p>第二种，就是生成<code>locustfile.py</code>这样一个中间文件，然后将文件路径传给<code>Locust</code>。这样的好处在于我们可以不改变<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的任何地方，直接对其进行使用。与<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的传统使用方式差异在于，之前我们是在<code>Terminal</code>中通过参数启动<code>Locust</code>，而现在我们是在<code>ApiTestEngine</code>框架中通过Python代码启动<code>Locust</code>。</p>
+<p>具体地，我在<code>setup.py</code>的<code>entry_points</code>中新增了一个命令<code>locusts</code>，并绑定了对应的程序入口。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">entry_points=&#123;</div><div class="line">    <span class="string">'console_scripts'</span>: [</div><div class="line">        <span class="string">'ate=ate.cli:main_ate'</span>,</div><div class="line">        <span class="string">'locusts=ate.cli:main_locust'</span></div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在<code>ate/cli.py</code>中新增了<code>main_locust</code>函数，作为<code>locusts</code>命令的入口。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main_locust</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">""" Performance test with locust: parse command line options and run commands.</span></div><div class="line">    """</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        <span class="keyword">from</span> locust.main <span class="keyword">import</span> main</div><div class="line">    <span class="keyword">except</span> ImportError:</div><div class="line">        print(<span class="string">"Locust is not installed, exit."</span>)</div><div class="line">        exit(<span class="number">1</span>)</div><div class="line"></div><div class="line">    sys.argv[<span class="number">0</span>] = <span class="string">'locust'</span></div><div class="line">    <span class="keyword">if</span> len(sys.argv) == <span class="number">1</span>:</div><div class="line">        sys.argv.extend([<span class="string">"-h"</span>])</div><div class="line"></div><div class="line">    <span class="keyword">if</span> sys.argv[<span class="number">1</span>] <span class="keyword">in</span> [<span class="string">"-h"</span>, <span class="string">"--help"</span>, <span class="string">"-V"</span>, <span class="string">"--version"</span>]:</div><div class="line">        main()</div><div class="line">        sys.exit(<span class="number">0</span>)</div><div class="line"></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        testcase_index = sys.argv.index(<span class="string">'-f'</span>) + <span class="number">1</span></div><div class="line">        <span class="keyword">assert</span> testcase_index &lt; len(sys.argv)</div><div class="line">    <span class="keyword">except</span> (ValueError, AssertionError):</div><div class="line">        print(<span class="string">"Testcase file is not specified, exit."</span>)</div><div class="line">        sys.exit(<span class="number">1</span>)</div><div class="line"></div><div class="line">    testcase_file_path = sys.argv[testcase_index]</div><div class="line">    sys.argv[testcase_index] = parse_locustfile(testcase_file_path)</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<p>若你执行<code>locusts -V</code>或<code>locusts -h</code>，会发现效果与<code>locust</code>的特性完全一致。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ locusts -V</div><div class="line">[2017-08-27 12:41:27,740] bogon/INFO/stdout: Locust 0.8a2</div><div class="line">[2017-08-27 12:41:27,740] bogon/INFO/stdout:</div></pre></td></tr></table></figure>
+<p>事实上，通过上面的代码（<code>main_locust</code>）也可以看出，<code>locusts</code>命令只是对<code>locust</code>进行了一层封装，用法基本等价。唯一的差异在于，当<code>-f</code>参数指定的是<code>YAML/JSON</code>格式的用例文件时，会先转换为Python格式的<code>locustfile.py</code>，然后再传给<code>locust</code>。</p>
+<p>至于解析函数<code>parse_locustfile</code>，实现起来也很简单。我们只需要在框架中保存一份<code>locustfile.py</code>的模板文件（<code>ate/locustfile_template</code>），并将<code>testcase_file_path</code>采用占位符代替。然后，在解析函数中，就可以读取整个模板文件，将其中的占位符替换为<code>YAML/JSON</code>用例文件的实际路径，然后再保存为<code>locustfile.py</code>，并返回其路径即可。</p>
+<p>具体的代码就不贴了，有兴趣的话可自行查看。</p>
+<p>通过这一轮优化，<code>ApiTestEngine</code>就继承了<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>的全部功能，并且可以直接指定<code>YAML/JSON</code>格式的文件启动<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>执行性能测试。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ locusts <span class="_">-f</span> examples/first-testcase.yml</div><div class="line">[2017-08-18 17:20:43,915] Leos-MacBook-Air.local/INFO/locust.main: Starting web monitor at *:8089</div><div class="line">[2017-08-18 17:20:43,918] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2</div></pre></td></tr></table></figure>
+<h2 id="优化2：一键启动多个locust实例"><a href="#优化2：一键启动多个locust实例" class="headerlink" title="优化2：一键启动多个locust实例"></a>优化2：一键启动多个locust实例</h2><p>经过第一轮优化后，本来应该是告一段落了，因为此时<code>ApiTestEngine</code>已经可以非常便捷地实现接口自动化测试和接口性能测试的切换了。</p>
+<p>直到有一天，在<code>TesterHome</code>论坛讨论<code>Locust</code>的一个<a href="https://testerhome.com/topics/9277#reply-84542" target="_blank" rel="external">回复</a>中，<a href="https://testerhome.com/keithmork" target="_blank" rel="external"><code>@keithmork</code></a>说了这么一句话。</p>
+<blockquote>
+<p>期待有一天<code>ApiTestEngine</code>的热度超过<code>Locust</code>本身</p>
+</blockquote>
+<p>看到这句话时我真的不禁泪流满面。虽然我也是一直在用心维护<code>ApiTestEngine</code>，却从未有过这样的奢望。</p>
+<p>但反过来细想，为啥不能有这样的想法呢？当前<code>ApiTestEngine</code>已经继承了<code>Locust</code>的所有功能，在不影响<code>Locust</code>已有特性的同时，还可以采用<code>YAML/JSON</code>格式来编写维护测试用例，并实现了一份测试用例可同时用于接口自动化和接口性能测试的目的。</p>
+<p>这些特性都是<code>Locust</code>所不曾拥有的，而对于使用者来说的确也都是比较实用的功能。</p>
+<p>于是，新的目标在内心深处萌芽了，那就是在<code>ApiTestEngine</code>中通过对<code>Locust</code>更好的封装，让<code>Locust</code>的使用者体验更爽。</p>
+<p>然后，我又想到了自己之前做的一个开源项目，<a href="https://github.com/debugtalk/Stormer" target="_blank" rel="external"><code>debugtalk/stormer</code></a>。当时做这个项目的初衷在于，当我们使用<code>Locust</code>进行压测时，要想使用压测机所有CPU的性能，就需要采用<code>master-slave</code>模式。因为<code>Locust</code>默认是单进程运行的，只能运行在压测机的一个CPU核上；而通过采用<code>master-slave</code>模式，启动多个<code>slave</code>，就可以让不同的<code>slave</code>运行在不同的CPU核上，从而充分发挥压测机多核处理器的性能。</p>
+<p>而在实际使用<code>Locust</code>的时候，每次只能手动启动<code>master</code>，并依次手动启动多个<code>slave</code>。若遇到测试脚本调整的情况，就需要逐一结束<code>Locust</code>的所有进程，然后再重复之前的启动步骤。如果有使用过<code>Locust</code>的同学，应该对此痛苦的经历都有比较深的体会。当时也是基于这一痛点，我开发了<a href="https://github.com/debugtalk/Stormer" target="_blank" rel="external"><code>debugtalk/stormer</code></a>，目的就是可以一次性启动或销毁多个<code>Locust</code>实例。这个脚本做出来后，自己用得甚爽，也得到了<code>Github</code>上一些朋友的青睐。</p>
+<p>既然现在要提升<code>ApiTestEngine</code>针对<code>Locust</code>的使用便捷性，那么这个特性毫无疑问也应该加进去。就此，<a href="https://github.com/debugtalk/Stormer" target="_blank" rel="external"><code>debugtalk/stormer</code></a>项目便被废弃，正式合并到<code>debugtalk/ApiTestEngine</code>。</p>
+<p>想法明确后，实现起来也挺简单的。</p>
+<p>原则还是保持不变，那就是不改变<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>本身的特性，只在传参的时候在中间层进行操作。</p>
+<p>具体地，我们可以新增一个<code>--full-speed</code>参数。当不指定该参数时，使用方式跟之前完全相同；而指定<code>--full-speed</code>参数后，就可以采用多进程的方式启动多个实例（实例个数等于压测机的处理器核数）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main_locust</span><span class="params">()</span>:</span></div><div class="line">    <span class="comment"># do original work</span></div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="string">"--full-speed"</span> <span class="keyword">in</span> sys.argv:</div><div class="line">        locusts.run_locusts_at_full_speed(sys.argv)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        locusts.main()</div></pre></td></tr></table></figure>
+<p>具体实现逻辑在<code>ate/locusts.py</code>中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> multiprocessing</div><div class="line"><span class="keyword">from</span> locust.main <span class="keyword">import</span> main</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_master</span><span class="params">(sys_argv)</span>:</span></div><div class="line">    sys_argv.append(<span class="string">"--master"</span>)</div><div class="line">    sys.argv = sys_argv</div><div class="line">    main()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_slave</span><span class="params">(sys_argv)</span>:</span></div><div class="line">    sys_argv.extend([<span class="string">"--slave"</span>])</div><div class="line">    sys.argv = sys_argv</div><div class="line">    main()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_locusts_at_full_speed</span><span class="params">(sys_argv)</span>:</span></div><div class="line">    sys_argv.pop(sys_argv.index(<span class="string">"--full-speed"</span>))</div><div class="line">    slaves_num = multiprocessing.cpu_count()</div><div class="line"></div><div class="line">    processes = []</div><div class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(slaves_num):</div><div class="line">        p_slave = multiprocessing.Process(target=start_slave, args=(sys_argv,))</div><div class="line">        p_slave.daemon = <span class="keyword">True</span></div><div class="line">        p_slave.start()</div><div class="line">        processes.append(p_slave)</div><div class="line"></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        start_master(sys_argv)</div><div class="line">    <span class="keyword">except</span> KeyboardInterrupt:</div><div class="line">        sys.exit(<span class="number">0</span>)</div></pre></td></tr></table></figure>
+<p>由此可见，关键点也就是使用了<code>multiprocessing.Process</code>，在不同的进程中分别调用<code>Locust</code>的<code>main()</code>函数，实现逻辑十分简单。</p>
+<h2 id="最终实现效果"><a href="#最终实现效果" class="headerlink" title="最终实现效果"></a>最终实现效果</h2><p>经过前面的优化，采用<code>ApiTestEngine</code>执行性能测试时，使用就十分便捷了。</p>
+<p>安装<code>ApiTestEngine</code>后，系统中就具有了<code>locusts</code>命令，使用方式跟<code>Locust</code>框架的<code>locust</code>几乎完全相同，我们完全可以使用<code>locusts</code>命令代替原生的<code>locust</code>命令。</p>
+<p>例如，下面的命令执行效果与<code>locust</code>完全一致。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ locusts -V</div><div class="line">$ locusts -h</div><div class="line">$ locusts <span class="_">-f</span> locustfile.py</div><div class="line">$ locusts <span class="_">-f</span> locustfile.py --master -P 8088</div><div class="line">$ locusts <span class="_">-f</span> locustfile.py --slave &amp;</div></pre></td></tr></table></figure>
+<p>差异在于，<code>locusts</code>具有更加丰富的功能。</p>
+<p>在<code>ApiTestEngine</code>中编写的<code>YAML/JSON</code>格式的接口测试用例文件，直接运行就可以启动<code>Locust</code>运行性能测试。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ locusts <span class="_">-f</span> examples/first-testcase.yml</div><div class="line">[2017-08-18 17:20:43,915] Leos-MacBook-Air.local/INFO/locust.main: Starting web monitor at *:8089</div><div class="line">[2017-08-18 17:20:43,918] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2</div></pre></td></tr></table></figure>
+<p>加上<code>--full-speed</code>参数，就可以同时启动多个<code>Locust</code>实例（实例个数等于处理器核数），充分发挥压测机多核处理器的性能。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ locusts <span class="_">-f</span> examples/first-testcase.yml --full-speed -P 8088</div><div class="line">[2017-08-26 23:51:47,071] bogon/INFO/locust.main: Starting web monitor at *:8088</div><div class="line">[2017-08-26 23:51:47,075] bogon/INFO/locust.main: Starting Locust 0.8a2</div><div class="line">[2017-08-26 23:51:47,078] bogon/INFO/locust.main: Starting Locust 0.8a2</div><div class="line">[2017-08-26 23:51:47,080] bogon/INFO/locust.main: Starting Locust 0.8a2</div><div class="line">[2017-08-26 23:51:47,083] bogon/INFO/locust.main: Starting Locust 0.8a2</div><div class="line">[2017-08-26 23:51:47,084] bogon/INFO/locust.runners: Client <span class="string">'bogon_656e0af8e968a8533d379dd252422ad3'</span> reported as ready. Currently 1 clients ready to swarm.</div><div class="line">[2017-08-26 23:51:47,085] bogon/INFO/locust.runners: Client <span class="string">'bogon_09f73850252ee4ec739ed77d3c4c6dba'</span> reported as ready. Currently 2 clients ready to swarm.</div><div class="line">[2017-08-26 23:51:47,084] bogon/INFO/locust.main: Starting Locust 0.8a2</div><div class="line">[2017-08-26 23:51:47,085] bogon/INFO/locust.runners: Client <span class="string">'bogon_869f7ed671b1a9952b56610f01e2006f'</span> reported as ready. Currently 3 clients ready to swarm.</div><div class="line">[2017-08-26 23:51:47,085] bogon/INFO/locust.runners: Client <span class="string">'bogon_80a804cda36b80fac17b57fd2d5e7cdb'</span> reported as ready. Currently 4 clients ready to swarm.</div></pre></td></tr></table></figure>
+<p><img src="/images/locusts-full-speed.jpg" alt=""></p>
+<p>后续，<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>将持续进行优化，欢迎大家多多反馈改进建议。</p>
+<p>Enjoy!</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Locust/">Locust</a><a href="/tags/HttpRunner/">HttpRunner</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/apitestengine-supersede-locust/" data-title="ApiTestEngine 集成 Locust 实现更好的性能测试体验 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/apitestengine-hot-plugin/" title="约定大于配置：ApiTestEngine实现热加载机制">
+  <strong>上一篇：</strong><br/>
+  <span>
+  约定大于配置：ApiTestEngine实现热加载机制</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/apitestengine-quickstart/"  title="ApiTestEngine QuickStart">
+ <strong>下一篇：</strong><br/> 
+ <span>ApiTestEngine QuickStart
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#灵感来源"><span class="toc-number">1.</span> <span class="toc-text">灵感来源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#灵感初探"><span class="toc-number">2.</span> <span class="toc-text">灵感初探</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化1：自动生成locustfile"><span class="toc-number">3.</span> <span class="toc-text">优化1：自动生成locustfile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化2：一键启动多个locust实例"><span class="toc-number">4.</span> <span class="toc-text">优化2：一键启动多个locust实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最终实现效果"><span class="toc-number">5.</span> <span class="toc-text">最终实现效果</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

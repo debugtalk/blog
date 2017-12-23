@@ -1,0 +1,631 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Android开发环境配置0：adb和fastboot | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="1、安装adb和fastboot在对Android进行调试时，常用的工具有adb和fastboot。
+Install Android SDKadb和fastboot包含在Android SDK的Platform-tools package里面，安装Android SDK后也就具备了adb和fastboot工具。
+下载并安装Android SDK tools，打开SDK Manager并安装Andr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android开发环境配置0：adb和fastboot">
+<meta property="og:url" content="http://debugtalk.com/post/android-development-environment-adb-and-fastboot/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="1、安装adb和fastboot在对Android进行调试时，常用的工具有adb和fastboot。
+Install Android SDKadb和fastboot包含在Android SDK的Platform-tools package里面，安装Android SDK后也就具备了adb和fastboot工具。
+下载并安装Android SDK tools，打开SDK Manager并安装Andr">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android开发环境配置0：adb和fastboot">
+<meta name="twitter:description" content="1、安装adb和fastboot在对Android进行调试时，常用的工具有adb和fastboot。
+Install Android SDKadb和fastboot包含在Android SDK的Platform-tools package里面，安装Android SDK后也就具备了adb和fastboot工具。
+下载并安装Android SDK tools，打开SDK Manager并安装Andr">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/android-development-environment-adb-and-fastboot/" title="Android开发环境配置0：adb和fastboot" itemprop="url">Android开发环境配置0：adb和fastboot</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2015-07-01T16:00:00.000Z" itemprop="datePublished"> 发表于 2015-07-02</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、安装adb和fastboot"><span class="toc-number">1.</span> <span class="toc-text">1、安装adb和fastboot</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Install-Android-SDK"><span class="toc-number">1.1.</span> <span class="toc-text">Install Android SDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Install-from-the-command-line"><span class="toc-number">1.2.</span> <span class="toc-text">Install from the command line</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、开启USB调试模式（USB-debugging）"><span class="toc-number">2.</span> <span class="toc-text">2、开启USB调试模式（USB debugging）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、建立手机与电脑之间的USB调试连接"><span class="toc-number">3.</span> <span class="toc-text">3、建立手机与电脑之间的USB调试连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建并配置51-android-rules文件"><span class="toc-number">3.1.</span> <span class="toc-text">创建并配置51-android.rules文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置用户组"><span class="toc-number">3.2.</span> <span class="toc-text">配置用户组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA指纹密钥认证"><span class="toc-number">3.3.</span> <span class="toc-text">RSA指纹密钥认证</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="1、安装adb和fastboot"><a href="#1、安装adb和fastboot" class="headerlink" title="1、安装adb和fastboot"></a>1、安装adb和fastboot</h2><p>在对Android进行调试时，常用的工具有adb和fastboot。</p>
+<h3 id="Install-Android-SDK"><a href="#Install-Android-SDK" class="headerlink" title="Install Android SDK"></a>Install Android SDK</h3><p>adb和fastboot包含在Android SDK的<code>Platform-tools package</code>里面，安装Android SDK后也就具备了adb和fastboot工具。</p>
+<p>下载并安装<a href="https://developer.android.com/sdk/index.html#Other" target="_blank" rel="external">Android SDK tools</a>，打开<code>SDK Manager</code>并安装<code>Android SDK Platform-tools package</code>。</p>
+<p>安装完成后，adb和fastboot的存放路径为<code>&lt;path-to-sdk&gt;/platform-tools</code>。为了方便后续使用，可对其配置环境变量。</p>
+<p><code>vim ~/.bashrc</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> [ <span class="_">-d</span> <span class="string">"&lt;path-to-sdk&gt;/platform-tools"</span> ] ; <span class="keyword">then</span></div><div class="line">  <span class="built_in">export</span> PATH=<span class="string">"&lt;path-to-sdk&gt;/platform-tools:<span class="variable">$PATH</span>"</span></div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure>
+<h3 id="Install-from-the-command-line"><a href="#Install-from-the-command-line" class="headerlink" title="Install from the command line"></a>Install from the command line</h3><p>如果只是使用adb和fastboot工具，而不想安装完整的<code>Android SDK</code>，可以采用如下方式单独进行安装。</p>
+<p>for debian-based Linux distributions:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install android-tools-adb</div><div class="line">$ sudo apt-get install android-tools-fastboot</div></pre></td></tr></table></figure>
+<p>for rpm-based Linux distributions(Fedora/Centos/RHEL):<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo yum install android-tools</div></pre></td></tr></table></figure></p>
+<p>在<code>Mac OS X</code>中，可以采用<code>homebrew</code>进行安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ brew install android-platform-tools</div></pre></td></tr></table></figure>
+<h2 id="2、开启USB调试模式（USB-debugging）"><a href="#2、开启USB调试模式（USB-debugging）" class="headerlink" title="2、开启USB调试模式（USB debugging）"></a>2、开启USB调试模式（USB debugging）</h2><p>对手机进行unlock或root操作需要开启手机的USB调试模式，该设置在手机设置菜单的开发者选项（Developer Options）里面。<br>对于<code>3.2</code>及以前的Android版本，开发者选项的设置位置为：<code>Settings &gt; Applications &gt; Development</code>；<br>对于<code>4.0</code>及以上的Android版本，开发者选项的设置位置为：<code>Setting -&gt; Developer Options</code>；需要注意的是，对于<code>4.2</code>及以上的Android版本，开发者选项默认是隐藏的，开启方式为：进入<code>Setting -&gt; About Phone</code>，连续点击7次<code>Build number</code>。</p>
+<p>进入开发者选项设置页面，开启开发者选项，并勾选USB调试模式。</p>
+<h2 id="3、建立手机与电脑之间的USB调试连接"><a href="#3、建立手机与电脑之间的USB调试连接" class="headerlink" title="3、建立手机与电脑之间的USB调试连接"></a>3、建立手机与电脑之间的USB调试连接</h2><p>对于Windows/Mac OSX的开发环境，安装好adb的USB驱动即可。<br>对于Linux（Debian based）系统的开发环境，若要使用adb或者fastboot工具对手机进行USB调试，则需要配置<code>udev</code>规则。</p>
+<h3 id="创建并配置51-android-rules文件"><a href="#创建并配置51-android-rules文件" class="headerlink" title="创建并配置51-android.rules文件"></a>创建并配置<code>51-android.rules</code>文件</h3><p>创建<code>51-android.rules</code>文件，并设置Read权限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo touch /etc/udev/rules.d/51-android.rules</div><div class="line">$ sudo chmod a+r /etc/udev/rules.d/51-android.rules</div><div class="line">$ sudo vim /etc/udev/rules.d/51-android.rules</div></pre></td></tr></table></figure>
+<p>在<code>51-android.rules</code>文件中，按照如下格式进行配置。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#HTC</div><div class="line">SUBSYSTEM==<span class="string">"usb"</span>, ATTR&#123;idVendor&#125;==<span class="string">"0bb4"</span>, MODE=<span class="string">"0664"</span>, GROUP=<span class="string">"plugdev"</span></div></pre></td></tr></table></figure>
+<p>在该配置文件中：</p>
+<ul>
+<li><code>ATTR{idVendor}</code>：设备厂商的编号，每个厂商都有专属的唯一编号，例如HTC的venderID为<code>0bb4</code></li>
+<li><code>MODE</code>：指定了对该类设备的操作权限，通常设置为<code>0664</code></li>
+<li><code>GROUP</code>：指定了该类设备的用户组，通常设置为<code>plugdev</code></li>
+</ul>
+<p>对于venderID，可以在此处查看到主流厂商的编号：<a href="http://developer.android.com/tools/device.html#VendorIds" target="_blank" rel="external">all vendors listed by Google</a><br>除此之外，也可以将手机通过USB连接至电脑，采用<code>lsusb</code>命令进行查看。该命令会列出连接至电脑的所有设备，<code>ID</code>属性值即为设备厂商的venderID。例如，在如下命令执行返回结果中可以看到，HTC的venderID为<code>0bb4</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ lsusb</div><div class="line">Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub</div><div class="line">Bus 001 Device 004: ID 0e0f:0002 VMware, Inc. Virtual USB Hub</div><div class="line">Bus 001 Device 003: ID 0e0f:0002 VMware, Inc. Virtual USB Hub</div><div class="line">Bus 001 Device 033: ID 0bb4:0<span class="built_in">cd</span>6 HTC (High Tech Computer Corp.)</div><div class="line">Bus 001 Device 002: ID 0e0f:0003 VMware, Inc. Virtual Mouse</div><div class="line">Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub</div><div class="line">Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub</div><div class="line">Bus 004 Device 002: ID 0e0f:0002 VMware, Inc. Virtual USB Hub</div><div class="line">Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub</div></pre></td></tr></table></figure>
+<p>对<code>udev</code>配置完成后还不能即时生效，需要重启系统，或者重启<code>udev</code>才能使其生效。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo /etc/init.d/udev restart</div></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo sh -c <span class="string">"(udevadm control --reload-rules &amp;&amp; udevadm trigger --action=change)"</span></div></pre></td></tr></table></figure>
+<p>再次将手机通过USB连接至电脑后，系统便能检测到设备。</p>
+<h3 id="配置用户组"><a href="#配置用户组" class="headerlink" title="配置用户组"></a>配置用户组</h3><p>如果当前登录用户不在<code>plugdev</code>用户组内，采用adb或者fastboot工具进行调试的时候需要<code>sudo</code>权限。为了避免每次都这么麻烦，可以将当前登录用户添加至<code>plugdev</code>用户组。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">leo@debian8:~$ groups</div><div class="line">leo cdrom floppy audio dip video netdev scanner lpadmin    <span class="comment"># 可以看出，当前用户leo并不在用户组plugdev里面</span></div><div class="line">leo@debian8:~$ sudo gpasswd <span class="_">-a</span> username plugdev            <span class="comment"># 将用户leo添加至用户组plugdev</span></div><div class="line">leo@debian8:~$ groups</div><div class="line">leo cdrom floppy audio dip video plugdev netdev scanner lpadmin    <span class="comment"># 用户leo已属于用户组plugdev</span></div></pre></td></tr></table></figure>
+<h3 id="RSA指纹密钥认证"><a href="#RSA指纹密钥认证" class="headerlink" title="RSA指纹密钥认证"></a>RSA指纹密钥认证</h3><p>对于<code>4.2.2</code>及以上的Android版本，将手机开启USB调试模式并连接至电脑以后，手机屏幕上会出现电脑的RSA指纹密钥验证确认请求，这是Android的一套安全机制，只有点击确认以后才能从电脑上通过adb命令与手机建立调试连接。通常，勾选【Always allow from this computer】并点击确认后，手机便与电脑建立了认证连接，之后即可在电脑上采用<code>adb</code>、<code>fastboot</code>工具对手机进行操作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ adb devices</div><div class="line">List of devices attached</div><div class="line">HT259W103035	unauthorized    <span class="comment"># 若为进行RSA指纹密钥验证确认，则会出现unauthorized提示</span></div><div class="line"></div><div class="line">$ adb devices</div><div class="line">List of devices attached</div><div class="line">HT259W103035	device          <span class="comment"># 显示device，则说明已经建立了调试连接</span></div></pre></td></tr></table></figure>
+<p>需要说明的是，对于<code>4.2.2</code>及以上的Android版本，adb版本要求<code>1.0.31</code>及以上，对应的Android SDK的版本要求为<code>r16.0.1</code>及以上。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/adb/">adb</a><a href="/tags/fastboot/">fastboot</a><a href="/tags/环境搭建/">环境搭建</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/android-development-environment-adb-and-fastboot/" data-title="Android开发环境配置0：adb和fastboot | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/android-development-environment-bootloader/" title="Android开发环境配置1：详解Bootloader">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Android开发环境配置1：详解Bootloader</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/blackbox-testing-method-boundary-value-analysis/"  title="黑盒测试用例设计技术--边界值分析法">
+ <strong>下一篇：</strong><br/> 
+ <span>黑盒测试用例设计技术--边界值分析法
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、安装adb和fastboot"><span class="toc-number">1.</span> <span class="toc-text">1、安装adb和fastboot</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Install-Android-SDK"><span class="toc-number">1.1.</span> <span class="toc-text">Install Android SDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Install-from-the-command-line"><span class="toc-number">1.2.</span> <span class="toc-text">Install from the command line</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、开启USB调试模式（USB-debugging）"><span class="toc-number">2.</span> <span class="toc-text">2、开启USB调试模式（USB debugging）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、建立手机与电脑之间的USB调试连接"><span class="toc-number">3.</span> <span class="toc-text">3、建立手机与电脑之间的USB调试连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建并配置51-android-rules文件"><span class="toc-number">3.1.</span> <span class="toc-text">创建并配置51-android.rules文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置用户组"><span class="toc-number">3.2.</span> <span class="toc-text">配置用户组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA指纹密钥认证"><span class="toc-number">3.3.</span> <span class="toc-text">RSA指纹密钥认证</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

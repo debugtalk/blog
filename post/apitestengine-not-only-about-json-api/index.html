@@ -1,0 +1,649 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ApiTestEngine，不再局限于API的测试 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="背景从编写《接口自动化测试的最佳工程实践（ApiTestEngine）》至今，已经快半年了。在这一段时间内，ApiTestEngine经过持续迭代，也已完全实现了当初预设的目标。
+然而，在设计ApiTestEngine之初只考虑了面向最常规的API接口类型，即HTTP响应内容为JSON数据结构的类型。那么，如果HTTP接口响应内容不是JSON，而是XML或SOAP，甚至为HTML呢？
+答案是，不支">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ApiTestEngine，不再局限于API的测试">
+<meta property="og:url" content="http://debugtalk.com/post/apitestengine-not-only-about-json-api/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="背景从编写《接口自动化测试的最佳工程实践（ApiTestEngine）》至今，已经快半年了。在这一段时间内，ApiTestEngine经过持续迭代，也已完全实现了当初预设的目标。
+然而，在设计ApiTestEngine之初只考虑了面向最常规的API接口类型，即HTTP响应内容为JSON数据结构的类型。那么，如果HTTP接口响应内容不是JSON，而是XML或SOAP，甚至为HTML呢？
+答案是，不支">
+<meta property="og:updated_time" content="2017-12-23T07:18:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ApiTestEngine，不再局限于API的测试">
+<meta name="twitter:description" content="背景从编写《接口自动化测试的最佳工程实践（ApiTestEngine）》至今，已经快半年了。在这一段时间内，ApiTestEngine经过持续迭代，也已完全实现了当初预设的目标。
+然而，在设计ApiTestEngine之初只考虑了面向最常规的API接口类型，即HTTP响应内容为JSON数据结构的类型。那么，如果HTTP接口响应内容不是JSON，而是XML或SOAP，甚至为HTML呢？
+答案是，不支">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/apitestengine-not-only-about-json-api/" title="ApiTestEngine，不再局限于API的测试" itemprop="url">ApiTestEngine，不再局限于API的测试</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2017-11-05T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-11-06</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON接口的解析"><span class="toc-number">2.</span> <span class="toc-text">JSON接口的解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现XML-HTML的解析器"><span class="toc-number">3.</span> <span class="toc-text">实现XML/HTML的解析器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">4.</span> <span class="toc-text">写在最后</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>从编写<a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a>至今，已经快半年了。在这一段时间内，<code>ApiTestEngine</code>经过持续迭代，也已完全实现了当初预设的目标。</p>
+<p>然而，在设计<code>ApiTestEngine</code>之初只考虑了面向最常规的API接口类型，即<code>HTTP</code>响应内容为<code>JSON</code>数据结构的类型。那么，如果<code>HTTP</code>接口响应内容不是<code>JSON</code>，而是<code>XML</code>或<code>SOAP</code>，甚至为<code>HTML</code>呢？</p>
+<p>答案是，不支持！</p>
+<p>不支持的原因是什么呢？</p>
+<p>其实，不管是何种业务类型或者技术架构的系统接口，我们在对其进行测试时都可以拆分为三步：</p>
+<ul>
+<li>发起接口请求（Request）</li>
+<li>解析接口响应（Parse Response）</li>
+<li>校验测试结果（Validation）</li>
+</ul>
+<p>而<code>ApiTestEngine</code>不支持<code>XML/HTML</code>类型的接口，问题恰恰是出现在<code>解析接口响应</code>和<code>校验测试结果</code>这两个环节。考虑到<code>校验测试结果</code>环节是依赖于<code>解析接口响应</code>，即需要先从接口响应结果中解析出具体的字段，才能实现与预期结果的校验检测，因此，制约<code>ApiTestEngine</code>无法支持<code>XML/HTML</code>类型接口的根本原因在于无法支持对<code>XML/HTML</code>的解析。</p>
+<p>也因为这个原因，<code>ApiTestEngine</code>存在局限性，没法推广到公司内部的所有项目组。遇到<code>JSON</code>类型以外的接口时，只能再使用别的测试工具，体验上很是不爽。</p>
+<p>在经历了一段时间的不爽后，我开始重新思考<code>ApiTestEngine</code>的设计，希望使其具有更大的适用范围。通过前面的分析我们也不难看出，解决问题的关键在于实现针对<code>XML/HTML</code>的解析器。</p>
+<h2 id="JSON接口的解析"><a href="#JSON接口的解析" class="headerlink" title="JSON接口的解析"></a>JSON接口的解析</h2><p>在实现<code>XML/HTML</code>的解析器之前，我们不妨先看下<code>ApiTestEngine</code>的<code>JSON</code>解析器是怎么工作的。</p>
+<p>在<code>JSON</code>类型的数据结构中，无论结构有多么复杂，数据字段都只可能为如下三种数据类型之一：</p>
+<ul>
+<li>值（value）类型，包括数字、字符串等；该种数据类型的特点是不会再有下一层极的数据；</li>
+<li>字典（dict）类型；该种数据类型的特点是包含无序的下一层极的数据；</li>
+<li>列表（list）类型：该种数据类型的特点是包含有序的下一层极的数据。</li>
+</ul>
+<p>基于这一背景，<code>ApiTestEngine</code>在实现<code>JSON</code>的字段提取器（<code>extractor</code>）时，就采用了点（<code>.</code>）的运算符。</p>
+<p>例如，假如<code>HTTP</code>接口响应的<code>headers</code>和<code>body</code>为如下内容：</p>
+<p>response headers:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"Content-Type"</span>: <span class="string">"application/json"</span>,</div><div class="line">    <span class="attr">"Content-Length"</span>: <span class="number">69</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>response body:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"success"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"person"</span>: &#123;</div><div class="line">        <span class="attr">"name"</span>: &#123;</div><div class="line">            <span class="attr">"first_name"</span>: <span class="string">"Leo"</span>,</div><div class="line">            <span class="attr">"last_name"</span>: <span class="string">"Lee"</span>,</div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"age"</span>: <span class="number">29</span>,</div><div class="line">        <span class="attr">"cities"</span>: [<span class="string">"Guangzhou"</span>, <span class="string">"Shenzhen"</span>]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么对应的字段提取方式就为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&quot;headers.content-type&quot; =&gt; &quot;application/json&quot;</div><div class="line">&quot;headers.content-length&quot; =&gt; 69</div><div class="line">&quot;body.success&quot;/&quot;content.success&quot;/&quot;text.success&quot; =&gt; false</div><div class="line"></div><div class="line">&quot;content.person.name.first_name&quot; =&gt; &quot;Leo&quot;</div><div class="line">&quot;content.person.age&quot; =&gt; 29</div><div class="line">&quot;content.person.cities&quot; =&gt; [&quot;Guangzhou&quot;, &quot;Shenzhen&quot;]</div><div class="line">&quot;content.person.cities.0&quot; =&gt; &quot;Guangzhou&quot;</div><div class="line">&quot;content.person.cities.1&quot; =&gt; &quot;Shenzhen&quot;</div></pre></td></tr></table></figure>
+<p>可以看出，通过点（<code>.</code>）运算符，我们可以从上往下逐级定位到具体的字段：</p>
+<ul>
+<li>当下一级为字典时，通过<code>.key</code>来指定下一级的节点，例如<code>.person</code>，指定了<code>content</code>下的<code>person</code>节点；</li>
+<li>当下一级为列表时，通过<code>.index</code>来指定下一级的节点，例如<code>.0</code>，指定了<code>cities</code>下的第一个元素。</li>
+</ul>
+<p>定位到具体字段后，我们也就可以方便地提取字段值供后续使用了，作为参数或者进行结果校验均可。</p>
+<h2 id="实现XML-HTML的解析器"><a href="#实现XML-HTML的解析器" class="headerlink" title="实现XML/HTML的解析器"></a>实现XML/HTML的解析器</h2><p>从点（<code>.</code>）运算符的描述形式上来看，它和<code>XML/HTML</code>的<code>xpath</code>十分类似。既然如此，那我们针对<code>XML/HTML</code>类型的接口，是否可以基于<code>xpath</code>来实现解析器呢？</p>
+<p>在大多数情况下的确可以。例如，针对如下HTML页面，当我们要获取标题信息时，我们就可以通过<code>xpath</code>来指定提取字段：<code>body/h1</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>订单页面<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>订单号：SA89193<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>然而，如果我们想获取订单号（SA89193）时，使用<code>xpath</code>就没有办法了（通过<code>body/div/p</code>获取到的是<code>订单号：SA89193</code>，还需进一步地进行处理）。</p>
+<p>那除了<code>xpath</code>，我们还能使用什么其它方法从<code>XML/HTML</code>中提取特定字段呢？</p>
+<p>由于早些年对<code>LoadRunner</code>比较熟悉，因此我首先想到了<code>LoadRunner</code>的<code>web_reg_save_param</code>函数；在该函数中，我们可以通过指定左右边界（LB &amp; RB）来查找字段，将其提取出来并保存到变量中供后续使用。借鉴这种方式虽然可行，但在描述方式上还是比较复杂，特别是在<code>YAML</code>测试用例的<code>extract</code>中描述的时候。</p>
+<p>再一想，这种方式的底层实现不就是正则表达式么。而且我们通过Python脚本解析网页时，采用正则表达式来对目标字段进行匹配和提取，的确也是通用性非常强的方式。</p>
+<p>例如，假设我们现在想从<code>http://debugtalk.com</code>首页中提取出座右铭，通过查看网页源代码，我们可以看到座右铭对应的位置。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">h2</span> <span class="attr">class</span>=<span class="string">"blog-motto"</span>&gt;</span>探索一个软件工程师的无限可能<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>那么，要提取“探索一个软件工程师的无限可能”字符串时，我们就可以使用正则表达式<code>r&quot;blog-motto\&quot;&gt;(.*)&lt;/h2&gt;&quot;</code>进行匹配，然后使用<code>regex</code>的<code>group</code>将匹配内容提取出来。</p>
+<p>对应的Python脚本实现如下所示。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; import re, requests</div><div class="line">&gt;&gt;&gt; resp = requests.get(<span class="string">"http://debugtalk.com"</span>)</div><div class="line">&gt;&gt;&gt; content = resp.text</div><div class="line">&gt;&gt;&gt; matched = re.search(r<span class="string">"blog-motto\"&gt;(.*)&lt;/h2&gt;"</span>, content)</div><div class="line">&gt;&gt;&gt; matched.group(1)</div><div class="line"><span class="string">'探索一个软件工程师的无限可能'</span></div></pre></td></tr></table></figure>
+<p>思路确定后，实现起来就很快了。</p>
+<p>此处省略256字。。。</p>
+<p>最终，我在<code>ApiTestEngine</code>中新增实现了一个基于正则表达式的提取器。使用形式与JSON解析保持一致，只需要将之前的点（<code>.</code>）运算符更改为正则表达式即可。</p>
+<p>还是前面提取座右铭的例子，我们就可以通过<code>YAML</code>格式来编写测试用例。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> demo</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://debugtalk.com/</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    extract:</span></div><div class="line"><span class="attr">        - motto:</span> <span class="string">'blog-motto\"&gt;(.*)&lt;/h2&gt;'</span></div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"expected"</span>: <span class="number">200</span>&#125;</div></pre></td></tr></table></figure>
+<p>需要说明的是，指定的正则表达式必须满足<code>r&quot;.*\(.*\).*&quot;</code>的格式要求，必须并且只能有一个分组（即一对括号）。如果在同一段内容中需要提取多个字段，那就分多次匹配即可。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>实现了基于正则表达式的提取器后，我们就彻底实现了对任意格式<code>HTTP</code>响应内容的解析，不仅限于<code>XML/HTML</code>类型，对于任意基于<code>HTTP</code>协议的的接口，<code>ApiTestEngine</code>都可以适用了。当然，如果接口响应是<code>JSON</code>类型，我们虽然可以也使用正则表达式提取，但更建议采用原有的点（<code>.</code>）运算符形式，因为描述更清晰。</p>
+<p>至此，<code>ApiTestEngine</code>可以说是真正意义上实现了，面向任意类型的<code>HTTP</code>协议接口，只需要编写维护一份<code>YAML</code>用例，即可同时实现接口自动化测试、性能测试、持续集成、线上监控的全测试类型覆盖！</p>
+<p>现在看来，<code>ApiTestEngine</code>的名字与其实际功能有些不大匹配了，是该考虑改名了。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JSON-API/">JSON API</a><a href="/tags/正则表达式/">正则表达式</a><a href="/tags/HttpRunner/">HttpRunner</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/apitestengine-not-only-about-json-api/" data-title="ApiTestEngine，不再局限于API的测试 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/ApiTestEngine-rename-to-HttpRunner/" title="ApiTestEngine 正式更名为 HttpRunner">
+  <strong>上一篇：</strong><br/>
+  <span>
+  ApiTestEngine 正式更名为 HttpRunner</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/apitestengine-hot-plugin/"  title="约定大于配置：ApiTestEngine实现热加载机制">
+ <strong>下一篇：</strong><br/> 
+ <span>约定大于配置：ApiTestEngine实现热加载机制
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON接口的解析"><span class="toc-number">2.</span> <span class="toc-text">JSON接口的解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现XML-HTML的解析器"><span class="toc-number">3.</span> <span class="toc-text">实现XML/HTML的解析器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">4.</span> <span class="toc-text">写在最后</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

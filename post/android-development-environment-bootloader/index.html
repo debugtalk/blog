@@ -1,0 +1,616 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Android开发环境配置1：详解Bootloader | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在刚接触Android开发时，通常需要对设备进行root操作，而在root之前，必须要做的一步就是先对设备的Bootloader进行解锁。那么什么是Bootloader？为什么必须要对Bootloader进行解锁？如何对Bootloader进行解锁？本文便围绕着几个问题展开进行介绍。
+About Bootloader顾名思义，Bootloader是操作系统在启动之前需要执行的一段小程序。通过这段小">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android开发环境配置1：详解Bootloader">
+<meta property="og:url" content="http://debugtalk.com/post/android-development-environment-bootloader/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在刚接触Android开发时，通常需要对设备进行root操作，而在root之前，必须要做的一步就是先对设备的Bootloader进行解锁。那么什么是Bootloader？为什么必须要对Bootloader进行解锁？如何对Bootloader进行解锁？本文便围绕着几个问题展开进行介绍。
+About Bootloader顾名思义，Bootloader是操作系统在启动之前需要执行的一段小程序。通过这段小">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android开发环境配置1：详解Bootloader">
+<meta name="twitter:description" content="在刚接触Android开发时，通常需要对设备进行root操作，而在root之前，必须要做的一步就是先对设备的Bootloader进行解锁。那么什么是Bootloader？为什么必须要对Bootloader进行解锁？如何对Bootloader进行解锁？本文便围绕着几个问题展开进行介绍。
+About Bootloader顾名思义，Bootloader是操作系统在启动之前需要执行的一段小程序。通过这段小">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/android-development-environment-bootloader/" title="Android开发环境配置1：详解Bootloader" itemprop="url">Android开发环境配置1：详解Bootloader</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2015-07-02T16:00:00.000Z" itemprop="datePublished"> 发表于 2015-07-03</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#About-Bootloader"><span class="toc-number">1.</span> <span class="toc-text">About Bootloader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-to-Unlock-Bootloader"><span class="toc-number">2.</span> <span class="toc-text">How to Unlock Bootloader</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、准备工作（Prerequisites）"><span class="toc-number">2.1.</span> <span class="toc-text">1、准备工作（Prerequisites）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、将手机切换至fastboot模式"><span class="toc-number">2.2.</span> <span class="toc-text">2、将手机切换至fastboot模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、对锁定（locked）设备进行解锁（unlock）操作"><span class="toc-number">2.3.</span> <span class="toc-text">3、对锁定（locked）设备进行解锁（unlock）操作</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>在刚接触Android开发时，通常需要对设备进行root操作，而在root之前，必须要做的一步就是先对设备的Bootloader进行解锁。那么什么是Bootloader？为什么必须要对Bootloader进行解锁？如何对Bootloader进行解锁？本文便围绕着几个问题展开进行介绍。</p>
+<h2 id="About-Bootloader"><a href="#About-Bootloader" class="headerlink" title="About Bootloader"></a>About Bootloader</h2><p>顾名思义，Bootloader是操作系统在启动之前需要执行的一段小程序。通过这段小程序，我们可以初始化硬件设备、建立内存空间的映射表，从而建立适当的系统软硬件环境，为最终调用操作系统内核做好准备。</p>
+<p>虽然Android系统是开源的，但是设备制造商为了保证系统的稳定性，以及维护自身某些方面的利益，并不希望用户更换为其它厂商的ROM。因此，通常各家设备制造商都会对Bootloader进行加锁。在设备Bootloader处于锁定状态时，无法对ROM进行更改，不能进行root操作，也无法刷机为别的ROM。而要解除这些限制，就需要对Bootloader进行解锁。</p>
+<h2 id="How-to-Unlock-Bootloader"><a href="#How-to-Unlock-Bootloader" class="headerlink" title="How to Unlock Bootloader"></a>How to Unlock Bootloader</h2><p>不同机型以及不同Android版本的Bootloader的解锁方式略有不同，但基本思路和步骤都是类似的。</p>
+<p>本文以设备机型Nexus 5、ROM版本4.4.4为例，讲解解锁Bootloader的具体步骤；PC机的操作系统为Linux（Debian）。</p>
+<h3 id="1、准备工作（Prerequisites）"><a href="#1、准备工作（Prerequisites）" class="headerlink" title="1、准备工作（Prerequisites）"></a>1、准备工作（Prerequisites）</h3><ul>
+<li>配置Android调试环境：安装adb和fastboot工具，开启USB调试模式（USB debugging），建立手机与电脑之间的USB调试连接。</li>
+<li>数据备份：需要注意的是，bootloader解锁操作会将手机恢复至出厂设置，并清空所有用户数据。因此，在解锁前需要进行必要的数据备份。</li>
+</ul>
+<h3 id="2、将手机切换至fastboot模式"><a href="#2、将手机切换至fastboot模式" class="headerlink" title="2、将手机切换至fastboot模式"></a>2、将手机切换至<code>fastboot</code>模式</h3><p>不管是要查看Bootloader是否锁定，还是要对Bootloader进行解锁、锁定操作，均需要将手机切换至<code>fastboot</code>模式。切换至<code>fastboot</code>模式可以采用如下两种方式中的任意一种。</p>
+<ul>
+<li>采用<code>adb</code>命令：将手机开机后连接至电脑，在命令终端中输入<code>adb reboot bootloader</code>。</li>
+<li>开机时采用组合按键：将手机关机，同时按住组合按键数秒；不同机型的组合按键略有不同，Nexus 5的组合按键为<code>Volume Down</code>和<code>Power</code>。</li>
+</ul>
+<p>进入到<code>fastboot</code>模式后，可以看到如下信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">FASTBOOT MODE</div><div class="line">PRODUCT_NAME - hammerhead</div><div class="line">VARIANT - hammerhead D821(E) 16GB</div><div class="line">HW VERSION - rev_11</div><div class="line">BOOTLOADER VERSION - HHZ11k</div><div class="line">BASEBAND VERSION - M897aA-2.0.50.1.16</div><div class="line">CARRIER INFO - None</div><div class="line">SERIAL NUMBER - 03f7fc7ad0081a10</div><div class="line">SIGNING - production</div><div class="line">SECURE BOOT - enabled</div><div class="line">LOCK STATE - locked</div></pre></td></tr></table></figure>
+<p>在<code>LOCK STATE</code>一项中，可以看到手机当前处于锁定（locked）状态，若需要进行<code>root</code>操作，则必须先进行解锁（unlock）。如果手机已经处于解锁（unlocked）状态了，则不用再进行<code>unlock</code>操作。</p>
+<h3 id="3、对锁定（locked）设备进行解锁（unlock）操作"><a href="#3、对锁定（locked）设备进行解锁（unlock）操作" class="headerlink" title="3、对锁定（locked）设备进行解锁（unlock）操作"></a>3、对锁定（locked）设备进行解锁（unlock）操作</h3><p>解锁操作需要将手机通过USB数据线与电脑连接，在电脑的命令终端中通过<code>fastboot</code>工具命令进行解锁操作。</p>
+<p>首先，保持手机与电脑的USB连接，在命令终端中查看手机在<code>fastboot</code>模式下与电脑的连接状态。若连接正常，则可以看到如下信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ fastboot devices</div><div class="line">03f7<span class="built_in">fc</span>7ad0081a10	fastboot</div></pre></td></tr></table></figure>
+<p>然后，在电脑的命令终端中输入如下命令。在手机上会显示<code>Unblock bootloader?</code>警告提示信息，用手机的音量键选择<code>Yes</code>后，按下手机的电源键进行确认。接下来手机便会进行unlock操作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ fastboot oem unlock</div><div class="line">...</div><div class="line">OKAY [ 14.907s]</div><div class="line">finished. total time: 14.907s</div></pre></td></tr></table></figure>
+<p>出现如上响应信息后，则表明手机已经解锁成功。在手机屏幕上，也可以看到<code>fastboot</code>模式页面中，<code>LOCK STATE</code>的属性值已经变为<code>unlocked</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ fastboot reboot</div></pre></td></tr></table></figure>
+<p>手机unlock完成后，会恢复到出厂设置，<code>USB调试模式</code>设置也已失效，需要重新进行设置。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/环境搭建/">环境搭建</a><a href="/tags/bootloader/">bootloader</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/android-development-environment-bootloader/" data-title="Android开发环境配置1：详解Bootloader | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/android-development-environment-recovery/" title="Android开发环境配置2：详解Recovery">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Android开发环境配置2：详解Recovery</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/android-development-environment-adb-and-fastboot/"  title="Android开发环境配置0：adb和fastboot">
+ <strong>下一篇：</strong><br/> 
+ <span>Android开发环境配置0：adb和fastboot
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#About-Bootloader"><span class="toc-number">1.</span> <span class="toc-text">About Bootloader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-to-Unlock-Bootloader"><span class="toc-number">2.</span> <span class="toc-text">How to Unlock Bootloader</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、准备工作（Prerequisites）"><span class="toc-number">2.1.</span> <span class="toc-text">1、准备工作（Prerequisites）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、将手机切换至fastboot模式"><span class="toc-number">2.2.</span> <span class="toc-text">2、将手机切换至fastboot模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、对锁定（locked）设备进行解锁（unlock）操作"><span class="toc-number">2.3.</span> <span class="toc-text">3、对锁定（locked）设备进行解锁（unlock）操作</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

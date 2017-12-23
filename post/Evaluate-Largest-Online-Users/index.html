@@ -1,0 +1,646 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>测试最大在线用户数 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="背景介绍
+在性能测试工作中，有时需要对业务系统所能支持的最大在线用户数目进行评估。这与我们接触最多的压力测试不一样，因为用户在线时只是与服务器保持连接，并不一定对服务器有业务请求，从而对服务器不一定会产生压力。然而，在线用户数目并非可以无限增长，当在线用户数目达到应用服务器（或者WebLogic等中间件，或者数据库连接池等）的连接数设置的极限时，业务系统同样可能会发生异常，出现新用户无法登录，或者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="测试最大在线用户数">
+<meta property="og:url" content="http://debugtalk.com/post/Evaluate-Largest-Online-Users/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="背景介绍
+在性能测试工作中，有时需要对业务系统所能支持的最大在线用户数目进行评估。这与我们接触最多的压力测试不一样，因为用户在线时只是与服务器保持连接，并不一定对服务器有业务请求，从而对服务器不一定会产生压力。然而，在线用户数目并非可以无限增长，当在线用户数目达到应用服务器（或者WebLogic等中间件，或者数据库连接池等）的连接数设置的极限时，业务系统同样可能会发生异常，出现新用户无法登录，或者">
+<meta property="og:image" content="http://debugtalk.com/images/20130822202622_Online-Users-Communication-between-Browser-and-Server.png">
+<meta property="og:updated_time" content="2017-09-04T05:28:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="测试最大在线用户数">
+<meta name="twitter:description" content="背景介绍
+在性能测试工作中，有时需要对业务系统所能支持的最大在线用户数目进行评估。这与我们接触最多的压力测试不一样，因为用户在线时只是与服务器保持连接，并不一定对服务器有业务请求，从而对服务器不一定会产生压力。然而，在线用户数目并非可以无限增长，当在线用户数目达到应用服务器（或者WebLogic等中间件，或者数据库连接池等）的连接数设置的极限时，业务系统同样可能会发生异常，出现新用户无法登录，或者">
+<meta name="twitter:image" content="http://debugtalk.com/images/20130822202622_Online-Users-Communication-between-Browser-and-Server.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/Evaluate-Largest-Online-Users/" title="测试最大在线用户数" itemprop="url">测试最大在线用户数</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2013-08-21T16:00:00.000Z" itemprop="datePublished"> 发表于 2013-08-22</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景介绍"><span class="toc-number">1.</span> <span class="toc-text">背景介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试方法分析"><span class="toc-number">2.</span> <span class="toc-text">测试方法分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#脚本及场景设计"><span class="toc-number">3.</span> <span class="toc-text">脚本及场景设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试方法优化"><span class="toc-number">4.</span> <span class="toc-text">测试方法优化</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><blockquote>
+<p>在性能测试工作中，有时需要对业务系统所能支持的最大在线用户数目进行评估。这与我们接触最多的压力测试不一样，因为用户在线时只是与服务器保持连接，并不一定对服务器有业务请求，从而对服务器不一定会产生压力。然而，在线用户数目并非可以无限增长，当在线用户数目达到应用服务器（或者WebLogic等中间件，或者数据库连接池等）的连接数设置的极限时，业务系统同样可能会发生异常，出现新用户无法登录，或者老用户被挤出系统，甚至业务系统宕机的情况。因此，对业务系统的最大在线用户数指标进行测试是极其必要的。</p>
+</blockquote>
+<p>现有一OA系统，需要测试其支持的最大在线用户数目。已知当使用浏览器登录该系统后，登录用户可持续地保持登录状态，即使长时间不做任何操作也不会自动退出系统；通过该OA系统的在线用户数统计模块可以详细地查看到当前在线的用户。</p>
+<h2 id="测试方法分析"><a href="#测试方法分析" class="headerlink" title="测试方法分析"></a>测试方法分析</h2><p>为了测试被测系统所能支持的最大在线用户数，需要不断地使用新用户帐号进行登录操作，在此同时查看被测系统的在线用户数目以及系统的响应情况。</p>
+<p>在新增登录用户时需要注意，由于考察的是系统在正常情况下所能支持的在线用户数目，而不是系统在并发压力下的性能响应情况，因此登录用户时最好采用单个用户或少量并发用户（如两个或三个）逐步登录的形式，不同登录批次之间最好能有一定时间间隔，务必使新增登录用户的操作对服务器产生尽可能小的业务压力。</p>
+<p>在新增登录用户的过程中，需要对被测系统的在线用户数目进行查看，并着重关注以下几个方面：</p>
+<ul>
+<li>持续新增登录用户的同时，业务系统中的在线用户数目是否相应地进行增长</li>
+<li>持续新增登录用户的过程中，系统登录操作是否产生连接超时的情况，事务的响应时间是否出现大幅度上升的情况，系统登录事务是否出现失败的情况（这需要在脚本中对登录事务做检查点设置）</li>
+<li>持续新增登录用户的过程中，定期地在浏览器中手动刷新业务系统界面，查看业务系统是否出现不可访问的情况（如内部服务器错误、宕机等）</li>
+</ul>
+<p>相应地，测试脚本需符合如下形式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">lr_start_transaction(<span class="string">"进入登录页面"</span>);</div><div class="line"><span class="comment">/*此处为进入系统登录界面的脚本*/</span></div><div class="line">lr_end_transaction(<span class="string">"进入登录页面"</span>, LR_AUTO);</div><div class="line"></div><div class="line">lr_start_transaction(<span class="string">"登录系统"</span>);</div><div class="line"></div><div class="line"><span class="comment">/*登录脚本--部分1*/</span></div><div class="line"></div><div class="line"><span class="comment">/*对系统登录进行校验</span></div><div class="line"> *若成功，即新页面中包含"重新登录"，reLogin_Count&gt;0</div><div class="line"> *若失败，reLogin_Count=0</div><div class="line"> */</div><div class="line">web_reg_find(<span class="string">"Text=重新登录"</span>,</div><div class="line">    <span class="string">"SaveCount=reLogin_Count"</span>,</div><div class="line">    LAST );</div><div class="line"></div><div class="line"><span class="comment">/*登录脚本--部分2（包含检查点内容部分）*/</span></div><div class="line"></div><div class="line"><span class="comment">//对系统登录结果进行检查</span></div><div class="line"><span class="keyword">if</span> (atoi(lr_eval_string(<span class="string">"&#123;reLogin_Count&#125;"</span>)) == <span class="number">0</span>)</div><div class="line">&#123;    <span class="comment">//登录失败</span></div><div class="line">    lr_error_message(<span class="string">"登录失败!!!--UserName：%s"</span>,lr_eval_string(<span class="string">"&#123;UserName&#125;"</span>));</div><div class="line">     <span class="comment">//勾选Fail Open Transations on lr_error_message</span></div><div class="line">     <span class="comment">//当执到该lr_error_message时，"登录系统"的Transaction失败</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">lr_end_transaction(<span class="string">"登录系统"</span>, LR_AUTO);</div></pre></td></tr></table></figure>
+<p>以上脚本调试成功后，通过检查点函数及日志信息可以判断出系统登录操作已通过脚本回放成功完成。</p>
+<p>理论上，只要VuGen采用不同帐号迭代运行该脚本，由于只是进行系统登录操作而未进行系统注销或退出操作，业务系统中的在线用户数将持续增加。</p>
+<p>然而在该OA系统中采用此方法时发现，虽然脚本成功运行，但业务系统中的在线用户数并未增长。这说明LoadRunner与浏览器在访问系统的过程中存在差异性。</p>
+<h2 id="脚本及场景设计"><a href="#脚本及场景设计" class="headerlink" title="脚本及场景设计"></a>脚本及场景设计</h2><p>针对上面的问题，通过抓包工具Fiddler2对系统进行网络流量抓包<br>分析可知：用户登录系统后，在未进行任何操作的情况下，浏览器与服务器会定期（间隔30秒）进行通讯交互。如下图所示：</p>
+<p><img src="/images/20130822202622_Online-Users-Communication-between-Browser-and-Server.png" alt="Online-Users-Communication-between-Browser-and-Server"></p>
+<p>这就解释了为什么用户在浏览器中登录系统后可以长期地保持在线，而通过脚本成功地进行系统登录后却无法保持在线状态；因为VuGen不会像浏览器那样定期地与服务器进行通讯交互。</p>
+<p>找出其中的差异后，我们便可在VuGen中用脚本模拟浏览器的定期交互功能，简单的实现方法如下所示。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">    web_url(<span class="string">"userAction.struts"</span>,</div><div class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo"</span>,</div><div class="line">        <span class="string">"Resource=0"</span>,</div><div class="line">        <span class="string">"RecContentType=text/html"</span>,</div><div class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/sysShortMsgReflesh.jsp"</span>,</div><div class="line">        <span class="string">"Snapshot=t4.inf"</span>,</div><div class="line">        <span class="string">"Mode=HTML"</span>,</div><div class="line">        LAST);</div><div class="line"></div><div class="line">    web_url(<span class="string">"userAction.struts_2"</span>,</div><div class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo&amp;time=Mon%20Aug%2012%2015:42:04%20UTC+0800%202013"</span>,</div><div class="line">        <span class="string">"Resource=0"</span>,</div><div class="line">        <span class="string">"RecContentType=text/html"</span>,</div><div class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/reflesh.jsp"</span>,</div><div class="line">        <span class="string">"Snapshot=t5.inf"</span>,</div><div class="line">        <span class="string">"Mode=HTML"</span>,</div><div class="line">        LAST);</div><div class="line"></div><div class="line">    lr_think_time(<span class="number">30</span>);    <span class="comment">//模拟浏览器与服务器30秒间隔的通讯交互</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么，将系统登录脚本和循环函数都放入Action中，在VuGen中采用迭代运行的方式可行吗？</p>
+<p>虽然新增登录用户可以逐个进行，即使用VuGen通过Action迭代的形式采用不同帐号逐个地进行登录操作。但由于用户登录后需要持续间隔地与服务器进行通讯交互才能保持在线，而单线程脚本运行至while(1)后便进入死循环，从而使得Action迭代无效。因此，采用VuGen进行Action迭代的方式是不可行的。</p>
+<p>正确的做法是，在Controller中采用逐步加载的方式，使各个虚拟用户独立地运行，从而保证了各虚拟用户登录成功后保持在线状态。</p>
+<p>在Controller中的具体配置如下所示：</p>
+<ul>
+<li>Run Logic：Number of Iterations设置为1</li>
+<li>Think Time：Replay think time As recorded</li>
+<li>Continue on error：False</li>
+<li>Fail open transactions on lr_error_message：True</li>
+<li>Schedule：Initialize each Vuser just before it runs</li>
+<li>Schedule：Start 1000 Vusers – 1 Vuser every 3 Seconds</li>
+<li>Schedule：Run for 5 minutes</li>
+</ul>
+<p>通过以上配置，可以达到如下效果：</p>
+<ul>
+<li>每个Vuser只登录一次，然后定期30秒与服务器进行一次交互，保持在线状态</li>
+<li>Vuser的登录操作与定期刷新操作不会对服务器造成并发压力，且符合真实业务场景</li>
+<li>逐步缓慢地增加在线用户数，当系统出现异常时即可查看到当前的在线用户数目</li>
+</ul>
+<h2 id="测试方法优化"><a href="#测试方法优化" class="headerlink" title="测试方法优化"></a>测试方法优化</h2><p>通过以上方法可以测试得到业务系统所能承受的“初略的”最大在线用户数目。为什么说是“初略的”呢？因为该方法仍存在缺陷，主要体现在如下两个方面：</p>
+<ul>
+<li>该方法只适用于测试期间无他人使用系统的情况。如果测试期间同时有其他用户登录系统，或者系统中本身已存在在线用户，则会造成测试得到的结果不准确。</li>
+<li>该方法忽略了系统稳定性对在线用户数的影响。举例来说，也许逐步增加在线用户数至500时，系统并没有发生异常，但这并不意味着500个用户长时间处于在线状态时系统不会出现异常。</li>
+</ul>
+<p>针对以上两方面缺陷，可以做出如下改进：</p>
+<ul>
+<li>在逐步增加在线用户数的时候，定期（比如间隔3秒）查看业务系统自身统计的在线用户数目，并以该数据为测试结果。</li>
+<li>利用之前的方法测试得到业务系统“初略的”最大在线用户数后，使系统长时间保持该数量的在线用户数目，观察系统在长时间运行期间是否会出现异常；若出现异常后，适当减少在线用户数目后重复地进行测试，直到系统可以保持长时间地稳定运行为止，此时对应的在线用户数目即为业务系统所能承受的最大在线用户数目。</li>
+</ul>
+<p>在本文提到的OA系统中，对链接[<a href="http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。" target="_blank" rel="external">http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">Action()</div><div class="line">&#123;</div><div class="line"></div><div class="line">    web_add_cookie(<span class="string">"USERORGID=db93a2M11f6719ff92Mf528764d624db129b32c21fbca0cb8d6; DOMAIN=10.147.15.28"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line"></div><div class="line">        lr_start_transaction(<span class="string">"查看在线用户数目"</span>);</div><div class="line"></div><div class="line">        web_reg_save_param(<span class="string">"OnlineUsers"</span>,</div><div class="line">                <span class="string">"LB=[在线用户数/总用户数：&lt;font color=\"red\"&gt;"</span>,</div><div class="line">                <span class="string">"RB=&lt;/font&gt;]"</span>,</div><div class="line">                <span class="string">"ORD=2"</span>,</div><div class="line">                <span class="string">"Notfound=error"</span>,</div><div class="line">                <span class="string">"Search=Body"</span>,</div><div class="line">                LAST);</div><div class="line"></div><div class="line">        web_url(<span class="string">"countAction.struts"</span>,</div><div class="line">            <span class="string">"URL=http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser"</span>,</div><div class="line">            <span class="string">"Resource=0"</span>,</div><div class="line">            <span class="string">"RecContentType=text/html"</span>,</div><div class="line">            <span class="string">"Referer="</span>,</div><div class="line">            <span class="string">"Snapshot=t1.inf"</span>,</div><div class="line">            <span class="string">"Mode=HTML"</span>,</div><div class="line">            LAST);</div><div class="line"></div><div class="line">        lr_output_message(<span class="string">"当前在线用户数目：%s"</span>, lr_eval_string(<span class="string">"&#123;OnlineUsers&#125;"</span>));</div><div class="line"></div><div class="line">        lr_end_transaction(<span class="string">"查看在线用户数目"</span>, LR_AUTO);</div><div class="line"></div><div class="line">        lr_think_time(<span class="number">3</span>);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LoadRunner/">LoadRunner</a><a href="/tags/性能指标/">性能指标</a><a href="/tags/最大在线用户数/">最大在线用户数</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/Evaluate-Largest-Online-Users/" data-title="测试最大在线用户数 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/Create-Blog-with-Pelican-and-GitCafe-Pages/" title="使用 Pelican + GitCafe Pages 创建 Blog">
+  <strong>上一篇：</strong><br/>
+  <span>
+  使用 Pelican + GitCafe Pages 创建 Blog</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/loadrunner-parameter-variable/"  title="LoadRuner中的参数与变量">
+ <strong>下一篇：</strong><br/> 
+ <span>LoadRuner中的参数与变量
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景介绍"><span class="toc-number">1.</span> <span class="toc-text">背景介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试方法分析"><span class="toc-number">2.</span> <span class="toc-text">测试方法分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#脚本及场景设计"><span class="toc-number">3.</span> <span class="toc-text">脚本及场景设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试方法优化"><span class="toc-number">4.</span> <span class="toc-text">测试方法优化</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">My Github</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">近期开源项目</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="120" class="share_self" frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=120&fansRow=2&ptype=1&speed=0&skin=9&isTitle=0&noborder=1&isWeibo=0&isFans=0&uid=undefined&verifier=&dpc=1"></iframe>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
