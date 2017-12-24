@@ -2,14 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
+    
+    <lastmod>2017-12-24T01:49:57.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
     
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
     
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     
@@ -44,7 +51,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
     
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     
@@ -58,14 +65,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
     
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
+    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
     
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     
@@ -129,13 +136,6 @@
   
   <url>
     <loc>http://debugtalk.com/post/head-first-locust-user-guide/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -317,16 +317,16 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com//about/index.html</loc>
+    <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/build-ideal-app-automation-test-framework/</loc>
+    <loc>http://debugtalk.com//about/index.html</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
@@ -513,6 +513,13 @@
   </url>
   
   <url>
+    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
+    
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/baidu_verify_WfVJyFbNZp.html</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -534,7 +541,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
+    <loc>http://debugtalk.com/post/build-ideal-app-automation-test-framework/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     

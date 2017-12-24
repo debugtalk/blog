@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://debugtalk.com/"/>
-  <updated>2017-12-13T15:10:44.000Z</updated>
+  <updated>2017-12-24T01:49:57.000Z</updated>
   <id>http://debugtalk.com/</id>
   
   <author>
@@ -14,6 +14,87 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HttpRunner 的测试用例分层机制</title>
+    <link href="http://debugtalk.com/post/HttpRunner-testcase-layer/"/>
+    <id>http://debugtalk.com/post/HttpRunner-testcase-layer/</id>
+    <published>2017-12-22T16:00:00.000Z</published>
+    <updated>2017-12-24T01:49:57.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在<code>HttpRunner</code>中，测试用例引擎最大的特色就是支持<code>YAML/JSON</code>格式的用例描述形式。</p>
+<p>采用<code>YAML/JSON</code>格式编写维护测试用例，优势还是很明显的：</p>
+<ul>
+<li>相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力；</li>
+<li>相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。</li>
+</ul>
+<p>以最常见的登录注销为例，我们的测试用例通常会描述为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> demo-login-logoff</div><div class="line"><span class="attr">    variable_binds:</span></div><div class="line"><span class="attr">        - UserName:</span> test001</div><div class="line"><span class="attr">        - Password:</span> <span class="number">123456</span></div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        base_url:</span> http://xxx.debugtalk.com</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Accept:</span> application/json</div><div class="line"><span class="attr">            User-Agent:</span> iOS/<span class="number">10.3</span></div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> Login</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /api/v1/Account/Login</div><div class="line"><span class="attr">        method:</span> POST</div><div class="line"><span class="attr">        json:</span></div><div class="line"><span class="attr">            UserName:</span> $UserName</div><div class="line"><span class="attr">            Pwd:</span> $Password</div><div class="line"><span class="attr">            VerCode:</span> <span class="string">""</span></div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.IsSuccess"</span>, <span class="literal">True</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.Code"</span>, <span class="number">200</span>]</div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> Logoff</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /api/v1/Account/LoginOff</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.IsSuccess"</span>, <span class="literal">True</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.Code"</span>, <span class="number">200</span>]</div></pre></td></tr></table></figure>
+<p>相信大家已经对该种用例描述形式十分熟悉了。不过，该种描述形式的问题在于，接口通常会出现在多个测试场景中，而每次都需要对接口进行定义描述，包括请求的URL、Header、Body、以及预期响应值等，这就会产生大量的重复。</p>
+<p>例如，在某个项目中存在三个测试场景：</p>
+<ul>
+<li>场景A：注册新账号（<code>API_1/2</code>）、登录新注册的账号（<code>API_3/4/5</code>）、查看登录状态（<code>API_6</code>）；</li>
+<li>场景B：登录已有账号（<code>API_3/4/5</code>）、注销登录（<code>API_7/8</code>）；</li>
+<li>场景C：注销登录（<code>API_7/8</code>）、查看登录状态（<code>API_6</code>）、注册新账号（<code>API_1/2</code>）。</li>
+</ul>
+<p>按照常规的接口测试用例编写方式，我们需要创建3个场景文件，然后在各个文件中分别描述三个测试场景相关的接口信息。示意图如下所示。</p>
+<p><img src="/images/httprunner-testcase-layer-1.jpeg" alt=""></p>
+<p>在本例中，接口（<code>API_1/2/6</code>）在场景A和场景C中都进行了定义；接口（<code>API_3/4/5</code>）在场景A和场景B中都进行了定义；接口（<code>API_7/8</code>）在场景B和场景C中都进行了定义。可以预见，当测试场景增多以后，接口定义描述的维护就会变得非常困难和繁琐。</p>
+<h2 id="接口的分层定义描述"><a href="#接口的分层定义描述" class="headerlink" title="接口的分层定义描述"></a>接口的分层定义描述</h2><p>那要如何进行优化呢？</p>
+<p>其实也很简单，在编程语言中，如果出现重复代码块，我们通常会将其封装为类或方法，然后在需要时进行调用，以此来消除重复。同样地，我们也可以将项目的API进行统一定义，里面包含API的请求和预期响应描述，然后在测试场景中进行引用即可。</p>
+<p>示意图如下所示。</p>
+<p><img src="/images/httprunner-testcase-layer-2.jpeg" alt=""></p>
+<p>具体地，我们可以约定将项目的所有API接口定义放置在<code>api</code>目录下，并在<code>api</code>目录中按照项目的系统模块来组织接口的定义；同时，将测试场景放置到<code>testcases</code>目录中。</p>
+<p>此时测试用例文件的目录结构如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">✗ tree tests</div><div class="line">tests</div><div class="line">├── api</div><div class="line">│   └── v1</div><div class="line">│       ├── Account.yml</div><div class="line">│       ├── BusinessTrip.yml</div><div class="line">│       ├── Common.yml</div><div class="line">│       └── Leave.yml</div><div class="line">├── debugtalk.py</div><div class="line">└── testcases</div><div class="line">    ├── scenario_A.yml</div><div class="line">    ├── scenario_B.yml</div><div class="line">    └── scenario_C.yml</div></pre></td></tr></table></figure>
+<p>而对于API接口的定义，与之前的描述方式基本一致，只做了两点调整：</p>
+<ul>
+<li>接口定义块（<code>block</code>）的标识为<code>api</code>；</li>
+<li>接口定义块中包含<code>def</code>字段，形式为<code>api_name(*args)</code>，作为接口的唯一标识ID；需要注意的是，即使<code>api</code>没有参数，也需要带上括号，<code>api_name()</code>；这和编程语言中定义函数是一样的。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- api:</span></div><div class="line"><span class="attr">    def:</span> api_v1_Account_Login_POST($UserName, $Password)</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /api/v1/Account/Login</div><div class="line"><span class="attr">        method:</span> POST</div><div class="line"><span class="attr">        json:</span></div><div class="line"><span class="attr">            UserName:</span> $UserName</div><div class="line"><span class="attr">            Pwd:</span> $Password</div><div class="line"><span class="attr">            VerCode:</span> <span class="string">""</span></div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.IsSuccess"</span>, <span class="literal">True</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.Code"</span>, <span class="number">200</span>]</div><div class="line"></div><div class="line"><span class="attr">- api:</span></div><div class="line"><span class="attr">    def:</span> api_v1_Account_LoginOff_GET()</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /api/v1/Account/LoginOff</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.IsSuccess"</span>, <span class="literal">True</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.Code"</span>, <span class="number">200</span>]</div></pre></td></tr></table></figure>
+<p>有了接口的定义描述后，我们编写测试场景时就可以直接引用接口定义了。</p>
+<p>同样是背景描述中的登录注销场景，测试用例就描述为变为如下形式。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> demo</div><div class="line"><span class="attr">    variable_binds:</span></div><div class="line"><span class="attr">        - UserName:</span> test001</div><div class="line"><span class="attr">        - Password:</span> <span class="number">123456</span></div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        base_url:</span> http://xxx.debugtalk.com</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Accept:</span> application/json</div><div class="line"><span class="attr">            User-Agent:</span> iOS/<span class="number">10.3</span></div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> Login</div><div class="line"><span class="attr">    api:</span> api_v1_Account_Login_POST($UserName, $Password)</div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> Logoff</div><div class="line"><span class="attr">    api:</span> api_v1_Account_LoginOff_GET()</div></pre></td></tr></table></figure>
+<p>不难看出，对API接口进行分层定义后，我们在测试用例场景中引用接口定义时，与编程语言里面调用函数的形式基本完全一样，只需要指定接口的名称，以及所需传递的参数值；同样的，即使没有参数，也需要带上括号。</p>
+<p>实现接口的分层定义描述后，我们就可以避免接口的重复定义。但是，我们回过头来看之前的案例，发现仍然会存在一定的重复。</p>
+<p><img src="/images/httprunner-testcase-layer-3.jpeg" alt=""></p>
+<p>如上图所示，场景A和场景C都包含了注册新账号（<code>API_1/2</code>）和查看登录状态（<code>API_6</code>），场景A和场景B都包含了登录已有账号（<code>API_3/4/5</code>），场景B和场景C都包含了注销登录（<code>API_7/8</code>）。</p>
+<p>虽然我们已经将接口的定义描述抽离出来，避免了重复的定义；但是在实际业务场景中，某些功能（例如登录、注销）会在多个场景中重复出现，而该功能又涉及到多个接口的组合调用，这同样也会出现大量的重复。</p>
+<h2 id="接口的模块化封装"><a href="#接口的模块化封装" class="headerlink" title="接口的模块化封装"></a>接口的模块化封装</h2><p>玩过积木的同学可能就会想到，我们也可以将系统的常用功能封装为模块（suite），只需要在模块中定义一次，然后就可以在测试场景中重复进行引用，从而避免了模块功能的重复描述。</p>
+<p><img src="/images/httprunner-testcase-layer-4.jpeg" alt=""></p>
+<p>具体地，我们可以约定将项目的所有模块定义放置在<code>suite</code>目录下，并在<code>suite</code>目录中按照项目的功能来组织模块的定义。</p>
+<p>后续，我们在<code>testcases</code>目录中描述测试场景时，就可同时引用接口定义和模块定义了；模块和接口的混合调用，必将为我们编写测试场景带来极大的灵活性。</p>
+<p>此时测试用例文件的目录结构如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">✗ tree tests</div><div class="line">tests</div><div class="line">├── api</div><div class="line">│   └── v1</div><div class="line">│       ├── Account.yml</div><div class="line">│       ├── BusinessTrip.yml</div><div class="line">│       ├── Common.yml</div><div class="line">│       └── Leave.yml</div><div class="line">├── debugtalk.py</div><div class="line">├── suite</div><div class="line">│   ├── BusinessTravelApplication</div><div class="line">│   │   ├── approve-application.yml</div><div class="line">│   │   ├── executive-application.yml</div><div class="line">│   │   ├── reject-application.yml</div><div class="line">│   │   └── submit-application.yml</div><div class="line">│   └── LeaveApplication</div><div class="line">│       ├── approve.yml</div><div class="line">│       ├── cancel.yml</div><div class="line">│       └── submit-application.yml</div><div class="line">└── testcases</div><div class="line">    ├── scenario_A.yml</div><div class="line">    ├── scenario_B.yml</div><div class="line">    └── scenario_C.yml</div></pre></td></tr></table></figure>
+<p>需要注意的是，我们在组织测试用例描述的文件目录结构时，遵循约定大于配置的原则：</p>
+<ul>
+<li>API接口定义必须放置在<code>api</code>目录下</li>
+<li>模块定义必须放置在<code>suite</code>目录下</li>
+<li>测试场景文件必须放置在<code>testcases</code>目录下</li>
+<li>相关的函数定义放置在<code>debugtalk.py</code>中</li>
+</ul>
+<p>至此，我们实现了测试用例的<code>接口-模块-场景</code>分层，从而彻底避免了重复定义描述。</p>
+<h2 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h2><p>得益于约定大于配置的原则，在<code>HttpRunner</code>中实现了一个脚手架工具，可以快速创建项目的目录结构。该想法来源于<code>Django</code>的<code>django-admin.py startproject project_name</code>。</p>
+<p>使用方式也与<code>Django</code>类似，只需要通过<code>--startproject</code>指定新项目的名称即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ hrun --startproject helloworld</div><div class="line">INFO:root: Start to create new project: /Users/Leo/MyProjects/helloworld</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/api</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/suite</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/testcases</div><div class="line">INFO:root:      created file: /Users/Leo/MyProjects/helloworld/tests/debugtalk.py</div></pre></td></tr></table></figure>
+<p>运行之后，就会在指定的目录中生成新项目的目录结构，接下来，我们就可以按照测试用例的<code>接口-模块-场景</code>分层原则往里面添加用例描述信息了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果看到这里你还不明白测试用例分层的必要性，那也没关系，测试用例分层不是必须的，你还是可以按照之前的方式组织测试用例。不过当你某一天发现需要进行分层管理时，你会发现它就在那里，很实用。</p>
+<p>最后，在<code>HttpRunner</code>项目的<a href="https://github.com/HttpRunner/HttpRunner/tree/master/examples/HelloWorld" target="_blank" rel="external"><code>examples/HelloWorld</code></a>目录中，包含了一份完整的分层测试用例示例，相信会对大家有所帮助。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景描述&quot;&gt;&lt;a href=&quot;#背景描述&quot; class=&quot;headerlink&quot; title=&quot;背景描述&quot;&gt;&lt;/a&gt;背景描述&lt;/h2&gt;&lt;p&gt;在&lt;code&gt;HttpRunner&lt;/code&gt;中，测试用例引擎最大的特色就是支持&lt;code&gt;YAML/JSON&lt;/code
+    
+    </summary>
+    
+    
+      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
+      <category term="testcase" scheme="http://debugtalk.com/tags/testcase/"/>
+    
+  </entry>
   
   <entry>
     <title>HttpRunner 的结果校验器优化</title>
@@ -1688,65 +1769,6 @@
       <category term="pyenv" scheme="http://debugtalk.com/tags/pyenv/"/>
     
       <category term="virtualenv" scheme="http://debugtalk.com/tags/virtualenv/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【GIT技巧】清除历史提交记录中的敏感信息</title>
-    <link href="http://debugtalk.com/post/clean-sensitive-data-from-git-history-commits/"/>
-    <id>http://debugtalk.com/post/clean-sensitive-data-from-git-history-commits/</id>
-    <published>2017-03-16T16:00:00.000Z</published>
-    <updated>2017-09-04T05:28:54.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="/images/GitHub_hacker.jpg" alt=""></p>
-<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>在使用GitHub的过程中，假如某次提交代码时不小心将密码或<code>SSH-key</code>提交进了公共仓库。当然，希望这种事情永远也不会发生，但是如果真遇到了，该怎么办呢？</p>
-<p>如果发现得及时，本地提交后还没有推送到GitHub远程仓库的话，这种情况还好处理，直接修改代码后通过<code>git commit --amend</code>即可。</p>
-<p>但如果发现时已经推送到了GitHub远程仓库，或者已过了许久，后续有了很多新的<code>commits</code>，这种情况就会比较复杂了。</p>
-<p>错误的方式是，直接在当前代码中去除敏感信息，然后再提交到代码仓库中。这样的做法只能在最新的代码中去除了敏感信息，在git历史记录中仍然保存着敏感信息。</p>
-<p>当然，也可以选择直接将整个仓库删除了。不过，看着昔日精心提交的代码记录，实在是难以下手。</p>
-<p>要是可以只删除敏感信息部分，而不影响到其它提交记录就好了。事实上，<code>GIT</code>的确支持这种操作。</p>
-<h2 id="处理方式"><a href="#处理方式" class="headerlink" title="处理方式"></a>处理方式</h2><p>实现的方式有两种，一是通过<code>git filter-branch</code>命令，另一种是采用一款开源的工具，<code>BFG Repo-Cleaner</code>。前者是<code>GIT</code>官方的实现方法，后者是一款采用<code>Scala</code>编写的工具，号称比<code>git filter-branch</code>更简单、更快捷。</p>
-<h3 id="git-filter-branch"><a href="#git-filter-branch" class="headerlink" title="git filter-branch"></a>git filter-branch</h3><p>先来看下<a href="https://help.github.com/articles/removing-sensitive-data-from-a-repository/" target="_blank" rel="external"><code>git filter-branch</code></a>这种方式。假设要在所有历史提交记录中删除文件<code>PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA</code>，那么就可以采用如下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ git filter-branch --force --index-filter \</div><div class="line"><span class="string">'git rm --cached --ignore-unmatch PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA'</span> \</div><div class="line">--prune-empty --tag-name-filter cat -- --all</div><div class="line"></div><div class="line">&gt; Rewrite 48dc599c80e20527ed902928085e7861e6b3cbe6 (266/266)</div><div class="line">&gt; Ref <span class="string">'refs/heads/master'</span> was rewritten</div></pre></td></tr></table></figure>
-<p>正常情况下，通过执行上面的命令，就可以在所有历史提交记录中彻底删除指定文件。如果要进一步确定的话，可以在<code>.git</code>目录中进行全局搜索，确保已彻底清理干净。</p>
-<p>然后，就可以通过如下命令将本地代码推送到<code>GitHub</code>上，并强制覆盖掉所有历史记录。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git push origin --force --all</div></pre></td></tr></table></figure>
-<p>可以看出，采用<code>git filter-branch</code>的操作命令十分复杂（复杂到我也不想理会每个参数的具体含义），这还只是选择粗暴地将整个文件进行删除的情况。如果不想删除文件，而是单独修改特定文件特定内容的话，操作会更加复杂，如有兴趣可查看<a href="https://git-scm.com/docs/git-filter-branch" target="_blank" rel="external"><code>git官方文档</code></a>。</p>
-<h3 id="BFG-Repo-Cleaner"><a href="#BFG-Repo-Cleaner" class="headerlink" title="BFG Repo-Cleaner"></a>BFG Repo-Cleaner</h3><p>估计也是因为官方的<code>git filter-branch</code>太过复杂，于是<code>Roberto Tyley</code>开发了<a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="external"><code>BFG Repo-Cleaner</code></a>这款工具。该工具是专门针对移除历史记录的需求而产生的，这可以从其简介中看出来。</p>
-<blockquote>
-<p>Removes large or troublesome blobs like git-filter-branch does, but faster. And written in Scala</p>
-</blockquote>
-<p>使用<code>BFG Repo-Cleaner</code>之前，需要先下载<a href="https://rtyley.github.io/bfg-repo-cleaner/#download" target="_blank" rel="external"><code>BFG&#39;s jar</code></a>(requires Java 7 or above)。</p>
-<p>如果想实现前面例子中同样的功能，删除文件<code>PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA</code>，可以通过如下命令实现：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ java -jar bfg.jar --delete-files PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA my-repo.git</div></pre></td></tr></table></figure>
-<p>如果不想删除文件，而是单独修改特定文件特定内容的话，就可以通过如下命令实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ java -jar bfg.jar --replace-text replacements.txt my-repo.git</div></pre></td></tr></table></figure>
-<p>在<code>replacements.txt</code>文件中，应包含所有需要替换的内容，格式如下（不包含注释内容）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PASSWORD1                       <span class="comment"># Replace with '***REMOVED***' (default)</span></div><div class="line">PASSWORD2==&gt;examplePass         <span class="comment"># replace with 'examplePass' instead</span></div><div class="line">PASSWORD3==&gt;                    <span class="comment"># replace with the empty string</span></div><div class="line">regex:password=\w+==&gt;password=  <span class="comment"># Replace, using a regex</span></div><div class="line">regex:\r(\n)==&gt;<span class="variable">$1</span>               <span class="comment"># Replace Windows newlines with Unix newlines</span></div></pre></td></tr></table></figure>
-<p>通过执行上述命令，<code>BFG Repo-Cleaner</code>就会扫描代码仓库的所有历史提交记录，并按照<code>replacements.txt</code>文件中的映射进行替换操作。</p>
-<p>通过对比可以看到，<code>BFG Repo-Cleaner</code>的确是更加简洁，这也是<code>GitHub</code>官方推荐的方式。不过，在<code>BFG Repo-Cleaner</code>的介绍文档中也说了，该工具的优势在于简单和快捷，从功能强大的角度来讲，它是比不上<code>git-filter-branch</code>的，有些操作也只能通过<code>git-filter-branch</code>完成。</p>
-<p>如需了解<code>BFG Repo-Cleaner</code>的更多用法，可详细阅读其<a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="external">文档</a>。</p>
-<h2 id="写在末尾"><a href="#写在末尾" class="headerlink" title="写在末尾"></a>写在末尾</h2><p>不要问我为啥写了这么一篇博客，让我再哭一会儿。我也真心地希望大家永远不会用到这些工具。</p>
-<p>小心驶得万年船，共勉！</p>
-<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
-<li><a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="external">https://rtyley.github.io/bfg-repo-cleaner/</a></li>
-<li><a href="https://git-scm.com/docs/git-filter-branch" target="_blank" rel="external">https://git-scm.com/docs/git-filter-branch</a></li>
-<li><a href="https://help.github.com/articles/removing-sensitive-data-from-a-repository/" target="_blank" rel="external">https://help.github.com/articles/removing-sensitive-data-from-a-repository/</a></li>
-<li><a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/ch05.html#_8230_and_then_some" target="_blank" rel="external">http://www-cs-students.stanford.edu/~blynn/gitmagic/ch05.html#_8230_and_then_some</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;/images/GitHub_hacker.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;背景介绍&quot;&gt;&lt;a href=&quot;#背景介绍&quot; class=&quot;headerlink&quot; title=&quot;背景介绍&quot;&gt;&lt;/a&gt;背景介绍&lt;/h2&gt;&lt;p&gt;在使用GitHub的
-    
-    </summary>
-    
-    
-      <category term="Git" scheme="http://debugtalk.com/tags/Git/"/>
-    
-      <category term="GitHub" scheme="http://debugtalk.com/tags/GitHub/"/>
     
   </entry>
   

@@ -1,0 +1,659 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>HttpRunner 的测试用例分层机制 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="背景描述在HttpRunner中，测试用例引擎最大的特色就是支持YAML/JSON格式的用例描述形式。
+采用YAML/JSON格式编写维护测试用例，优势还是很明显的：
+
+相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力；
+相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。
+
+以最常见的登录注销为例，我们的测试用例通常会描述为如下形式：
+1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HttpRunner 的测试用例分层机制">
+<meta property="og:url" content="http://debugtalk.com/post/HttpRunner-testcase-layer/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="背景描述在HttpRunner中，测试用例引擎最大的特色就是支持YAML/JSON格式的用例描述形式。
+采用YAML/JSON格式编写维护测试用例，优势还是很明显的：
+
+相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力；
+相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。
+
+以最常见的登录注销为例，我们的测试用例通常会描述为如下形式：
+1">
+<meta property="og:image" content="http://debugtalk.com/images/httprunner-testcase-layer-1.jpeg">
+<meta property="og:image" content="http://debugtalk.com/images/httprunner-testcase-layer-2.jpeg">
+<meta property="og:image" content="http://debugtalk.com/images/httprunner-testcase-layer-3.jpeg">
+<meta property="og:image" content="http://debugtalk.com/images/httprunner-testcase-layer-4.jpeg">
+<meta property="og:updated_time" content="2017-12-24T01:49:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HttpRunner 的测试用例分层机制">
+<meta name="twitter:description" content="背景描述在HttpRunner中，测试用例引擎最大的特色就是支持YAML/JSON格式的用例描述形式。
+采用YAML/JSON格式编写维护测试用例，优势还是很明显的：
+
+相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力；
+相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。
+
+以最常见的登录注销为例，我们的测试用例通常会描述为如下形式：
+1">
+<meta name="twitter:image" content="http://debugtalk.com/images/httprunner-testcase-layer-1.jpeg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/HttpRunner-testcase-layer/" title="HttpRunner 的测试用例分层机制" itemprop="url">HttpRunner 的测试用例分层机制</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2017-12-22T16:00:00.000Z" itemprop="datePublished"> Published 2017-12-23</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景描述"><span class="toc-number">1.</span> <span class="toc-text">背景描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口的分层定义描述"><span class="toc-number">2.</span> <span class="toc-text">接口的分层定义描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口的模块化封装"><span class="toc-number">3.</span> <span class="toc-text">接口的模块化封装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#脚手架工具"><span class="toc-number">4.</span> <span class="toc-text">脚手架工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在<code>HttpRunner</code>中，测试用例引擎最大的特色就是支持<code>YAML/JSON</code>格式的用例描述形式。</p>
+<p>采用<code>YAML/JSON</code>格式编写维护测试用例，优势还是很明显的：</p>
+<ul>
+<li>相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力；</li>
+<li>相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。</li>
+</ul>
+<p>以最常见的登录注销为例，我们的测试用例通常会描述为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> demo-login-logoff</div><div class="line"><span class="attr">    variable_binds:</span></div><div class="line"><span class="attr">        - UserName:</span> test001</div><div class="line"><span class="attr">        - Password:</span> <span class="number">123456</span></div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        base_url:</span> http://xxx.debugtalk.com</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Accept:</span> application/json</div><div class="line"><span class="attr">            User-Agent:</span> iOS/<span class="number">10.3</span></div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> Login</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /api/v1/Account/Login</div><div class="line"><span class="attr">        method:</span> POST</div><div class="line"><span class="attr">        json:</span></div><div class="line"><span class="attr">            UserName:</span> $UserName</div><div class="line"><span class="attr">            Pwd:</span> $Password</div><div class="line"><span class="attr">            VerCode:</span> <span class="string">""</span></div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.IsSuccess"</span>, <span class="literal">True</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.Code"</span>, <span class="number">200</span>]</div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> Logoff</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /api/v1/Account/LoginOff</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.IsSuccess"</span>, <span class="literal">True</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.Code"</span>, <span class="number">200</span>]</div></pre></td></tr></table></figure>
+<p>相信大家已经对该种用例描述形式十分熟悉了。不过，该种描述形式的问题在于，接口通常会出现在多个测试场景中，而每次都需要对接口进行定义描述，包括请求的URL、Header、Body、以及预期响应值等，这就会产生大量的重复。</p>
+<p>例如，在某个项目中存在三个测试场景：</p>
+<ul>
+<li>场景A：注册新账号（<code>API_1/2</code>）、登录新注册的账号（<code>API_3/4/5</code>）、查看登录状态（<code>API_6</code>）；</li>
+<li>场景B：登录已有账号（<code>API_3/4/5</code>）、注销登录（<code>API_7/8</code>）；</li>
+<li>场景C：注销登录（<code>API_7/8</code>）、查看登录状态（<code>API_6</code>）、注册新账号（<code>API_1/2</code>）。</li>
+</ul>
+<p>按照常规的接口测试用例编写方式，我们需要创建3个场景文件，然后在各个文件中分别描述三个测试场景相关的接口信息。示意图如下所示。</p>
+<p><img src="/images/httprunner-testcase-layer-1.jpeg" alt=""></p>
+<p>在本例中，接口（<code>API_1/2/6</code>）在场景A和场景C中都进行了定义；接口（<code>API_3/4/5</code>）在场景A和场景B中都进行了定义；接口（<code>API_7/8</code>）在场景B和场景C中都进行了定义。可以预见，当测试场景增多以后，接口定义描述的维护就会变得非常困难和繁琐。</p>
+<h2 id="接口的分层定义描述"><a href="#接口的分层定义描述" class="headerlink" title="接口的分层定义描述"></a>接口的分层定义描述</h2><p>那要如何进行优化呢？</p>
+<p>其实也很简单，在编程语言中，如果出现重复代码块，我们通常会将其封装为类或方法，然后在需要时进行调用，以此来消除重复。同样地，我们也可以将项目的API进行统一定义，里面包含API的请求和预期响应描述，然后在测试场景中进行引用即可。</p>
+<p>示意图如下所示。</p>
+<p><img src="/images/httprunner-testcase-layer-2.jpeg" alt=""></p>
+<p>具体地，我们可以约定将项目的所有API接口定义放置在<code>api</code>目录下，并在<code>api</code>目录中按照项目的系统模块来组织接口的定义；同时，将测试场景放置到<code>testcases</code>目录中。</p>
+<p>此时测试用例文件的目录结构如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">✗ tree tests</div><div class="line">tests</div><div class="line">├── api</div><div class="line">│   └── v1</div><div class="line">│       ├── Account.yml</div><div class="line">│       ├── BusinessTrip.yml</div><div class="line">│       ├── Common.yml</div><div class="line">│       └── Leave.yml</div><div class="line">├── debugtalk.py</div><div class="line">└── testcases</div><div class="line">    ├── scenario_A.yml</div><div class="line">    ├── scenario_B.yml</div><div class="line">    └── scenario_C.yml</div></pre></td></tr></table></figure>
+<p>而对于API接口的定义，与之前的描述方式基本一致，只做了两点调整：</p>
+<ul>
+<li>接口定义块（<code>block</code>）的标识为<code>api</code>；</li>
+<li>接口定义块中包含<code>def</code>字段，形式为<code>api_name(*args)</code>，作为接口的唯一标识ID；需要注意的是，即使<code>api</code>没有参数，也需要带上括号，<code>api_name()</code>；这和编程语言中定义函数是一样的。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- api:</span></div><div class="line"><span class="attr">    def:</span> api_v1_Account_Login_POST($UserName, $Password)</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /api/v1/Account/Login</div><div class="line"><span class="attr">        method:</span> POST</div><div class="line"><span class="attr">        json:</span></div><div class="line"><span class="attr">            UserName:</span> $UserName</div><div class="line"><span class="attr">            Pwd:</span> $Password</div><div class="line"><span class="attr">            VerCode:</span> <span class="string">""</span></div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.IsSuccess"</span>, <span class="literal">True</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.Code"</span>, <span class="number">200</span>]</div><div class="line"></div><div class="line"><span class="attr">- api:</span></div><div class="line"><span class="attr">    def:</span> api_v1_Account_LoginOff_GET()</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /api/v1/Account/LoginOff</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.IsSuccess"</span>, <span class="literal">True</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"content.Code"</span>, <span class="number">200</span>]</div></pre></td></tr></table></figure>
+<p>有了接口的定义描述后，我们编写测试场景时就可以直接引用接口定义了。</p>
+<p>同样是背景描述中的登录注销场景，测试用例就描述为变为如下形式。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> demo</div><div class="line"><span class="attr">    variable_binds:</span></div><div class="line"><span class="attr">        - UserName:</span> test001</div><div class="line"><span class="attr">        - Password:</span> <span class="number">123456</span></div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        base_url:</span> http://xxx.debugtalk.com</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Accept:</span> application/json</div><div class="line"><span class="attr">            User-Agent:</span> iOS/<span class="number">10.3</span></div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> Login</div><div class="line"><span class="attr">    api:</span> api_v1_Account_Login_POST($UserName, $Password)</div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> Logoff</div><div class="line"><span class="attr">    api:</span> api_v1_Account_LoginOff_GET()</div></pre></td></tr></table></figure>
+<p>不难看出，对API接口进行分层定义后，我们在测试用例场景中引用接口定义时，与编程语言里面调用函数的形式基本完全一样，只需要指定接口的名称，以及所需传递的参数值；同样的，即使没有参数，也需要带上括号。</p>
+<p>实现接口的分层定义描述后，我们就可以避免接口的重复定义。但是，我们回过头来看之前的案例，发现仍然会存在一定的重复。</p>
+<p><img src="/images/httprunner-testcase-layer-3.jpeg" alt=""></p>
+<p>如上图所示，场景A和场景C都包含了注册新账号（<code>API_1/2</code>）和查看登录状态（<code>API_6</code>），场景A和场景B都包含了登录已有账号（<code>API_3/4/5</code>），场景B和场景C都包含了注销登录（<code>API_7/8</code>）。</p>
+<p>虽然我们已经将接口的定义描述抽离出来，避免了重复的定义；但是在实际业务场景中，某些功能（例如登录、注销）会在多个场景中重复出现，而该功能又涉及到多个接口的组合调用，这同样也会出现大量的重复。</p>
+<h2 id="接口的模块化封装"><a href="#接口的模块化封装" class="headerlink" title="接口的模块化封装"></a>接口的模块化封装</h2><p>玩过积木的同学可能就会想到，我们也可以将系统的常用功能封装为模块（suite），只需要在模块中定义一次，然后就可以在测试场景中重复进行引用，从而避免了模块功能的重复描述。</p>
+<p><img src="/images/httprunner-testcase-layer-4.jpeg" alt=""></p>
+<p>具体地，我们可以约定将项目的所有模块定义放置在<code>suite</code>目录下，并在<code>suite</code>目录中按照项目的功能来组织模块的定义。</p>
+<p>后续，我们在<code>testcases</code>目录中描述测试场景时，就可同时引用接口定义和模块定义了；模块和接口的混合调用，必将为我们编写测试场景带来极大的灵活性。</p>
+<p>此时测试用例文件的目录结构如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">✗ tree tests</div><div class="line">tests</div><div class="line">├── api</div><div class="line">│   └── v1</div><div class="line">│       ├── Account.yml</div><div class="line">│       ├── BusinessTrip.yml</div><div class="line">│       ├── Common.yml</div><div class="line">│       └── Leave.yml</div><div class="line">├── debugtalk.py</div><div class="line">├── suite</div><div class="line">│   ├── BusinessTravelApplication</div><div class="line">│   │   ├── approve-application.yml</div><div class="line">│   │   ├── executive-application.yml</div><div class="line">│   │   ├── reject-application.yml</div><div class="line">│   │   └── submit-application.yml</div><div class="line">│   └── LeaveApplication</div><div class="line">│       ├── approve.yml</div><div class="line">│       ├── cancel.yml</div><div class="line">│       └── submit-application.yml</div><div class="line">└── testcases</div><div class="line">    ├── scenario_A.yml</div><div class="line">    ├── scenario_B.yml</div><div class="line">    └── scenario_C.yml</div></pre></td></tr></table></figure>
+<p>需要注意的是，我们在组织测试用例描述的文件目录结构时，遵循约定大于配置的原则：</p>
+<ul>
+<li>API接口定义必须放置在<code>api</code>目录下</li>
+<li>模块定义必须放置在<code>suite</code>目录下</li>
+<li>测试场景文件必须放置在<code>testcases</code>目录下</li>
+<li>相关的函数定义放置在<code>debugtalk.py</code>中</li>
+</ul>
+<p>至此，我们实现了测试用例的<code>接口-模块-场景</code>分层，从而彻底避免了重复定义描述。</p>
+<h2 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h2><p>得益于约定大于配置的原则，在<code>HttpRunner</code>中实现了一个脚手架工具，可以快速创建项目的目录结构。该想法来源于<code>Django</code>的<code>django-admin.py startproject project_name</code>。</p>
+<p>使用方式也与<code>Django</code>类似，只需要通过<code>--startproject</code>指定新项目的名称即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ hrun --startproject helloworld</div><div class="line">INFO:root: Start to create new project: /Users/Leo/MyProjects/helloworld</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/api</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/suite</div><div class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/testcases</div><div class="line">INFO:root:      created file: /Users/Leo/MyProjects/helloworld/tests/debugtalk.py</div></pre></td></tr></table></figure>
+<p>运行之后，就会在指定的目录中生成新项目的目录结构，接下来，我们就可以按照测试用例的<code>接口-模块-场景</code>分层原则往里面添加用例描述信息了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果看到这里你还不明白测试用例分层的必要性，那也没关系，测试用例分层不是必须的，你还是可以按照之前的方式组织测试用例。不过当你某一天发现需要进行分层管理时，你会发现它就在那里，很实用。</p>
+<p>最后，在<code>HttpRunner</code>项目的<a href="https://github.com/HttpRunner/HttpRunner/tree/master/examples/HelloWorld" target="_blank" rel="external"><code>examples/HelloWorld</code></a>目录中，包含了一份完整的分层测试用例示例，相信会对大家有所帮助。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HttpRunner/">HttpRunner</a><a href="/tags/testcase/">testcase</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/HttpRunner-testcase-layer/" data-title="HttpRunner 的测试用例分层机制 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/post/HttpRunner-validator-optimization/"  title="HttpRunner 的结果校验器优化">
+ <strong>下一篇：</strong><br/> 
+ <span>HttpRunner 的结果校验器优化
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景描述"><span class="toc-number">1.</span> <span class="toc-text">背景描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口的分层定义描述"><span class="toc-number">2.</span> <span class="toc-text">接口的分层定义描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口的模块化封装"><span class="toc-number">3.</span> <span class="toc-text">接口的模块化封装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#脚手架工具"><span class="toc-number">4.</span> <span class="toc-text">脚手架工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

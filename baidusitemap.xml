@@ -4,18 +4,37 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
+    <lastmod>2017-12-24T01:49:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>HttpRunner 的测试用例分层机制</title>
+        <pubTime>2017-12-22T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>testcase</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</title>
-        <pubTime>2017-07-06T16:00:00.000Z</pubTime>
+        <title>How to install a package from Github that has other github dependencies ?</title>
+        <pubTime>2017-08-04T16:00:00.000Z</pubTime>
         
-        <tag>自动化测试</tag>
+        <tag>Locust</tag>
          
-        <tag>测试框架</tag>
+        <tag>setuptools</tag>
          
-        <tag>测试用例</tag>
+        <tag>pip</tag>
          
         <tag>HttpRunner</tag>
          
@@ -27,19 +46,13 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用</title>
-        <pubTime>2017-07-16T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 正式更名为 HttpRunner</title>
+        <pubTime>2017-11-07T16:00:00.000Z</pubTime>
         
-        <tag>Python</tag>
-         
-        <tag>自动化测试</tag>
-         
-        <tag>测试框架</tag>
-         
         <tag>HttpRunner</tag>
          
          
@@ -142,13 +155,19 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine 正式更名为 HttpRunner</title>
-        <pubTime>2017-11-07T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</title>
+        <pubTime>2017-07-06T16:00:00.000Z</pubTime>
         
+        <tag>自动化测试</tag>
+         
+        <tag>测试框架</tag>
+         
+        <tag>测试用例</tag>
+         
         <tag>HttpRunner</tag>
          
          
@@ -184,16 +203,18 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine，不再局限于API的测试</title>
-        <pubTime>2017-11-05T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用</title>
+        <pubTime>2017-07-16T16:00:00.000Z</pubTime>
         
-        <tag>JSON API</tag>
+        <tag>Python</tag>
          
-        <tag>正则表达式</tag>
+        <tag>自动化测试</tag>
+         
+        <tag>测试框架</tag>
          
         <tag>HttpRunner</tag>
          
@@ -205,18 +226,16 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
+    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     <data>
         <display>
-        <title>How to install a package from Github that has other github dependencies ?</title>
-        <pubTime>2017-08-04T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine，不再局限于API的测试</title>
+        <pubTime>2017-11-05T16:00:00.000Z</pubTime>
         
-        <tag>Locust</tag>
+        <tag>JSON API</tag>
          
-        <tag>setuptools</tag>
-         
-        <tag>pip</tag>
+        <tag>正则表达式</tag>
          
         <tag>HttpRunner</tag>
          
@@ -390,27 +409,6 @@
         <tag>Locust</tag>
          
         <tag>开源项目</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>Introduction to AppiumBooster</title>
-        <pubTime>2016-07-19T16:00:00.000Z</pubTime>
-        
-        <tag>AutomationTest</tag>
-         
-        <tag>Appium</tag>
-         
-        <tag>AppiumBooster</tag>
          
          
            
@@ -950,14 +948,13 @@
     </url>
 
     
-    
   <url>
-    <loc>http://debugtalk.com/post/build-ideal-app-automation-test-framework/</loc>
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>打造心目中理想的自动化测试框架（AppiumBooster）</title>
-        <pubTime>2016-09-06T16:00:00.000Z</pubTime>
+        <title>Introduction to AppiumBooster</title>
+        <pubTime>2016-07-19T16:00:00.000Z</pubTime>
         
         <tag>AutomationTest</tag>
          
@@ -965,14 +962,13 @@
          
         <tag>AppiumBooster</tag>
          
-        <tag>UI Test</tag>
-         
          
            
         </display>
     </data>
     </url>
 
+    
     
   <url>
     <loc>http://debugtalk.com/post/locustplus-talk-about-performance-test/</loc>
@@ -1480,9 +1476,6 @@
     </url>
 
     
-    
-    
-    
   <url>
     <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -1498,6 +1491,32 @@
         <tag>Plugin</tag>
          
         <tag>ANSI escape sequences</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+    
+  <url>
+    <loc>http://debugtalk.com/post/build-ideal-app-automation-test-framework/</loc>
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>打造心目中理想的自动化测试框架（AppiumBooster）</title>
+        <pubTime>2016-09-06T16:00:00.000Z</pubTime>
+        
+        <tag>AutomationTest</tag>
+         
+        <tag>Appium</tag>
+         
+        <tag>AppiumBooster</tag>
+         
+        <tag>UI Test</tag>
          
          
            
