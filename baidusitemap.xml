@@ -4,11 +4,30 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/my-2017-summary/</loc>
-    <lastmod>2018-01-02T00:59:45.000Z</lastmod>
+    <loc>http://debugtalk.com/post/my-2016-summary/</loc>
+    <lastmod>2018-01-02T02:13:14.000Z</lastmod>
     <data>
         <display>
-        <title>我的2017年终总结</title>
+        <title>我的 2016 年终总结</title>
+        <pubTime>2016-12-30T16:00:00.000Z</pubTime>
+        
+        <tag>年终总结</tag>
+         
+        <tag>个人成长</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/my-2017-summary/</loc>
+    <lastmod>2018-01-02T02:13:07.000Z</lastmod>
+    <data>
+        <display>
+        <title>我的 2017 年终总结</title>
         <pubTime>2017-12-30T16:00:00.000Z</pubTime>
         
         <tag>年终总结</tag>
@@ -42,41 +61,18 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
+    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     <data>
         <display>
-        <title>接口自动化测试的最佳工程实践（ApiTestEngine）</title>
-        <pubTime>2017-06-17T16:00:00.000Z</pubTime>
+        <title>How to install a package from Github that has other github dependencies ?</title>
+        <pubTime>2017-08-04T16:00:00.000Z</pubTime>
         
-        <tag>接口测试</tag>
+        <tag>Locust</tag>
          
-        <tag>自动化测试</tag>
+        <tag>setuptools</tag>
          
-        <tag>测试框架</tag>
-         
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
-        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
-        
-        <tag>HTTP</tag>
-         
-        <tag>自动化测试</tag>
-         
-        <tag>测试框架</tag>
+        <tag>pip</tag>
          
         <tag>HttpRunner</tag>
          
@@ -206,18 +202,18 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
     <lastmod>2017-12-23T07:18:08.000Z</lastmod>
     <data>
         <display>
-        <title>How to install a package from Github that has other github dependencies ?</title>
-        <pubTime>2017-08-04T16:00:00.000Z</pubTime>
+        <title>接口自动化测试的最佳工程实践（ApiTestEngine）</title>
+        <pubTime>2017-06-17T16:00:00.000Z</pubTime>
         
-        <tag>Locust</tag>
+        <tag>接口测试</tag>
          
-        <tag>setuptools</tag>
+        <tag>自动化测试</tag>
          
-        <tag>pip</tag>
+        <tag>测试框架</tag>
          
         <tag>HttpRunner</tag>
          
@@ -323,6 +319,29 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
+    <data>
+        <display>
+        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
+        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
+        
+        <tag>HTTP</tag>
+         
+        <tag>自动化测试</tag>
+         
+        <tag>测试框架</tag>
+         
+        <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
     <lastmod>2017-12-13T15:10:44.000Z</lastmod>
     <data>
@@ -368,25 +387,6 @@
         <title>【大疆内推】岗位描述我只想这么写</title>
         <pubTime>2017-08-08T16:00:00.000Z</pubTime>
         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/my-2016-summary/</loc>
-    <lastmod>2017-11-03T14:44:50.000Z</lastmod>
-    <data>
-        <display>
-        <title>我的2016年终总结</title>
-        <pubTime>2016-12-30T16:00:00.000Z</pubTime>
-        
-        <tag>年终总结</tag>
-         
-        <tag>个人成长</tag>
-         
          
            
         </display>
