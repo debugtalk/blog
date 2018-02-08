@@ -1,0 +1,644 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>HttpRunner 通过 skip 机制实现对测试用例的分组执行控制 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="背景介绍近期，某位同学对HttpRunner提了一个需求点：
+
+能否支持类似unittest中的skip注解，方便灵活剔除某些用例，不执行。目前在接口测试日常构建中，会遇到一些接口开发暂时屏蔽了或者降级，导致用例执行失败；所以想当遇到这些情况的时候，能够临时剔除掉某些用例不执行；等后续恢复后，再去掉，然后恢复执行。
+
+针对这种情况，HttpRunner的确没有直接支持。之所以说是没有直接支持，是因">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HttpRunner 通过 skip 机制实现对测试用例的分组执行控制">
+<meta property="og:url" content="http://debugtalk.com/post/HttpRunner-skip-feature/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="背景介绍近期，某位同学对HttpRunner提了一个需求点：
+
+能否支持类似unittest中的skip注解，方便灵活剔除某些用例，不执行。目前在接口测试日常构建中，会遇到一些接口开发暂时屏蔽了或者降级，导致用例执行失败；所以想当遇到这些情况的时候，能够临时剔除掉某些用例不执行；等后续恢复后，再去掉，然后恢复执行。
+
+针对这种情况，HttpRunner的确没有直接支持。之所以说是没有直接支持，是因">
+<meta property="og:image" content="http://debugtalk.com/images/httprunner-skip.jpg">
+<meta property="og:updated_time" content="2018-02-08T16:50:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HttpRunner 通过 skip 机制实现对测试用例的分组执行控制">
+<meta name="twitter:description" content="背景介绍近期，某位同学对HttpRunner提了一个需求点：
+
+能否支持类似unittest中的skip注解，方便灵活剔除某些用例，不执行。目前在接口测试日常构建中，会遇到一些接口开发暂时屏蔽了或者降级，导致用例执行失败；所以想当遇到这些情况的时候，能够临时剔除掉某些用例不执行；等后续恢复后，再去掉，然后恢复执行。
+
+针对这种情况，HttpRunner的确没有直接支持。之所以说是没有直接支持，是因">
+<meta name="twitter:image" content="http://debugtalk.com/images/httprunner-skip.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/HttpRunner-skip-feature/" title="HttpRunner 通过 skip 机制实现对测试用例的分组执行控制" itemprop="url">HttpRunner 通过 skip 机制实现对测试用例的分组执行控制</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2018-02-07T16:00:00.000Z" itemprop="datePublished"> Published 2018-02-08</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景介绍"><span class="toc-number">1.</span> <span class="toc-text">背景介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现方式"><span class="toc-number">2.</span> <span class="toc-text">实现方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效果展示"><span class="toc-number">3.</span> <span class="toc-text">效果展示</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>近期，某位同学对<code>HttpRunner</code>提了一个<a href="https://github.com/HttpRunner/HttpRunner/issues/96" target="_blank" rel="external">需求点</a>：</p>
+<blockquote>
+<p>能否支持类似unittest中的skip注解，方便灵活剔除某些用例，不执行。<br>目前在接口测试日常构建中，会遇到一些接口开发暂时屏蔽了或者降级，导致用例执行失败；所以想当遇到这些情况的时候，能够临时剔除掉某些用例不执行；等后续恢复后，再去掉，然后恢复执行。</p>
+</blockquote>
+<p>针对这种情况，<code>HttpRunner</code>的确没有直接支持。之所以说是没有<code>直接</code>支持，是因为在<code>HttpRunner</code>中存在<code>times</code>关键字，可以指定某个<code>test</code>的运行次数。</p>
+<p>例如，如下<code>test</code>中指定了<code>times</code>为3，那么该<code>test</code>就会运行3次。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> demo</div><div class="line"><span class="attr">    times:</span> <span class="number">3</span></div><div class="line"><span class="attr">    request:</span> &#123;...&#125;</div><div class="line"><span class="attr">    validate:</span> [...]</div></pre></td></tr></table></figure>
+<p>假如要实现临时屏蔽掉某些<code>test</code>，那么就可以将对应<code>test</code>的<code>times</code>设置为0。</p>
+<p>这虽然也能勉强实现需求，但是这跟直接将临时不运行的<code>test</code>注释掉没什么区别，都需要对测试用例内容进行改动，使用上很是不方便。</p>
+<p>考虑到该需求的普遍性，<code>HttpRunner</code>的确应该增加对该种情况的支持。</p>
+<p>在这方面，<code>unittest</code>已经有了清晰的定义，有三种常用的装饰器可以控制单元测试用例是否被执行：</p>
+<ul>
+<li>@unittest.skip(reason)：无条件跳过当前测试用例</li>
+<li>@unittest.skipIf(condition, reason)：当条件表达式的值为true时跳过当前测试用例</li>
+<li>@unittest.skipUnless(condition, reason)：当条件表达式的值为false时跳过当前测试用例</li>
+</ul>
+<p>该功能完全满足我们的需求，因此，我们可以直接复用其概念，尝试实现同样的功能。</p>
+<h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><p>目标明确了，那需要怎么实现呢？</p>
+<p>首先，我们先看下<code>unittest</code>中这三个函数是怎么实现的；这三个函数定义在<code>unittest/case.py</code>中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SkipTest</span><span class="params">(Exception)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Raise this exception in a test to skip it.</div><div class="line"></div><div class="line">    Usually you can use TestCase.skipTest() or one of the skipping decorators</div><div class="line">    instead of raising this directly.</div><div class="line">    """</div><div class="line">    <span class="keyword">pass</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skip</span><span class="params">(reason)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Unconditionally skip a test.</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(test_item)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> isinstance(test_item, (type, types.ClassType)):</div><div class="line"><span class="meta">            @functools.wraps(test_item)</span></div><div class="line">            <span class="function"><span class="keyword">def</span> <span class="title">skip_wrapper</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">                <span class="keyword">raise</span> SkipTest(reason)</div><div class="line">            test_item = skip_wrapper</div><div class="line"></div><div class="line">        test_item.__unittest_skip__ = <span class="keyword">True</span></div><div class="line">        test_item.__unittest_skip_why__ = reason</div><div class="line">        <span class="keyword">return</span> test_item</div><div class="line">    <span class="keyword">return</span> decorator</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skipIf</span><span class="params">(condition, reason)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Skip a test if the condition is true.</div><div class="line">    """</div><div class="line">    <span class="keyword">if</span> condition:</div><div class="line">        <span class="keyword">return</span> skip(reason)</div><div class="line">    <span class="keyword">return</span> _id</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skipUnless</span><span class="params">(condition, reason)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Skip a test unless the condition is true.</div><div class="line">    """</div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> condition:</div><div class="line">        <span class="keyword">return</span> skip(reason)</div><div class="line">    <span class="keyword">return</span> _id</div></pre></td></tr></table></figure>
+<p>不难看出，核心有两点：</p>
+<ul>
+<li>对于<code>skip</code>，只需要在该测试用例中<code>raise SkipTest(reason)</code>，而<code>SkipTest</code>是<code>unittest/case.py</code>中定义的一个异常类；</li>
+<li>对于<code>skipIf</code>和<code>skipUnless</code>，相比于<code>skip</code>，主要是需要指定一个条件表达式（condition），然后根据该表达式的实际值来决定是否<code>skip</code>当前测试用例。</li>
+</ul>
+<p>明确了这两点之后，我们要如何在<code>HttpRunner</code>中实现同样的功能，思路应该就比较清晰了。</p>
+<p>因为<code>HttpRunner</code>同样也是采用<code>unittest</code>来组织和驱动测试用例执行的，而具体的执行控制部分都是在<code>httprunner/runner.py</code>的<code>_run_test</code>方法中；同时，在<code>_run_test</code>方法中会传入<code>testcase_dict</code>，也就是具体测试用例的全部信息。</p>
+<p>那么，最简单的做法，就是在<code>YAML/JSON</code>测试用例中，新增<code>skip/skipIf/skipUnless</code>参数，然后在<code>_run_test</code>方法中根据参数内容来决定是否执行<code>raise SkipTest(reason)</code>。</p>
+<p>例如，在<code>YAML</code>测试用例中，我们可以按照如下形式新增<code>skip</code>字段，其中对应的值部分就是我们需要的<code>reason</code>。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> demo</div><div class="line"><span class="attr">    skip:</span> <span class="string">"skip this test unconditionally"</span></div><div class="line"><span class="attr">    request:</span> &#123;...&#125;</div><div class="line"><span class="attr">    validate:</span> [...]</div></pre></td></tr></table></figure>
+<p>接下来在<code>_run_test</code>方法，要处理就十分简单，只需要判断<code>testcase_dict</code>中是否包含<code>skip</code>字段，假如包含，则执行<code>raise SkipTest(reason)</code>即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">_run_test</span><span class="params">(self, testcase_dict)</span>:</span></div><div class="line">    ...</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="string">"skip"</span> <span class="keyword">in</span> testcase_dict:</div><div class="line">        skip_reason = testcase_dict[<span class="string">"skip"</span>]</div><div class="line">        <span class="keyword">raise</span> SkipTest(skip_reason)</div><div class="line"></div><div class="line">    ...</div></pre></td></tr></table></figure>
+<p>这对于<code>skip</code>机制来做，完全满足需求；但对于<code>skipIf/skipUnless</code>，可能就会麻烦些，因为我们的用例是在<code>YAML/JSON</code>文本格式的文件中，没法像在<code>unittest</code>中执行<code>condition</code>那样的Python表达式。</p>
+<p>嗯？谁说在<code>YAML/JSON</code>中就不能执行函数表达式的？在<code>HttpRunner</code>中，我们已经实现了该功能，即：</p>
+<ul>
+<li>在<code>debugtalk.py</code>中定义函数，例如<code>func(a, b)</code></li>
+<li>在<code>YAML/JSON</code>中通过<code>${func(a,b)}</code>对函数进行调用</li>
+</ul>
+<p>在此基础上，我们要实现<code>skipIf/skipUnless</code>就很简单了；很自然地，我们可以想到采用如下形式来进行描述。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> create user which existed (skip if condition)</div><div class="line"><span class="attr">    skipIf:</span> $&#123;skip_test_in_production_env()&#125;</div><div class="line"><span class="attr">    request:</span> &#123;...&#125;</div><div class="line"><span class="attr">    validate:</span> [...]</div></pre></td></tr></table></figure>
+<p>其中，<code>skip_test_in_production_env</code>定义在<code>debugtalk.py</code>文件中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skip_test_in_production_env</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">""" skip this test in production environment</span></div><div class="line">    """</div><div class="line">    <span class="keyword">return</span> os.environ[<span class="string">"TEST_ENV"</span>] == <span class="string">"PRODUCTION"</span></div></pre></td></tr></table></figure>
+<p>然后，在<code>_run_test</code>方法中，我们只需要判断<code>testcase_dict</code>中是否包含<code>skipIf</code>字段，假如包含，则将其对应的函数表达式取出，运行得到其结果，最后再根据运算结果来判断是否执行<code>raise SkipTest(reason)</code>。对函数表达式进行解析的方法在<code>httprunner/context.py</code>的<code>exec_content_functions</code>函数中，具体实现方式可阅读之前的文章。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">_run_test</span><span class="params">(self, testcase_dict)</span>:</span></div><div class="line">    ...</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="string">"skip"</span> <span class="keyword">in</span> testcase_dict:</div><div class="line">        skip_reason = testcase_dict[<span class="string">"skip"</span>]</div><div class="line">        <span class="keyword">raise</span> SkipTest(skip_reason)</div><div class="line">    <span class="keyword">elif</span> <span class="string">"skipIf"</span> <span class="keyword">in</span> testcase_dict:</div><div class="line">        skip_if_condition = testcase_dict[<span class="string">"skipIf"</span>]</div><div class="line">        <span class="keyword">if</span> self.context.exec_content_functions(skip_if_condition):</div><div class="line">            skip_reason = <span class="string">"&#123;&#125; evaluate to True"</span>.format(skip_if_condition)</div><div class="line">            <span class="keyword">raise</span> SkipTest(skip_reason)</div><div class="line"></div><div class="line">    ...</div></pre></td></tr></table></figure>
+<p><code>skipUnless</code>与<code>skipIf</code>类似，不再重复。</p>
+<p>通过该种方式，我们就可以实现在不对测试用例文件做任何修改的情况下，通过外部方式（例如设定环境变量的值）就可以控制是否执行某些测试用例。</p>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><code>skip/skipIf/skipUnless</code>机制实现后，我们对测试用例的执行控制就更加灵活方便了。</p>
+<p>例如，我们可以很容易地实现如下常见的测试场景：</p>
+<ul>
+<li>对测试用例进行分组，P0/P1/P2等，然后根据实际需求选择执行哪些用例</li>
+<li>通过环境变量来控制是否执行某些用例</li>
+</ul>
+<p>更重要的是，我们无需对测试用例文件进行任何修改。</p>
+<p>在<code>HttpRunner</code>项目中存在一个示例文件，<a href="https://github.com/HttpRunner/HttpRunner/blob/master/tests/data/demo_testset_cli.yml" target="_blank" rel="external"><code>httprunner/tests/data/demo_testset_cli.yml</code></a>，大家可以此作为参考。</p>
+<p>在运行该测试集后，生成的测试报告如下所示。</p>
+<p><img src="/images/httprunner-skip.jpg" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HttpRunner/">HttpRunner</a><a href="/tags/testcase/">testcase</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/HttpRunner-skip-feature/" data-title="HttpRunner 通过 skip 机制实现对测试用例的分组执行控制 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/post/my-2017-summary/"  title="我的 2017 年终总结">
+ <strong>下一篇：</strong><br/> 
+ <span>我的 2017 年终总结
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景介绍"><span class="toc-number">1.</span> <span class="toc-text">背景介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现方式"><span class="toc-number">2.</span> <span class="toc-text">实现方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效果展示"><span class="toc-number">3.</span> <span class="toc-text">效果展示</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>17</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

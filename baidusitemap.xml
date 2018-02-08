@@ -4,6 +4,25 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/HttpRunner-skip-feature/</loc>
+    <lastmod>2018-02-08T16:50:17.000Z</lastmod>
+    <data>
+        <display>
+        <title>HttpRunner 通过 skip 机制实现对测试用例的分组执行控制</title>
+        <pubTime>2018-02-07T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>testcase</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/my-2016-summary/</loc>
     <lastmod>2018-01-02T02:13:14.000Z</lastmod>
     <data>
@@ -42,117 +61,16 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
-    <lastmod>2017-12-24T01:49:57.000Z</lastmod>
+    <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>HttpRunner 的测试用例分层机制</title>
-        <pubTime>2017-12-22T16:00:00.000Z</pubTime>
+        <title>HttpRunner 的结果校验器优化</title>
+        <pubTime>2017-12-12T16:00:00.000Z</pubTime>
         
         <tag>HttpRunner</tag>
          
-        <tag>testcase</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>How to install a package from Github that has other github dependencies ?</title>
-        <pubTime>2017-08-04T16:00:00.000Z</pubTime>
-        
-        <tag>Locust</tag>
-         
-        <tag>setuptools</tag>
-         
-        <tag>pip</tag>
-         
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 正式更名为 HttpRunner</title>
-        <pubTime>2017-11-07T16:00:00.000Z</pubTime>
-        
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine，不再局限于API的测试</title>
-        <pubTime>2017-11-05T16:00:00.000Z</pubTime>
-        
-        <tag>JSON API</tag>
-         
-        <tag>正则表达式</tag>
-         
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>约定大于配置：ApiTestEngine实现热加载机制</title>
-        <pubTime>2017-09-08T16:00:00.000Z</pubTime>
-        
-        <tag>热加载</tag>
-         
-        <tag>debugtalk.py</tag>
-         
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/apitestengine-supersede-locust/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 集成 Locust 实现更好的性能测试体验</title>
-        <pubTime>2017-08-26T16:00:00.000Z</pubTime>
-        
-        <tag>Locust</tag>
-         
-        <tag>HttpRunner</tag>
+        <tag>validator</tag>
          
          
            
@@ -163,7 +81,7 @@
     
   <url>
     <loc>http://debugtalk.com/post/apitestengine-quickstart/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
         <title>ApiTestEngine QuickStart</title>
@@ -179,31 +97,8 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 演进之路（0）开发未动，测试先行</title>
-        <pubTime>2017-06-19T16:00:00.000Z</pubTime>
-        
-        <tag>自动化测试</tag>
-         
-        <tag>测试框架</tag>
-         
-        <tag>Mock</tag>
-         
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
         <title>接口自动化测试的最佳工程实践（ApiTestEngine）</title>
@@ -225,8 +120,151 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>ApiTestEngine 正式更名为 HttpRunner</title>
+        <pubTime>2017-11-07T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/apitestengine-supersede-locust/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>ApiTestEngine 集成 Locust 实现更好的性能测试体验</title>
+        <pubTime>2017-08-26T16:00:00.000Z</pubTime>
+        
+        <tag>Locust</tag>
+         
+        <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>ApiTestEngine，不再局限于API的测试</title>
+        <pubTime>2017-11-05T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>JSON API</tag>
+         
+        <tag>正则表达式</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>约定大于配置：ApiTestEngine实现热加载机制</title>
+        <pubTime>2017-09-08T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>热加载</tag>
+         
+        <tag>debugtalk.py</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
+        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
+        
+        <tag>HTTP</tag>
+         
+        <tag>自动化测试</tag>
+         
+        <tag>测试框架</tag>
+         
+        <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>HttpRunner 的测试用例分层机制</title>
+        <pubTime>2017-12-22T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>testcase</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>How to install a package from Github that has other github dependencies ?</title>
+        <pubTime>2017-08-04T16:00:00.000Z</pubTime>
+        
+        <tag>Locust</tag>
+         
+        <tag>HttpRunner</tag>
+         
+        <tag>setuptools</tag>
+         
+        <tag>pip</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
         <title>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用</title>
@@ -249,7 +287,7 @@
     
   <url>
     <loc>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
         <title>ApiTestEngine 演进之路（3）测试用例中实现 Python 函数的定义</title>
@@ -261,9 +299,9 @@
          
         <tag>测试框架</tag>
          
-        <tag>lambda</tag>
-         
         <tag>HttpRunner</tag>
+         
+        <tag>lambda</tag>
          
          
            
@@ -274,7 +312,7 @@
     
   <url>
     <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
         <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</title>
@@ -284,9 +322,32 @@
          
         <tag>测试框架</tag>
          
+        <tag>HttpRunner</tag>
+         
         <tag>测试用例</tag>
          
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>ApiTestEngine 演进之路（0）开发未动，测试先行</title>
+        <pubTime>2017-06-19T16:00:00.000Z</pubTime>
+        
+        <tag>自动化测试</tag>
+         
+        <tag>测试框架</tag>
+         
         <tag>HttpRunner</tag>
+         
+        <tag>Mock</tag>
          
          
            
@@ -297,7 +358,7 @@
     
   <url>
     <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
         <title>300行Python代码打造实用接口测试框架</title>
@@ -319,50 +380,8 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
-    <lastmod>2017-12-23T07:18:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
-        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
-        
-        <tag>HTTP</tag>
-         
-        <tag>自动化测试</tag>
-         
-        <tag>测试框架</tag>
-         
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
-    <lastmod>2017-12-13T15:10:44.000Z</lastmod>
-    <data>
-        <display>
-        <title>HttpRunner 的结果校验器优化</title>
-        <pubTime>2017-12-12T16:00:00.000Z</pubTime>
-        
-        <tag>HttpRunner</tag>
-         
-        <tag>validator</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/HttpRunner-supports-HAR/</loc>
-    <lastmod>2017-11-14T16:23:04.000Z</lastmod>
+    <lastmod>2017-12-13T15:08:06.000Z</lastmod>
     <data>
         <display>
         <title>HttpRunner 支持 HAR 意味着什么？</title>
@@ -380,23 +399,8 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
-    <lastmod>2017-11-03T15:02:59.000Z</lastmod>
-    <data>
-        <display>
-        <title>【大疆内推】岗位描述我只想这么写</title>
-        <pubTime>2017-08-08T16:00:00.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/</loc>
-    <lastmod>2017-11-03T14:44:16.000Z</lastmod>
+    <lastmod>2017-11-14T16:24:33.000Z</lastmod>
     <data>
         <display>
         <title>从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划</title>
@@ -416,19 +420,13 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
+    <lastmod>2017-11-14T16:24:33.000Z</lastmod>
     <data>
         <display>
-        <title>Introduction to AppiumBooster</title>
-        <pubTime>2016-07-19T16:00:00.000Z</pubTime>
+        <title>【大疆内推】岗位描述我只想这么写</title>
+        <pubTime>2017-08-08T16:00:00.000Z</pubTime>
         
-        <tag>AutomationTest</tag>
-         
-        <tag>Appium</tag>
-         
-        <tag>AppiumBooster</tag>
-         
          
            
         </display>
@@ -437,16 +435,24 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/Create-Blog-with-Pelican-and-GitCafe-Pages/</loc>
+    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-refactor-testcase-scripts/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>使用 Pelican + GitCafe Pages 创建 Blog</title>
-        <pubTime>2013-10-02T16:00:00.000Z</pubTime>
+        <title>从0到1搭建移动App功能自动化测试平台 (4)：自动化测试代码⎡工程化⎦</title>
+        <pubTime>2016-07-27T16:00:00.000Z</pubTime>
         
-        <tag>Pelican</tag>
+        <tag>AutomationTest</tag>
          
-        <tag>Git</tag>
+        <tag>Appium</tag>
+         
+        <tag>F0T1</tag>
+         
+        <tag>iOS</tag>
+         
+        <tag>Ruby</tag>
+         
+        <tag>RSpec</tag>
          
          
            
@@ -494,6 +500,46 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>使用SIPp对基于SIP协议的IP电话通信服务器进行性能测试</title>
+        <pubTime>2014-05-10T16:00:00.000Z</pubTime>
+        
+        <tag>性能测试</tag>
+         
+        <tag>SIP</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>基于WSDL或SOAP的WebService测试方法--对原理的思考</title>
+        <pubTime>2015-02-11T16:00:00.000Z</pubTime>
+        
+        <tag>WebService</tag>
+         
+        <tag>WSDL</tag>
+         
+        <tag>SOAP</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -527,46 +573,6 @@
         <tag>测试报告</tag>
          
         <tag>持续集成</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>使用SIPp对基于SIP协议的IP电话通信服务器进行性能测试</title>
-        <pubTime>2014-05-10T16:00:00.000Z</pubTime>
-        
-        <tag>性能测试</tag>
-         
-        <tag>SIP</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>基于WSDL或SOAP的WebService测试方法--对原理的思考</title>
-        <pubTime>2015-02-11T16:00:00.000Z</pubTime>
-        
-        <tag>WebService</tag>
-         
-        <tag>WSDL</tag>
-         
-        <tag>SOAP</tag>
          
          
            
@@ -661,24 +667,16 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-write-iOS-testcase-scripts/</loc>
+    <loc>http://debugtalk.com/post/loadrunner-parameter-variable/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>从0到1搭建移动App功能自动化测试平台（3）：编写iOS自动化测试脚本</title>
-        <pubTime>2016-05-29T16:00:00.000Z</pubTime>
+        <title>LoadRuner中的参数与变量</title>
+        <pubTime>2013-08-11T16:00:00.000Z</pubTime>
         
-        <tag>Python</tag>
+        <tag>LoadRunner</tag>
          
-        <tag>AutomationTest</tag>
-         
-        <tag>Appium</tag>
-         
-        <tag>F0T1</tag>
-         
-        <tag>iOS</tag>
-         
-        <tag>Ruby</tag>
+        <tag>脚本开发</tag>
          
          
            
@@ -703,9 +701,36 @@
          
         <tag>iOS</tag>
          
+        <tag>Simulator</tag>
+         
         <tag>Ruby</tag>
          
-        <tag>Simulator</tag>
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-write-iOS-testcase-scripts/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>从0到1搭建移动App功能自动化测试平台（3）：编写iOS自动化测试脚本</title>
+        <pubTime>2016-05-29T16:00:00.000Z</pubTime>
+        
+        <tag>Python</tag>
+         
+        <tag>AutomationTest</tag>
+         
+        <tag>Appium</tag>
+         
+        <tag>F0T1</tag>
+         
+        <tag>iOS</tag>
+         
+        <tag>Ruby</tag>
          
          
            
@@ -736,44 +761,6 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/loadrunner-parameter-variable/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>LoadRuner中的参数与变量</title>
-        <pubTime>2013-08-11T16:00:00.000Z</pubTime>
-        
-        <tag>LoadRunner</tag>
-         
-        <tag>脚本开发</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>【科普】互联网测试岗位的工作日常</title>
-        <pubTime>2017-06-14T16:00:00.000Z</pubTime>
-        
-        <tag>个人成长</tag>
-         
-        <tag>培训</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/trap-in-GitHub-authority-verification/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -786,6 +773,25 @@
         <tag>SSH</tag>
          
         <tag>HTTPS，权限校验</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/Create-Blog-with-Pelican-and-GitCafe-Pages/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>使用 Pelican + GitCafe Pages 创建 Blog</title>
+        <pubTime>2013-10-02T16:00:00.000Z</pubTime>
+        
+        <tag>Pelican</tag>
+         
+        <tag>Git</tag>
          
          
            
@@ -818,6 +824,65 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>Introduction to AppiumBooster</title>
+        <pubTime>2016-07-19T16:00:00.000Z</pubTime>
+        
+        <tag>AutomationTest</tag>
+         
+        <tag>Appium</tag>
+         
+        <tag>AppiumBooster</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/performance-index-concurrent-users/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>性能指标--并发用户数（Concurrent Users）</title>
+        <pubTime>2013-07-30T16:00:00.000Z</pubTime>
+        
+        <tag>性能指标</tag>
+         
+        <tag>并发用户数</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>【科普】互联网测试岗位的工作日常</title>
+        <pubTime>2017-06-14T16:00:00.000Z</pubTime>
+        
+        <tag>个人成长</tag>
+         
+        <tag>培训</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -839,16 +904,16 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/performance-index-concurrent-users/</loc>
+    <loc>http://debugtalk.com/post/clean-sensitive-data-from-git-history-commits/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>性能指标--并发用户数（Concurrent Users）</title>
-        <pubTime>2013-07-30T16:00:00.000Z</pubTime>
+        <title>【GIT技巧】清除历史提交记录中的敏感信息</title>
+        <pubTime>2017-03-16T16:00:00.000Z</pubTime>
         
-        <tag>性能指标</tag>
+        <tag>Git</tag>
          
-        <tag>并发用户数</tag>
+        <tag>GitHub</tag>
          
          
            
@@ -881,57 +946,11 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-refactor-testcase-scripts/</loc>
+    <loc>http://debugtalk.com/post/head-first-locust-user-guide/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>从0到1搭建移动App功能自动化测试平台 (4)：自动化测试代码⎡工程化⎦</title>
-        <pubTime>2016-07-27T16:00:00.000Z</pubTime>
-        
-        <tag>AutomationTest</tag>
-         
-        <tag>Appium</tag>
-         
-        <tag>F0T1</tag>
-         
-        <tag>iOS</tag>
-         
-        <tag>Ruby</tag>
-         
-        <tag>RSpec</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/clean-sensitive-data-from-git-history-commits/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>【GIT技巧】清除历史提交记录中的敏感信息</title>
-        <pubTime>2017-03-16T16:00:00.000Z</pubTime>
-        
-        <tag>Git</tag>
-         
-        <tag>GitHub</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/head-first-locust-advanced-script/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>深入浅出开源性能测试工具Locust（脚本增强）</title>
+        <title>深入浅出开源性能测试工具Locust（使用篇）</title>
         <pubTime>2017-02-21T16:00:00.000Z</pubTime>
         
         <tag>性能测试</tag>
@@ -948,11 +967,11 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/head-first-locust-user-guide/</loc>
+    <loc>http://debugtalk.com/post/head-first-locust-advanced-script/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>深入浅出开源性能测试工具Locust（使用篇）</title>
+        <title>深入浅出开源性能测试工具Locust（脚本增强）</title>
         <pubTime>2017-02-21T16:00:00.000Z</pubTime>
         
         <tag>性能测试</tag>
@@ -1032,16 +1051,16 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/my-impression-on-italy-and-france/</loc>
+    <loc>http://debugtalk.com/post/locustplus-talk-about-performance-test/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     <data>
         <display>
-        <title>春节旅行之意法印象</title>
-        <pubTime>2017-02-01T16:00:00.000Z</pubTime>
+        <title>【LocustPlus序】漫谈服务端性能测试</title>
+        <pubTime>2016-11-01T16:00:00.000Z</pubTime>
         
-        <tag>个人成长</tag>
+        <tag>性能测试</tag>
          
-        <tag>旅行</tag>
+        <tag>Locust</tag>
          
          
            
@@ -1074,29 +1093,6 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    <data>
-        <display>
-        <title>Jenkins的输出日志也可以变得色色的</title>
-        <pubTime>2016-08-14T16:00:00.000Z</pubTime>
-        
-        <tag>Jenkins</tag>
-         
-        <tag>Console</tag>
-         
-        <tag>Plugin</tag>
-         
-        <tag>ANSI escape sequences</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/Jenkins-CI-Automation-Test/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     <data>
@@ -1113,6 +1109,29 @@
         <tag>CI</tag>
          
         <tag>Automation</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>Jenkins的输出日志也可以变得色色的</title>
+        <pubTime>2016-08-14T16:00:00.000Z</pubTime>
+        
+        <tag>Jenkins</tag>
+         
+        <tag>Console</tag>
+         
+        <tag>Plugin</tag>
+         
+        <tag>ANSI escape sequences</tag>
          
          
            
@@ -1269,14 +1288,20 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/traps-in-sql-null/</loc>
+    <loc>http://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     <data>
         <display>
-        <title>SQL语句中关于NULL的那些坑</title>
-        <pubTime>2016-04-24T16:00:00.000Z</pubTime>
+        <title>Android App持续集成性能测试：使用Python实现UI自动化</title>
+        <pubTime>2016-04-16T16:00:00.000Z</pubTime>
         
-        <tag>SQL</tag>
+        <tag>Android</tag>
+         
+        <tag>Python</tag>
+         
+        <tag>UI</tag>
+         
+        <tag>AutomationTest</tag>
          
          
            
@@ -1305,20 +1330,14 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/</loc>
+    <loc>http://debugtalk.com/post/traps-in-sql-null/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     <data>
         <display>
-        <title>Android App持续集成性能测试：使用Python实现UI自动化</title>
-        <pubTime>2016-04-16T16:00:00.000Z</pubTime>
+        <title>SQL语句中关于NULL的那些坑</title>
+        <pubTime>2016-04-24T16:00:00.000Z</pubTime>
         
-        <tag>Android</tag>
-         
-        <tag>Python</tag>
-         
-        <tag>UI</tag>
-         
-        <tag>AutomationTest</tag>
+        <tag>SQL</tag>
          
          
            
@@ -1347,16 +1366,33 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/locustplus-talk-about-performance-test/</loc>
+    <loc>http://debugtalk.com/post/my-impression-on-italy-and-france/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     <data>
         <display>
-        <title>【LocustPlus序】漫谈服务端性能测试</title>
-        <pubTime>2016-11-01T16:00:00.000Z</pubTime>
+        <title>春节旅行之意法印象</title>
+        <pubTime>2017-02-01T16:00:00.000Z</pubTime>
         
-        <tag>性能测试</tag>
+        <tag>个人成长</tag>
          
-        <tag>Locust</tag>
+        <tag>旅行</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>【灵感】线上数据采摘工具（ProductionDataPicker）</title>
+        <pubTime>2016-03-07T16:00:00.000Z</pubTime>
+        
+        <tag>Development</tag>
          
          
            
@@ -1385,23 +1421,6 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    <data>
-        <display>
-        <title>【灵感】线上数据采摘工具（ProductionDataPicker）</title>
-        <pubTime>2016-03-07T16:00:00.000Z</pubTime>
-        
-        <tag>Development</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/remote-debugging-with-pycharm/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     <data>
@@ -1412,27 +1431,6 @@
         <tag>pycharm</tag>
          
         <tag>Python</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/android-development-environment-recovery/</loc>
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android开发环境配置2：详解Recovery</title>
-        <pubTime>2015-07-03T16:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>环境搭建</tag>
-         
-        <tag>recovery</tag>
          
          
            
@@ -1482,6 +1480,27 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/android-development-environment-recovery/</loc>
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android开发环境配置2：详解Recovery</title>
+        <pubTime>2015-07-03T16:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>环境搭建</tag>
+         
+        <tag>recovery</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/android-development-environment-bootloader/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     <data>
@@ -1494,29 +1513,6 @@
         <tag>环境搭建</tag>
          
         <tag>bootloader</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/android-development-environment-adb-and-fastboot/</loc>
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android开发环境配置0：adb和fastboot</title>
-        <pubTime>2015-07-01T16:00:00.000Z</pubTime>
-        
-        <tag>Android</tag>
-         
-        <tag>adb</tag>
-         
-        <tag>fastboot</tag>
-         
-        <tag>环境搭建</tag>
          
          
            
@@ -1544,9 +1540,6 @@
     </url>
 
     
-    
-    
-    
   <url>
     <loc>http://debugtalk.com/post/blackbox-testing-method-equivalence-partitioning/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -1558,6 +1551,32 @@
         <tag>黑盒测试</tag>
          
         <tag>测试用例设计</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+    
+  <url>
+    <loc>http://debugtalk.com/post/android-development-environment-adb-and-fastboot/</loc>
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android开发环境配置0：adb和fastboot</title>
+        <pubTime>2015-07-01T16:00:00.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>adb</tag>
+         
+        <tag>fastboot</tag>
+         
+        <tag>环境搭建</tag>
          
          
            

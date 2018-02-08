@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://debugtalk.com/"/>
-  <updated>2018-01-02T02:13:07.000Z</updated>
+  <updated>2018-02-08T16:50:17.000Z</updated>
   <id>http://debugtalk.com/</id>
   
   <author>
@@ -14,6 +14,84 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HttpRunner 通过 skip 机制实现对测试用例的分组执行控制</title>
+    <link href="http://debugtalk.com/post/HttpRunner-skip-feature/"/>
+    <id>http://debugtalk.com/post/HttpRunner-skip-feature/</id>
+    <published>2018-02-07T16:00:00.000Z</published>
+    <updated>2018-02-08T16:50:17.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>近期，某位同学对<code>HttpRunner</code>提了一个<a href="https://github.com/HttpRunner/HttpRunner/issues/96" target="_blank" rel="external">需求点</a>：</p>
+<blockquote>
+<p>能否支持类似unittest中的skip注解，方便灵活剔除某些用例，不执行。<br>目前在接口测试日常构建中，会遇到一些接口开发暂时屏蔽了或者降级，导致用例执行失败；所以想当遇到这些情况的时候，能够临时剔除掉某些用例不执行；等后续恢复后，再去掉，然后恢复执行。</p>
+</blockquote>
+<p>针对这种情况，<code>HttpRunner</code>的确没有直接支持。之所以说是没有<code>直接</code>支持，是因为在<code>HttpRunner</code>中存在<code>times</code>关键字，可以指定某个<code>test</code>的运行次数。</p>
+<p>例如，如下<code>test</code>中指定了<code>times</code>为3，那么该<code>test</code>就会运行3次。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> demo</div><div class="line"><span class="attr">    times:</span> <span class="number">3</span></div><div class="line"><span class="attr">    request:</span> &#123;...&#125;</div><div class="line"><span class="attr">    validate:</span> [...]</div></pre></td></tr></table></figure>
+<p>假如要实现临时屏蔽掉某些<code>test</code>，那么就可以将对应<code>test</code>的<code>times</code>设置为0。</p>
+<p>这虽然也能勉强实现需求，但是这跟直接将临时不运行的<code>test</code>注释掉没什么区别，都需要对测试用例内容进行改动，使用上很是不方便。</p>
+<p>考虑到该需求的普遍性，<code>HttpRunner</code>的确应该增加对该种情况的支持。</p>
+<p>在这方面，<code>unittest</code>已经有了清晰的定义，有三种常用的装饰器可以控制单元测试用例是否被执行：</p>
+<ul>
+<li>@unittest.skip(reason)：无条件跳过当前测试用例</li>
+<li>@unittest.skipIf(condition, reason)：当条件表达式的值为true时跳过当前测试用例</li>
+<li>@unittest.skipUnless(condition, reason)：当条件表达式的值为false时跳过当前测试用例</li>
+</ul>
+<p>该功能完全满足我们的需求，因此，我们可以直接复用其概念，尝试实现同样的功能。</p>
+<h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><p>目标明确了，那需要怎么实现呢？</p>
+<p>首先，我们先看下<code>unittest</code>中这三个函数是怎么实现的；这三个函数定义在<code>unittest/case.py</code>中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SkipTest</span><span class="params">(Exception)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Raise this exception in a test to skip it.</div><div class="line"></div><div class="line">    Usually you can use TestCase.skipTest() or one of the skipping decorators</div><div class="line">    instead of raising this directly.</div><div class="line">    """</div><div class="line">    <span class="keyword">pass</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skip</span><span class="params">(reason)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Unconditionally skip a test.</div><div class="line">    """</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(test_item)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> isinstance(test_item, (type, types.ClassType)):</div><div class="line"><span class="meta">            @functools.wraps(test_item)</span></div><div class="line">            <span class="function"><span class="keyword">def</span> <span class="title">skip_wrapper</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">                <span class="keyword">raise</span> SkipTest(reason)</div><div class="line">            test_item = skip_wrapper</div><div class="line"></div><div class="line">        test_item.__unittest_skip__ = <span class="keyword">True</span></div><div class="line">        test_item.__unittest_skip_why__ = reason</div><div class="line">        <span class="keyword">return</span> test_item</div><div class="line">    <span class="keyword">return</span> decorator</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skipIf</span><span class="params">(condition, reason)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Skip a test if the condition is true.</div><div class="line">    """</div><div class="line">    <span class="keyword">if</span> condition:</div><div class="line">        <span class="keyword">return</span> skip(reason)</div><div class="line">    <span class="keyword">return</span> _id</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skipUnless</span><span class="params">(condition, reason)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Skip a test unless the condition is true.</div><div class="line">    """</div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> condition:</div><div class="line">        <span class="keyword">return</span> skip(reason)</div><div class="line">    <span class="keyword">return</span> _id</div></pre></td></tr></table></figure>
+<p>不难看出，核心有两点：</p>
+<ul>
+<li>对于<code>skip</code>，只需要在该测试用例中<code>raise SkipTest(reason)</code>，而<code>SkipTest</code>是<code>unittest/case.py</code>中定义的一个异常类；</li>
+<li>对于<code>skipIf</code>和<code>skipUnless</code>，相比于<code>skip</code>，主要是需要指定一个条件表达式（condition），然后根据该表达式的实际值来决定是否<code>skip</code>当前测试用例。</li>
+</ul>
+<p>明确了这两点之后，我们要如何在<code>HttpRunner</code>中实现同样的功能，思路应该就比较清晰了。</p>
+<p>因为<code>HttpRunner</code>同样也是采用<code>unittest</code>来组织和驱动测试用例执行的，而具体的执行控制部分都是在<code>httprunner/runner.py</code>的<code>_run_test</code>方法中；同时，在<code>_run_test</code>方法中会传入<code>testcase_dict</code>，也就是具体测试用例的全部信息。</p>
+<p>那么，最简单的做法，就是在<code>YAML/JSON</code>测试用例中，新增<code>skip/skipIf/skipUnless</code>参数，然后在<code>_run_test</code>方法中根据参数内容来决定是否执行<code>raise SkipTest(reason)</code>。</p>
+<p>例如，在<code>YAML</code>测试用例中，我们可以按照如下形式新增<code>skip</code>字段，其中对应的值部分就是我们需要的<code>reason</code>。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> demo</div><div class="line"><span class="attr">    skip:</span> <span class="string">"skip this test unconditionally"</span></div><div class="line"><span class="attr">    request:</span> &#123;...&#125;</div><div class="line"><span class="attr">    validate:</span> [...]</div></pre></td></tr></table></figure>
+<p>接下来在<code>_run_test</code>方法，要处理就十分简单，只需要判断<code>testcase_dict</code>中是否包含<code>skip</code>字段，假如包含，则执行<code>raise SkipTest(reason)</code>即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">_run_test</span><span class="params">(self, testcase_dict)</span>:</span></div><div class="line">    ...</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="string">"skip"</span> <span class="keyword">in</span> testcase_dict:</div><div class="line">        skip_reason = testcase_dict[<span class="string">"skip"</span>]</div><div class="line">        <span class="keyword">raise</span> SkipTest(skip_reason)</div><div class="line"></div><div class="line">    ...</div></pre></td></tr></table></figure>
+<p>这对于<code>skip</code>机制来做，完全满足需求；但对于<code>skipIf/skipUnless</code>，可能就会麻烦些，因为我们的用例是在<code>YAML/JSON</code>文本格式的文件中，没法像在<code>unittest</code>中执行<code>condition</code>那样的Python表达式。</p>
+<p>嗯？谁说在<code>YAML/JSON</code>中就不能执行函数表达式的？在<code>HttpRunner</code>中，我们已经实现了该功能，即：</p>
+<ul>
+<li>在<code>debugtalk.py</code>中定义函数，例如<code>func(a, b)</code></li>
+<li>在<code>YAML/JSON</code>中通过<code>${func(a,b)}</code>对函数进行调用</li>
+</ul>
+<p>在此基础上，我们要实现<code>skipIf/skipUnless</code>就很简单了；很自然地，我们可以想到采用如下形式来进行描述。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> create user which existed (skip if condition)</div><div class="line"><span class="attr">    skipIf:</span> $&#123;skip_test_in_production_env()&#125;</div><div class="line"><span class="attr">    request:</span> &#123;...&#125;</div><div class="line"><span class="attr">    validate:</span> [...]</div></pre></td></tr></table></figure>
+<p>其中，<code>skip_test_in_production_env</code>定义在<code>debugtalk.py</code>文件中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skip_test_in_production_env</span><span class="params">()</span>:</span></div><div class="line">    <span class="string">""" skip this test in production environment</span></div><div class="line">    """</div><div class="line">    <span class="keyword">return</span> os.environ[<span class="string">"TEST_ENV"</span>] == <span class="string">"PRODUCTION"</span></div></pre></td></tr></table></figure>
+<p>然后，在<code>_run_test</code>方法中，我们只需要判断<code>testcase_dict</code>中是否包含<code>skipIf</code>字段，假如包含，则将其对应的函数表达式取出，运行得到其结果，最后再根据运算结果来判断是否执行<code>raise SkipTest(reason)</code>。对函数表达式进行解析的方法在<code>httprunner/context.py</code>的<code>exec_content_functions</code>函数中，具体实现方式可阅读之前的文章。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">_run_test</span><span class="params">(self, testcase_dict)</span>:</span></div><div class="line">    ...</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="string">"skip"</span> <span class="keyword">in</span> testcase_dict:</div><div class="line">        skip_reason = testcase_dict[<span class="string">"skip"</span>]</div><div class="line">        <span class="keyword">raise</span> SkipTest(skip_reason)</div><div class="line">    <span class="keyword">elif</span> <span class="string">"skipIf"</span> <span class="keyword">in</span> testcase_dict:</div><div class="line">        skip_if_condition = testcase_dict[<span class="string">"skipIf"</span>]</div><div class="line">        <span class="keyword">if</span> self.context.exec_content_functions(skip_if_condition):</div><div class="line">            skip_reason = <span class="string">"&#123;&#125; evaluate to True"</span>.format(skip_if_condition)</div><div class="line">            <span class="keyword">raise</span> SkipTest(skip_reason)</div><div class="line"></div><div class="line">    ...</div></pre></td></tr></table></figure>
+<p><code>skipUnless</code>与<code>skipIf</code>类似，不再重复。</p>
+<p>通过该种方式，我们就可以实现在不对测试用例文件做任何修改的情况下，通过外部方式（例如设定环境变量的值）就可以控制是否执行某些测试用例。</p>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><code>skip/skipIf/skipUnless</code>机制实现后，我们对测试用例的执行控制就更加灵活方便了。</p>
+<p>例如，我们可以很容易地实现如下常见的测试场景：</p>
+<ul>
+<li>对测试用例进行分组，P0/P1/P2等，然后根据实际需求选择执行哪些用例</li>
+<li>通过环境变量来控制是否执行某些用例</li>
+</ul>
+<p>更重要的是，我们无需对测试用例文件进行任何修改。</p>
+<p>在<code>HttpRunner</code>项目中存在一个示例文件，<a href="https://github.com/HttpRunner/HttpRunner/blob/master/tests/data/demo_testset_cli.yml" target="_blank" rel="external"><code>httprunner/tests/data/demo_testset_cli.yml</code></a>，大家可以此作为参考。</p>
+<p>在运行该测试集后，生成的测试报告如下所示。</p>
+<p><img src="/images/httprunner-skip.jpg" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景介绍&quot;&gt;&lt;a href=&quot;#背景介绍&quot; class=&quot;headerlink&quot; title=&quot;背景介绍&quot;&gt;&lt;/a&gt;背景介绍&lt;/h2&gt;&lt;p&gt;近期，某位同学对&lt;code&gt;HttpRunner&lt;/code&gt;提了一个&lt;a href=&quot;https://github.com
+    
+    </summary>
+    
+    
+      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
+      <category term="testcase" scheme="http://debugtalk.com/tags/testcase/"/>
+    
+  </entry>
   
   <entry>
     <title>我的 2017 年终总结</title>
@@ -62,7 +140,7 @@
     <link href="http://debugtalk.com/post/HttpRunner-testcase-layer/"/>
     <id>http://debugtalk.com/post/HttpRunner-testcase-layer/</id>
     <published>2017-12-22T16:00:00.000Z</published>
-    <updated>2017-12-24T01:49:57.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在<code>HttpRunner</code>中，测试用例引擎最大的特色就是支持<code>YAML/JSON</code>格式的用例描述形式。</p>
 <p>采用<code>YAML/JSON</code>格式编写维护测试用例，优势还是很明显的：</p>
@@ -143,7 +221,7 @@
     <link href="http://debugtalk.com/post/HttpRunner-validator-optimization/"/>
     <id>http://debugtalk.com/post/HttpRunner-validator-optimization/</id>
     <published>2017-12-12T16:00:00.000Z</published>
-    <updated>2017-12-13T15:10:44.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>在测试用例中，包含预期结果这么一项，用于辅助测试人员执行测试用例时判断系统的功能是否正常。而在自动化测试中，我们的目标是让测试用例自动执行，因此自动化测试用例中同样需要包含预期结果一项，只不过系统响应结果不再由人工来进行判断，而是交由测试工具或框架来实现。</p>
 <p>这部分功能对应的就是测试结果校验器（validator），基本上能称得上自动化测试工具或框架的都包含该功能特性。</p>
@@ -231,7 +309,7 @@
     <link href="http://debugtalk.com/post/HttpRunner-supports-HAR/"/>
     <id>http://debugtalk.com/post/HttpRunner-supports-HAR/</id>
     <published>2017-11-13T16:00:00.000Z</published>
-    <updated>2017-11-14T16:23:04.000Z</updated>
+    <updated>2017-12-13T15:08:06.000Z</updated>
     
     <content type="html"><![CDATA[<p><code>HttpRunner</code>开始支持<code>HAR</code>啦！！！</p>
 <p>如果你还没有体会到这三个感叹号的含义，那们你可能对<code>HAR</code>还不了解。</p>
@@ -322,7 +400,7 @@
     <link href="http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/"/>
     <id>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</id>
     <published>2017-11-07T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>在<a href="http://debugtalk.com/post/apitestengine-not-only-about-json-api/">《ApiTestEngine，不再局限于API的测试》</a>一文的末尾，我提到随着<code>ApiTestEngine</code>的发展，它的实际功能特性和名字已经不大匹配，需要考虑改名了。</p>
 <p>经过慎重考虑，最终决定将<code>ApiTestEngine</code>正式更名为<code>HttpRunner</code>。</p>
@@ -382,7 +460,7 @@
     <link href="http://debugtalk.com/post/apitestengine-not-only-about-json-api/"/>
     <id>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</id>
     <published>2017-11-05T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>从编写<a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a>至今，已经快半年了。在这一段时间内，<code>ApiTestEngine</code>经过持续迭代，也已完全实现了当初预设的目标。</p>
 <p>然而，在设计<code>ApiTestEngine</code>之初只考虑了面向最常规的API接口类型，即<code>HTTP</code>响应内容为<code>JSON</code>数据结构的类型。那么，如果<code>HTTP</code>接口响应内容不是<code>JSON</code>，而是<code>XML</code>或<code>SOAP</code>，甚至为<code>HTML</code>呢？</p>
@@ -448,11 +526,11 @@
     </summary>
     
     
+      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
       <category term="JSON API" scheme="http://debugtalk.com/tags/JSON-API/"/>
     
       <category term="正则表达式" scheme="http://debugtalk.com/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    
-      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
     
   </entry>
   
@@ -461,7 +539,7 @@
     <link href="http://debugtalk.com/post/apitestengine-hot-plugin/"/>
     <id>http://debugtalk.com/post/apitestengine-hot-plugin/</id>
     <published>2017-09-08T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>中编写测试用例时，我们有时需要定义全局的变量，或者引用外部函数实现一些动态的计算逻辑。当前采用的方式是：</p>
 <ul>
@@ -531,11 +609,11 @@
     </summary>
     
     
+      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
       <category term="热加载" scheme="http://debugtalk.com/tags/%E7%83%AD%E5%8A%A0%E8%BD%BD/"/>
     
       <category term="debugtalk.py" scheme="http://debugtalk.com/tags/debugtalk-py/"/>
-    
-      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
     
   </entry>
   
@@ -544,7 +622,7 @@
     <link href="http://debugtalk.com/post/apitestengine-supersede-locust/"/>
     <id>http://debugtalk.com/post/apitestengine-supersede-locust/</id>
     <published>2017-08-26T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>不是接口测试框架么，也能实现性能测试？</p>
 <p>是的，你没有看错，<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>集成了<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>性能测试框架，只需一份测试用例，就能同时实现接口自动化测试和接口性能测试，在不改变<a href="http://locust.io/" target="_blank" rel="external"><code>Locust</code></a>任何特性的情况下，甚至比<code>Locust</code>本身更易用。</p>
@@ -644,7 +722,7 @@
     <link href="http://debugtalk.com/post/apitestengine-quickstart/"/>
     <id>http://debugtalk.com/post/apitestengine-quickstart/</id>
     <published>2017-08-19T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="Introduction-to-Sample-Interface-Service"><a href="#Introduction-to-Sample-Interface-Service" class="headerlink" title="Introduction to Sample Interface Service"></a>Introduction to Sample Interface Service</h2><p>Along with this project, I devised a sample interface service, and you can use it to familiarize how to play with <code>ApiTestEngine</code>.</p>
 <p>This sample service mainly has two parts:</p>
@@ -721,7 +799,7 @@
     <link href="http://debugtalk.com/post/d-test-hire-info/"/>
     <id>http://debugtalk.com/post/d-test-hire-info/</id>
     <published>2017-08-08T16:00:00.000Z</published>
-    <updated>2017-11-03T15:02:59.000Z</updated>
+    <updated>2017-11-14T16:24:33.000Z</updated>
     
     <content type="html"><![CDATA[<p>近期，大疆互联网事业部广招各路英豪，各类岗位都有大量的<code>Hire Count</code>。</p>
 <p>在我们质量部，现急需招聘<code>软件测试工程师</code>、<code>测试开发工程师</code>和<code>QA</code>，名额无限制。</p>
@@ -763,7 +841,7 @@
     <link href="http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/"/>
     <id>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</id>
     <published>2017-08-04T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>最近在开发<code>ApiTestEngine</code>时遇到一个安装包依赖的问题，耗费了不少时间寻找解决方案，考虑到还算比较有普遍性，因此总结形成这篇文章。</p>
 <h2 id="从-pip-install-说起"><a href="#从-pip-install-说起" class="headerlink" title="从 pip install 说起"></a>从 pip install 说起</h2><p>先不那么简单地描述下背景。</p>
@@ -835,11 +913,11 @@
     
       <category term="Locust" scheme="http://debugtalk.com/tags/Locust/"/>
     
+      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
       <category term="setuptools" scheme="http://debugtalk.com/tags/setuptools/"/>
     
       <category term="pip" scheme="http://debugtalk.com/tags/pip/"/>
-    
-      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
     
   </entry>
   
@@ -936,7 +1014,7 @@
     <link href="http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/"/>
     <id>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</id>
     <published>2017-07-16T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>在<a href="http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/">《测试用例中实现<code>Python</code>函数的定义》</a>中，介绍了在<code>YAML/JSON</code>测试用例中实现<code>Python</code>函数定义的两种方法，以及它们各自适用的场景。</p>
 <p>但是在<code>YAML/JSON</code>文本中要怎样实现函数的调用和传参呢？</p>
@@ -1042,7 +1120,7 @@
     <link href="http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/"/>
     <id>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</id>
     <published>2017-07-10T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>在<a href="http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/">《ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式》</a>中，我们臆想了一种简洁优雅的用例描述方式，接下来，我们就从技术实现的角度，逐项进行深入讲解，将臆想变成现实。</p>
 <p>本文先解决第一个问题，“如何在用例描述（<code>YAML/JSON</code>）中实现函数的定义和调用”。</p>
@@ -1178,9 +1256,9 @@
     
       <category term="测试框架" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
     
-      <category term="lambda" scheme="http://debugtalk.com/tags/lambda/"/>
-    
       <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
+      <category term="lambda" scheme="http://debugtalk.com/tags/lambda/"/>
     
   </entry>
   
@@ -1189,7 +1267,7 @@
     <link href="http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/"/>
     <id>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</id>
     <published>2017-07-06T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>在<a href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a>一文中，我们完成了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>基础框架的搭建，并实现了简单接口的测试功能。</p>
 <p>接下来，我们就针对复杂类型的接口（例如包含签名校验等机制），通过对接口的业务参数和技术细节进行分离，实现简洁优雅的接口测试用例描述。</p>
@@ -1258,9 +1336,9 @@
     
       <category term="测试框架" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
     
-      <category term="测试用例" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/"/>
-    
       <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
+      <category term="测试用例" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/"/>
     
   </entry>
   
@@ -1269,7 +1347,7 @@
     <link href="http://debugtalk.com/post/300-lines-python-code-api-test-framework/"/>
     <id>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</id>
     <published>2017-06-27T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>在刚开始实现<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的时候，<a href="https://testerhome.com/kasi" target="_blank" rel="external"><code>卡斯（kasi）</code></a>提议做一个Java版的。对于这样的建议，我当然是拒绝的，瞬即回复了他，“人生苦短，回头是岸啊”。</p>
 <p>当然，我没好意思跟他说的是，我不会Java啊。不过最主要的原因嘛，还是因为Python的语法简洁，可以采用很少的代码量实现丰富的功能。</p>
@@ -1331,7 +1409,7 @@
     <link href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/"/>
     <id>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</id>
     <published>2017-06-21T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>在<a href="http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/">《ApiTestEngine 演进之路（0）开发未动，测试先行》</a>一文中，我对<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>项目正式开始前的准备工作进行了介绍，包括构建API接口服务（<code>Mock Server</code>）、搭建项目单元测试框架、实现持续集成构建检查机制（<a href="https://travis-ci.org/" target="_blank" rel="external"><code>Travis CI</code></a>）等。</p>
 <p>接下来，我们就开始构建<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>项目的基础框架，实现基本功能吧。</p>
@@ -1421,7 +1499,7 @@
     <link href="http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/"/>
     <id>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</id>
     <published>2017-06-19T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>在<a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a>一文中，我详细介绍了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>诞生的背景，并对其核心特性进行了详尽的剖析。</p>
 <p>接下来，我将在《ApiTestEngine演进之路》系列文章中讲解<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>是如何从第一行代码开始，逐步实现接口自动化测试框架的核心功能特性的。</p>
@@ -1518,9 +1596,9 @@
     
       <category term="测试框架" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
     
-      <category term="Mock" scheme="http://debugtalk.com/tags/Mock/"/>
-    
       <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
+      <category term="Mock" scheme="http://debugtalk.com/tags/Mock/"/>
     
   </entry>
   
@@ -1529,7 +1607,7 @@
     <link href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/"/>
     <id>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</id>
     <published>2017-06-17T16:00:00.000Z</published>
-    <updated>2017-12-23T07:18:08.000Z</updated>
+    <updated>2017-12-24T01:55:19.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>当前市面上存在的接口测试工具已经非常多，常见的如<code>Postman</code>、<code>JMeter</code>、<code>RobotFramework</code>等，相信大多数测试人员都有使用过，至少从接触到的大多数简历的描述上看是这样的。除了这些成熟的工具，也有很多有一定技术能力的测试（开发）人员自行开发了一些接口测试框架，质量也是参差不齐。</p>
 <p>但是，当我打算在项目组中推行接口自动化测试时，搜罗了一圈，也没有找到一款特别满意的工具或框架，总是与理想中的构想存在一定的差距。</p>
@@ -1661,59 +1739,6 @@
       <category term="测试框架" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
     
       <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【科普】互联网测试岗位的工作日常</title>
-    <link href="http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/"/>
-    <id>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</id>
-    <published>2017-06-14T16:00:00.000Z</published>
-    <updated>2017-09-04T05:28:54.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>近期公司新来了一批实习生，公司也组织了大量的人力物力对实习生的进行培训。不得不说，公司的确在朝”大公司“的方向发展，各项制度福利也在逐步完善。以前别说是实习生了，不管是社招还是校招来的人，都是入职后就直接上岗，哪有这么多培训机会。</p>
-<p>分配给我的任务是对我们质量部的岗位进行介绍，给实习生们讲解下我们测试工程师的工作日常情况。由于面向的都是新人，而且各种岗位的都有，因此也只能是科普介绍了。当时也没有准备PPT，就是提前想了几个主题点，然后就简单展开讲了下。</p>
-<p>培训结束后感觉这个科普可能对于刚毕业或者还没有毕业的同学还是有一些价值的，因此就将今天讲的内容整理为文字。老司机们就不用看了，我们后续再聊。</p>
-<p>——— 分割线 ———</p>
-<p>大家好，我是李隆，当前在互联网事业部的质量部做测试开发岗位。在之前的培训中，大家应该知道了，当前我们质量部共分为三类岗位，分别是QA、测试和测试开发。不知道大家有没有想过，为什么要这么划分？这三类岗位的区别和联系在哪里？</p>
-<p>这就要从质量部的名称说起了。在日常工作中，通常我们都是说产品、开发、测试、运维，那为什么我们不是叫做测试部，而是叫质量部呢？这是因为，站在软件工程的角度，测试只是手段，而保障项目质量才是我们的最终目的。</p>
-<p>那么，”质量“这两个字要怎么理解呢？这是一个非常大的问题，我的确也没法单纯从字面上给大家解释它的完整含义。那我们不妨换个角度，先来看下日常工作中哪些情况会对项目质量造成影响，或者说当出现哪些现象时，就可以说明我们的项目质量存在问题。</p>
-<ul>
-<li>开发提交的代码里面有bug。这个应该是最常见的，也是大家最熟悉的质量问题了。</li>
-<li>产品的需求描述不清楚，或者需求里面有隐藏的业务逻辑问题，甚至压根就没有需求文档，完全是”一句话需求“。可以想象，这种情况通常造成的后果就是开发到后期才会发现与预期需求不符，严重的甚至造成返工的后果。</li>
-<li>开发人员没有写单元测试，项目没有版本规划，提测比较随意并且没有自测。这种情况通常就会造成所有人员都很忙，天天加班，但是项目质量问题越来越多。</li>
-<li>运维人员操作没有规范指引，也没有风险预案机制，说不定哪天某个运维人员没睡醒，一不小心就”删库“然后”跑路“了。</li>
-<li>测试人员没有测试策略，设计的测试用例仅局限于UI功能层面，难以实现核心业务逻辑的覆盖，也无法发现深层次的问题。</li>
-<li>测试人员需要做大量的重复性回归测试，也没有引入自动化测试机制，造成要么没有回归测试，要么测试耗费大量人力和时间成本。</li>
-</ul>
-<p>还可以列出来的内容还有很多，不难看出，以上每一种情况都会造成项目质量出现问题，而且很多看似跟测试不直接相关的情况，往往造成的质量问题比单纯的代码bug更严重。而如果我们只是单纯地从软件测试的角度去考虑的话，我们会遗漏很多问题，项目整体质量也没法得到保障。相信你们这时应该会明白，质量部这个名称的真正含义了。</p>
-<p>通过以上实例，可以看出质量部可以做的事情，以及必须要去做的事情非常多，但是这个范围又这么广，毕竟术业有专攻，不可能要求每个人都能做到那么多，所以我们质量部才有了岗位划分。</p>
-<p>先来说下QA这个岗位，这个岗位主要是做什么的呢？还是回到前面提到的案例，当项目团队没有规范流程的时候，项目质量是很难保障的，往往都会有事倍功半的情况。当团队处于这种状态的时候，QA应该是第一个站出来，让项目组的所有人员认识到流程规范的重要性，并且牵头来制定和梳理流程，包括产品需求应该写成什么样才算规范，版本发版周期定为怎样才算合适，测试人员的用例规范，验收标准，以及运维人员应该有怎样的操作规范，等等。当规范建立起来后，QA也会参与到日常的测试工作中去，除了单纯的测试工作外，QA还需要对项目规范流程进行监督，发掘在实际工作中有哪些是不符合流程规范的，或者哪些流程规范是可以改进的，然后再协同各方人员来一起优化。可以看出，QA这个岗位可能并不是要特别精通于某项测试技术，但是TA一定是要对项目质量有非常灵敏的嗅觉，总是能及时地发现当前项目中可能会影响项目质量的”坏味道“，及时地暴露问题，并且跟进问题的解决。</p>
-<p>然后再来说下测试岗位。测试这个岗位应该是大家从感觉上最直观，也是业界大众普遍认知里负责软件测试的岗位。可能有人会觉得，测试这个岗位是产品开发周期的末端，只有等到研发开发完毕，提测以后才开始工作。其实不是这样的。一个好的测试人员，应该是关注项目开发周期的整个流程的。在产品需求出来后，测试就应该要参与产品需求评审，并利用自身在业务方面的测试经验积累，充分挖掘新版本需求可能存在的业务逻辑漏洞。在开发设计技术方案的时候，测试人员也要参与到技术评审，从软件测试的角度，挖掘技术方案中可能存在的技术漏洞。评审完成后，在开发还在编码实现的时候，就需要根据当前版本需求设计测试策略，编写测试用例。等到开发提交测试以后，才是开始大家普遍认知上的测试工作。具体地，对于测试岗位来说，这本来就是一个技术性的岗位，除了需要掌握多种测试理论方法外，还需要根据系统类型的实际测试需要，熟练使用对应的测试工具。测试类型也会很多，除了最基础的功能测试外，也会根据实际情况，对Web前端进行页面兼容性测试、对app进行客户端性能专项测试（启动时间、启动内存、流畅度、包大小等），对后台服务器端进行性能测试（响应时间、吞吐量等），对系统安全进行测试，等等。</p>
-<p>最后再来说下测试开发，也就是当前我所在的这个岗位。那么测试开发要做什么呢？可能我讲一个之前的经历大家就清楚了。</p>
-<blockquote>
-<p>我上一家公司在阿里巴巴，当时也是做测试开发岗位。刚进公司的时候，组里的同事跟我说，欢迎来到”生促（畜）组“，看到我一脸懵逼，同事解释到，生产力促进组嘛。我说，这名字也太难听了吧。同事说，这还算好的了，知道以前其它组的叫我们什么吗？促（畜）生组，促进生产力组。<br>这么一对比，”生促组“听上去的确是优雅多了。</p>
-</blockquote>
-<p>可以看到，不管是”生促“还是”促生“，测试开发这个岗位的核心都是围绕着如何提升生产力，也就是工作效率上面。当然，提高生产力也分为两个层面。第一个层面是提高质量部内部测试人员的测试效率，当前我们也主要还停留在这个层面。前面的例子也说道，当测试人员需要进行大量的重复性回归测试的时候，或者在日常工作中存在简单重复低效的工作内容的时候，这个时候就需要测试开发人员来辅助开发相应的工具平台，常见的包括实现接口测试自动化、UI自动化、持续集成等，将测试人员从重复性的工作解放出来，从而能有更多的时间精力投入到探索性测试当中去。第二个层面呢，也是我们后续的工作目标，那就是提高整个研发团队的工作效率。当然这可能不是测试开发岗位就能独立完成的，这也需要联合开发和运维同学，一起梳理整个研发测试运维流程，然后从技术的角度去开发实现一些工具平台，从而让整个项目团队能更高效的运作。</p>
-<p>当然，虽然存在着QA、测试、测试开发的岗位划分，但是在实际工作中并不会有特别严格的界限，只是相对来说工作重心有所侧重而已。就比如说，QA和测试开发岗位也是会参与到测试工作中的，因为如果你不熟悉测试，你怎么知道测试过程中存在哪些不规范的地方，你怎么知道测试在哪些地方存在低效的痛点？同样的，测试人员要更好地理解流程和规范，也需要参与到流程规范的制订讨论工作中；而要更好地实现对系统的测试，必定需要用到一些技术手段，甚至自身具备足够的编码能力，来开展专项测试、性能测试等测试工作，从而能更好地应用技术手段来保障项目质量。</p>
-<p>以上便是我对质量部各个岗位工作内容的介绍，也非常欢迎各位到质量部来轮岗。</p>
-<p>其实也可以毫不夸张地说，测试岗位对于一个刚接触互联网行业的新人来说，的确是一个非常适合从整体上快速了解行业的岗位。为什么这么说？因为从前面的介绍也可以看出来，测试岗位需要参与项目的整个流程，也需要跟各种角色的人员进行沟通交流，只要用心，就能快速地得到成长，并对各个岗位能有一个较清晰的认识，这对你们后续选择职业方向和岗位的时候也是非常有帮助的。</p>
-<p>——— 分割线 ———</p>
-<p>最后再发点小感悟。这次也算是第一次大量接触”95后“，直观的印象，的确是一个非常活跃的群体。一方面的体现，就是参与度很强，在每个主题讲解完成后，都有大量的提问，交流十分活跃；而另一方面，就是思维活跃，虽然实习生大多都是才大三，但是从提问的问题来看，他们的知识面很广，很多问题都可以看出是经过认真思考的，而且有些问题还很有深度。</p>
-<p>不得不佩服的同时，再想想自己的年龄，不禁黯然神伤，啥也不说了，搬砖去了。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;近期公司新来了一批实习生，公司也组织了大量的人力物力对实习生的进行培训。不得不说，公司的确在朝”大公司“的方向发展，各项制度福利也在逐步完善。以前别说是实习生了，不管是社招还是校招来的人，都是入职后就直接上岗，哪有这么多培训机会。&lt;/p&gt;
-&lt;p&gt;分配给我的任务是对我们质量部
-    
-    </summary>
-    
-    
-      <category term="个人成长" scheme="http://debugtalk.com/tags/%E4%B8%AA%E4%BA%BA%E6%88%90%E9%95%BF/"/>
-    
-      <category term="培训" scheme="http://debugtalk.com/tags/%E5%9F%B9%E8%AE%AD/"/>
     
   </entry>
   
