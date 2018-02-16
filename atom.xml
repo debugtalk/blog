@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://debugtalk.com/"/>
-  <updated>2018-02-08T16:50:17.000Z</updated>
+  <updated>2018-02-16T08:42:22.000Z</updated>
   <id>http://debugtalk.com/</id>
   
   <author>
@@ -14,6 +14,139 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HttpRunner 实现参数化数据驱动机制</title>
+    <link href="http://debugtalk.com/post/httprunner-data-driven/"/>
+    <id>http://debugtalk.com/post/httprunner-data-driven/</id>
+    <published>2018-02-15T16:00:00.000Z</published>
+    <updated>2018-02-16T08:42:22.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在自动化测试中，经常会遇到如下场景：</p>
+<blockquote>
+<p>1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；<br>2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。</p>
+</blockquote>
+<p>这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是在我们的自动化测试脚本中存在参数，并且我们需要采用不同的参数去运行。</p>
+<p>经过概括，参数基本上分为两种类型：</p>
+<ul>
+<li>单个独立参数：例如前面的第一种场景，我们只需要变换搜索关键字这一个参数</li>
+<li>多个具有关联性的参数：例如前面的第二种场景，我们需要变换用户名和密码两个参数，并且这两个参数需要关联组合</li>
+</ul>
+<p>然后，对于参数而言，我们可能具有一个参数列表，在脚本运行时需要按照不同的规则去取值，例如顺序取值、随机取值、循环取值等等。</p>
+<p>对于这一块儿，没有太多新的概念，这就是典型的参数化和数据驱动。遗憾的是，当前<code>HttpRunner</code>并未支持该功能特性。</p>
+<p>考虑到该需求的普遍性，并且近期提到该需求的的人也越来越多（<a href="https://github.com/HttpRunner/HttpRunner/issues/74" target="_blank" rel="external">issue #74</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/87" target="_blank" rel="external">issue #87</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/88" target="_blank" rel="external">issue #88</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/97" target="_blank" rel="external">issue #97</a>），因此趁着春节假期的空闲时间，决定优先实现下。</p>
+<p>经过前面的场景分析，我们的目标已经很明确了，接下来就是如何实现的问题了。</p>
+<h2 id="借鉴-LoadRunner-的数据参数化"><a href="#借鉴-LoadRunner-的数据参数化" class="headerlink" title="借鉴 LoadRunner 的数据参数化"></a>借鉴 LoadRunner 的数据参数化</h2><p>要造一个轮子，最好是先看下现有知名轮子的实现机制。之前有用过一段时间的 LoadRunner，对其参数化机制印象蛮深的，虽然它是性能测试工具，但在脚本参数化方面是通用的。</p>
+<p>我们先看下在 LoadRunner 中是如何实现参数化的。</p>
+<p>在 LoadRunner 中，可以在脚本中创建一个参数，然后参数会保存到一个<code>.dat</code>的文件中，例如下图中的<code>psd.dat</code>。</p>
+<p><img src="/images/loadrunner-parameterize.jpg" alt=""></p>
+<p>在<code>.dat</code>文件中，是采用表格的形式来存储参数值，结构与<code>CSV</code>基本一致。</p>
+<p>对于单个独立参数，可以将参数列表保存在一个单独的<code>.dat</code>文件中，第一行为参数名称，后续每一行为一个参数值。例如本文背景介绍中的第一类场景，数据存储形式如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Keyword</div><div class="line">hello</div><div class="line">world</div><div class="line">debugtalk</div></pre></td></tr></table></figure>
+<p>然后对于参数的取值方式，可以通过<code>Select next row</code>和<code>Update value on</code>进行配置。</p>
+<p><code>Select next row</code>的可选方式有：</p>
+<ul>
+<li>Sequential：顺序取值</li>
+<li>Random：随机取值</li>
+<li>Unique：为每个虚拟用户分配一条唯一的数据</li>
+</ul>
+<p><code>Update value on</code>的可选方式有：</p>
+<ul>
+<li>Each iteration：每次脚本迭代时更新参数值</li>
+<li>Each occurrence：每次出现参数引用时更新参数值</li>
+<li>Once：每条数据只能使用一次</li>
+</ul>
+<p>而且，可以通过对这两种方式进行组合，配制出9种参数化方式。</p>
+<p>另外，因为 LoadRunner 本身是性能测试工具，具有长时间运行的需求，假如<code>Select next row</code>选择为<code>Unique</code>，同时<code>Update value on</code>设置为<code>Each iteration</code>，那么就会涉及到参数用完的情况。在该种情况下，可通过<code>When out of value</code>配置项实现如下选择：</p>
+<ul>
+<li>Abort vuser：当超出时终止脚本</li>
+<li>Continue in a cyclic manner：当超出时回到列表头再次取值</li>
+<li>Continue with last value：使用参数表中的最后一个值</li>
+</ul>
+<p>对于多个具有关联性的参数，可以将关联参数列表保存在一个<code>.dat</code>文件中，第一行为参数名称，后续每一行为一个参数值，参数之间采用逗号进行分隔。例如本文背景介绍中的第二类场景，数据存储形式如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">UserName,Password</div><div class="line">test1,111111</div><div class="line">test2,222222</div><div class="line">test3,333333</div></pre></td></tr></table></figure>
+<p>对于参数的取值方式，与上面单个独立参数的取值方式基本相同。差异在于，我们可以只配置一个参数（例如<code>UserName</code>）的取值方式，然后其它参数（例如<code>Password</code>）的取值方式选择为<code>same line as UserName</code>。如此一来，我们就可以保证参数化时的数据关联性。</p>
+<p>LoadRunner 的参数化机制就回顾到这里，可以看出，其功能还是很强大的，使用也十分灵活。</p>
+<h2 id="设计思路演变历程"><a href="#设计思路演变历程" class="headerlink" title="设计思路演变历程"></a>设计思路演变历程</h2><p>现在再回到我们的 HttpRunner，要如何来实现参数化机制呢？</p>
+<p>因为 LoadRunner 的参数化机制比较完善，用户群体也很大，因此我在脑海里最先冒出的想法就是照抄 LoadRunner，将 LoadRunner 在 GUI 中配置的内容在 HttpRunner 中通过<code>YAML/JSON</code>来进行配置。</p>
+<p>按照这个思路，在 HttpRunner 的 config 中，就要有一块儿地方用来进行参数化配置，暂且设定为<code>parameters</code>吧。然后，对于每一个参数，其参数列表要单独存放在文件中，考虑到LoadRunner中的<code>.dat</code>文件基本就是<code>CSV</code>格式，因此可以约定采用大众更熟悉的<code>.csv</code>文件来存储参数；在脚本中，要指定参数变量从哪个文件中取值，那么就需要设定一个<code>parameter_file</code>，用于指定对应的参数文件路径。接下来，要实现取值规则的配置，例如是顺序取值还是随机取值，那么就需要设定<code>select_next_row</code>和<code>update_value_on</code>。</p>
+<p>根据该设想，在<code>YAML</code>测试用例文件中，数据参数化将描述为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span></div><div class="line"><span class="attr">            parameter_file:</span> keywords.csv</div><div class="line"><span class="attr">            select_next_row:</span> Random</div><div class="line"><span class="attr">            update_value_on:</span> EachIteration</div><div class="line"><span class="attr">        - UserName:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> Sequential</div><div class="line"><span class="attr">            update_value_on:</span> EachIteration</div><div class="line"><span class="attr">        - Password:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> same line as UserName</div></pre></td></tr></table></figure>
+<p>这个想法基本可行，但就是感觉配置项有些繁琐，我们可以尝试再对其进行简化。</p>
+<p>首先，比较明显的，针对每个参数都要配置<code>select_next_row</code>和<code>update_value_on</code>，虽然从功能上来说比较丰富，但是对于用户来说，这些功能并不都是必须的。特别是<code>update_value_on</code>这个参数，绝大多数情况下我们的需求应该都是采用<code>Each iteration</code>，即每次脚本再次运行时更新参数值。因此，我们可以去除<code>update_value_on</code>这个配置项，默认都是采用<code>Each iteration</code>的方式。</p>
+<p>经过第一轮简化，配置描述方式变为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span></div><div class="line"><span class="attr">            parameter_file:</span> keywords.csv</div><div class="line"><span class="attr">            select_next_row:</span> Random</div><div class="line"><span class="attr">        - UserName:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> Sequential</div><div class="line"><span class="attr">        - Password:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> same line as UserName</div></pre></td></tr></table></figure>
+<p>然后，我们可以看到<code>UserName</code>和<code>Password</code>这两个参数，它们有关联性，但却各自单独进行了配置；而且对于有关联性的参数，除了需要对第一个参数配置取值方式外，其它参数的<code>select_next_row</code>应该总是为<code>same line as XXX</code>，这样描述就显得比较累赘了。</p>
+<p>既然是有关联性的参数，那就放在一起吧，参数名称可以采用约定的符号进行分离。考虑到参数变量名称通常包含字母、数字和下划线，同时要兼顾<code>YAML/JSON</code>中对字符的限制，因此选择短横线（<code>-</code>）作为分隔符吧。</p>
+<p>经过第二轮简化，配置描述方式变为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span></div><div class="line"><span class="attr">            parameter_file:</span> keywords.csv</div><div class="line"><span class="attr">            select_next_row:</span> Random</div><div class="line"><span class="attr">        - UserName-Password:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> Sequential</div></pre></td></tr></table></figure>
+<p>接着，我们再看下<code>parameter_file</code>参数。因为我们测试用例中的参数名称必须与数据源进行绑定，因此这一项信息是不可少的。但是在描述形式上，还是会感觉有些繁琐。再一想，既然我们本来就要指定参数名称，那何必不将参数名称约定为文件名称呢？</p>
+<p>例如，对于参数<code>Keyword</code>，我们可以将其数据源文件名称约定为<code>Keyword.csv</code>；对于参数<code>UserName</code>和<code>Password</code>，我们可以将其数据源文件名称约定为<code>UserName-Password.csv</code>；然后，再约定数据源文件需要与当前<code>YAML/JSON</code>测试用例文件放置在同一个目录。</p>
+<p>经过第三轮简化，配置描述方式变为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span></div><div class="line"><span class="attr">            select_next_row:</span> Random</div><div class="line"><span class="attr">        - UserName-Password:</span></div><div class="line"><span class="attr">            select_next_row:</span> Sequential</div></pre></td></tr></table></figure>
+<p>同时该用例文件同级目录下的数据源文件名称为<code>Keyword.csv</code>和<code>UserName-Password.csv</code>。</p>
+<p>现在，我们就只剩下<code>select_next_row</code>一个配置项了。既然是只剩一项，那就也省略配置项名称吧。</p>
+<p>最终，我们的配置描述方式变为：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span> Random</div><div class="line"><span class="attr">        - UserName-Password:</span> Sequential</div></pre></td></tr></table></figure>
+<p>不过，我们还忽略了一个信息，那就是脚本的运行次数。假如参数取值都是采用<code>Sequential</code>的方式，那么我们可以将不同组参数进行笛卡尔积的组合，这是一个有限次数，可以作为自动化测试运行终止的条件；但如果参数取值采用<code>Random</code>的方式，即每次都是在参数列表里面随机取值，那么就不好界定自动化测试运行终止的条件了，我们只能手动进行终止，或者事先指定运行的总次数，不管是采用哪种方式，都会比较麻烦。</p>
+<p>针对参数取值采用<code>Random</code>方式的这个问题，我们不妨换个思路。从数据驱动的角度来看，我们期望在自动化测试时能遍历数据源文件中的所有数据，那么重复采用相同参数进行测试的意义就不大了。因此，在选择<code>Random</code>的取值方式时，我们可以先将参数列表进行乱序排序，然后采用顺序的方式进行遍历；对于存在多组参数的情况，也可以实现乱序排序后再进行笛卡尔积的组合方式了。</p>
+<p>到此为止，我们的参数化配置方式应该算是十分简洁了，而且在功能上也能满足常规参数化的配置需求。</p>
+<p>最后，我们再回过头来看脚本参数化设计思路的演变历程，基本上都可以概括为<code>约定大于配置</code>，这的确也是<code>HttpRunner</code>崇尚和遵循的准则。</p>
+<h2 id="开发实现"><a href="#开发实现" class="headerlink" title="开发实现"></a>开发实现</h2><p>设计思路理顺了，实现起来就比较简单了，点击此处查看<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d" target="_blank" rel="external">相关代码</a>，就会发现实际的代码量并不多。</p>
+<p>在这里我就只挑几个典型的点讲下。</p>
+<h3 id="数据源格式约定"><a href="#数据源格式约定" class="headerlink" title="数据源格式约定"></a>数据源格式约定</h3><p>既然是参数化，那么肯定会存在数据源的问题，我们约定采用<code>.csv</code>文件格式来存储参数列表。同时，在同一个测试场景中可能会存在多个参数的情况，为了降低问题的复杂度，我们可以约定独立参数存放在独立的<code>.csv</code>文件中，多个具有关联性的参数存放在一个<code>.csv</code>文件中。另外，我们同时约定在<code>.csv</code>文件中的第一行必须为参数名称，并且要与文件名保持一致；从第二行开始为参数值，每个值占一行。</p>
+<p>例如，<code>keyword</code>这种独立的参数就可以存放在<code>keyword.csv</code>中，内容形式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">keyword</div><div class="line">hello</div><div class="line">world</div><div class="line">debugtalk</div></pre></td></tr></table></figure>
+<p><code>username</code>和<code>password</code>这种具有关联性的参数就可以存放在<code>username-password.csv</code>中，内容形式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">username,password</div><div class="line">test1,111111</div><div class="line">test2,222222</div><div class="line">test3,333333</div></pre></td></tr></table></figure>
+<h3 id="csv-解析器"><a href="#csv-解析器" class="headerlink" title="csv 解析器"></a>csv 解析器</h3><p>数据源的格式约定好了，我们要想进行读取，那么就得有一个对应的解析器。因为我们后续想要遍历每一行数据，并且还会涉及到多个参数进行组合的情况，因此我们希望解析出来的每一行数据应该同时包含参数名称和参数值。</p>
+<p>于是，我们的数据结构就约定采用<code>list of dict</code>的形式。即每一个<code>.csv</code>文件解析后会得到一个列表（list），而列表中的每一个元素为一个字典结构（dict），对应着一行数据的参数名称和参数值。具体实现的代码函数为<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d#diff-1ef6376047562e36a304745bca9ade9aR47" target="_blank" rel="external"><code>_load_csv_file</code></a>。</p>
+<p>例如，上面的<code>username-password.csv</code>经过解析，会生成如下形式的数据结构。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">    &#123;'username': 'test1', 'password': '111111'&#125;,</div><div class="line">    &#123;'username': 'test2', 'password': '222222'&#125;,</div><div class="line">    &#123;'username': 'test3', 'password': '333333'&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>这里还会涉及到一个问题，就是参数取值顺序。</p>
+<p>在<code>YAML/JSON</code>测试用例中，我们会配置参数的取值顺序，是要顺序取值（<code>Sequential</code>）还是乱序随机取值（<code>Random</code>）。对于顺序的情况没啥好说的，默认从<code>.csv</code>文件中读取出的内容就是顺序的；对于随机取值，更确切地说，应该是乱序取值，我们需要进行一次乱序排序，实现起来也很简单，使用<code>random.shuffle</code>函数即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> fetch_method.lower() == <span class="string">"random"</span>:</div><div class="line">    random.shuffle(csv_content_list)</div></pre></td></tr></table></figure>
+<h3 id="多个参数的组合"><a href="#多个参数的组合" class="headerlink" title="多个参数的组合"></a>多个参数的组合</h3><p>然后，对于多个参数的情况，为了组合出所有可能的情况，我们就需要用到笛卡尔积的概念。直接看例子可能会更好理解些。</p>
+<p>例如我们在用例场景中具有三个参数，<code>a</code>为独立参数，参数列表为[1, 2]；<code>x</code>和<code>y</code>为关联参数，参数列表为[[111,112], [121,122]]；经过解析后，得到的数据分别为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">a:</div><div class="line">[&#123;&quot;a&quot;: 1&#125;, &#123;&quot;a&quot;: 2&#125;]</div><div class="line"></div><div class="line">x &amp; y:</div><div class="line">[</div><div class="line">    &#123;&quot;x&quot;: 111, &quot;y&quot;: 112&#125;,</div><div class="line">    &#123;&quot;x&quot;: 121, &quot;y&quot;: 122&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>那么经过笛卡尔积，就可以组合出4种情况，组合后的结果应该为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">    &#123;'a': 1, 'x': 111, 'y': 112&#125;,</div><div class="line">    &#123;'a': 1, 'x': 121, 'y': 122&#125;,</div><div class="line">    &#123;'a': 2, 'x': 111, 'y': 112&#125;,</div><div class="line">    &#123;'a': 2, 'x': 121, 'y': 122&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>这里需要强调的是，多个参数经过笛卡尔积运算转换后，仍然是<code>list of dict</code>的数据结构，列表中的每一个字典（dict）代表着参数的一种组合情况。</p>
+<h3 id="参数化数据驱动"><a href="#参数化数据驱动" class="headerlink" title="参数化数据驱动"></a>参数化数据驱动</h3><p>现在，我们已经实现了在<code>YAML/JSON</code>测试用例文件中对参数进行配置，从<code>.csv</code>数据源文件中解析出参数列表，并且生成所有可能的组合情况。最后还差一步，就是如何使用参数值来驱动测试用例的执行。</p>
+<p>听上去很高大上，但实际却异常简单，直接对照着<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d#diff-fe4aef5754006b3e9100eb41eb3ca28cR57" target="_blank" rel="external">代码</a>来说吧。</p>
+<p><img src="/images/httprunner-parameterize.jpg" alt=""></p>
+<p>对于每一组参数组合情况来说，我们完全可以将其视为当前用例集运行时定义的变量值。而在 HttpRunner 中每一次运行测试用例集的时候都需要对<code>runner.Runner</code>做一次初始化，里面会用到定义的变量（即<code>config_dict[&quot;variables&quot;]</code>），那么，我们完全可以在每次初始化的时候将组合好的参数作为变量传进去，假如存在同名的变量，就进行覆盖。</p>
+<p>这样一来，我们就可以使用所有的参数组合情况来依次驱动测试用例的执行，并且每次执行时都采用了不同的参数，从而也就实现了参数化数据驱动的目的。</p>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>最后我们再来看下实际的运行效果吧。</p>
+<p>假设我们有一个获取token的接口，我们需要使用 user_agent 和 app_version 这两个参数来进行参数化数据驱动。</p>
+<p>YAML 测试用例的描述形式如下所示：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"user management testset."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - user_agent:</span> Random</div><div class="line"><span class="attr">        - app_version:</span> Sequential</div><div class="line"><span class="attr">    variables:</span></div><div class="line"><span class="attr">        - user_agent:</span> <span class="string">'iOS/10.3'</span></div><div class="line"><span class="attr">        - device_sn:</span> $&#123;gen_random_string(<span class="number">15</span>)&#125;</div><div class="line"><span class="attr">        - os_platform:</span> <span class="string">'ios'</span></div><div class="line"><span class="attr">        - app_version:</span> <span class="string">'2.8.6'</span></div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        base_url:</span> $BASE_URL</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Content-Type:</span> application/json</div><div class="line"><span class="attr">            device_sn:</span> $device_sn</div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token with $user_agent and $app_version</div><div class="line"><span class="attr">    api:</span> get_token($user_agent, $device_sn, $os_platform, $app_version)</div><div class="line"><span class="attr">    extract:</span></div><div class="line"><span class="attr">        - token:</span> content.token</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="attr">        - "eq":</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - "len_eq":</span> [<span class="string">"content.token"</span>, <span class="number">16</span>]</div></pre></td></tr></table></figure>
+<p>其中，user_agent 和 app_version 的数据源列表分别为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">user_agent</div><div class="line">iOS/10.1</div><div class="line">iOS/10.2</div><div class="line">iOS/10.3</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">app_version</div><div class="line">2.8.5</div><div class="line">2.8.6</div></pre></td></tr></table></figure>
+<p>那么，经过笛卡尔积组合，应该总共有6种参数组合情况，并且 user_agent 为乱序取值，app_version 为顺序取值。</p>
+<p>最终的测试结果如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ hrun tests/data/demo_parameters.yml</div><div class="line"></div><div class="line">Running tests...</div><div class="line">----------------------------------------------------------------------</div><div class="line"> get token with iOS/10.2 and 2.8.5 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 13 ms, response_length: 46 bytes</div><div class="line">OK (0.014845)s</div><div class="line"> get token with iOS/10.2 and 2.8.6 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 2 ms, response_length: 46 bytes</div><div class="line">OK (0.003909)s</div><div class="line"> get token with iOS/10.1 and 2.8.5 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 3 ms, response_length: 46 bytes</div><div class="line">OK (0.004090)s</div><div class="line"> get token with iOS/10.1 and 2.8.6 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 5 ms, response_length: 46 bytes</div><div class="line">OK (0.006673)s</div><div class="line"> get token with iOS/10.3 and 2.8.5 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 3 ms, response_length: 46 bytes</div><div class="line">OK (0.004775)s</div><div class="line"> get token with iOS/10.3 and 2.8.6 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 3 ms, response_length: 46 bytes</div><div class="line">OK (0.004846)s</div><div class="line">----------------------------------------------------------------------</div><div class="line">Ran 6 tests in 0.046s</div></pre></td></tr></table></figure>
+<p>至此，我们就已经实现了参数化数据驱动的需求。对于测试用例中参数的描述形式，大家要是发现还有更加简洁优雅的方式，欢迎反馈给我。</p>
+<p>最后，本文发表于 2018 年大年初一，祝大家新年快乐，狗年旺旺旺！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;在自动化测试中，经常会遇到如下场景：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索
+    
+    </summary>
+    
+    
+      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
+      <category term="Parameter" scheme="http://debugtalk.com/tags/Parameter/"/>
+    
+      <category term="Data-Driven" scheme="http://debugtalk.com/tags/Data-Driven/"/>
+    
+  </entry>
   
   <entry>
     <title>HttpRunner 通过 skip 机制实现对测试用例的分组执行控制</title>
@@ -1599,146 +1732,6 @@
       <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
     
       <category term="Mock" scheme="http://debugtalk.com/tags/Mock/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>接口自动化测试的最佳工程实践（ApiTestEngine）</title>
-    <link href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/"/>
-    <id>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</id>
-    <published>2017-06-17T16:00:00.000Z</published>
-    <updated>2017-12-24T01:55:19.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>当前市面上存在的接口测试工具已经非常多，常见的如<code>Postman</code>、<code>JMeter</code>、<code>RobotFramework</code>等，相信大多数测试人员都有使用过，至少从接触到的大多数简历的描述上看是这样的。除了这些成熟的工具，也有很多有一定技术能力的测试（开发）人员自行开发了一些接口测试框架，质量也是参差不齐。</p>
-<p>但是，当我打算在项目组中推行接口自动化测试时，搜罗了一圈，也没有找到一款特别满意的工具或框架，总是与理想中的构想存在一定的差距。</p>
-<p>那么理想中的接口自动化测试框架应该是怎样的呢？</p>
-<p>测试工具（框架）脱离业务使用场景都是耍流氓！所以我们不妨先来看下日常工作中的一些常见场景。</p>
-<ul>
-<li>测试或开发人员在定位问题的时候，想调用某个接口查看其是否响应正常；</li>
-<li>测试人员在手工测试某个功能点的时候，需要一个订单号，而这个订单号可以通过顺序调用多个接口实现下单流程；</li>
-<li>测试人员在开始版本功能测试之前，可以先检测下系统的所有接口是否工作正常，确保接口正常后再开始手工测试；</li>
-<li>开发人员在提交代码前需要检测下新代码是否对系统的已有接口产生影响；</li>
-<li>项目组需要每天定时检测下测试环境所有接口的工作情况，确保当天的提交代码没有对主干分支的代码造成破坏；</li>
-<li>项目组需要定时（30分钟）检测下生产环境所有接口的工作情况，以便及时发现生产环境服务不可用的情况；</li>
-<li>项目组需要不定期对核心业务场景进行性能测试，期望能减少人力投入，直接复用接口测试中的工作成果。</li>
-</ul>
-<p>可以看到，以上罗列的场景大家应该都很熟悉，这都是我们在日常工作中经常需要去做的事情。但是在没有一款合适工具的情况下，效率往往十分低下，或者就是某些重要工作压根就没有开展，例如接口回归测试、线上接口监控等。</p>
-<p>先说下最简单的手工调用接口测试。可能有人会说，<code>Postman</code>就可以满足需求啊。的确，<code>Postman</code>作为一款通用的接口测试工具，它可以构造接口请求，查看接口响应，从这个层面上来说，它是满足了接口测试的功能需求。但是在具体的项目中，使用<code>Postman</code>并不是那么高效。</p>
-<p>不妨举个最常见的例子。</p>
-<blockquote>
-<p>某个接口的请求参数非常多，并且接口请求要求有<code>MD5</code>签名校验；签名的方式为在Headers中包含一个<code>sign</code>参数，该参数值通过对<code>URL</code>、<code>Method</code>、<code>Body</code>的拼接字符串进行<code>MD5</code>计算后得到。</p>
-</blockquote>
-<p>回想下我们要对这个接口进行测试时是怎么做的。首先，我们需要先参照接口文档的描述，手工填写完所有接口参数；然后，按照签名校验方式，对所有参数值进行拼接得到一个字符串，在另一个MD5计算工具计算得到其MD5值，将签名值填入<code>sign</code>参数；最后，才是发起接口请求，查看接口响应，并人工检测响应是否正常。最坑爹的是，我们每次需要调用这个接口的时候，以上工作就得重新来一遍。这样的实际结果是，面对参数较多或者需要签名验证的接口时，测试人员可能会选择忽略不进行接口测试。</p>
-<p>除了单个接口的调用，很多时候我们也需要组合多个接口进行调用。例如测试人员在测试物流系统时，经常需要一个特定组合条件下生成的订单号。而由于订单号关联的业务较多，很难直接在数据库中生成，因此当前业务测试人员普遍采取的做法，就是每次需要订单号时模拟下单流程，顺序调用多个相应的接口来生成需要的订单号。可以想象，在手工调用单个接口都如此麻烦的情况下，每次都要手工调用多个接口会有多么的费时费力。</p>
-<p>再说下接口自动化调用测试。这一块儿大多接口测试框架都支持，普遍的做法就是通过代码编写接口测试用例，或者采用数据驱动的方式，然后在支持命令行（CLI）调用的情况下，就可以结合<code>Jenkins</code>或者<code>crontab</code>实现持续集成，或者定时接口监控的功能。</p>
-<p>思路是没有问题的，问题在于实际项目中的推动落实情况。要说自动化测试用例最靠谱的维护方式，还是直接通过代码编写测试用例，可靠且不失灵活性，这也是很多经历过惨痛教训的老手的感悟，甚至网络上还出现了一些反测试框架的言论。但问题在于项目中的测试人员并不是都会写代码，也不是对其强制要求就能马上学会的。这种情况下，要想在具体项目中推动接口自动化测试就很难，就算我可以帮忙写一部分，但是很多时候接口测试用例也是要结合业务逻辑场景的，我也的确是没法在这方面投入太多时间，毕竟对接的项目实在太多。所以也是基于这类原因，很多测试框架提倡采用数据驱动的方式，将业务测试用例和执行代码分离。不过由于很多时候业务场景比较复杂，大多数框架测试用例模板引擎的表达能力不足，很难采用简洁的方式对测试场景进行描述，从而也没法很好地得到推广使用。</p>
-<p>可以列举的问题还有很多，这些也的确都是在互联网企业的日常测试工作中真实存在的痛点。</p>
-<p>基于以上背景，我产生了开发<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的想法。</p>
-<p>对于<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的定位，与其说它是一个工具或框架，它更多的应该是一套接口自动化测试的最佳工程实践，而<code>简洁优雅实用</code>应该是它最核心的特点。</p>
-<p>当然，每位工程师对<code>最佳工程实践</code>的理念或多或少都会存在一些差异，也希望大家能多多交流，在思维的碰撞中共同进步。</p>
-<h2 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h2><p><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的核心特性概述如下：</p>
-<ul>
-<li>支持API接口的多种请求方法，包括 GET/POST/HEAD/PUT/DELETE 等</li>
-<li>测试用例与代码分离，测试用例维护方式简洁优雅，支持<code>YAML</code></li>
-<li>测试用例描述方式具有表现力，可采用简洁的方式描述输入参数和预期输出结果</li>
-<li>接口测试用例具有可复用性，便于创建复杂测试场景</li>
-<li>测试执行方式简单灵活，支持单接口调用测试、批量接口调用测试、定时任务执行测试</li>
-<li>测试结果统计报告简洁清晰，附带详尽日志记录，包括接口请求耗时、请求响应数据等</li>
-<li>身兼多职，同时实现接口管理、接口自动化测试、接口性能测试（结合Locust）</li>
-<li>具有可扩展性，便于扩展实现Web平台化</li>
-</ul>
-<h2 id="特性拆解介绍"><a href="#特性拆解介绍" class="headerlink" title="特性拆解介绍"></a>特性拆解介绍</h2><blockquote>
-<p>支持API接口的多种请求方法，包括 GET/POST/HEAD/PUT/DELETE 等</p>
-</blockquote>
-<p>个人偏好，编程语言选择Python。而采用Python实现HTTP请求，最好的方式就是采用<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external"><code>Requests</code></a>库了，简洁优雅，功能强大。</p>
-<blockquote>
-<p>测试用例与代码分离，测试用例维护方式简洁优雅，支持<code>YAML</code></p>
-</blockquote>
-<p>要实现测试用例与代码的分离，最好的做法就是做一个测试用例加载引擎和一个测试用例执行引擎，这也是之前在做<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="external"><code>AppiumBooster</code></a>框架的时候总结出来的最优雅的实现方式。当然，这里需要事先对测试用例制定一个标准的数据结构规范，作为测试用例加载引擎和测试用例执行引擎的桥梁。</p>
-<p>需要说明的是，测试用例数据结构必须包含接口测试用例完备的信息要素，包括接口请求的信息内容（URL、Headers、Method等参数），以及预期的接口请求响应结果（StatusCode、ResponseHeaders、ResponseContent）。</p>
-<p>这样做的好处在于，不管测试用例采用什么形式进行描述（<a href="http://pyyaml.org/" target="_blank" rel="external"><code>YAML</code></a>、JSON、CSV、Excel、XML等），也不管测试用例是否采用了业务分层的组织思想，只要在测试用例加载引擎中实现对应的转换器，都可以将业务测试用例转换为标准的测试用例数据结构。而对于测试用例执行引擎而言，它无需关注测试用例的具体描述形式，只需要从标准的测试用例数据结构中获取到测试用例信息要素，包括接口请求信息和预期接口响应信息，然后构造并发起HTTP请求，再将HTTP请求的响应结果与预期结果进行对比判断即可。</p>
-<p>至于为什么明确说明支持<a href="http://pyyaml.org/" target="_blank" rel="external"><code>YAML</code></a>，这是因为个人认为这是最佳的测试用例描述方式，表达简洁不累赘，同时也能包含非常丰富的信息。当然，这只是个人喜好，如果喜欢采用别的方式，只需要扩展实现对应的转换器即可。</p>
-<blockquote>
-<p>测试用例描述方式具有表现力，可采用简洁的方式描述输入参数和预期输出结果</p>
-</blockquote>
-<p>测试用例与框架代码分离以后，对业务逻辑测试场景的描述重任就落在测试用例上了。比如我们选择采用<a href="http://pyyaml.org/" target="_blank" rel="external"><code>YAML</code></a>来描述测试用例，那么我们就应该能在<a href="http://pyyaml.org/" target="_blank" rel="external"><code>YAML</code></a>中描述各种复杂的业务场景。</p>
-<p>那么怎么理解这个“表现力”呢？</p>
-<p>简单的参数值传参应该都容易理解，我们举几个相对复杂但又比较常见的例子。</p>
-<ul>
-<li>接口请求参数中要包含当前的时间戳；</li>
-<li>接口请求参数中要包含一个16位的随机字符串；</li>
-<li>接口请求参数中包含签名校验，需要对多个请求参数进行拼接后取md5值；</li>
-<li>接口响应头（Headers）中要包含一个<code>X-ATE-V</code>头域，并且需要判断该值是否大于100；</li>
-<li>接口响应结果中包含一个字符串，需要校验字符串中是否包含10位长度的订单号；</li>
-<li>接口响应结果为一个多层嵌套的json结构体，需要判断某一层的某一个元素值是否为True。</li>
-</ul>
-<p>可以看出，以上几个例子都是没法直接在测试用例里面描述参数值的。如果是采用Python脚本来编写测试用例还好解决，只需要通过Python函数实现即可。但是现在测试用例和框架代码分离了，我们没法在<a href="http://pyyaml.org/" target="_blank" rel="external"><code>YAML</code></a>里面执行Python函数，这该怎么办呢？</p>
-<p>答案就是，定义函数转义符，实现自定义模板。</p>
-<p>这种做法其实也不难理解，也算是模板语言通用的方式。例如，我们将<code>${}</code>定义为转义符，那么在<code>{}</code>内的内容就不再当做是普通的字符串，而应该转义为变量值，或者执行函数得到实际结果。当然，这个需要我们在测试用例执行引擎进行适配实现，最简单方式就是提取出<code>${}</code>中的字符串，通过<code>eval</code>计算得到表达式的值。如果要实现更复杂的功能，我们也可以将接口测试中常用的一些功能封装为一套关键字，然后在编写测试用例的时候使用这些关键字。</p>
-<blockquote>
-<p>接口测试用例具有可复用性，便于创建复杂测试场景</p>
-</blockquote>
-<p>很多情况下，系统的接口都是有业务逻辑关联的。例如，要请求调用登录接口，需要先请求获取验证码的接口，然后在登录请求中带上获取到的验证码；而要请求数据查询的接口，又要在请求参数中包含登录接口返回的session值。这个时候，我们如果针对每一个要测的业务逻辑，都单独描述要请求的接口，那么就会造成大量的重复描述，测试用例的维护也十分臃肿。</p>
-<p>比较好的做法是，将每一个接口调用单独封装为一条测试用例，然后在描述业务测试场景时，选择对应的接口，按照顺序拼接为业务场景测试用例，就像搭积木一般。如果你之前读过<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="external"><code>AppiumBooster</code></a>的介绍，应该还会联想到，我们可以将常用的功能组成模块用例集，然后就可以在更高的层面对模块用例集进行组装，实现更复杂的测试场景。</p>
-<p>不过，这里有一个非常关键的问题需要解决，就是如何在接口测试用例之前传参的问题。其实实现起来也不复杂，我们可以在接口请求响应结果中指定一个变量名，然后将接口返回关键值提取出来后赋值给那个变量；然后在其它接口请求参数中，传入这个<code>${变量名}</code>即可。</p>
-<blockquote>
-<p>测试执行方式简单灵活，支持单接口调用测试、批量接口调用测试、定时任务执行测试</p>
-</blockquote>
-<p>通过背景中的例子可以看出，需要使用接口测试工具的场景很多，除了定时地对所有接口进行自动化测试检测外，很多时候在手工测试的时候也需要采用接口测试工具进行辅助，也就是<code>半手工+半自动化</code>的模式。</p>
-<p>而业务测试人员在使用测试工具的时候，遇到的最大问题在于除了需要关注业务功能本身，还需要花费很多时间去处理技术实现细节上的东西，例如签名校验这类情况，而且往往后者在重复操作中占用的时间更多。</p>
-<p>这个问题的确是没法避免的，毕竟不同系统的接口千差万别，不可能存在一款工具可以自动处理所有情况。但是我们可以尝试将接口的技术细节实现和业务参数进行拆分，让业务测试人员只需要关注业务参数部分。</p>
-<p>具体地，我们可以针对每一个接口配置一个模板，将其中与业务功能无关的参数以及技术细节封装起来，例如签名校验、时间戳、随机值等，而与业务功能相关的参数配置为可传参的模式。</p>
-<p>这样做的好处在于，与业务功能无关的参数以及技术细节我们只需要封装配置一次，而且这个工作可以由开发人员或者测试开发人员来实现，减轻业务测试人员的压力；接口模板配置好后，测试人员只需要关注与业务相关的参数即可，结合业务测试用例，就可以在接口模板的基础上很方便地配置生成多个接口测试用例。</p>
-<blockquote>
-<p>测试结果统计报告简洁清晰，附带详尽日志记录，包括接口请求耗时、请求响应数据等</p>
-</blockquote>
-<p>测试结果统计报告，应该遵循简洁而不简单的原则。“简洁”，是因为大多数时候我们只需要在最短的时间内判断所有接口是否运行正常即可。而“不简单”，是因为当存在执行失败的测试用例时，我们期望能获得接口测试时尽可能详细的数据，包括测试时间、请求参数、响应内容、接口响应耗时等。</p>
-<p>之前在读<code>locust</code>源码时，其对<a href="https://github.com/locustio/locust/blob/master/locust/clients.py" target="_blank" rel="external"><code>HTTP</code>客户端</a>的封装方式给我留下了深刻的印象。它采用的做法是，继承<code>requests.Session</code>类，在子类<code>HttpSession</code>中重写覆盖了<code>request</code>方法，然后在<code>request</code>方法中对<code>requests.Session.request</code>进行了一层封装。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">request_meta = &#123;&#125;</div><div class="line"></div><div class="line"><span class="comment"># set up pre_request hook for attaching meta data to the request object</span></div><div class="line">request_meta[<span class="string">"method"</span>] = method</div><div class="line">request_meta[<span class="string">"start_time"</span>] = time.time()</div><div class="line"></div><div class="line">response = self._send_request_safe_mode(method, url, **kwargs)</div><div class="line"></div><div class="line"><span class="comment"># record the consumed time</span></div><div class="line">request_meta[<span class="string">"response_time"</span>] = int((time.time() - request_meta[<span class="string">"start_time"</span>]) * <span class="number">1000</span>)</div><div class="line"></div><div class="line">request_meta[<span class="string">"content_size"</span>] = int(response.headers.get(<span class="string">"content-length"</span>) <span class="keyword">or</span> <span class="number">0</span>)</div></pre></td></tr></table></figure>
-<p>而<code>HttpLocust</code>的每一个虚拟用户（client）都是一个<code>HttpSession</code>实例，这样每次在执行<code>HTTP</code>请求的时候，既可充分利用<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external"><code>Requests</code></a>库的强大功能，同时也能将请求的响应时间、响应体大小等原始性能数据进行保存，实现可谓十分优雅。</p>
-<p>受到该处启发，要保存接口的详细请求响应数据也可采用同样的方式。例如，要保存<code>Response</code>的<code>Headers</code>、<code>Body</code>只需要增加如下两行代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">request_meta[<span class="string">"response_headers"</span>] = response.headers</div><div class="line">request_meta[<span class="string">"response_content"</span>] = response.content</div></pre></td></tr></table></figure>
-<blockquote>
-<p>身兼多职，同时实现接口管理、接口自动化测试、接口性能测试（结合Locust）</p>
-</blockquote>
-<p>其实像接口性能测试这样的需求，不应该算到接口自动化测试框架的职责范围之内。但是在实际项目中需求就是这样，又要做接口自动化测试，又要做接口性能测试，而且还不想同时维护两套代码。</p>
-<p>多亏有了<code>locust</code>性能测试框架，接口自动化和性能测试脚本还真能合二为一。</p>
-<p>前面也讲了，<code>HttpLocust</code>的每一个虚拟用户（client）都是一个<code>HttpSession</code>实例，而<code>HttpSession</code>又继承自<code>requests.Session</code>类，所以<code>HttpLocust</code>的每一个虚拟用户（client）也是<code>requests.Session</code>类的实例。</p>
-<p>同样的，我们在用<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external"><code>Requests</code></a>库做接口测试时，请求客户端其实也是<code>requests.Session</code>类的实例，只是我们通常用的是<code>requests</code>的简化用法。</p>
-<p>以下两种用法是等价的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">resp = requests.get(<span class="string">'http://debugtalk.com'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 等价于</span></div><div class="line">client = requests.Session()</div><div class="line">resp = client.get(<span class="string">'http://debugtalk.com'</span>)</div></pre></td></tr></table></figure>
-<p>有了这一层关系以后，要在接口自动化测试和性能测试之间切换就很容易了。在接口测试框架内，可以通过如下方式初始化<code>HTTP</code>客户端。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, origin, kwargs, http_client_session=None)</span>:</span></div><div class="line">   self.http_client_session = http_client_session <span class="keyword">or</span> requests.Session()</div></pre></td></tr></table></figure>
-<p>默认情况下，<code>http_client_session</code>是<code>requests.Session</code>的实例，用于进行接口测试；当需要进行性能测试时，只需要传入<code>locust</code>的<code>HttpSession</code>实例即可。</p>
-<blockquote>
-<p>具有可扩展性，便于扩展实现Web平台化</p>
-</blockquote>
-<p>当要将测试平台推广至更广阔的用户群体（例如产品经理、运营人员）时，对框架实现Web化就在所难免了。在Web平台上查看接口测试用例运行情况、对接口模块进行配置、对接口测试用例进行管理，的确会便捷很多。</p>
-<p>不过对于接口测试框架来说，<code>Web平台</code>只能算作锦上添花的功能。我们在初期可以优先实现命令行（CLI）调用方式，规范好数据存储结构，后期再结合Web框架（如Flask）增加实现Web平台功能。</p>
-<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>以上便是我对<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>特性的详细介绍，也算是我个人对接口自动化测试<code>最佳工程实践</code>的理念阐述。</p>
-<p>当前，<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>还处于开发过程中，代码也开源托管在GitHub上，欢迎<code>Star</code>关注。</p>
-<p>GitHub项目地址：<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external">https://github.com/debugtalk/ApiTestEngine</a></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://debugtalk.com/post/build-ideal-app-automation-test-framework/">《打造心目中理想的自动化测试框架（AppiumBooster）》</a></li>
-<li><a href="http://myzhan.github.io/2016/03/04/giving-up-robotframework/" target="_blank" rel="external">《告别robotframework》</a></li>
-<li><a href="https://github.com/svanoort/pyresttest/blob/master/advanced_guide.md" target="_blank" rel="external">《Advanced Guide For PyRestTest》</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;当前市面上存在的接口测试工具已经非常多，常见的如&lt;code&gt;Postman&lt;/code&gt;、&lt;code&gt;JMeter&lt;/code&gt;、&lt;code
-    
-    </summary>
-    
-    
-      <category term="接口测试" scheme="http://debugtalk.com/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="自动化测试" scheme="http://debugtalk.com/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="测试框架" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
-    
-      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
     
   </entry>
   
