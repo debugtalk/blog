@@ -1,0 +1,724 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>关于持续集成打包平台的Jenkins配置和构建脚本实现细节 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在《使用Jenkins搭建iOS/Android持续集成打包平台》一文中，我对如何使用Jenkins搭建iOS/Android持续集成打包平台的基础概念和实施流程进行了介绍。本文作为配套，对搭建持续集成打包平台中涉及到的执行命令、构建脚本（build.py），以及Jenkins的配置进行详细的补充说明。 当然，如果你不关心技术实现细节，也可以完全不用理会，直接参照【开箱即用】部分按照步骤进行操作即">
+<meta name="keywords" content="Android,Jenkins,iOS,CI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于持续集成打包平台的Jenkins配置和构建脚本实现细节">
+<meta property="og:url" content="http://debugtalk.com/post/iOS-Android-Packing-with-Jenkins-details/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在《使用Jenkins搭建iOS/Android持续集成打包平台》一文中，我对如何使用Jenkins搭建iOS/Android持续集成打包平台的基础概念和实施流程进行了介绍。本文作为配套，对搭建持续集成打包平台中涉及到的执行命令、构建脚本（build.py），以及Jenkins的配置进行详细的补充说明。 当然，如果你不关心技术实现细节，也可以完全不用理会，直接参照【开箱即用】部分按照步骤进行操作即">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/Jenkins_manul_build.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Jenkins_build_history.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Jenkins_set_build_description.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Jenkins_archive_the_artifacts.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Jenkins_show_artifacts.jpg">
+<meta property="og:updated_time" content="2017-09-04T05:28:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于持续集成打包平台的Jenkins配置和构建脚本实现细节">
+<meta name="twitter:description" content="在《使用Jenkins搭建iOS/Android持续集成打包平台》一文中，我对如何使用Jenkins搭建iOS/Android持续集成打包平台的基础概念和实施流程进行了介绍。本文作为配套，对搭建持续集成打包平台中涉及到的执行命令、构建脚本（build.py），以及Jenkins的配置进行详细的补充说明。 当然，如果你不关心技术实现细节，也可以完全不用理会，直接参照【开箱即用】部分按照步骤进行操作即">
+<meta name="twitter:image" content="http://debugtalk.com/images/Jenkins_manul_build.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/iOS-Android-Packing-with-Jenkins-details/" title="关于持续集成打包平台的Jenkins配置和构建脚本实现细节" itemprop="url">关于持续集成打包平台的Jenkins配置和构建脚本实现细节</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished"> Published 2016-07-26</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于iOS的构建"><span class="toc-number">1.</span> <span class="toc-text">关于iOS的构建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#源码-gt-archive-gt-ipa"><span class="toc-number">1.1.</span> <span class="toc-text">源码 -&gt; .archive -&gt; .ipa</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#源码-gt-app-gt-ipa"><span class="toc-number">1.2.</span> <span class="toc-text">源码 -&gt; .app -&gt; .ipa</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数说明"><span class="toc-number">1.3.</span> <span class="toc-text">参数说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#补充说明"><span class="toc-number">1.4.</span> <span class="toc-text">补充说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于Android的构建"><span class="toc-number">2.</span> <span class="toc-text">关于Android的构建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于构建脚本"><span class="toc-number">3.</span> <span class="toc-text">关于构建脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jenkins的详细配置"><span class="toc-number">4.</span> <span class="toc-text">Jenkins的详细配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、参数的传递"><span class="toc-number">4.1.</span> <span class="toc-text">1、参数的传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、修改build名称"><span class="toc-number">4.2.</span> <span class="toc-text">2、修改build名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、展示二维码图片"><span class="toc-number">4.3.</span> <span class="toc-text">3、展示二维码图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、收集编译成果物"><span class="toc-number">4.4.</span> <span class="toc-text">4、收集编译成果物</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开箱即用"><span class="toc-number">6.</span> <span class="toc-text">开箱即用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、添加构建脚本"><span class="toc-number">6.1.</span> <span class="toc-text">1、添加构建脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、运行jenkins，安装必备插件"><span class="toc-number">6.2.</span> <span class="toc-text">2、运行jenkins，安装必备插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、创建Jenkins-Job"><span class="toc-number">6.3.</span> <span class="toc-text">3、创建Jenkins Job</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、done！"><span class="toc-number">6.4.</span> <span class="toc-text">4、done！</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>在<a href="/post/iOS-Android-Packing-with-Jenkins/">《使用Jenkins搭建iOS/Android持续集成打包平台》</a>一文中，我对如何使用Jenkins搭建iOS/Android持续集成打包平台的基础概念和实施流程进行了介绍。本文作为配套，对搭建持续集成打包平台中涉及到的执行命令、构建脚本（build.py），以及Jenkins的配置进行详细的补充说明。</p>
+<p>当然，如果你不关心技术实现细节，也可以完全不用理会，直接参照【开箱即用】部分按照步骤进行操作即可。</p>
+<h2 id="关于iOS的构建"><a href="#关于iOS的构建" class="headerlink" title="关于iOS的构建"></a>关于iOS的构建</h2><p>对iOS源码进行构建，目标是要生成<code>.ipa</code>文件，即iOS应用安装包。</p>
+<p>当前，构建方式主要包括两种：</p>
+<ul>
+<li><code>源码</code> -&gt; <code>.archive</code>文件 -&gt; <code>.ipa</code>文件</li>
+<li><code>源码</code> -&gt; <code>.app</code>文件 -&gt; <code>.ipa</code>文件</li>
+</ul>
+<p>这两种方式的主要差异是生成的中间产物不同，对应的，两种构建方式采用的命令也不同。</p>
+<h3 id="源码-gt-archive-gt-ipa"><a href="#源码-gt-archive-gt-ipa" class="headerlink" title="源码 -&gt; .archive -&gt; .ipa"></a><code>源码</code> -&gt; <code>.archive</code> -&gt; <code>.ipa</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># build archive file from source code</span></div><div class="line">xcodebuild \    <span class="comment"># xctool</span></div><div class="line">  -workspace <span class="variable">$&#123;WORKSPACE_PATH&#125;</span> \</div><div class="line">  -scheme <span class="variable">$&#123;SCHEME&#125;</span> \</div><div class="line">  -configuration <span class="variable">$&#123;CONFIGURATION&#125;</span> \</div><div class="line">  -sdk <span class="variable">$&#123;SDK&#125;</span></div><div class="line">  -archivePath <span class="variable">$&#123;archive_path&#125;</span></div><div class="line">  archive</div></pre></td></tr></table></figure>
+<p><code>archive</code>：对编译结果进行归档，会生成一个<code>.xcarchive</code>的文件，位于<code>-archivePath</code>指定的目录中。需要注意的是，对模拟器类型的<code>sdk</code>无法使用<code>archive</code>命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># export ipa file from .archive</span></div><div class="line">xcodebuild -exportArchive \</div><div class="line">  -exportFormat format \</div><div class="line">  -archivePath xcarchivepath \</div><div class="line">  -exportPath destinationpath \</div><div class="line">  -exportProvisioningProfile profilename \</div><div class="line">  [-exportSigningIdentity identityname]</div><div class="line">  [-exportInstallerIdentity identityname]</div></pre></td></tr></table></figure>
+<h3 id="源码-gt-app-gt-ipa"><a href="#源码-gt-app-gt-ipa" class="headerlink" title="源码 -&gt; .app -&gt; .ipa"></a><code>源码</code> -&gt; <code>.app</code> -&gt; <code>.ipa</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># build .app file from source code</span></div><div class="line">xcodebuild \    <span class="comment"># xctool</span></div><div class="line">  -workspace <span class="variable">$&#123;WORKSPACE_PATH&#125;</span> \</div><div class="line">  -scheme <span class="variable">$&#123;SCHEME&#125;</span> \</div><div class="line">  -configuration <span class="variable">$&#123;CONFIGURATION&#125;</span> \</div><div class="line">  -sdk <span class="variable">$&#123;SDK&#125;</span></div><div class="line">  -derivedDataPath <span class="variable">$&#123;OUTPUT_FOLDER&#125;</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># convert .app file to ipa file</span></div><div class="line">xcrun \</div><div class="line">  -sdk iphoneos \</div><div class="line">  PackageApplication \</div><div class="line">  -v <span class="variable">$&#123;OUTPUT_FOLDER&#125;</span>/Release-iphoneos/xxx.app \</div><div class="line">  -o <span class="variable">$&#123;OUTPUT_FOLDER&#125;</span>/Release-iphoneos/xxx.ipa</div></pre></td></tr></table></figure>
+<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><p><strong>xcodebuild/xctool参数</strong>：</p>
+<ul>
+<li><code>-workspace</code>：需要打包的workspace，后面接的文件一定要是<code>.xcworkspace</code>结尾的；</li>
+<li><code>-scheme</code>：需要打包的Scheme，一般与<code>$project_name</code>相同；</li>
+<li><code>-sdk</code>：区分iphone device和Simulator，可通过<code>xcodebuild -showsdks</code>获取，例如<code>iphoneos</code>和<code>iphonesimulator9.3</code>；</li>
+<li><code>-configuration</code>：需要打包的配置文件，我们一般在项目中添加多个配置，适合不同的环境，Release/Debug；</li>
+<li><code>-exportFormat</code>：导出的格式，通常填写为<code>ipa</code>；</li>
+<li><code>-archivePath</code>：<code>.xcarchive</code>文件的路径；</li>
+<li><code>-exportPath</code>：导出文件（<code>.ipa</code>）的路径；</li>
+<li><code>-exportProvisioningProfile</code>：profile文件证书；</li>
+<li><code>-derivedDataPath</code>：指定编译结果文件的存储路径；例如，指定<code>-derivedDataPath ${OUTPUT_FOLDER}</code>时，将在项目根目录下创建一个<code>${OUTPUT_FOLDER}</code>文件夹，生成的<code>.app</code>文件将位于<code>${OUTPUT_FOLDER}/Build/Products/${CONFIGURATION}-iphoneos</code>中。</li>
+</ul>
+<p>除了采用官方的<code>xcodebuild</code>命令，还可以使用由Facebook开发维护的<code>xctool</code>。<code>xctool</code>命令的使用方法基本与<code>xcodebuild</code>一致，但是输出的日志会清晰很多，而且还有许多其它优化，详情请参考<code>xctool</code>的官方文档。</p>
+<p><strong>xcrun参数</strong>：</p>
+<ul>
+<li><code>-v</code>：指定<code>.app</code>文件的路径</li>
+<li><code>-o</code>：指定生成<code>.ipa</code>文件的路径</li>
+</ul>
+<h3 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h3><p><strong>1、获取Targets、Schemes、Configurations参数</strong></p>
+<p>在填写<code>target</code>/<code>workspace</code>/<code>scheme</code>/<code>configuration</code>等参数时，如果不知道该怎么填写，可以在项目根目录下执行<code>xcodebuild -list</code>命令，它会列出当前项目的所有可选参数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">➜  Store_iOS git:(NPED) ✗ xcodebuild -list</div><div class="line">Information about project <span class="string">"Store"</span>:</div><div class="line">    Targets:</div><div class="line">        Store</div><div class="line">        StoreCI</div><div class="line"></div><div class="line">    Build Configurations:</div><div class="line">        Debug</div><div class="line">        Release</div><div class="line"></div><div class="line">    If no build configuration is specified and -scheme is not passed <span class="keyword">then</span> <span class="string">"Release"</span> is used.</div><div class="line"></div><div class="line">    Schemes:</div><div class="line">        Store</div><div class="line">        StoreCI</div></pre></td></tr></table></figure>
+<p><strong>2、清除缓存文件</strong></p>
+<p>在每次build之后，工程目录下会遗留一些缓存文件，以便下次build时减少编译时间。然而，若因为工程配置错误等问题造成编译失败后，下次再编译时就可能会受到缓存的影响。</p>
+<p>因此，在持续集成构建脚本中，比较好的做法是在每次build之前都清理一下上一次编译遗留的缓存文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># clean before build</span></div><div class="line">xctool \</div><div class="line">  -workspace <span class="variable">$&#123;WORKSPACE_PATH&#125;</span> \</div><div class="line">  -scheme <span class="variable">$&#123;SCHEME&#125;</span> \</div><div class="line">  -configuration <span class="variable">$&#123;CONFIGURATION&#125;</span> \</div><div class="line">  clean</div></pre></td></tr></table></figure>
+<p><code>clean</code>：清除编译产生的问题，下次编译就是全新的编译了</p>
+<p><strong>3、处理Cocoapod依赖库</strong></p>
+<p>另外一个需要注意的是，若项目是采用Cocoapod管理项目依赖，每次拉取最新代码后直接编译可能会报错。这往往是因为其他同事更新了依赖库（新增了第三方库或升级了某些库），而本地还采用之前的第三方库进行编译，从而会出现依赖库缺失或版本不匹配等问题。</p>
+<p>应对的做法是，在每次build之前都更新一下Cocoapod。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Update pod repository</span></div><div class="line">pod repo update</div><div class="line"><span class="comment"># Install pod dependencies</span></div><div class="line">pod install</div></pre></td></tr></table></figure>
+<p><strong>4、修改编译包的版本号</strong></p>
+<p>通过持续集成打包，我们会得到大量的安装包。为了便于区分，比较好的做法是在App中显示版本号，并将版本号与Jenkins的<code>BUILD_NUMBER</code>关联起来。</p>
+<p>例如，当前项目的主版本号为<code>2.6.0</code>，本次构建的<code>BUILD_NUMBER</code>为130，那么我们就可以将本次构建的App版本号设置为<code>2.6.0.130</code>。通过这种方式，我们可以通过App中显示的版本号快速定位到具体到构建历史，从而对应到具体的代码提交记录。</p>
+<p>要实现对App版本号的设置，只需要在打包前对<code>Info.plist</code>文件中的<code>CFBundleVersion</code>和<code>CFBundleShortVersionString</code>进行修改即可。在Python中，利用<code>plistlib</code>库可以很方便地实现对<code>Info.plist</code>文件的读写。</p>
+<p><strong>5、模拟器运行</strong></p>
+<p>如果持续集成测试是要运行在iOS模拟器上，那么就需要构建生成<code>.app</code>文件。</p>
+<p>在前面讲解的两种构建方式中，中间产物都包含了<code>.app</code>文件。对于以<code>.xcarchive</code>为中间产物的方式，生成的<code>.app</code>文件位于<code>output_dir/StoreCI_Release.xcarchive/Products/Applications/</code>目录中。</p>
+<p>不过，这个<code>.app</code>文件在模拟器中还无法直接运行，还需要在Xcode中修改<code>Supported Platforms</code>，例如，将<code>iphoneos</code>更改为<code>iOS</code>。详细原因请参考<a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/">《从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用》</a></p>
+<h2 id="关于Android的构建"><a href="#关于Android的构建" class="headerlink" title="关于Android的构建"></a>关于Android的构建</h2><p>待续</p>
+<h2 id="关于构建脚本"><a href="#关于构建脚本" class="headerlink" title="关于构建脚本"></a>关于构建脚本</h2><p>对于构建脚本（<a href="https://github.com/debugtalk/JenkinsTemplateForApp/blob/master/workspace/YourProject/Build_scripts/build.py" target="_blank" rel="external"><code>build.py</code></a>）本身，源码应该是最好的说明文档。</p>
+<p>在<code>build.py</code>脚本中，主要实现的功能就四点：</p>
+<ul>
+<li>执行构建命令，编译生成<code>.ipa</code>文件，这部分包含了<code>关于iOS的构建</code>部分的全部内容；</li>
+<li>构建时动态修改<code>Info.plist</code>，将编译包的版本号与Jenkins的BuildNumber关联起来；</li>
+<li>上传<code>.ipa</code>文件至<code>pyger</code>/<code>fir.im</code>平台，并且做了失败重试机制；</li>
+<li>解析<code>pyger</code>/<code>fir.im</code>平台页面中的二维码，将二维码图片保存到本地。</li>
+</ul>
+<p>需要说明的是，对于构建任务中常用的可配置参数，例如<code>BRANCH</code>/<code>SCHEME</code>/<code>CONFIGURATION</code>/<code>OUTPUT_FOLDER</code>等，需要在构建脚本中通过<code>OptionParser</code>的方式实现可传参数机制。这样我们不仅可以命令行中通过传参的方式灵活地调用构建脚本，也可以在Jenkins中实现参数传递。</p>
+<p>之所以强调<code>常用的</code>可配置参数，这是为了尽可能减少参数数目，降低脚本调用的复杂度。像<code>PROVISIONING_PROFILE</code>和<code>pgyer/fir.im</code>账号这种比较固定的配置参数，就可以写死在脚本中。因此，在使用构建脚本（build.py）之前，需要先在脚本中配置下<code>PROVISIONING_PROFILE</code>和<code>pgyer/fir.im</code>账号。</p>
+<p>另外还想多说一句，<code>pyger</code>/<code>fir.im</code>这类第三方平台在为我们提供便利的同时，稳定性不可控也是一个不得不考虑的问题。在我使用<code>pgyer</code>平台期间，就遇到了平台服务变动、接口时而不稳定出现502等问题。因此，最好的方式还是自行搭建一套类似的服务，反正我是打算这么做了。</p>
+<h2 id="Jenkins的详细配置"><a href="#Jenkins的详细配置" class="headerlink" title="Jenkins的详细配置"></a>Jenkins的详细配置</h2><p>对于Jenkins的详细配置，需要补充说明的有四点。</p>
+<h3 id="1、参数的传递"><a href="#1、参数的传递" class="headerlink" title="1、参数的传递"></a>1、参数的传递</h3><p>在构建脚本中，我们已经对常用的可配置参数实现了可传参机制。例如，在Terminal中可以通过如下形式调用构建脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python build.py --scheme SCHEME --workspace Store.xcworkspace --configuration CONFIGURATION --output OUTPUT_FOLDER</div></pre></td></tr></table></figure>
+<p>那么我们在Jenkins中要怎样才能指定参数呢？</p>
+<p>实际上，Jenkins针对项目具有参数化的功能。在项目的配置选项中，勾选<code>This project is parameterized</code>后，就可以为当前project添加多种类型的参数，包括：</p>
+<ul>
+<li>Boolean Parameter</li>
+<li>Choice Parameter</li>
+<li>Credentials Parameter</li>
+<li>File Parameter</li>
+<li>Multi-line String Parameter</li>
+<li>Password Parameter</li>
+<li>Run Parameter</li>
+<li>String Parameter</li>
+</ul>
+<p>通常，我们可以选择使用<code>String Parameter</code>来定义自定义参数，并可对每个参数设置默认值。</p>
+<p>当我们配置了<code>BRANCH</code>、<code>SCHEME</code>、<code>CONFIGURATION</code>、<code>OUTPUT_FOLDER</code>、<code>BUILD_VERSION</code>这几个参数后，我们就可以在<code>Build</code>配置区域的<code>Execute shell</code>通过如下形式来进行参数传递。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ python <span class="variable">$&#123;WORKSPACE&#125;</span>/Build_scripts/build.py \</div><div class="line">    --scheme <span class="variable">$&#123;SCHEME&#125;</span> \</div><div class="line">    --workspace <span class="variable">$&#123;WORKSPACE&#125;</span>/Store.xcworkspace \</div><div class="line">    --configuration <span class="variable">$&#123;CONFIGURATION&#125;</span> \</div><div class="line">    --output <span class="variable">$&#123;WORKSPACE&#125;</span>/<span class="variable">$&#123;OUTPUT_FOLDER&#125;</span> \</div><div class="line">    --build_version <span class="variable">$&#123;BUILD_VERSION&#125;</span>.<span class="variable">$&#123;BUILD_NUMBER&#125;</span></div></pre></td></tr></table></figure>
+<p>可以看出，参数的传递方式很简单，只需要预先定义好了自定义参数，然后就可以通过<code>${Param}</code>的形式来进行调用了。</p>
+<p>不过你也许会问，<code>WORKSPACE</code>和<code>BUILD_NUMBER</code>这两个参数我们并未进行定义，为什么也能进行调用呢？这是因为Jenkins自带部分与项目相关的环境变量，例如<code>BRANCH_NAME</code>、<code>JOB_NAME</code>等，这部分参数可以在shell脚本中直接进行调用。完整的环境变量可在<code>Jenkins_Url/env-vars.html/</code>中查看。</p>
+<p>配置完成后，就可以在<code>Build with Parameters</code>中通过如下形式手动触发构建。</p>
+<p><img src="/images/Jenkins_manul_build.jpg" alt="Jenkins manul build"></p>
+<h3 id="2、修改build名称"><a href="#2、修改build名称" class="headerlink" title="2、修改build名称"></a>2、修改build名称</h3><p>在<code>Build History</code>列表中，构建任务的名称默认显示为按照build次数递增的<code>BUILD_NUMBER</code>。有时候我们可能想在build名称中包含更多的信息，例如包含当次构建的<code>SCHEME</code>和<code>CONFIGURATION</code>，这时我们就可以通过修改<code>BuildName</code>实现。</p>
+<p>Jenkins默认不支持<code>BuildName</code>设置，但可通过安装<code>build-name-setter</code>插件进行实现。安装<code>build-name-setter</code>插件后，在配置页面的<code>Build Environment</code>栏目下会出现<code>Set Build Name</code>配置项，然后在<code>Build Name</code>中就可以通过环境变量参数来设置build名称。</p>
+<p>例如，要将build名称设置为上面截图中的<code>StoreCI_Release_#130</code>样式，就可以在<code>Build Name</code>中配置为<code>${SCHEME}_${CONFIGURATION}_#${BUILD_NUMBER}</code>。</p>
+<p>除了在<code>Build Name</code>中传递环境变量参数，<code>build-name-setter</code>还可以实现许多更加强大的自定义功能，大家可自行探索。</p>
+<h3 id="3、展示二维码图片"><a href="#3、展示二维码图片" class="headerlink" title="3、展示二维码图片"></a>3、展示二维码图片</h3><p>然后再说下如何在<code>Build History</code>列表中展示每次构建对应的二维码图片。</p>
+<p><img src="/images/Jenkins_build_history.jpg" alt="Jenkins build history"></p>
+<p>需要说明的是，在上图中，绿色框对应的内容是<code>BuildName</code>，我们可以通过<code>build-name-setter</code>插件来实现自定义配置；但是红色框已经不在<code>BuildName</code>的范围之内，而是对应的<code>BuildDescription</code>。</p>
+<p>同样地，Jenkins默认不支持在构建过程中自动修改<code>BuildDescription</code>，需要通过安装<code>description setter plugin</code>插件来辅助实现。安装<code>description setter plugin</code>插件后，在配置页面的<code>Build</code>栏目下，<code>Add build step</code>中会出现<code>Set build description</code>配置项，添加该配置项后就会出现如下配置框。</p>
+<p><img src="/images/Jenkins_set_build_description.jpg" alt="Jenkins set build description"></p>
+<p>该功能的强大之处在于，它可以在构建日志中通过正则表达式来匹配内容，并将匹配到的内容添加到<code>BuildDescription</code>中去。</p>
+<p>例如，我们想要展示的二维码图片是在每次构建过程中生成的，因此我们首先要获取到二维码图片文件。</p>
+<p>我的做法是，在<code>build.py</code>中将蒲公英平台返回的应用下载页面地址和二维码图片地址打印到log中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">appDownloadPage: https://www.pgyer.com/035aaf10acf5dd7c279c4fe423a57674</div><div class="line">appQRCodeURL: https://o1wjx1evz.qnssl.com/app/qrcodeHistory/fe7a8c9051f0c7fc0affc78f40c20a4b5e4bdb4c77b91a29501f55fd9039c659</div><div class="line">Save QRCode image to file: /Users/Leo/.jenkins/workspace/DebugTalk_Plus_Store_iOS/build_outputs/QRCode.png</div></pre></td></tr></table></figure>
+<p>然后，在<code>Set build description</code>配置项的<code>Regular expression</code>就可以按照如下正则表达式进行匹配：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">appDownloadPage: (.*)$</div></pre></td></tr></table></figure>
+<p>接下来，就可以在<code>Description</code>中对匹配到的结果进行引用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;img src=&apos;$&#123;BUILD_URL&#125;artifact/build_outputs/QRCode.png&apos;&gt;\n&lt;a href=&apos;\1&apos;&gt;Install Online&lt;/a&gt;</div></pre></td></tr></table></figure>
+<p>在这里，我们用到了HTML的标签，而Jenkins的<code>Markup Formatter</code>默认是采用<code>Plain text</code>模式，因此还需要对Jenkins对系统配置进行修改，在<a href="/post/iOS-Android-Packing-with-Jenkins/">《使用Jenkins搭建iOS/Android持续集成打包平台》</a>中已进行了详细说明，在此就不再重复。</p>
+<p>通过以上方式，就可以实现前面图片中的效果。</p>
+<h3 id="4、收集编译成果物"><a href="#4、收集编译成果物" class="headerlink" title="4、收集编译成果物"></a>4、收集编译成果物</h3><p>在上面讲解的展示二维码图片一节中，用到了<code>${BUILD_URL}artifact/build_outputs/QRCode.png</code>一项，这里的URL就是用到了编译成果物收集后保存的路径。</p>
+<p><code>Archives build artifacts</code>是Jenkins默认自带的功能，无需安装插件。该功能在配置页面的<code>Post-build Actions</code>栏目下，在<code>Add post-build action</code>的列表中选择添加<code>Archives build artifacts</code>。</p>
+<p>添加后的配置页面如下图所示：</p>
+<p><img src="/images/Jenkins_archive_the_artifacts.jpg" alt="Jenkins archive the artifacts"></p>
+<p>通常，我们只需要配置<code>Files to archive</code>即可。定位文件时，可以通过正则表达式进行匹配，也可以调用项目的环境变量；多个文件通过逗号进行分隔。</p>
+<p>例如，假如我们想收集<code>QRCode.png</code>、<code>StoreCI_Release.ipa</code>、<code>Info.plist</code>这三个文件，那么我们就可以通过如下表达式来进行指定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$&#123;OUTPUT_FOLDER&#125;/*.ipa,$&#123;OUTPUT_FOLDER&#125;/QRCode.png,$&#123;OUTPUT_FOLDER&#125;/*.xcarchive/Info.plist</div></pre></td></tr></table></figure>
+<p>当然，目标文件的具体位置是我们在构建脚本（<code>build.py</code>）中预先进行处理的。</p>
+<p>通过这种方式，我们就可以实现在每次完成构建后将需要的文件收集起来进行存档，以便后续在Jenkins的任务页面中进行下载。</p>
+<p><img src="/images/Jenkins_show_artifacts.jpg" alt="show artifacts of Jenkins"></p>
+<p>也可以直接通过归档文件的URL进行访问。例如，上图中<code>QRCode.png</code>的URL为<code>Jenkins_Url/job/JenkinsJobName/131/artifact/build_outputs/QRCode.png</code>，而<code>Jenkins_Url/job/JenkinsJobName/131/</code>即是<code>${BUILD_URL}</code>，因此可以直接通过<code>${BUILD_URL}artifact/build_outputs/QRCode.png</code>引用。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>至此，<a href="/post/iOS-Android-Packing-with-Jenkins/">《使用Jenkins搭建iOS/Android持续集成打包平台》</a>一文中涉及到的Jenkins配置和构建脚本实现细节均已补充完毕了。相信大家结合这两篇文章，应该会对如何使用Jenkins搭建iOS/Android持续集成打包平台的基础概念和实现细节都有一个比较清晰的认识。</p>
+<p>对于还未完善的部分，我后续将在博客中进行更新。</p>
+<p>操作手册请参考文章末尾的【开箱即用】部分，祝大家玩得愉快！</p>
+<h2 id="开箱即用"><a href="#开箱即用" class="headerlink" title="开箱即用"></a>开箱即用</h2><p>GitHub地址：<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" rel="external">https://github.com/debugtalk/JenkinsTemplateForApp</a></p>
+<h3 id="1、添加构建脚本"><a href="#1、添加构建脚本" class="headerlink" title="1、添加构建脚本"></a>1、添加构建脚本</h3><ul>
+<li>在构建脚本中配置<code>PROVISIONING_PROFILE</code>和<code>pgyer/fir.im</code>账号；</li>
+<li>在目标构建代码库的根目录中，创建<code>Build_scripts</code>文件夹，并将<code>build.py</code>拷贝到<code>Build_scripts</code>中；</li>
+<li>将<code>Build_scripts/build.py</code>提交到项目中。</li>
+</ul>
+<p>除了与Jenkins实现持续集成，构建脚本还可单独使用，使用方式如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ python <span class="variable">$&#123;WORKSPACE&#125;</span>/Build_scripts/build.py \</div><div class="line">true--scheme <span class="variable">$&#123;SCHEME&#125;</span> \</div><div class="line">    --workspace <span class="variable">$&#123;WORKSPACE&#125;</span>/Store.xcworkspace \</div><div class="line">    --configuration <span class="variable">$&#123;CONFIGURATION&#125;</span> \</div><div class="line">    --output <span class="variable">$&#123;WORKSPACE&#125;</span>/<span class="variable">$&#123;OUTPUT_FOLDER&#125;</span></div></pre></td></tr></table></figure>
+<h3 id="2、运行jenkins，安装必备插件"><a href="#2、运行jenkins，安装必备插件" class="headerlink" title="2、运行jenkins，安装必备插件"></a>2、运行jenkins，安装必备插件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nohup java -jar jenkins_located_path/jenkins.war &amp;</div></pre></td></tr></table></figure>
+<h3 id="3、创建Jenkins-Job"><a href="#3、创建Jenkins-Job" class="headerlink" title="3、创建Jenkins Job"></a>3、创建Jenkins Job</h3><ul>
+<li>在Jenkins中创建一个<code>Freestyle project</code>类型的Job，先不进行任何配置；</li>
+<li>然后将<code>config.xml</code>文件拷贝到<code>~/.jenkins/jobs/YourProject/</code>中覆盖原有配置文件，重启Jenkins；</li>
+<li>完成配置文件替换和重启后，刚创建好的Job就已完成了大部分配置；</li>
+<li>在<code>Job Configure</code>中根据项目实际情况调整配置，其中<code>Git Repositories</code>是必须修改的，其它配置项可选择性地进行调整。</li>
+</ul>
+<h3 id="4、done！"><a href="#4、done！" class="headerlink" title="4、done！"></a>4、done！</h3>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/Jenkins/">Jenkins</a><a href="/tags/iOS/">iOS</a><a href="/tags/CI/">CI</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/iOS-Android-Packing-with-Jenkins-details/" data-title="关于持续集成打包平台的Jenkins配置和构建脚本实现细节 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/build-app-automated-test-platform-from-0-to-1-refactor-testcase-scripts/" title="从0到1搭建移动App功能自动化测试平台 (4)：自动化测试代码⎡工程化⎦">
+  <strong>上一篇：</strong><br/>
+  <span>
+  从0到1搭建移动App功能自动化测试平台 (4)：自动化测试代码⎡工程化⎦</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/Introduction-to-AppiumBooster/"  title="Introduction to AppiumBooster">
+ <strong>下一篇：</strong><br/> 
+ <span>Introduction to AppiumBooster
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于iOS的构建"><span class="toc-number">1.</span> <span class="toc-text">关于iOS的构建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#源码-gt-archive-gt-ipa"><span class="toc-number">1.1.</span> <span class="toc-text">源码 -&gt; .archive -&gt; .ipa</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#源码-gt-app-gt-ipa"><span class="toc-number">1.2.</span> <span class="toc-text">源码 -&gt; .app -&gt; .ipa</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数说明"><span class="toc-number">1.3.</span> <span class="toc-text">参数说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#补充说明"><span class="toc-number">1.4.</span> <span class="toc-text">补充说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于Android的构建"><span class="toc-number">2.</span> <span class="toc-text">关于Android的构建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于构建脚本"><span class="toc-number">3.</span> <span class="toc-text">关于构建脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jenkins的详细配置"><span class="toc-number">4.</span> <span class="toc-text">Jenkins的详细配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、参数的传递"><span class="toc-number">4.1.</span> <span class="toc-text">1、参数的传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、修改build名称"><span class="toc-number">4.2.</span> <span class="toc-text">2、修改build名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、展示二维码图片"><span class="toc-number">4.3.</span> <span class="toc-text">3、展示二维码图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、收集编译成果物"><span class="toc-number">4.4.</span> <span class="toc-text">4、收集编译成果物</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开箱即用"><span class="toc-number">6.</span> <span class="toc-text">开箱即用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、添加构建脚本"><span class="toc-number">6.1.</span> <span class="toc-text">1、添加构建脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、运行jenkins，安装必备插件"><span class="toc-number">6.2.</span> <span class="toc-text">2、运行jenkins，安装必备插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、创建Jenkins-Job"><span class="toc-number">6.3.</span> <span class="toc-text">3、创建Jenkins Job</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、done！"><span class="toc-number">6.4.</span> <span class="toc-text">4、done！</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,626 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>微信朋友圈投票活动的刷票案例分析 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="现阶段，在微信朋友圈举办的投票活动层出不穷，相信已经有不少同学对此不胜其烦，因为总会时不时地冒出个人（亲戚、朋友、or whatever）来请你帮TA投票。 本文倒没有打算从道德或者情感层面来探讨这个问题，我所感兴趣的是，当前大多数投票活动其实都是存在明显漏洞的，通过简单的技术手段就可以实现“刷票”。 案例描述这里就有一个案例。 某美发网上商城（以下简称S商城）在微信平台上举办了一场在线投票活动，">
+<meta name="keywords" content="案例分析,security">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信朋友圈投票活动的刷票案例分析">
+<meta property="og:url" content="http://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="现阶段，在微信朋友圈举办的投票活动层出不穷，相信已经有不少同学对此不胜其烦，因为总会时不时地冒出个人（亲戚、朋友、or whatever）来请你帮TA投票。 本文倒没有打算从道德或者情感层面来探讨这个问题，我所感兴趣的是，当前大多数投票活动其实都是存在明显漏洞的，通过简单的技术手段就可以实现“刷票”。 案例描述这里就有一个案例。 某美发网上商城（以下简称S商城）在微信平台上举办了一场在线投票活动，">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/voteRobot_01.png">
+<meta property="og:image" content="http://debugtalk.com/images/voteRobot_02.png">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信朋友圈投票活动的刷票案例分析">
+<meta name="twitter:description" content="现阶段，在微信朋友圈举办的投票活动层出不穷，相信已经有不少同学对此不胜其烦，因为总会时不时地冒出个人（亲戚、朋友、or whatever）来请你帮TA投票。 本文倒没有打算从道德或者情感层面来探讨这个问题，我所感兴趣的是，当前大多数投票活动其实都是存在明显漏洞的，通过简单的技术手段就可以实现“刷票”。 案例描述这里就有一个案例。 某美发网上商城（以下简称S商城）在微信平台上举办了一场在线投票活动，">
+<meta name="twitter:image" content="http://debugtalk.com/images/voteRobot_01.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/cheat-in-wechat-moments-voting-activity/" title="微信朋友圈投票活动的刷票案例分析" itemprop="url">微信朋友圈投票活动的刷票案例分析</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-04-03T16:00:00.000Z" itemprop="datePublished"> Published 2016-04-04</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#案例描述"><span class="toc-number">1.</span> <span class="toc-text">案例描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#漏洞分析"><span class="toc-number">2.</span> <span class="toc-text">漏洞分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VoteRobot实现"><span class="toc-number">3.</span> <span class="toc-text">VoteRobot实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作弊与反作弊？"><span class="toc-number">4.</span> <span class="toc-text">作弊与反作弊？</span></a></li></ol>
+		
+		</div>
+		
+		<p>现阶段，在微信朋友圈举办的投票活动层出不穷，相信已经有不少同学对此不胜其烦，因为总会时不时地冒出个人（亲戚、朋友、or whatever）来请你帮TA投票。</p>
+<p>本文倒没有打算从道德或者情感层面来探讨这个问题，我所感兴趣的是，当前大多数投票活动其实都是存在明显漏洞的，通过简单的技术手段就可以实现“刷票”。</p>
+<h2 id="案例描述"><a href="#案例描述" class="headerlink" title="案例描述"></a>案例描述</h2><p>这里就有一个案例。</p>
+<p>某美发网上商城（以下简称S商城）在微信平台上举办了一场在线投票活动，微信用户可通过活动链接访问到投票页面，对喜欢的发型师作品进行投票；每个微信帐号每天只能给单个作品投1张选票。</p>
+<p>投票活动页面如下图所示：</p>
+<p><img src="/images/voteRobot_01.png" alt="vote activity overview"></p>
+<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><p>表面上看，S商城已经对投票活动进行了反作弊处理，因为限制了每个微信用户每天只能投一张票。如果用户都是正常地通过微信访问这个投票服务进行投票的话，的确是能起到预期效果的。</p>
+<p>然而，如果查看投票页面的原始地址，即按住页面向下拖动，会发现屏幕顶端显示为”本网页由XXX提供”，需要注意的是，这里的”XXX”并不是”mp.weixin.qq.com”，而是S商城的域名。也就是说，这个投票活动的程序是运行在S商城的服务器上面的。</p>
+<p>基于以上分析，可以推断出用户投票操作的网络拓扑结构示意图应该是这样的：</p>
+<p><img src="/images/voteRobot_02.png" alt="vote system network structure"></p>
+<p>微信用户访问投票页面时，微信服务器只是进行了请求转发，具体的投票计数与校验都是在S商城的服务器上的。</p>
+<p>那么，S商城是怎么来区分投票用户的呢？</p>
+<p>这里就涉及到微信公众平台<code>OpenID</code>的概念了。官方对<code>OpenID</code>的解释是：加密后的微信号，每个用户对每个公众号的OpenID是唯一的。</p>
+<p>要验证这一点也很容易，只需要通过采用多个微信账号进行投票，并对投票过程进行网络抓包，查看POST中的参数就可以证实。</p>
+<p>基于这一点，微信公众平台在转发投票请求时，会在POST参数中包含用户的<code>OpenID</code>；S商城在接收到投票的POST请求后，通过查询当前<code>OpenID</code>是否在当天已经投过票，就可以阻止单一用户重复投票的行为了。</p>
+<p>然而，这里面却存在一个很大的漏洞！</p>
+<p>S商城只能判断<code>OpenID</code>是否出现了重复，但是却无法校验<code>OpenID</code>的有效性，因为它是无法调用微信服务器来对这个<code>OpenID</code>进行校验的。</p>
+<h2 id="VoteRobot实现"><a href="#VoteRobot实现" class="headerlink" title="VoteRobot实现"></a>VoteRobot实现</h2><p>明确了这个漏洞后，要实现刷票就很简单了。</p>
+<ul>
+<li>采用微信用户正常地进行一次投票操作，对设备进行网络抓包，获取到投票过程中HTTP层面的请求参数和响应内容；</li>
+<li>使用Fiddler（或Python脚本）构造投票的HTTP POST请求，保持各参数与真实投票时抓取到的参数内容一致；</li>
+<li>随机生成不同的<code>OpenID</code>参数，重复进行POST请求。</li>
+</ul>
+<p>如果要实现批量刷票，或者刷票自动化操作，那么就可以将刷票请求通过Python脚本来实现；甚至，采用LoadRunner也是可以的。</p>
+<p>运行<code>VoteRobot.py</code>，输出日志如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">======== Start to vote zpid(38), Total votes: 3</div><div class="line">1 tickets has been voted, the next ticket will be voted after 35 seconds.</div><div class="line">2 tickets has been voted, the next ticket will be voted after 31 seconds.</div><div class="line">3 tickets has been voted, the next ticket will be voted after 10 seconds.</div><div class="line">======== Voting Ended!</div></pre></td></tr></table></figure>
+<p>需要注意的是，通常自动化刷票时最好有个随机的时间间隔，并且，最好能动态模拟不同的设备，即修改<code>User-Agent</code>，否则，服务端可以较为容易地识别作弊行为。</p>
+<h2 id="作弊与反作弊？"><a href="#作弊与反作弊？" class="headerlink" title="作弊与反作弊？"></a>作弊与反作弊？</h2><p>看到这里，也许有的同学心中窃喜，以后投票都可以采用这种方式“刷票”了么？</p>
+<p>很遗憾，当然不是。</p>
+<p>其实本文中案例的漏洞是很低级的，只是，当前的确还存在不少比例的投票活动是采用这种模式。</p>
+<p>要判断一个投票活动是否可以采用这种方式来作弊也很简单。采用本文中的方法，若查看到活动的网址是非微信官方的，而且整个投票过程也没有额外的校验，那么实现作弊的可能性就很大了；再通过抓包看下通讯交互过程，并用网络请求工具修改参数后重新请求下，即可验证是否真的可以作弊了。</p>
+<p>另外，也许有人想问了，网络中的投票活动就没法杜绝“刷票”行为了么？</p>
+<p>答案是，完全杜绝的确很难。听说过12306的黄牛党没？听说过Apple Store专业给应用刷榜单的没？听说过“网络水军”、“五毛党”没？</p>
+<p>不过，活动举办方可以通过一些手段，大大提高作弊的门槛。例如，当前有不少活动就采用了如下方式：</p>
+<ul>
+<li>要求投票用户先关注活动举办方的公众号，然后调用微信官方的投票功能；</li>
+<li>要求投票用户在投票活动举办方的网站上进行注册（手机号验证、实名验证）</li>
+</ul>
+<p>不管采用这两种方式中的哪一种，本文中的“刷票”方法就完全失效了。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/案例分析/">案例分析</a><a href="/tags/security/">security</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/" data-title="微信朋友圈投票活动的刷票案例分析 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/python-functional-programming-getting-started/" title="Python的函数式编程--从入门到⎡放弃⎦">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Python的函数式编程--从入门到⎡放弃⎦</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/render-multi-level-table-in-webpage/"  title="测试结果报表展现：Web页面绘制多层级表格">
+ <strong>下一篇：</strong><br/> 
+ <span>测试结果报表展现：Web页面绘制多层级表格
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#案例描述"><span class="toc-number">1.</span> <span class="toc-text">案例描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#漏洞分析"><span class="toc-number">2.</span> <span class="toc-text">漏洞分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VoteRobot实现"><span class="toc-number">3.</span> <span class="toc-text">VoteRobot实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作弊与反作弊？"><span class="toc-number">4.</span> <span class="toc-text">作弊与反作弊？</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

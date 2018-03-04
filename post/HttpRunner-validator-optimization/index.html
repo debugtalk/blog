@@ -1,0 +1,649 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>HttpRunner 的结果校验器优化 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在测试用例中，包含预期结果这么一项，用于辅助测试人员执行测试用例时判断系统的功能是否正常。而在自动化测试中，我们的目标是让测试用例自动执行，因此自动化测试用例中同样需要包含预期结果一项，只不过系统响应结果不再由人工来进行判断，而是交由测试工具或框架来实现。 这部分功能对应的就是测试结果校验器（validator），基本上能称得上自动化测试工具或框架的都包含该功能特性。 设计之初HttpRunner">
+<meta name="keywords" content="HttpRunner,validator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HttpRunner 的结果校验器优化">
+<meta property="og:url" content="http://debugtalk.com/post/HttpRunner-validator-optimization/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在测试用例中，包含预期结果这么一项，用于辅助测试人员执行测试用例时判断系统的功能是否正常。而在自动化测试中，我们的目标是让测试用例自动执行，因此自动化测试用例中同样需要包含预期结果一项，只不过系统响应结果不再由人工来进行判断，而是交由测试工具或框架来实现。 这部分功能对应的就是测试结果校验器（validator），基本上能称得上自动化测试工具或框架的都包含该功能特性。 设计之初HttpRunner">
+<meta property="og:locale" content="en-us">
+<meta property="og:updated_time" content="2017-12-24T01:55:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HttpRunner 的结果校验器优化">
+<meta name="twitter:description" content="在测试用例中，包含预期结果这么一项，用于辅助测试人员执行测试用例时判断系统的功能是否正常。而在自动化测试中，我们的目标是让测试用例自动执行，因此自动化测试用例中同样需要包含预期结果一项，只不过系统响应结果不再由人工来进行判断，而是交由测试工具或框架来实现。 这部分功能对应的就是测试结果校验器（validator），基本上能称得上自动化测试工具或框架的都包含该功能特性。 设计之初HttpRunner">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/HttpRunner-validator-optimization/" title="HttpRunner 的结果校验器优化" itemprop="url">HttpRunner 的结果校验器优化</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2017-12-12T16:00:00.000Z" itemprop="datePublished"> Published 2017-12-13</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计之初"><span class="toc-number">1.</span> <span class="toc-text">设计之初</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存在的局限性"><span class="toc-number">2.</span> <span class="toc-text">存在的局限性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改造结果"><span class="toc-number">3.</span> <span class="toc-text">改造结果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#新增支持自定义结果校验器"><span class="toc-number">3.1.</span> <span class="toc-text">新增支持自定义结果校验器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果校验器中实现变量引用"><span class="toc-number">3.2.</span> <span class="toc-text">结果校验器中实现变量引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果校验内容新增支持正则表达式提取"><span class="toc-number">3.3.</span> <span class="toc-text">结果校验内容新增支持正则表达式提取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果校验器的进一步简化"><span class="toc-number">3.4.</span> <span class="toc-text">结果校验器的进一步简化</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>在测试用例中，包含预期结果这么一项，用于辅助测试人员执行测试用例时判断系统的功能是否正常。而在自动化测试中，我们的目标是让测试用例自动执行，因此自动化测试用例中同样需要包含预期结果一项，只不过系统响应结果不再由人工来进行判断，而是交由测试工具或框架来实现。</p>
+<p>这部分功能对应的就是测试结果校验器（validator），基本上能称得上自动化测试工具或框架的都包含该功能特性。</p>
+<h2 id="设计之初"><a href="#设计之初" class="headerlink" title="设计之初"></a>设计之初</h2><p><code>HttpRunner</code>在设计之初，结果校验器（validator）的实现比较简单。</p>
+<p>对于每一个<code>test</code>，可以指定0个或多个校验项，放置在<code>validate</code>中。在自动化测试执行的时候，会在发起HTTP请求、解析结果响应之后，逐个检查各个校验项，若存在任意校验项不通过的情况，则该<code>test</code>将终止并被标记为失败。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    extract:</span></div><div class="line"><span class="attr">        - token:</span> content.token</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expect"</span>: <span class="number">200</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"content.token"</span>, <span class="string">"comparator"</span>: <span class="string">"len_eq"</span>, <span class="string">"expect"</span>: <span class="number">16</span>&#125;</div></pre></td></tr></table></figure>
+<p>如上例所示，每一个校验项均为一个<code>json</code>结构，里面包含<code>check</code>、<code>expect</code>、<code>comparator</code>三个属性字段。其中，<code>check</code>对应着要检查的字段，<code>expect</code>对应着检查字段预期的值，这两项是必须指定的；<code>comparator</code>字段对应着比较方法，若不指定，则默认采用<code>eq</code>，即检查字段与预期值相等。</p>
+<p>为了实现尽可能强大的检查功能，<code>check</code>属性值可通过链式操作精确指定具体的字段，<code>comparator</code>也内置实现了大量的检查功能。</p>
+<p>举个例子可能会更清晰些。假如某结构的响应结果如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">// status code: 200</div><div class="line"></div><div class="line">// response headers</div><div class="line">&#123;</div><div class="line">   "Content-Type": "application/json"</div><div class="line">&#125;</div><div class="line"></div><div class="line">// response body content</div><div class="line">&#123;</div><div class="line">   "success": False,</div><div class="line">   "person": &#123;</div><div class="line">       "name": &#123;</div><div class="line">           "first_name": "Leo",</div><div class="line">           "last_name": "Lee",</div><div class="line">       &#125;,</div><div class="line">       "age": 29,</div><div class="line">       "cities": ["Guangzhou", "Shenzhen"]</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么假如我们要检查<code>status code</code>，<code>check</code>就可以指定为<code>status_code</code>；假如要检查<code>response headers</code>中的<code>Content-Type</code>，<code>check</code>就可以指定为<code>headers.content-type</code>；假如要检查<code>response body</code>中的<code>first_name</code>，<code>check</code>就可以指定为<code>content.person.name.first_name</code>。可以看出，假如下一层级为字典结构，那么就可以通过<code>.</code>运算符指定下一层级的<code>key</code>，依次类推。</p>
+<p>对于字段内容为列表<code>list</code>的情况略有不同，我们需要通过序号来指定具体检查哪一项内容。例如，<code>Guangzhou</code>对应的检查项为<code>content.person.cities.0</code>，<code>Shenzhen</code>对应的检查项为<code>content.person.cities.1</code>。</p>
+<p>在比较方式（<code>comparator</code>）方面，<code>HttpRunner</code>除了<code>eq</code>，还内置了大量的检查方法。例如，我们可以通过<code>gt</code>、<code>ge</code>、<code>lt</code>、<code>le</code>等比较数值大小，通过<code>len_eq</code>、<code>len_gt</code>、<code>len_lt</code>等比较长度是否相等（列表、字典、字符串均适用），通过<code>contains</code>、<code>contained_by</code>来判断包含关系，通过<code>startswith</code>、<code>endswith</code>判断字符串的开头结尾，甚至通过<code>regex_match</code>来判断是否满足正则匹配等。详细的比较方式还有许多，需要时可查看<a href="http://httprunner.readthedocs.io/en/latest/write-testcases.html#comparator" target="_blank" rel="external">comparator</a>表格。</p>
+<h2 id="存在的局限性"><a href="#存在的局限性" class="headerlink" title="存在的局限性"></a>存在的局限性</h2><p>在大多数情况下，<code>HttpRunner</code>的结果校验器（validator）是够用的。不过问题在于，框架不可能为用户实现所有的检查方法，假如用户需要某些特殊的检查方法时，<code>HttpRunner</code>就没法实现了。</p>
+<p>这的确是一个问题，之前<code>Junho2010</code>提的issue <a href="https://github.com/HttpRunner/HttpRunner/issues/29" target="_blank" rel="external">#29</a>中举了一个例子，应该也算是比较有代表性。</p>
+<blockquote>
+<p>发送请求时的数据使用了随机生成，然后需要比较结果中的数据是否是和这个相关（通过某个算法转换）。比如我输入的是321，我的结果是<code>(3+2+1) * avg(3+2+1)</code>这种转化，目前的comparator是比较难于实现的。</p>
+</blockquote>
+<p>要解决这个问题，最好的方式应该是在<code>HttpRunner</code>中实现自定义结果校验器的机制；用户在有需要的时候，可以自己编写校验函数，然后在<code>validate</code>中引用校验函数。之前也介绍过<code>HttpRunner</code>的热加载机制，<a href="http://debugtalk.com/post/apitestengine-hot-plugin/">《约定大于配置：ApiTestEngine实现热加载机制》</a>，自定义结果校验器应该也是可以采用这种方式来实现的。</p>
+<p>第二个需要优化的点，<code>HttpRunner</code>的结果校验器还不支持变量引用，会造成某些场景下的局限性。例如，<code>testwangchao</code>曾提过一个issue <a href="https://github.com/HttpRunner/HttpRunner/issues/52" target="_blank" rel="external">#52</a>：</p>
+<blockquote>
+<p>接口response内，会返回数据库内的自增ID。ID校验的时候，希望<code>expected</code>为参数化的值。</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">validate:</span></div><div class="line"><span class="bullet">    -</span> &#123;<span class="string">"check"</span>: <span class="string">"content.data.table_list.0.id"</span>, <span class="string">"expected"</span>: <span class="string">"$id"</span>&#125;</div></pre></td></tr></table></figure>
+<p>另外，在<a href="http://debugtalk.com/post/apitestengine-not-only-about-json-api/">《ApiTestEngine，不再局限于API的测试》</a>一文中有介绍过，结果提取器（<code>extract</code>）新增实现了通过正则表达式对任意文本响应内容的字段提取。考虑到结果校验器（<code>validate</code>）也需要先从结果响应中提取出特定字段才能与预期值进行比较，在具体实现上完全可以复用同一部分代码，因此在<code>validate</code>的<code>check</code>部分也可以进行统一化处理。</p>
+<p>经过前面的局限性问题描述，我们的改造目标也明确了，主要有三个方面：</p>
+<ul>
+<li>新增支持自定义结果校验器</li>
+<li>结果校验器中实现变量引用</li>
+<li>结果校验内容新增支持正则表达式提取</li>
+</ul>
+<h2 id="改造结果"><a href="#改造结果" class="headerlink" title="改造结果"></a>改造结果</h2><p>具体的改造过程就不写了，有兴趣的同学可以直接阅读源码，重点查看<a href="https://github.com/HttpRunner/HttpRunner/blob/master/httprunner/context.py" target="_blank" rel="external"><code>httprunner/context.py</code></a>中的<code>parse_validator</code>、<code>do_validation</code>和<code>validate</code>三个函数。</p>
+<p>经过优化后，改造目标中的三项功能都实现了。为了更好地展现改造后的结果校验器，此处将结合实例进行演示。</p>
+<h3 id="新增支持自定义结果校验器"><a href="#新增支持自定义结果校验器" class="headerlink" title="新增支持自定义结果校验器"></a>新增支持自定义结果校验器</h3><p>先来看第一个优化项，新增支持自定义结果校验器。</p>
+<p>假设我们需要使用HTTP响应状态码各个数字的和来进行校验，例如，<code>201</code>状态码对应的数字和为3，<code>503</code>状态码对应的数字和为8。该实例只是为了演示用，实际上并不会用到这样的校验方式。</p>
+<p>首先，该种校验方式在<code>HttpRunner</code>中并没有内置，因此需要我们自己来实现。实现方式与热加载机制相同，只需要将自定义的校验函数放置到当前<code>YAML/JSON</code>文件同级或者父级目录的<code>debugtalk.py</code>中。</p>
+<p>对于自定义的校验函数，需要遵循三个规则：</p>
+<ul>
+<li>自定义校验函数需放置到<code>debugtalk.py</code>中</li>
+<li>参数有两个：第一个为原始数据，第二个为原始数据经过运算后得到的预期结果值</li>
+<li>在校验函数中通过<code>assert</code>将实际运算结果与预期结果值进行比较</li>
+</ul>
+<p>对于前面提到的演示案例，我们就可以在<code>debugtalk.py</code>中编写如下校验函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum_status_code</span><span class="params">(status_code, expect_sum)</span>:</span></div><div class="line">    <span class="string">""" sum status code digits</span></div><div class="line">        e.g. 400 =&gt; 4, 201 =&gt; 3</div><div class="line">    """</div><div class="line">    sum_value = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> digit <span class="keyword">in</span> str(status_code):</div><div class="line">        sum_value += int(digit)</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> sum_value == expect_sum</div></pre></td></tr></table></figure>
+<p>然后，在<code>YAML/JSON</code>格式测试用例的<code>validate</code>中，我们就可以将校验函数名称<code>sum_status_code</code>作为<code>comparator</code>进行使用了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expect"</span>: <span class="number">200</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"sum_status_code"</span>, <span class="string">"expect"</span>: <span class="number">2</span>&#125;</div></pre></td></tr></table></figure>
+<p>由此可见，自定义的校验函数<code>sum_status_code</code>与<code>HttpRunner</code>内置的校验方法<code>eq</code>在使用方式上完全相同，应该没有理解上的难度。</p>
+<h3 id="结果校验器中实现变量引用"><a href="#结果校验器中实现变量引用" class="headerlink" title="结果校验器中实现变量引用"></a>结果校验器中实现变量引用</h3><p>对于第二个优化项，结果校验器中实现变量引用。在使用方式上我们应该与<code>request</code>中的变量引用一致，即通过<code>$var</code>的方式来引用变量<code>var</code>。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    variables:</span></div><div class="line"><span class="attr">        - expect_status_code:</span> <span class="number">200</span></div><div class="line"><span class="attr">        - token_len:</span> <span class="number">16</span></div><div class="line"><span class="attr">    extract:</span></div><div class="line"><span class="attr">        - token:</span> content.token</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expect"</span>: <span class="string">"$expect_status_code"</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"content.token"</span>, <span class="string">"comparator"</span>: <span class="string">"len_eq"</span>, <span class="string">"expect"</span>: <span class="string">"$token_len"</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"$token"</span>, <span class="string">"comparator"</span>: <span class="string">"len_eq"</span>, <span class="string">"expect"</span>: <span class="string">"$token_len"</span>&#125;</div></pre></td></tr></table></figure>
+<p>通过以上示例可以看出，在结果校验器<code>validate</code>中，<code>check</code>和<code>expect</code>均可实现实现变量的引用；而引用的变量，可以来自四种类型：</p>
+<ul>
+<li>当前<code>test</code>中定义的<code>variables</code>，例如<code>expect_status_code</code></li>
+<li>当前<code>test</code>中提取（<code>extract</code>）的结果变量，例如<code>token</code></li>
+<li>当前测试用例集<code>testset</code>中，先前<code>test</code>中提取（<code>extract</code>）的结果变量</li>
+<li>当前测试用例集<code>testset</code>中，全局配置<code>config</code>中定义的变量</li>
+</ul>
+<p>而<code>check</code>字段除了可以引用变量，以及保留了之前的链式操作定位字段（例如上例中的<code>content.token</code>）外，还新增了采用正则表达式提取内容的方式，也就是第三个优化项。</p>
+<h3 id="结果校验内容新增支持正则表达式提取"><a href="#结果校验内容新增支持正则表达式提取" class="headerlink" title="结果校验内容新增支持正则表达式提取"></a>结果校验内容新增支持正则表达式提取</h3><p>假设如下接口的响应结果内容为<code>LB123abcRB789</code>，那么要提取出<code>abc</code>部分进行校验，就可以采用如下描述方式。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"LB123(.*)RB789"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expect"</span>: <span class="string">"abc"</span>&#125;</div></pre></td></tr></table></figure>
+<p>可见在使用方式上与在结果提取器（<code>extract</code>）中完全相同。</p>
+<h3 id="结果校验器的进一步简化"><a href="#结果校验器的进一步简化" class="headerlink" title="结果校验器的进一步简化"></a>结果校验器的进一步简化</h3><p>最后，为了进一步简化结果校验的描述，我在<code>validate</code>中新增实现了一种描述方式。</p>
+<p>简化后的描述方式与原始方式对比如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">validate:</span></div><div class="line"><span class="attr">    - comparator_name:</span> [check_item, expect_value]</div><div class="line"><span class="bullet">    -</span> &#123;<span class="string">"check"</span>: check_item, <span class="string">"comparator"</span>: comparator_name, <span class="string">"expect"</span>: expect_value&#125;</div></pre></td></tr></table></figure>
+<p>同样是前面的例子，采用新的描述方式后会更加简洁。而两种方式表达的含义是完全等价的。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, $expect_status_code]</div><div class="line"><span class="attr">        - sum_status_code:</span> [<span class="string">"status_code"</span>, <span class="number">2</span>]</div><div class="line"><span class="attr">        - len_eq:</span> [<span class="string">"$token"</span>, $token_len]</div><div class="line"><span class="attr">        - len_eq:</span> [<span class="string">"content.token"</span>, <span class="number">16</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"LB123(.*)RB789"</span>, <span class="string">"abc"</span>]</div></pre></td></tr></table></figure>
+<p>当然，此次优化保证了与历史版本的兼容，之前编写的测试用例脚本的运行是完全不会受到任何影响的。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HttpRunner/">HttpRunner</a><a href="/tags/validator/">validator</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/HttpRunner-validator-optimization/" data-title="HttpRunner 的结果校验器优化 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/HttpRunner-testcase-layer/" title="HttpRunner 的测试用例分层机制">
+  <strong>上一篇：</strong><br/>
+  <span>
+  HttpRunner 的测试用例分层机制</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/HttpRunner-supports-HAR/"  title="HttpRunner 支持 HAR 意味着什么？">
+ <strong>下一篇：</strong><br/> 
+ <span>HttpRunner 支持 HAR 意味着什么？
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计之初"><span class="toc-number">1.</span> <span class="toc-text">设计之初</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存在的局限性"><span class="toc-number">2.</span> <span class="toc-text">存在的局限性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改造结果"><span class="toc-number">3.</span> <span class="toc-text">改造结果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#新增支持自定义结果校验器"><span class="toc-number">3.1.</span> <span class="toc-text">新增支持自定义结果校验器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果校验器中实现变量引用"><span class="toc-number">3.2.</span> <span class="toc-text">结果校验器中实现变量引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果校验内容新增支持正则表达式提取"><span class="toc-number">3.3.</span> <span class="toc-text">结果校验内容新增支持正则表达式提取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果校验器的进一步简化"><span class="toc-number">3.4.</span> <span class="toc-text">结果校验器的进一步简化</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

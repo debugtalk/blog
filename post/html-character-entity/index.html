@@ -1,0 +1,604 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>HTML字符实体(Character Entity) | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="字符实体的由来在HTML源文件中，有些字符（如&amp;lt;，&amp;gt;，&amp;amp;等）作为特殊字符不能直接使用，如果直接使用的话HTML将不能被正确解析。但如果HTML内容中需要展示这些特殊字符时该怎么处理呢？这就需要使用转义字符串来对其进行转义。 转义字符串（Escape Sequence）也称字符实体(Character Entity)。在HTML中，定义转义字符串的原因有两个：  第一个原因：像“">
+<meta name="keywords" content="Encoding,HTML">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML字符实体(Character Entity)">
+<meta property="og:url" content="http://debugtalk.com/post/html-character-entity/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="字符实体的由来在HTML源文件中，有些字符（如&amp;lt;，&amp;gt;，&amp;amp;等）作为特殊字符不能直接使用，如果直接使用的话HTML将不能被正确解析。但如果HTML内容中需要展示这些特殊字符时该怎么处理呢？这就需要使用转义字符串来对其进行转义。 转义字符串（Escape Sequence）也称字符实体(Character Entity)。在HTML中，定义转义字符串的原因有两个：  第一个原因：像“">
+<meta property="og:locale" content="en-us">
+<meta property="og:updated_time" content="2017-09-04T05:28:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTML字符实体(Character Entity)">
+<meta name="twitter:description" content="字符实体的由来在HTML源文件中，有些字符（如&amp;lt;，&amp;gt;，&amp;amp;等）作为特殊字符不能直接使用，如果直接使用的话HTML将不能被正确解析。但如果HTML内容中需要展示这些特殊字符时该怎么处理呢？这就需要使用转义字符串来对其进行转义。 转义字符串（Escape Sequence）也称字符实体(Character Entity)。在HTML中，定义转义字符串的原因有两个：  第一个原因：像“">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/html-character-entity/" title="HTML字符实体(Character Entity)" itemprop="url">HTML字符实体(Character Entity)</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2013-10-03T16:00:00.000Z" itemprop="datePublished"> Published 2013-10-04</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#字符实体的由来"><span class="toc-number">1.</span> <span class="toc-text">字符实体的由来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转义字符串的组成"><span class="toc-number">2.</span> <span class="toc-text">转义字符串的组成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-Encode-amp-Decode"><span class="toc-number">3.</span> <span class="toc-text">HTML Encode &amp; Decode</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="字符实体的由来"><a href="#字符实体的由来" class="headerlink" title="字符实体的由来"></a>字符实体的由来</h2><p>在HTML源文件中，有些字符（如&lt;，&gt;，&amp;等）作为特殊字符不能直接使用，如果直接使用的话HTML将不能被正确解析。但如果HTML内容中需要展示这些特殊字符时该怎么处理呢？这就需要使用转义字符串来对其进行转义。</p>
+<p>转义字符串（Escape Sequence）也称字符实体(Character Entity)。在HTML中，定义转义字符串的原因有两个：</p>
+<ul>
+<li>第一个原因：像“&lt;”和“&gt;”这类符号已经用来表示HTML标签，因此就不能直接当作文本中的符号来使用。为了在HTML文档中使用这些符号，就需要定义它的转义字符串。当解释程序遇到这类字符串时就把它解释为真实的字符。在输入转义字符串时，要严格遵守字母大小写的规则。</li>
+<li>第二个原因：有些字符在ASCII字符集中没有定义，因此需要使用转义字符串来表示。</li>
+</ul>
+<h2 id="转义字符串的组成"><a href="#转义字符串的组成" class="headerlink" title="转义字符串的组成"></a>转义字符串的组成</h2><p>转义字符串（Escape Sequence），即字符实体（Character Entity）分成三部分：</p>
+<ul>
+<li>第一部分是一个&amp;符号，英文叫ampersand；</li>
+<li>第二部分是字符实体名称（character entity names）或者是#加上实体编号；</li>
+<li>第三部分是一个分号。</li>
+</ul>
+<p>对于实体编号，采用的是字符的Unicode编码序号，并且可以采用其对应的十进制编码或者十六进制编码进行表示，具体形式为<code>#nnnn</code>或<code>#xhhhh</code>。</p>
+<p>例如，要显示小于号（&lt;），如果采用字符实体名称进行表示，就可以写成<code>&amp;lt;</code>；如果采用字符实体编号的形式，由于其Unicode编码为60（对应16进制为x3c），因此可以写成<code>&amp;#60;</code>或者<code>&amp;#x3c;</code>。</p>
+<p>同一个符号，可以用“实体名称”和“实体编号”两种方式进行表示，“实体名称”的优势在于便于记忆，但不能保证所有的浏览器都能顺利识别它；而“实体编号”，各种浏览器都能处理，其劣势在于不便于记忆。</p>
+<p>提示：实体名称（Entity）是区分大小写的。</p>
+<p>如何显示空格？<br>通常情况下，HTML会自动截去多余的空格，多个空格都将被看做一个空格。为了在网页中增加空格，可以使用<code>&amp;nbsp;</code>表示空格。</p>
+<h2 id="HTML-Encode-amp-Decode"><a href="#HTML-Encode-amp-Decode" class="headerlink" title="HTML Encode &amp; Decode"></a>HTML Encode &amp; Decode</h2><p>对于HTML字符实体的Encode和Decode，即是对字符（character）和其对应的字符实体（Character Entity）进行相互转换。</p>
+<p>HTML Encode: 字符(Character) =&gt; 字符实体(Character Entity)<br>HTML Decode: 字符实体(Character Entity) =&gt; 字符(Character)</p>
+<p>例如，对于汉字“测试”，由于其Unicode编码为<code>\u6D4B\u8BD5</code>（对应的十进制为<code>27979 35797</code>），因此Encode后得到<code>&amp;#27979;&amp;#35797;</code>；反向地，对<code>&amp;#27979;&amp;#35797;</code>进行Decode后便得到“测试”。当然，对<code>&amp;#x6D4B;&amp;#x8BD5;</code>进行Decode同样可以得到“测试”。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Encoding/">Encoding</a><a href="/tags/HTML/">HTML</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/html-character-entity/" data-title="HTML字符实体(Character Entity) | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/Using-DuoShuo-in-Pelican/" title="在Pelican中使用多说评论系统">
+  <strong>上一篇：</strong><br/>
+  <span>
+  在Pelican中使用多说评论系统</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/Create-Blog-with-Pelican-and-GitCafe-Pages/"  title="使用 Pelican + GitCafe Pages 创建 Blog">
+ <strong>下一篇：</strong><br/> 
+ <span>使用 Pelican + GitCafe Pages 创建 Blog
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#字符实体的由来"><span class="toc-number">1.</span> <span class="toc-text">字符实体的由来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转义字符串的组成"><span class="toc-number">2.</span> <span class="toc-text">转义字符串的组成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-Encode-amp-Decode"><span class="toc-number">3.</span> <span class="toc-text">HTML Encode &amp; Decode</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

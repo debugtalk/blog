@@ -1,0 +1,694 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>HttpRunner 实现参数化数据驱动机制 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="背景在自动化测试中，经常会遇到如下场景：  1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。  这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是在我们的自动化测试脚本中存在参数，并且我们需要采用不同的参数去运行。 经过概括，参数基本上分为两种类型：  单个独立参数：例">
+<meta name="keywords" content="HttpRunner,Parameter,Data-Driven">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HttpRunner 实现参数化数据驱动机制">
+<meta property="og:url" content="http://debugtalk.com/post/httprunner-data-driven/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="背景在自动化测试中，经常会遇到如下场景：  1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。  这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是在我们的自动化测试脚本中存在参数，并且我们需要采用不同的参数去运行。 经过概括，参数基本上分为两种类型：  单个独立参数：例">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/loadrunner-parameterize.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/httprunner-parameterize.jpg">
+<meta property="og:updated_time" content="2018-02-16T08:42:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HttpRunner 实现参数化数据驱动机制">
+<meta name="twitter:description" content="背景在自动化测试中，经常会遇到如下场景：  1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。  这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是在我们的自动化测试脚本中存在参数，并且我们需要采用不同的参数去运行。 经过概括，参数基本上分为两种类型：  单个独立参数：例">
+<meta name="twitter:image" content="http://debugtalk.com/images/loadrunner-parameterize.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/httprunner-data-driven/" title="HttpRunner 实现参数化数据驱动机制" itemprop="url">HttpRunner 实现参数化数据驱动机制</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2018-02-15T16:00:00.000Z" itemprop="datePublished"> Published 2018-02-16</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#借鉴-LoadRunner-的数据参数化"><span class="toc-number">2.</span> <span class="toc-text">借鉴 LoadRunner 的数据参数化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思路演变历程"><span class="toc-number">3.</span> <span class="toc-text">设计思路演变历程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发实现"><span class="toc-number">4.</span> <span class="toc-text">开发实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据源格式约定"><span class="toc-number">4.1.</span> <span class="toc-text">数据源格式约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#csv-解析器"><span class="toc-number">4.2.</span> <span class="toc-text">csv 解析器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多个参数的组合"><span class="toc-number">4.3.</span> <span class="toc-text">多个参数的组合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数化数据驱动"><span class="toc-number">4.4.</span> <span class="toc-text">参数化数据驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效果展示"><span class="toc-number">5.</span> <span class="toc-text">效果展示</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在自动化测试中，经常会遇到如下场景：</p>
+<blockquote>
+<p>1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；<br>2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。</p>
+</blockquote>
+<p>这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是在我们的自动化测试脚本中存在参数，并且我们需要采用不同的参数去运行。</p>
+<p>经过概括，参数基本上分为两种类型：</p>
+<ul>
+<li>单个独立参数：例如前面的第一种场景，我们只需要变换搜索关键字这一个参数</li>
+<li>多个具有关联性的参数：例如前面的第二种场景，我们需要变换用户名和密码两个参数，并且这两个参数需要关联组合</li>
+</ul>
+<p>然后，对于参数而言，我们可能具有一个参数列表，在脚本运行时需要按照不同的规则去取值，例如顺序取值、随机取值、循环取值等等。</p>
+<p>对于这一块儿，没有太多新的概念，这就是典型的参数化和数据驱动。遗憾的是，当前<code>HttpRunner</code>并未支持该功能特性。</p>
+<p>考虑到该需求的普遍性，并且近期提到该需求的的人也越来越多（<a href="https://github.com/HttpRunner/HttpRunner/issues/74" target="_blank" rel="external">issue #74</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/87" target="_blank" rel="external">issue #87</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/88" target="_blank" rel="external">issue #88</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/97" target="_blank" rel="external">issue #97</a>），因此趁着春节假期的空闲时间，决定优先实现下。</p>
+<p>经过前面的场景分析，我们的目标已经很明确了，接下来就是如何实现的问题了。</p>
+<h2 id="借鉴-LoadRunner-的数据参数化"><a href="#借鉴-LoadRunner-的数据参数化" class="headerlink" title="借鉴 LoadRunner 的数据参数化"></a>借鉴 LoadRunner 的数据参数化</h2><p>要造一个轮子，最好是先看下现有知名轮子的实现机制。之前有用过一段时间的 LoadRunner，对其参数化机制印象蛮深的，虽然它是性能测试工具，但在脚本参数化方面是通用的。</p>
+<p>我们先看下在 LoadRunner 中是如何实现参数化的。</p>
+<p>在 LoadRunner 中，可以在脚本中创建一个参数，然后参数会保存到一个<code>.dat</code>的文件中，例如下图中的<code>psd.dat</code>。</p>
+<p><img src="/images/loadrunner-parameterize.jpg" alt=""></p>
+<p>在<code>.dat</code>文件中，是采用表格的形式来存储参数值，结构与<code>CSV</code>基本一致。</p>
+<p>对于单个独立参数，可以将参数列表保存在一个单独的<code>.dat</code>文件中，第一行为参数名称，后续每一行为一个参数值。例如本文背景介绍中的第一类场景，数据存储形式如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Keyword</div><div class="line">hello</div><div class="line">world</div><div class="line">debugtalk</div></pre></td></tr></table></figure>
+<p>然后对于参数的取值方式，可以通过<code>Select next row</code>和<code>Update value on</code>进行配置。</p>
+<p><code>Select next row</code>的可选方式有：</p>
+<ul>
+<li>Sequential：顺序取值</li>
+<li>Random：随机取值</li>
+<li>Unique：为每个虚拟用户分配一条唯一的数据</li>
+</ul>
+<p><code>Update value on</code>的可选方式有：</p>
+<ul>
+<li>Each iteration：每次脚本迭代时更新参数值</li>
+<li>Each occurrence：每次出现参数引用时更新参数值</li>
+<li>Once：每条数据只能使用一次</li>
+</ul>
+<p>而且，可以通过对这两种方式进行组合，配制出9种参数化方式。</p>
+<p>另外，因为 LoadRunner 本身是性能测试工具，具有长时间运行的需求，假如<code>Select next row</code>选择为<code>Unique</code>，同时<code>Update value on</code>设置为<code>Each iteration</code>，那么就会涉及到参数用完的情况。在该种情况下，可通过<code>When out of value</code>配置项实现如下选择：</p>
+<ul>
+<li>Abort vuser：当超出时终止脚本</li>
+<li>Continue in a cyclic manner：当超出时回到列表头再次取值</li>
+<li>Continue with last value：使用参数表中的最后一个值</li>
+</ul>
+<p>对于多个具有关联性的参数，可以将关联参数列表保存在一个<code>.dat</code>文件中，第一行为参数名称，后续每一行为一个参数值，参数之间采用逗号进行分隔。例如本文背景介绍中的第二类场景，数据存储形式如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">UserName,Password</div><div class="line">test1,111111</div><div class="line">test2,222222</div><div class="line">test3,333333</div></pre></td></tr></table></figure>
+<p>对于参数的取值方式，与上面单个独立参数的取值方式基本相同。差异在于，我们可以只配置一个参数（例如<code>UserName</code>）的取值方式，然后其它参数（例如<code>Password</code>）的取值方式选择为<code>same line as UserName</code>。如此一来，我们就可以保证参数化时的数据关联性。</p>
+<p>LoadRunner 的参数化机制就回顾到这里，可以看出，其功能还是很强大的，使用也十分灵活。</p>
+<h2 id="设计思路演变历程"><a href="#设计思路演变历程" class="headerlink" title="设计思路演变历程"></a>设计思路演变历程</h2><p>现在再回到我们的 HttpRunner，要如何来实现参数化机制呢？</p>
+<p>因为 LoadRunner 的参数化机制比较完善，用户群体也很大，因此我在脑海里最先冒出的想法就是照抄 LoadRunner，将 LoadRunner 在 GUI 中配置的内容在 HttpRunner 中通过<code>YAML/JSON</code>来进行配置。</p>
+<p>按照这个思路，在 HttpRunner 的 config 中，就要有一块儿地方用来进行参数化配置，暂且设定为<code>parameters</code>吧。然后，对于每一个参数，其参数列表要单独存放在文件中，考虑到LoadRunner中的<code>.dat</code>文件基本就是<code>CSV</code>格式，因此可以约定采用大众更熟悉的<code>.csv</code>文件来存储参数；在脚本中，要指定参数变量从哪个文件中取值，那么就需要设定一个<code>parameter_file</code>，用于指定对应的参数文件路径。接下来，要实现取值规则的配置，例如是顺序取值还是随机取值，那么就需要设定<code>select_next_row</code>和<code>update_value_on</code>。</p>
+<p>根据该设想，在<code>YAML</code>测试用例文件中，数据参数化将描述为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span></div><div class="line"><span class="attr">            parameter_file:</span> keywords.csv</div><div class="line"><span class="attr">            select_next_row:</span> Random</div><div class="line"><span class="attr">            update_value_on:</span> EachIteration</div><div class="line"><span class="attr">        - UserName:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> Sequential</div><div class="line"><span class="attr">            update_value_on:</span> EachIteration</div><div class="line"><span class="attr">        - Password:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> same line as UserName</div></pre></td></tr></table></figure>
+<p>这个想法基本可行，但就是感觉配置项有些繁琐，我们可以尝试再对其进行简化。</p>
+<p>首先，比较明显的，针对每个参数都要配置<code>select_next_row</code>和<code>update_value_on</code>，虽然从功能上来说比较丰富，但是对于用户来说，这些功能并不都是必须的。特别是<code>update_value_on</code>这个参数，绝大多数情况下我们的需求应该都是采用<code>Each iteration</code>，即每次脚本再次运行时更新参数值。因此，我们可以去除<code>update_value_on</code>这个配置项，默认都是采用<code>Each iteration</code>的方式。</p>
+<p>经过第一轮简化，配置描述方式变为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span></div><div class="line"><span class="attr">            parameter_file:</span> keywords.csv</div><div class="line"><span class="attr">            select_next_row:</span> Random</div><div class="line"><span class="attr">        - UserName:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> Sequential</div><div class="line"><span class="attr">        - Password:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> same line as UserName</div></pre></td></tr></table></figure>
+<p>然后，我们可以看到<code>UserName</code>和<code>Password</code>这两个参数，它们有关联性，但却各自单独进行了配置；而且对于有关联性的参数，除了需要对第一个参数配置取值方式外，其它参数的<code>select_next_row</code>应该总是为<code>same line as XXX</code>，这样描述就显得比较累赘了。</p>
+<p>既然是有关联性的参数，那就放在一起吧，参数名称可以采用约定的符号进行分离。考虑到参数变量名称通常包含字母、数字和下划线，同时要兼顾<code>YAML/JSON</code>中对字符的限制，因此选择短横线（<code>-</code>）作为分隔符吧。</p>
+<p>经过第二轮简化，配置描述方式变为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span></div><div class="line"><span class="attr">            parameter_file:</span> keywords.csv</div><div class="line"><span class="attr">            select_next_row:</span> Random</div><div class="line"><span class="attr">        - UserName-Password:</span></div><div class="line"><span class="attr">            parameter_file:</span> account.csv</div><div class="line"><span class="attr">            select_next_row:</span> Sequential</div></pre></td></tr></table></figure>
+<p>接着，我们再看下<code>parameter_file</code>参数。因为我们测试用例中的参数名称必须与数据源进行绑定，因此这一项信息是不可少的。但是在描述形式上，还是会感觉有些繁琐。再一想，既然我们本来就要指定参数名称，那何必不将参数名称约定为文件名称呢？</p>
+<p>例如，对于参数<code>Keyword</code>，我们可以将其数据源文件名称约定为<code>Keyword.csv</code>；对于参数<code>UserName</code>和<code>Password</code>，我们可以将其数据源文件名称约定为<code>UserName-Password.csv</code>；然后，再约定数据源文件需要与当前<code>YAML/JSON</code>测试用例文件放置在同一个目录。</p>
+<p>经过第三轮简化，配置描述方式变为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span></div><div class="line"><span class="attr">            select_next_row:</span> Random</div><div class="line"><span class="attr">        - UserName-Password:</span></div><div class="line"><span class="attr">            select_next_row:</span> Sequential</div></pre></td></tr></table></figure>
+<p>同时该用例文件同级目录下的数据源文件名称为<code>Keyword.csv</code>和<code>UserName-Password.csv</code>。</p>
+<p>现在，我们就只剩下<code>select_next_row</code>一个配置项了。既然是只剩一项，那就也省略配置项名称吧。</p>
+<p>最终，我们的配置描述方式变为：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo for data driven."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - Keyword:</span> Random</div><div class="line"><span class="attr">        - UserName-Password:</span> Sequential</div></pre></td></tr></table></figure>
+<p>不过，我们还忽略了一个信息，那就是脚本的运行次数。假如参数取值都是采用<code>Sequential</code>的方式，那么我们可以将不同组参数进行笛卡尔积的组合，这是一个有限次数，可以作为自动化测试运行终止的条件；但如果参数取值采用<code>Random</code>的方式，即每次都是在参数列表里面随机取值，那么就不好界定自动化测试运行终止的条件了，我们只能手动进行终止，或者事先指定运行的总次数，不管是采用哪种方式，都会比较麻烦。</p>
+<p>针对参数取值采用<code>Random</code>方式的这个问题，我们不妨换个思路。从数据驱动的角度来看，我们期望在自动化测试时能遍历数据源文件中的所有数据，那么重复采用相同参数进行测试的意义就不大了。因此，在选择<code>Random</code>的取值方式时，我们可以先将参数列表进行乱序排序，然后采用顺序的方式进行遍历；对于存在多组参数的情况，也可以实现乱序排序后再进行笛卡尔积的组合方式了。</p>
+<p>到此为止，我们的参数化配置方式应该算是十分简洁了，而且在功能上也能满足常规参数化的配置需求。</p>
+<p>最后，我们再回过头来看脚本参数化设计思路的演变历程，基本上都可以概括为<code>约定大于配置</code>，这的确也是<code>HttpRunner</code>崇尚和遵循的准则。</p>
+<h2 id="开发实现"><a href="#开发实现" class="headerlink" title="开发实现"></a>开发实现</h2><p>设计思路理顺了，实现起来就比较简单了，点击此处查看<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d" target="_blank" rel="external">相关代码</a>，就会发现实际的代码量并不多。</p>
+<p>在这里我就只挑几个典型的点讲下。</p>
+<h3 id="数据源格式约定"><a href="#数据源格式约定" class="headerlink" title="数据源格式约定"></a>数据源格式约定</h3><p>既然是参数化，那么肯定会存在数据源的问题，我们约定采用<code>.csv</code>文件格式来存储参数列表。同时，在同一个测试场景中可能会存在多个参数的情况，为了降低问题的复杂度，我们可以约定独立参数存放在独立的<code>.csv</code>文件中，多个具有关联性的参数存放在一个<code>.csv</code>文件中。另外，我们同时约定在<code>.csv</code>文件中的第一行必须为参数名称，并且要与文件名保持一致；从第二行开始为参数值，每个值占一行。</p>
+<p>例如，<code>keyword</code>这种独立的参数就可以存放在<code>keyword.csv</code>中，内容形式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">keyword</div><div class="line">hello</div><div class="line">world</div><div class="line">debugtalk</div></pre></td></tr></table></figure>
+<p><code>username</code>和<code>password</code>这种具有关联性的参数就可以存放在<code>username-password.csv</code>中，内容形式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">username,password</div><div class="line">test1,111111</div><div class="line">test2,222222</div><div class="line">test3,333333</div></pre></td></tr></table></figure>
+<h3 id="csv-解析器"><a href="#csv-解析器" class="headerlink" title="csv 解析器"></a>csv 解析器</h3><p>数据源的格式约定好了，我们要想进行读取，那么就得有一个对应的解析器。因为我们后续想要遍历每一行数据，并且还会涉及到多个参数进行组合的情况，因此我们希望解析出来的每一行数据应该同时包含参数名称和参数值。</p>
+<p>于是，我们的数据结构就约定采用<code>list of dict</code>的形式。即每一个<code>.csv</code>文件解析后会得到一个列表（list），而列表中的每一个元素为一个字典结构（dict），对应着一行数据的参数名称和参数值。具体实现的代码函数为<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d#diff-1ef6376047562e36a304745bca9ade9aR47" target="_blank" rel="external"><code>_load_csv_file</code></a>。</p>
+<p>例如，上面的<code>username-password.csv</code>经过解析，会生成如下形式的数据结构。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">    &#123;'username': 'test1', 'password': '111111'&#125;,</div><div class="line">    &#123;'username': 'test2', 'password': '222222'&#125;,</div><div class="line">    &#123;'username': 'test3', 'password': '333333'&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>这里还会涉及到一个问题，就是参数取值顺序。</p>
+<p>在<code>YAML/JSON</code>测试用例中，我们会配置参数的取值顺序，是要顺序取值（<code>Sequential</code>）还是乱序随机取值（<code>Random</code>）。对于顺序的情况没啥好说的，默认从<code>.csv</code>文件中读取出的内容就是顺序的；对于随机取值，更确切地说，应该是乱序取值，我们需要进行一次乱序排序，实现起来也很简单，使用<code>random.shuffle</code>函数即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> fetch_method.lower() == <span class="string">"random"</span>:</div><div class="line">    random.shuffle(csv_content_list)</div></pre></td></tr></table></figure>
+<h3 id="多个参数的组合"><a href="#多个参数的组合" class="headerlink" title="多个参数的组合"></a>多个参数的组合</h3><p>然后，对于多个参数的情况，为了组合出所有可能的情况，我们就需要用到笛卡尔积的概念。直接看例子可能会更好理解些。</p>
+<p>例如我们在用例场景中具有三个参数，<code>a</code>为独立参数，参数列表为[1, 2]；<code>x</code>和<code>y</code>为关联参数，参数列表为[[111,112], [121,122]]；经过解析后，得到的数据分别为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">a:</div><div class="line">[&#123;&quot;a&quot;: 1&#125;, &#123;&quot;a&quot;: 2&#125;]</div><div class="line"></div><div class="line">x &amp; y:</div><div class="line">[</div><div class="line">    &#123;&quot;x&quot;: 111, &quot;y&quot;: 112&#125;,</div><div class="line">    &#123;&quot;x&quot;: 121, &quot;y&quot;: 122&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>那么经过笛卡尔积，就可以组合出4种情况，组合后的结果应该为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">    &#123;'a': 1, 'x': 111, 'y': 112&#125;,</div><div class="line">    &#123;'a': 1, 'x': 121, 'y': 122&#125;,</div><div class="line">    &#123;'a': 2, 'x': 111, 'y': 112&#125;,</div><div class="line">    &#123;'a': 2, 'x': 121, 'y': 122&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>这里需要强调的是，多个参数经过笛卡尔积运算转换后，仍然是<code>list of dict</code>的数据结构，列表中的每一个字典（dict）代表着参数的一种组合情况。</p>
+<h3 id="参数化数据驱动"><a href="#参数化数据驱动" class="headerlink" title="参数化数据驱动"></a>参数化数据驱动</h3><p>现在，我们已经实现了在<code>YAML/JSON</code>测试用例文件中对参数进行配置，从<code>.csv</code>数据源文件中解析出参数列表，并且生成所有可能的组合情况。最后还差一步，就是如何使用参数值来驱动测试用例的执行。</p>
+<p>听上去很高大上，但实际却异常简单，直接对照着<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d#diff-fe4aef5754006b3e9100eb41eb3ca28cR57" target="_blank" rel="external">代码</a>来说吧。</p>
+<p><img src="/images/httprunner-parameterize.jpg" alt=""></p>
+<p>对于每一组参数组合情况来说，我们完全可以将其视为当前用例集运行时定义的变量值。而在 HttpRunner 中每一次运行测试用例集的时候都需要对<code>runner.Runner</code>做一次初始化，里面会用到定义的变量（即<code>config_dict[&quot;variables&quot;]</code>），那么，我们完全可以在每次初始化的时候将组合好的参数作为变量传进去，假如存在同名的变量，就进行覆盖。</p>
+<p>这样一来，我们就可以使用所有的参数组合情况来依次驱动测试用例的执行，并且每次执行时都采用了不同的参数，从而也就实现了参数化数据驱动的目的。</p>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>最后我们再来看下实际的运行效果吧。</p>
+<p>假设我们有一个获取token的接口，我们需要使用 user_agent 和 app_version 这两个参数来进行参数化数据驱动。</p>
+<p>YAML 测试用例的描述形式如下所示：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"user management testset."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - user_agent:</span> Random</div><div class="line"><span class="attr">        - app_version:</span> Sequential</div><div class="line"><span class="attr">    variables:</span></div><div class="line"><span class="attr">        - user_agent:</span> <span class="string">'iOS/10.3'</span></div><div class="line"><span class="attr">        - device_sn:</span> $&#123;gen_random_string(<span class="number">15</span>)&#125;</div><div class="line"><span class="attr">        - os_platform:</span> <span class="string">'ios'</span></div><div class="line"><span class="attr">        - app_version:</span> <span class="string">'2.8.6'</span></div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        base_url:</span> $BASE_URL</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Content-Type:</span> application/json</div><div class="line"><span class="attr">            device_sn:</span> $device_sn</div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token with $user_agent and $app_version</div><div class="line"><span class="attr">    api:</span> get_token($user_agent, $device_sn, $os_platform, $app_version)</div><div class="line"><span class="attr">    extract:</span></div><div class="line"><span class="attr">        - token:</span> content.token</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="attr">        - "eq":</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - "len_eq":</span> [<span class="string">"content.token"</span>, <span class="number">16</span>]</div></pre></td></tr></table></figure>
+<p>其中，user_agent 和 app_version 的数据源列表分别为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">user_agent</div><div class="line">iOS/10.1</div><div class="line">iOS/10.2</div><div class="line">iOS/10.3</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">app_version</div><div class="line">2.8.5</div><div class="line">2.8.6</div></pre></td></tr></table></figure>
+<p>那么，经过笛卡尔积组合，应该总共有6种参数组合情况，并且 user_agent 为乱序取值，app_version 为顺序取值。</p>
+<p>最终的测试结果如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ hrun tests/data/demo_parameters.yml</div><div class="line"></div><div class="line">Running tests...</div><div class="line">----------------------------------------------------------------------</div><div class="line"> get token with iOS/10.2 and 2.8.5 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 13 ms, response_length: 46 bytes</div><div class="line">OK (0.014845)s</div><div class="line"> get token with iOS/10.2 and 2.8.6 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 2 ms, response_length: 46 bytes</div><div class="line">OK (0.003909)s</div><div class="line"> get token with iOS/10.1 and 2.8.5 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 3 ms, response_length: 46 bytes</div><div class="line">OK (0.004090)s</div><div class="line"> get token with iOS/10.1 and 2.8.6 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 5 ms, response_length: 46 bytes</div><div class="line">OK (0.006673)s</div><div class="line"> get token with iOS/10.3 and 2.8.5 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 3 ms, response_length: 46 bytes</div><div class="line">OK (0.004775)s</div><div class="line"> get token with iOS/10.3 and 2.8.6 ... INFO:root: Start to POST http://127.0.0.1:5000/api/get-token</div><div class="line">INFO:root: status_code: 200, response_time: 3 ms, response_length: 46 bytes</div><div class="line">OK (0.004846)s</div><div class="line">----------------------------------------------------------------------</div><div class="line">Ran 6 tests in 0.046s</div></pre></td></tr></table></figure>
+<p>至此，我们就已经实现了参数化数据驱动的需求。对于测试用例中参数的描述形式，大家要是发现还有更加简洁优雅的方式，欢迎反馈给我。</p>
+<p>最后，本文发表于 2018 年大年初一，祝大家新年快乐，狗年旺旺旺！</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HttpRunner/">HttpRunner</a><a href="/tags/Parameter/">Parameter</a><a href="/tags/Data-Driven/">Data-Driven</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/httprunner-data-driven/" data-title="HttpRunner 实现参数化数据驱动机制 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/test-dev-in-dji/" title="在大疆做测试开发是一种什么体验？">
+  <strong>上一篇：</strong><br/>
+  <span>
+  在大疆做测试开发是一种什么体验？</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/HttpRunner-skip-feature/"  title="HttpRunner 通过 skip 机制实现对测试用例的分组执行控制">
+ <strong>下一篇：</strong><br/> 
+ <span>HttpRunner 通过 skip 机制实现对测试用例的分组执行控制
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#借鉴-LoadRunner-的数据参数化"><span class="toc-number">2.</span> <span class="toc-text">借鉴 LoadRunner 的数据参数化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思路演变历程"><span class="toc-number">3.</span> <span class="toc-text">设计思路演变历程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发实现"><span class="toc-number">4.</span> <span class="toc-text">开发实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据源格式约定"><span class="toc-number">4.1.</span> <span class="toc-text">数据源格式约定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#csv-解析器"><span class="toc-number">4.2.</span> <span class="toc-text">csv 解析器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多个参数的组合"><span class="toc-number">4.3.</span> <span class="toc-text">多个参数的组合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数化数据驱动"><span class="toc-number">4.4.</span> <span class="toc-text">参数化数据驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效果展示"><span class="toc-number">5.</span> <span class="toc-text">效果展示</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

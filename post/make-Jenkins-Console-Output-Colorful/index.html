@@ -1,0 +1,640 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Jenkins的输出日志也可以变得色色的 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在《使用Jenkins实现持续集成构建检查》一文中，写到了这么一段话：  在这里，我们还可以通过–disable_output_color开关将输出日志的颜色关闭。之所以实现这么一个功能，是因为在Jenkins中本来也无法显示颜色，但是如果还将Terminal中有颜色的日志内容输出到Jenkins中，就会出现一些额外的字符，比较影响日志的美观。  非常感谢热心的读者，及时地为我纠正了这一点。事实上">
+<meta name="keywords" content="Jenkins,Console,Plugin,ANSI escape sequences">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins的输出日志也可以变得色色的">
+<meta property="og:url" content="http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在《使用Jenkins实现持续集成构建检查》一文中，写到了这么一段话：  在这里，我们还可以通过–disable_output_color开关将输出日志的颜色关闭。之所以实现这么一个功能，是因为在Jenkins中本来也无法显示颜色，但是如果还将Terminal中有颜色的日志内容输出到Jenkins中，就会出现一些额外的字符，比较影响日志的美观。  非常感谢热心的读者，及时地为我纠正了这一点。事实上">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/Jenkins_Color_ANSI_Console_Output.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Jenkins_Console_Output_Colored.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/Terminal_Output_Colored.jpg">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jenkins的输出日志也可以变得色色的">
+<meta name="twitter:description" content="在《使用Jenkins实现持续集成构建检查》一文中，写到了这么一段话：  在这里，我们还可以通过–disable_output_color开关将输出日志的颜色关闭。之所以实现这么一个功能，是因为在Jenkins中本来也无法显示颜色，但是如果还将Terminal中有颜色的日志内容输出到Jenkins中，就会出现一些额外的字符，比较影响日志的美观。  非常感谢热心的读者，及时地为我纠正了这一点。事实上">
+<meta name="twitter:image" content="http://debugtalk.com/images/Jenkins_Color_ANSI_Console_Output.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/make-Jenkins-Console-Output-Colorful/" title="Jenkins的输出日志也可以变得色色的" itemprop="url">Jenkins的输出日志也可以变得色色的</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-08-14T16:00:00.000Z" itemprop="datePublished"> Published 2016-08-15</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装-amp-amp-配置"><span class="toc-number">1.</span> <span class="toc-text">安装 &amp;&amp; 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效果图"><span class="toc-number">2.</span> <span class="toc-text">效果图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#补充说明"><span class="toc-number">3.</span> <span class="toc-text">补充说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ANSI-escape-sequences"><span class="toc-number">4.</span> <span class="toc-text">ANSI escape sequences</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码示例"><span class="toc-number">5.</span> <span class="toc-text">代码示例</span></a></li></ol>
+		
+		</div>
+		
+		<p>在《<a href="/post/Jenkins-CI-Automation-Test/">使用Jenkins实现持续集成构建检查</a>》一文中，写到了这么一段话：</p>
+<blockquote>
+<p>在这里，我们还可以通过–disable_output_color开关将输出日志的颜色关闭。之所以实现这么一个功能，是因为在Jenkins中本来也无法显示颜色，但是如果还将Terminal中有颜色的日志内容输出到Jenkins中，就会出现一些额外的字符，比较影响日志的美观。</p>
+</blockquote>
+<p>非常感谢热心的读者，及时地为我纠正了这一点。事实上，当前在Jenkins中，是可以通过安装插件来实现在输出日志中显示颜色的。</p>
+<p>这个插件就是<code>AnsiColor</code>。</p>
+<h2 id="安装-amp-amp-配置"><a href="#安装-amp-amp-配置" class="headerlink" title="安装 &amp;&amp; 配置"></a>安装 &amp;&amp; 配置</h2><p>安装的方式很简单，【Manage Jenkins】-&gt;【Manage Plugins】，搜索<code>AnsiColor</code>进行安装即可。</p>
+<p>安装完成后，在Jenkins Project的<code>Configure</code>页面中，<code>Build Environment</code>栏目下会多出<code>Color ANSI Console Output</code>配置项，勾选后即可开启颜色输出配置。</p>
+<p><img src="/images/Jenkins_Color_ANSI_Console_Output.jpg" alt="Jenkins Color ANSI Console Output"></p>
+<p>在<code>ANSI color map</code>的列表选择框中，存在多个选项，默认情况下，选择<code>xterm</code>即可。</p>
+<p>保存配置后，再次执行构建时，就可以在<code>Console</code>中看到颜色输出了。</p>
+<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><p>使用<code>xctool</code>命令编译iOS应用时，在Jenkins的<code>Console output</code>中会看到和<code>Terminal</code>中一样的颜色效果。</p>
+<p><img src="/images/Jenkins_Console_Output_Colored.jpg" alt="Jenkins Console Output Colored"></p>
+<h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><p>需要说明的是，在输出日志中显示颜色，依赖于输出的日志本身。也就是说，如果输出日志时并没有<code>ANSI escape sequences</code>，那么安装该插件后也没有任何作用，并不会凭空给日志加上颜色。</p>
+<p>例如，如果采用<code>xcodebuild</code>命令编译iOS应用，那么输出日志就不会显示颜色。</p>
+<p>说到这里，再简单介绍下<code>ANSI escape sequences</code>。</p>
+<h2 id="ANSI-escape-sequences"><a href="#ANSI-escape-sequences" class="headerlink" title="ANSI escape sequences"></a>ANSI escape sequences</h2><p><a href="https://en.wikipedia.org/wiki/ANSI_escape_code" target="_blank" rel="external"><code>ANSI escape sequences</code></a>，也叫<code>ANSI escape codes</code>，主要是用于对Terminal中的文本字符进行颜色的控制，包括字符背景颜色和字符颜色。</p>
+<p>使用方式如下：</p>
+<p><code>33[字符背景颜色;字符颜色m{String}33[0m</code></p>
+<p>其中，<code>33[字符背景颜色;字符颜色m</code>是开始标识，<code>33[0m</code>是结束标识，<code>{String}</code>是原始文本内容。通过这种形式，就可以对输出的文本颜色进行控制。</p>
+<p>具体地，字符颜色和字符背景颜色的编码如下：</p>
+<p>字符颜色（foreground color）：30~37</p>
+<ul>
+<li>30:黑</li>
+<li>31:红</li>
+<li>32:绿</li>
+<li>33:黄</li>
+<li>34:蓝色</li>
+<li>35:紫色</li>
+<li>36:深绿</li>
+<li>37:白色</li>
+</ul>
+<p>字符背景颜色（background color）：40~47</p>
+<ul>
+<li>40:黑</li>
+<li>41:深红</li>
+<li>42:绿</li>
+<li>43:黄色</li>
+<li>44:蓝色</li>
+<li>45:紫色</li>
+<li>46:深绿</li>
+<li>47:白色</li>
+</ul>
+<p>需要说明的是，字符背景颜色和字符颜色并非必须同时设置，也可以只设置一项。</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>掌握了以上概念后，我们就可以通过对打印日志的代码进行一点调整，然后就可以让输出的日志更加美观了。</p>
+<p>以Ruby为例，在<code>Sting</code>基础类中添加一些展示颜色的方法。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">String</span></span></div><div class="line">  <span class="comment"># colorization</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">colorize</span><span class="params">(color_code)</span></span></div><div class="line">    <span class="string">"\e[<span class="subst">#&#123;color_code&#125;</span>m<span class="subst">#&#123;<span class="keyword">self</span>&#125;</span>\e[0m"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">red</span></span></div><div class="line">    colorize(<span class="number">31</span>)</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">green</span></span></div><div class="line">    colorize(<span class="number">32</span>)</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">yellow</span></span></div><div class="line">    colorize(<span class="number">33</span>)</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>然后，我们在打印日志时就可以通过如下方式来控制日志的颜色了。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 步骤执行正常，输出为绿色</span></div><div class="line">step_action_desc += <span class="string">"    ...    ✓"</span></div><div class="line">puts step_action_desc.green</div><div class="line"></div><div class="line"><span class="comment"># 步骤执行异常，输出为红色</span></div><div class="line">step_action_desc += <span class="string">"    ...    ✖"</span></div><div class="line">puts step_action_desc.red</div></pre></td></tr></table></figure>
+<p>展示效果如下图所示。</p>
+<p><img src="/images/Terminal_Output_Colored.jpg" alt="Terminal Output Colored"></p>
+<p>是不是好看多了？</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Jenkins/">Jenkins</a><a href="/tags/Console/">Console</a><a href="/tags/Plugin/">Plugin</a><a href="/tags/ANSI-escape-sequences/">ANSI escape sequences</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/" data-title="Jenkins的输出日志也可以变得色色的 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/build-ideal-app-automation-test-framework/" title="打造心目中理想的自动化测试框架（AppiumBooster）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  打造心目中理想的自动化测试框架（AppiumBooster）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/Jenkins-CI-Automation-Test/"  title="使用Jenkins实现持续集成构建检查">
+ <strong>下一篇：</strong><br/> 
+ <span>使用Jenkins实现持续集成构建检查
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装-amp-amp-配置"><span class="toc-number">1.</span> <span class="toc-text">安装 &amp;&amp; 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#效果图"><span class="toc-number">2.</span> <span class="toc-text">效果图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#补充说明"><span class="toc-number">3.</span> <span class="toc-text">补充说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ANSI-escape-sequences"><span class="toc-number">4.</span> <span class="toc-text">ANSI escape sequences</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码示例"><span class="toc-number">5.</span> <span class="toc-text">代码示例</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

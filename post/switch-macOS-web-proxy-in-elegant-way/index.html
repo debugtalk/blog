@@ -1,0 +1,618 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>如何优雅地一键实现macOS网络代理切换 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在macOS中配置Web代理时，通常的做法是在控制面板中进行操作，System Preferences -&amp;gt; Network -&amp;gt; Advanced -&amp;gt; Proxies.  这种配置方式虽然可以实现需求，但缺点在于操作比较繁琐，特别是在需要频繁切换的情况下，效率极其低下。 基于该痛点，我们希望能避免重复操作，实现快速切换配置。 Terminal中实现网络代理配置要避免在GUI进">
+<meta name="keywords" content="Locust,Web proxy,Shuttle,mitmproxy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何优雅地一键实现macOS网络代理切换">
+<meta property="og:url" content="http://debugtalk.com/post/switch-macOS-web-proxy-in-elegant-way/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在macOS中配置Web代理时，通常的做法是在控制面板中进行操作，System Preferences -&amp;gt; Network -&amp;gt; Advanced -&amp;gt; Proxies.  这种配置方式虽然可以实现需求，但缺点在于操作比较繁琐，特别是在需要频繁切换的情况下，效率极其低下。 基于该痛点，我们希望能避免重复操作，实现快速切换配置。 Terminal中实现网络代理配置要避免在GUI进">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/macOS-Web-Proxy-Setting.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/shuttle-preview.png">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何优雅地一键实现macOS网络代理切换">
+<meta name="twitter:description" content="在macOS中配置Web代理时，通常的做法是在控制面板中进行操作，System Preferences -&amp;gt; Network -&amp;gt; Advanced -&amp;gt; Proxies.  这种配置方式虽然可以实现需求，但缺点在于操作比较繁琐，特别是在需要频繁切换的情况下，效率极其低下。 基于该痛点，我们希望能避免重复操作，实现快速切换配置。 Terminal中实现网络代理配置要避免在GUI进">
+<meta name="twitter:image" content="http://debugtalk.com/images/macOS-Web-Proxy-Setting.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/switch-macOS-web-proxy-in-elegant-way/" title="如何优雅地一键实现macOS网络代理切换" itemprop="url">如何优雅地一键实现macOS网络代理切换</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-11-23T16:00:00.000Z" itemprop="datePublished"> Published 2016-11-24</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Terminal中实现网络代理配置"><span class="toc-number">1.</span> <span class="toc-text">Terminal中实现网络代理配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取系统已有的网络服务"><span class="toc-number">1.1.</span> <span class="toc-text">获取系统已有的网络服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启Web代理"><span class="toc-number">1.2.</span> <span class="toc-text">开启Web代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关闭Web代理"><span class="toc-number">1.3.</span> <span class="toc-text">关闭Web代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结合Shuttle实现一键配置"><span class="toc-number">2.</span> <span class="toc-text">结合Shuttle实现一键配置</span></a></li></ol>
+		
+		</div>
+		
+		<p>在<code>macOS</code>中配置Web代理时，通常的做法是在控制面板中进行操作，<code>System Preferences</code> -&gt; <code>Network</code> -&gt; <code>Advanced</code> -&gt; <code>Proxies</code>.</p>
+<p><img src="/images/macOS-Web-Proxy-Setting.jpg" alt="macOS-Web-Proxy-Setting"></p>
+<p>这种配置方式虽然可以实现需求，但缺点在于操作比较繁琐，特别是在需要频繁切换的情况下，效率极其低下。</p>
+<p>基于该痛点，我们希望能避免重复操作，实现快速切换配置。</p>
+<h2 id="Terminal中实现网络代理配置"><a href="#Terminal中实现网络代理配置" class="headerlink" title="Terminal中实现网络代理配置"></a>Terminal中实现网络代理配置</h2><p>要避免在GUI进行重复的配置操作，比较好的简化方式是在Terminal中通过命令实现同样的功能。事实上，在macOS系统中的确是存在配置网络代理的命令，该命令即是<code>networksetup</code>。</p>
+<h3 id="获取系统已有的网络服务"><a href="#获取系统已有的网络服务" class="headerlink" title="获取系统已有的网络服务"></a>获取系统已有的网络服务</h3><p>首先需要明确的是，macOS系统中针对不同网络服务（<code>networkservice</code>）的配置是独立的，因此在配置Web代理时需要进行指定。</p>
+<p>而要获取系统中存在哪些网络服务，可以通过如下命令查看：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ networksetup -listallnetworkservices</div><div class="line">An asterisk (*) denotes that a network service is disabled.</div><div class="line"></div><div class="line">Wi-Fi</div><div class="line">iPhone USB</div><div class="line">Bluetooth PAN</div><div class="line">Thunderbolt Bridge</div></pre></td></tr></table></figure>
+<p>如果计算机是通过<code>Wi-Fi</code>上网的，那么我们设置网络代理时就需要对<code>Wi-Fi</code>进行设置。</p>
+<h3 id="开启Web代理"><a href="#开启Web代理" class="headerlink" title="开启Web代理"></a>开启Web代理</h3><p>通过<code>networksetup</code>命令对<code>HTTP</code>接口设置代理时，可以采用如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo networksetup -setwebproxy &lt;networkservice&gt; &lt;domain&gt; &lt;port number&gt; &lt;authenticated&gt; &lt;username&gt; &lt;password&gt;</div><div class="line"><span class="comment"># e.g. sudo networksetup -setwebproxy "Wi-Fi" 127.0.0.1 8080</span></div></pre></td></tr></table></figure>
+<p>执行该命令时，会开启系统的Web HTTP Proxy，并将Proxy设置为<code>127.0.0.1:8080</code>。</p>
+<p>如果是对<code>HTTPS</code>接口设置代理时，命令为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ networksetup -setsecurewebproxy &lt;networkservice&gt; &lt;domain&gt; &lt;port number&gt; &lt;authenticated&gt; &lt;username&gt; &lt;password&gt;</div><div class="line"><span class="comment"># e.g. sudo networksetup -setsecurewebproxy "Wi-Fi" 127.0.0.1 8080</span></div></pre></td></tr></table></figure>
+<h3 id="关闭Web代理"><a href="#关闭Web代理" class="headerlink" title="关闭Web代理"></a>关闭Web代理</h3><p>对应地，关闭<code>HTTP</code>和<code>HTTPS</code>代理的命令为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ sudo networksetup -setwebproxystate &lt;networkservice&gt; &lt;on off&gt;</div><div class="line"><span class="comment"># e.g. sudo networksetup -setwebproxystate "Wi-Fi" off</span></div><div class="line"></div><div class="line">$ networksetup -setsecurewebproxystate &lt;networkservice&gt; &lt;on off&gt;</div><div class="line"><span class="comment"># e.g. sudo networksetup -setsecurewebproxystate "Wi-Fi" off</span></div></pre></td></tr></table></figure>
+<h2 id="结合Shuttle实现一键配置"><a href="#结合Shuttle实现一键配置" class="headerlink" title="结合Shuttle实现一键配置"></a>结合Shuttle实现一键配置</h2><p>现在我们已经知道如何通过<code>networksetup</code>命令在Terminal中进行Web代理切换了，但如果每次都要重新输入命令和密码，还是会很麻烦，并没有真正地解决我们的痛点。</p>
+<p>而且在实际场景中，我们通常需要同时开启或关闭HTTP、HTTPS两种协议的网络代理，这类操作如此高频，要是还能通过点击一个按钮就实现切换，那就优雅多了。</p>
+<p>幸运的是，这种优雅的方式还真能实现，只需要结合使用<code>Shuttle</code>这么一款小工具。</p>
+<p><a href="http://fitztrev.github.io/shuttle/" target="_blank" rel="external"><code>Shuttle</code></a>，简而言之，它可以将一串命令映射到macOS顶部菜单栏的快捷方式。我们要做的很简单，只需要将要实现的任务拼接成一条串行的命令即可，然后就可以在系统菜单栏中点击按钮运行整条命令。</p>
+<p>例如，在Terminal中，要想在不手动输入<code>sudo</code>密码的情况下实现同时关闭HTTP和HTTPS的网络代理，就可以通过如下串行命令实现。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">echo</span> &lt;password&gt; | sudo -S networksetup -setwebproxystate <span class="string">'Wi-Fi'</span> off &amp;&amp; sudo networksetup -setsecurewebproxystate <span class="string">'Wi-Fi'</span> off</div></pre></td></tr></table></figure>
+<p>类似地，我们还可以实现同时开启HTTP和HTTPS网络代理，更有甚者，我们还可以实现在同时开启HTTP和HTTPS网络代理后，启动<code>mitmproxy</code>抓包工具。</p>
+<p>这一切配置都可以在Shuttle的配置文件<code>~/.shuttle.json</code>中完成。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">"hosts": [</div><div class="line">  &#123;</div><div class="line">    "mitmproxy": [</div><div class="line">      &#123;</div><div class="line">        "name": "Open mitmproxy",</div><div class="line">        "cmd": "echo &lt;password&gt; | sudo -S networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 8080 &amp;&amp; sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 8080 &amp;&amp; workon mitmproxy &amp;&amp; mitmproxy -p 8080"</div><div class="line">      &#125;</div><div class="line">    ],</div><div class="line">    "HTTP(S) Proxy": [</div><div class="line">      &#123;</div><div class="line">        "name": "Turn on HTTP(S) Proxy",</div><div class="line">        "cmd": "echo &lt;password&gt; | sudo -S networksetup -setwebproxy 'Wi-Fi' 127.0.0.1 8080 &amp;&amp; sudo networksetup -setsecurewebproxy 'Wi-Fi' 127.0.0.1 8080"</div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        "name": "Turn off HTTP(S) Proxy",</div><div class="line">        "cmd": "echo &lt;password&gt; | sudo -S networksetup -setwebproxystate 'Wi-Fi' off &amp;&amp; sudo networksetup -setsecurewebproxystate 'Wi-Fi' off"</div><div class="line">      &#125;,</div><div class="line"></div><div class="line">    ],</div><div class="line">  &#125;,</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>配置十分简洁清晰，不用解释也能看懂。完成配置后，在<code>macOS</code>顶部菜单栏中就会出现如下效果的快捷方式。</p>
+<p><img src="/images/shuttle-preview.png" alt="macOS-Web-Proxy-Setting"></p>
+<p>后续，我们就可以通过快捷方式实现一键切换HTTP(S)代理配置、一键启动<code>mitmproxy</code>抓包工具了。</p>
+<p>说到<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="external"><code>mitmproxy</code></a>这款开源的抓包工具，只能说相见恨晚，第一次使用它时就被惊艳到了，情不自禁地想给它点个赞！自从使用了<code>mitmproxy</code>，我现在基本上就不再使用<code>Fiddler</code>和<code>Charles</code>了，日常工作中HTTP(S)抓包任务全靠它搞定。</p>
+<p>哦对了，<code>mitmproxy</code>不仅可以实现抓包任务，还可以跟<a href="https://github.com/locustio/locust" target="_blank" rel="external"><code>locust</code></a>性能测试工具紧密结合，直接将抓取的数据包生成<code>locust</code>脚本啊！</p>
+<p><code>mitmproxy</code>如此强大，本文就不再多说了，后续必须得写一篇博客单独对其详细介绍。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Locust/">Locust</a><a href="/tags/Web-proxy/">Web proxy</a><a href="/tags/Shuttle/">Shuttle</a><a href="/tags/mitmproxy/">mitmproxy</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/switch-macOS-web-proxy-in-elegant-way/" data-title="如何优雅地一键实现macOS网络代理切换 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/my-2016-summary/" title="我的 2016 年终总结">
+  <strong>上一篇：</strong><br/>
+  <span>
+  我的 2016 年终总结</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/locustplus-talk-about-performance-test/"  title="【LocustPlus序】漫谈服务端性能测试">
+ <strong>下一篇：</strong><br/> 
+ <span>【LocustPlus序】漫谈服务端性能测试
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Terminal中实现网络代理配置"><span class="toc-number">1.</span> <span class="toc-text">Terminal中实现网络代理配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取系统已有的网络服务"><span class="toc-number">1.1.</span> <span class="toc-text">获取系统已有的网络服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启Web代理"><span class="toc-number">1.2.</span> <span class="toc-text">开启Web代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关闭Web代理"><span class="toc-number">1.3.</span> <span class="toc-text">关闭Web代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结合Shuttle实现一键配置"><span class="toc-number">2.</span> <span class="toc-text">结合Shuttle实现一键配置</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

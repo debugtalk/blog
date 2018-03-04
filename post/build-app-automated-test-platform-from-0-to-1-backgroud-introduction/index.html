@@ -1,0 +1,643 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="背景最近新加入某项目组（以下均已M指代），需要从零开始搭建功能自动化测试平台。 简单地说，M是一个典型的移动互联网产品，客户端包括iOS和Android，并在app中通过WebView嵌入了H5，后端基于Ruby on Rails实现。 当前阶段，M项目除了Rails Server端采用Jenkins+RSpec实现了部分的持续集成功能外，客户端部分的部署和测试工作都还是完全依赖于手工操作。 基于">
+<meta name="keywords" content="AutomationTest,Appium,F0T1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划">
+<meta property="og:url" content="http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="背景最近新加入某项目组（以下均已M指代），需要从零开始搭建功能自动化测试平台。 简单地说，M是一个典型的移动互联网产品，客户端包括iOS和Android，并在app中通过WebView嵌入了H5，后端基于Ruby on Rails实现。 当前阶段，M项目除了Rails Server端采用Jenkins+RSpec实现了部分的持续集成功能外，客户端部分的部署和测试工作都还是完全依赖于手工操作。 基于">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/DebugTalk_Plus_Automated_Test_Platform.jpg">
+<meta property="og:updated_time" content="2017-11-14T16:24:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划">
+<meta name="twitter:description" content="背景最近新加入某项目组（以下均已M指代），需要从零开始搭建功能自动化测试平台。 简单地说，M是一个典型的移动互联网产品，客户端包括iOS和Android，并在app中通过WebView嵌入了H5，后端基于Ruby on Rails实现。 当前阶段，M项目除了Rails Server端采用Jenkins+RSpec实现了部分的持续集成功能外，客户端部分的部署和测试工作都还是完全依赖于手工操作。 基于">
+<meta name="twitter:image" content="http://debugtalk.com/images/DebugTalk_Plus_Automated_Test_Platform.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/" title="从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划" itemprop="url">从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-05-19T16:00:00.000Z" itemprop="datePublished"> Published 2016-05-20</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动化测试框架的选择"><span class="toc-number">2.</span> <span class="toc-text">自动化测试框架的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appium简介"><span class="toc-number">3.</span> <span class="toc-text">Appium简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境准备（iOS）"><span class="toc-number">4.</span> <span class="toc-text">环境准备（iOS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Appium"><span class="toc-number">5.</span> <span class="toc-text">安装Appium</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#To-be-continued-…"><span class="toc-number">6.</span> <span class="toc-text">To be continued …</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近新加入某项目组（以下均已M指代），需要从零开始搭建功能自动化测试平台。</p>
+<p>简单地说，M是一个典型的移动互联网产品，客户端包括iOS和Android，并在app中通过WebView嵌入了H5，后端基于Ruby on Rails实现。</p>
+<p>当前阶段，M项目除了Rails Server端采用Jenkins+RSpec实现了部分的持续集成功能外，客户端部分的部署和测试工作都还是完全依赖于手工操作。</p>
+<p>基于当前项目的开发模式，我对整个M项目实现持续集成自动化测试的架构流程进行了规划，初步计划的架构图如下图所示。最终的目标是希望能实现：不管是Rails Server，还是App(iOS/Android)，以及H5，当任意部分存在代码提交时，系统能自动拉取最新代码进行部署并执行自动化回归测试，及时地将执行情况反馈给开发人员。</p>
+<p><img src="/images/DebugTalk_Plus_Automated_Test_Platform.jpg" alt=""></p>
+<p>目标确定后，便是分阶段进行实现，需要开发的模块包括：</p>
+<ul>
+<li>自动化测试平台（Automated Test Platform）：满足iOS/Android/H5的自动化功能测试，包括模拟器和真机的测试；</li>
+<li>测试管理平台（Test Management Platform）：实现自动化测试用例管理、手动下发测试任务、测试结果报表展现、Dashboard等功能；</li>
+<li>打包平台（Pack System）：实现iOS/Android的自动化构建；</li>
+<li>服务端自动化测试（Rails）：将服务端Rails的自动化测试接入测试管理平台；</li>
+<li>持续集成流程打通：对Jenkins进行二次开发，与测试管理平台打通，实现全流程的持续集成自动化测试。</li>
+</ul>
+<p>而本系列教程，《从0到1搭建移动App功能自动化测试平台》，便是对整个实践过程的一个记录。</p>
+<p>需要说明的是，之前我个人的工作经历主要在服务端性能测试、Android客户端性能测试（测试开发）方向，对于客户端的自动化测试基本上没有经验积累，特别是iOS系统的测试，以前更是完全没有接触过。因此本系列教程只能算是个人在探索路上的学习总结和记录，可能会存在一些错误的观点，还请前辈们多多指教。</p>
+<h2 id="自动化测试框架的选择"><a href="#自动化测试框架的选择" class="headerlink" title="自动化测试框架的选择"></a>自动化测试框架的选择</h2><p>在愿景图中，绿色方框（Automated Test Platform）负责移动应用客户端（iOS/Android/H5）自动化测试的调度和执行，是整个自动化测试平台的核心。</p>
+<p>因此，在搭建自动化测试平台之前，首先需要选择一个合适的自动化测试框架。</p>
+<p>对于移动应用的自动化测试框架，当前市面上已经有很多成熟的开源项目。针对当前项目的实际情况，我主要参考如下选择标准：</p>
+<ul>
+<li>同时支持iOS、Android、H5，且尽量能保持接口统一，减少开发维护成本；</li>
+<li>编程语言支持Python/Ruby；</li>
+<li>用户量大，文档丰富。</li>
+</ul>
+<p>经过筛选，Appium无疑是最佳的选择。</p>
+<h2 id="Appium简介"><a href="#Appium简介" class="headerlink" title="Appium简介"></a>Appium简介</h2><p>对于Appium的详细介绍，大家可参考<a href="http://appium.io/" target="_blank" rel="external">Appium</a>官方文档，我就不再重复引用。</p>
+<p>不过对于Appium，仍然有几点很赞的理念值得强调。</p>
+<ul>
+<li>采用Appium时，无需对被测应用做任何修改，也无需嵌入任何东西；</li>
+<li>Appium对iOS和Android的原生自动化测试框架进行了封装，并提供了统一的API（WebDriver API），减少了自动化测试代码的维护工作量；</li>
+<li>Appium采用Client-Server的架构设计，并采用标准的HTTP通信协议；Server端负责与iOS/Android原生测试框架交互，无需测试人员关注细节实现；Client端基本上可以采用任意主流编程语言编写测试用例，减少了学习成本。</li>
+</ul>
+<h2 id="环境准备（iOS）"><a href="#环境准备（iOS）" class="headerlink" title="环境准备（iOS）"></a>环境准备（iOS）</h2><p>在Appium中测试iOS时，依赖于Apple开发环境，因此，在运行Appium之前需要先确保如下环境安装正确。</p>
+<ul>
+<li>Mac OS X &gt;= 10.7</li>
+<li>XCode &gt;= 4.6.3</li>
+<li>Apple Developer Tools (iPhone simulator SDK, command line tools)</li>
+</ul>
+<p>如上几个环境安装比较简单，直接在Apple Store中安装即可。</p>
+<p>在安装Appium之前，为了确保Appium的相关依赖已经准备就绪，可以使用<code>appium-doctor</code>来进行验证。</p>
+<p><a href="https://github.com/appium/appium-doctor" target="_blank" rel="external"><code>appium-doctor</code></a>是一个用于验证appium安装环境的工具，可以诊断出<code>Node/iOS/Android</code>环境配置方面的常见问题。</p>
+<p><code>appium-doctor</code>采用<code>node.js</code>编写，采用<code>npm</code>即可在Terminal中进行安装：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install appium-doctor -g</div></pre></td></tr></table></figure>
+<p>安装完毕后，执行<code>appium-doctor</code>命令即可对<code>Appium</code>的环境依赖情况进行检测；指定<code>--ios</code>时只针对iOS环境配置进行检测，指定<code>--android</code>参数时只针对Android环境配置进行检测，若不指定则同时对iOS和Android环境进行检测。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ appium-doctor --ios</div><div class="line">info AppiumDoctor <span class="comment">### Diagnostic starting ###</span></div><div class="line">info AppiumDoctor  ✔ Xcode is installed at: /Applications/Xcode.app/Contents/Developer</div><div class="line">info AppiumDoctor  ✔ Xcode Command Line Tools are installed.</div><div class="line">info AppiumDoctor  ✔ DevToolsSecurity is enabled.</div><div class="line">info AppiumDoctor  ✔ The Authorization DB is <span class="built_in">set</span> up properly.</div><div class="line">info AppiumDoctor  ✔ The Node.js binary was found at: /usr/<span class="built_in">local</span>/bin/node</div><div class="line">info AppiumDoctor  ✔ HOME is <span class="built_in">set</span> to: /Users/Leo</div><div class="line">info AppiumDoctor <span class="comment">### Diagnostic completed, no fix needed. ###</span></div><div class="line">info AppiumDoctor</div><div class="line">info AppiumDoctor Everything looks good, <span class="built_in">bye</span>!</div><div class="line">info AppiumDoctor</div></pre></td></tr></table></figure>
+<p>若检测结果全部通过，则说明Appium的相关依赖已经准备就绪，接下来可以继续安装Appium。</p>
+<h2 id="安装Appium"><a href="#安装Appium" class="headerlink" title="安装Appium"></a>安装Appium</h2><p>根据前面的介绍，Appium采用Client-Server的架构设计，因此安装Appium时需要分别安装Server部分和Client部分。</p>
+<p>通常情况下，我们说的Appium都是指代的Server部分。Appium的安装有多种方式：可以通过源码编译安装，也可以在Terminal中通过<code>npm</code>命令安装，另一种是直接下载<a href="https://github.com/appium/appium/releases" target="_blank" rel="external"><code>appium.dmg</code></a>后安装应用程序。</p>
+<p>在这里推荐运行<code>Appium app</code>的方式，除了GUI界面操作更直观以外，更重要的一个原因是，相比于命令行运行方式，<code>Appium app</code>多了一个<code>Inspector</code>模块，可以调用模拟器运行被测应用程序，并且可以很方便地在预览页面中查看UI元素的层级结构和详细控件属性，极大地提高编写测试脚本的效率。</p>
+<p>至于Client部分，其实我们原本可以不安装任何东西，只需要任意选择一门开发语言，然后直接基于WebDriver的C/S协议（JSON Wire Protocol）即可编写自动化测试代码。但是这样做的话工作量会比较大，因为要去处理一些跟协议相关的工作。所幸Appium项目已经针对众多主流的编程语言，将底层协议处理相关的工作封装为Library，通过调用这些Library，可以极大地简化我们编写测试用例的工作量。</p>
+<p>而说的需要安装的Client部分，其实也就是安装这些Library。选定编写测试用例的语言后，我们就可以针对性地进行安装。</p>
+<p>例如，如果选择Ruby语言，那么需要安装的Library就是<code>appium_lib</code>，安装方式如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gem install appium_lib</div></pre></td></tr></table></figure>
+<p>如果选择Python语言，那么需要安装的Library就是<code>Appium-Python-Client</code>，安装方式如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pip install Appium-Python-Client</div></pre></td></tr></table></figure>
+<p>对于其它编程语言，请自行参考官方文档。</p>
+<h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>iOS的自动化测试环境已基本准备就绪了，接下来我们想做的第一件事，就是在模拟器中运行iOS应用。</p>
+<p>在下一篇文章中，我们将从clone项目源码为起点，编译生成iOS app，在Appium中调用模拟器中运行iOS app，并分享实践过程中遇到的一些坑。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/AutomationTest/">AutomationTest</a><a href="/tags/Appium/">Appium</a><a href="/tags/F0T1/">F0T1</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/" data-title="从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/" title="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">
+  <strong>上一篇：</strong><br/>
+  <span>
+  从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/Android-performance-test-start-traffic-tcpdump-wireshark/"  title="Android App持续集成性能测试：启动流量（2）">
+ <strong>下一篇：</strong><br/> 
+ <span>Android App持续集成性能测试：启动流量（2）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自动化测试框架的选择"><span class="toc-number">2.</span> <span class="toc-text">自动化测试框架的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appium简介"><span class="toc-number">3.</span> <span class="toc-text">Appium简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境准备（iOS）"><span class="toc-number">4.</span> <span class="toc-text">环境准备（iOS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Appium"><span class="toc-number">5.</span> <span class="toc-text">安装Appium</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#To-be-continued-…"><span class="toc-number">6.</span> <span class="toc-text">To be continued …</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,709 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>打造心目中理想的自动化测试框架（AppiumBooster） | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="前言做过自动化测试的人应该都会有这样一种体会，要写个自动化demo测试用例很容易，但是要真正将自动化测试落地，对成百上千的自动化测试用例实现较好的可复用性和可维护性就很难了。 基于这一痛点，我开发了AppiumBooster框架。顾名思义，AppiumBooster基于Appium实现，但更简单和易于使用；测试人员不用接触任何代码，就可以直接采用简洁优雅的方式来编写和维护自动化测试用例。 原型开发">
+<meta name="keywords" content="AutomationTest,Appium,AppiumBooster,UI Test">
+<meta property="og:type" content="article">
+<meta property="og:title" content="打造心目中理想的自动化测试框架（AppiumBooster）">
+<meta property="og:url" content="http://debugtalk.com/post/build-ideal-app-automation-test-framework/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="前言做过自动化测试的人应该都会有这样一种体会，要写个自动化demo测试用例很容易，但是要真正将自动化测试落地，对成百上千的自动化测试用例实现较好的可复用性和可维护性就很难了。 基于这一痛点，我开发了AppiumBooster框架。顾名思义，AppiumBooster基于Appium实现，但更简单和易于使用；测试人员不用接触任何代码，就可以直接采用简洁优雅的方式来编写和维护自动化测试用例。 原型开发">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/AppiumBooster_CSV_Testcase_example.jpg">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="打造心目中理想的自动化测试框架（AppiumBooster）">
+<meta name="twitter:description" content="前言做过自动化测试的人应该都会有这样一种体会，要写个自动化demo测试用例很容易，但是要真正将自动化测试落地，对成百上千的自动化测试用例实现较好的可复用性和可维护性就很难了。 基于这一痛点，我开发了AppiumBooster框架。顾名思义，AppiumBooster基于Appium实现，但更简单和易于使用；测试人员不用接触任何代码，就可以直接采用简洁优雅的方式来编写和维护自动化测试用例。 原型开发">
+<meta name="twitter:image" content="http://debugtalk.com/images/AppiumBooster_CSV_Testcase_example.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/build-ideal-app-automation-test-framework/" title="打造心目中理想的自动化测试框架（AppiumBooster）" itemprop="url">打造心目中理想的自动化测试框架（AppiumBooster）</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-09-06T16:00:00.000Z" itemprop="datePublished"> Published 2016-09-07</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UI交互基础"><span class="toc-number">2.</span> <span class="toc-text">UI交互基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#控件定位"><span class="toc-number">2.1.</span> <span class="toc-text">控件定位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#控件操作"><span class="toc-number">2.2.</span> <span class="toc-text">控件操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预期结果检查"><span class="toc-number">2.3.</span> <span class="toc-text">预期结果检查</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试用例引擎（YAML）"><span class="toc-number">3.</span> <span class="toc-text">测试用例引擎（YAML）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#steps（测试步骤描述）"><span class="toc-number">3.1.</span> <span class="toc-text">steps（测试步骤描述）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#features（功能点描述）"><span class="toc-number">3.2.</span> <span class="toc-text">features（功能点描述）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#testcases（测试用例描述）"><span class="toc-number">3.3.</span> <span class="toc-text">testcases（测试用例描述）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试用例引擎（CSV）"><span class="toc-number">4.</span> <span class="toc-text">测试用例引擎（CSV）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#testcases（测试用例描述）-1"><span class="toc-number">4.1.</span> <span class="toc-text">testcases（测试用例描述）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试用例转换器（yaml2csv）"><span class="toc-number">4.2.</span> <span class="toc-text">测试用例转换器（yaml2csv）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过程记录及结果存储"><span class="toc-number">5.</span> <span class="toc-text">过程记录及结果存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#过程记录方式"><span class="toc-number">5.1.</span> <span class="toc-text">过程记录方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试结果存储"><span class="toc-number">5.2.</span> <span class="toc-text">测试结果存储</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境初始化"><span class="toc-number">6.</span> <span class="toc-text">环境初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Appium-Server"><span class="toc-number">6.1.</span> <span class="toc-text">Appium Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iOS-Android模拟器"><span class="toc-number">6.2.</span> <span class="toc-text">iOS/Android模拟器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#增强特性"><span class="toc-number">7.</span> <span class="toc-text">增强特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Data参数化"><span class="toc-number">7.1.</span> <span class="toc-text">Data参数化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全局参数配置"><span class="toc-number">7.2.</span> <span class="toc-text">全局参数配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#optional选项"><span class="toc-number">7.3.</span> <span class="toc-text">optional选项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令行工具"><span class="toc-number">8.</span> <span class="toc-text">命令行工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#执行测试用例"><span class="toc-number">8.1.</span> <span class="toc-text">执行测试用例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试用例转换"><span class="toc-number">8.2.</span> <span class="toc-text">测试用例转换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">9.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>做过自动化测试的人应该都会有这样一种体会，要写个自动化demo测试用例很容易，但是要真正将自动化测试落地，对成百上千的自动化测试用例实现较好的可复用性和可维护性就很难了。</p>
+<p>基于这一痛点，我开发了<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="external"><code>AppiumBooster</code></a>框架。顾名思义，<code>AppiumBooster</code>基于<code>Appium</code>实现，但更简单和易于使用；测试人员不用接触任何代码，就可以直接采用简洁优雅的方式来编写和维护自动化测试用例。</p>
+<p>原型开发完毕后，我将其应用在当前所在团队的项目上，并在使用的过程中，按照自己心目中理想的自动化测试框架的模样对其进行迭代优化，最终打磨成了一个自己还算用得顺手的自动化测试框架。</p>
+<p>本文便是对<code>AppiumBooster</code>的核心特性及其设计思想进行介绍。在内容组织上，本文的各个部分相对独立，大家可直接选择自己感兴趣的部分进行阅读。</p>
+<h2 id="UI交互基础"><a href="#UI交互基础" class="headerlink" title="UI交互基础"></a>UI交互基础</h2><p>UI交互是自动化测试的基础，主要分为三部分内容：定位控件、操作控件、检测结果。</p>
+<h3 id="控件定位"><a href="#控件定位" class="headerlink" title="控件定位"></a>控件定位</h3><p>定位控件时，统一采用元素ID进行定位。这里的ID包括<code>accessibility_id</code>或<code>accessibility_label</code>，需要在iOS工程项目中预先进行设置。</p>
+<p>另外，考虑到控件可能出现延迟加载的情况，定位控件时统一执行<code>wait</code>操作；定位成功后会立即返回控件对象，定位失败时会进行等待并不断尝试定位，直到超时（30秒）后抛出异常。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wait &#123; id control_id &#125;</div></pre></td></tr></table></figure>
+<p>源码路径：<a href="https://github.com/debugtalk/AppiumBooster/blob/master/lib/pages/control.rb" target="_blank" rel="external"><code>AppiumBooster/lib/pages/control.rb</code></a></p>
+<h3 id="控件操作"><a href="#控件操作" class="headerlink" title="控件操作"></a>控件操作</h3><p>根据实践证明，UI的控件操作基本主要就是点击、输入和滑动，这三个操作基本上可以覆盖绝大多数场景。</p>
+<ul>
+<li><code>scrollToDisplay</code>: 根据指定控件的坐标位置，对屏幕进行<code>上/下/左/右</code>滑动操作，直至将指定控件展示在屏幕中</li>
+<li><code>click</code>: 通过控件ID定位到指定控件，并对指定控件进行<code>click</code>操作；若指定控件不在当前屏幕中，则先执行<code>scrollToDisplay</code>，再执行<code>click</code>操作</li>
+<li><code>type(text)</code>: 在指定控件中输入字符串；若指定控件不在当前屏幕中，则先执行<code>scrollToDisplay</code>，再执行输入操作</li>
+<li><code>tapByCoordinate</code>: 先执行<code>scrollToDisplay</code>，确保指定控件在当前屏幕中；获取指定控件的坐标值，然后对坐标进行<code>tap</code>操作</li>
+<li><code>scroll(direction)</code>: 对屏幕进行指定方向的滑动</li>
+</ul>
+<p>源码路径：<a href="https://github.com/debugtalk/AppiumBooster/blob/master/lib/pages/actions.rb" target="_blank" rel="external"><code>AppiumBooster/lib/pages/actions.rb</code></a></p>
+<h3 id="预期结果检查"><a href="#预期结果检查" class="headerlink" title="预期结果检查"></a>预期结果检查</h3><p>每次执行一步操作后，需要对执行结果进行判断，以此来确定测试用例的各个步骤是否执行成功。</p>
+<p>当前，<code>AppiumBooster</code>采用控件的ID作为检查对象，并统一封装到<code>check_elements(control_ids)</code>方法中。</p>
+<p>在实际使用过程中，需要先确定当前步骤执行完成后的跳转页面的特征控件，即当前步骤执行前不存在该控件，但执行成功后的页面中具有该控件。然后在操作步骤描述的<code>expectation</code>属性中指定特征控件的ID。</p>
+<p>具体地，在指定控件ID的时候还可以配合使用操作符（<code>!</code>,<code>||</code>,<code>&amp;&amp;</code>），以此实现多种复杂场景的检测。典型的预期结果描述形式如下：</p>
+<ul>
+<li><code>A</code>: 预期控件A存在；</li>
+<li><code>!A</code>: 预期控件A不存在；</li>
+<li><code>A||B</code>: 预期控件A或控件B至少存在一个；</li>
+<li><code>A&amp;&amp;B</code>: 预期控件A和控件B同时存在；</li>
+<li><code>A&amp;&amp;!B</code>: 预期控件A存在，但控件B不存在；</li>
+<li><code>!A&amp;&amp;!B</code>: 预期控件A和控件B都不存在。</li>
+</ul>
+<p>源码路径：<a href="https://github.com/debugtalk/AppiumBooster/blob/master/lib/pages/inner_screen.rb" target="_blank" rel="external"><code>AppiumBooster/lib/pages/inner_screen.rb</code></a></p>
+<h2 id="测试用例引擎（YAML）"><a href="#测试用例引擎（YAML）" class="headerlink" title="测试用例引擎（YAML）"></a>测试用例引擎（YAML）</h2><p>对于自动化测试而言，自动化测试用例的组织与管理是最为重要的部分，直接关系到自动化测试用例的可复用性和可维护性。</p>
+<p>经过综合考虑，<code>AppiumBooster</code>从三个层面来描述测试用例，从低到高分别是<code>step</code>、<code>feature</code>和<code>testcase</code>；描述方式推荐使用<code>YAML</code>格式。</p>
+<h3 id="steps（测试步骤描述）"><a href="#steps（测试步骤描述）" class="headerlink" title="steps（测试步骤描述）"></a>steps（测试步骤描述）</h3><p>首先是对于单一操作步骤的描述。</p>
+<p>从UI层面来看，每一个操作步骤都可以归纳为三个方面：定位控件、操作控件和检查结果。</p>
+<p><code>AppiumBooster</code>的做法是，将App根据功能模块进行拆分，每一个模块单独创建一个<code>YAML</code>文件，并保存在<code>steps</code>目录下。然后，在每个模块中以控件为单位，分别进行定义。</p>
+<p>现以如下示例进行详细说明。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">AccountSteps:</span></div><div class="line">  enter Login page:</div><div class="line"><span class="attr">    control_id:</span> tablecellMyAccountLogin</div><div class="line"><span class="attr">    control_action:</span> click</div><div class="line"><span class="attr">    expectation:</span> btnForgetPassword</div><div class="line"></div><div class="line">  input test EmailAddress:</div><div class="line"><span class="attr">    control_id:</span> txtfieldEmailAddress</div><div class="line"><span class="attr">    control_action:</span> type</div><div class="line"><span class="attr">    data:</span> leo.lee@debugtalk.com</div><div class="line"><span class="attr">    expectation:</span> sectxtfieldPassword</div><div class="line"></div><div class="line">  check if coupon popup window exists(optional):</div><div class="line"><span class="attr">    control_id:</span> inner_screen</div><div class="line"><span class="attr">    control_action:</span> has_control</div><div class="line"><span class="attr">    data:</span> btnViewMyCoupons</div><div class="line"><span class="attr">    expectation:</span> btnClose</div><div class="line"><span class="attr">    optional:</span> <span class="literal">true</span></div></pre></td></tr></table></figure>
+<p>其中，<code>AccountSteps</code>是steps模块名称，用于区分不同的steps模块，方便在<code>features</code>模块中进行引用。</p>
+<p>描述单个步骤时，有三项是必不可少的：步骤名称、控件ID（<code>control_id</code>）和控件操作方式（<code>control_action</code>）。当控件操作方式为输入（<code>type</code>）时，则还需指定<code>data</code>属性，即输入内容。</p>
+<p>在检查步骤执行结果方面，可通过在<code>expectation</code>属性中指定控件ID进行实现，前面在<code>预期结果检查</code>一节中已经详细介绍了使用方法。该属性可以置空或不进行填写，相当于不对当前步骤进行检测。</p>
+<p>另外还有一个<code>optional</code>属性，对步骤指定该属性并设置为true时，当前步骤的执行结果不影响整个测试用例。</p>
+<h3 id="features（功能点描述）"><a href="#features（功能点描述）" class="headerlink" title="features（功能点描述）"></a>features（功能点描述）</h3><p>各个模块的单一操作步骤定义完毕后，虽然可以直接将多个步骤进行组合形成对测试场景的描述，即测试用例，但是操作起来会过于局限细节；特别是当测试用例较多时，可维护性是一个很大的问题。</p>
+<p><code>AppiumBooster</code>的做法是，将App根据功能模块进行拆分，每一个模块单独创建一个<code>YAML</code>文件，并保存在<code>features</code>目录下。然后，在每个模块中以功能点为单位，通过对steps模块中定义好的操作步骤进行引用并组合，即可实现对功能点的描述。</p>
+<p>以<code>系统登录</code>功能为例，功能点的描述可采用如下形式。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">AccountFeatures:</span></div><div class="line">  login with valid test account:</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter My Account page</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter Login page</div><div class="line"><span class="bullet">    -</span> AccountSteps | input test EmailAddress</div><div class="line"><span class="bullet">    -</span> AccountSteps | input test Password</div><div class="line"><span class="bullet">    -</span> AccountSteps | login</div><div class="line"><span class="bullet">    -</span> AccountSteps | close coupon popup window(optional)</div><div class="line"></div><div class="line">  login with valid production account:</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter My Account page</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter Login page</div><div class="line"><span class="bullet">    -</span> AccountSteps | input production EmailAddress</div><div class="line"><span class="bullet">    -</span> AccountSteps | input production Password</div><div class="line"><span class="bullet">    -</span> AccountSteps | login</div><div class="line"><span class="bullet">    -</span> AccountSteps | close coupon popup window(optional)</div><div class="line"></div><div class="line"><span class="attr">  logout:</span></div><div class="line"><span class="bullet">    -</span> AccountSteps | enter My Account page</div><div class="line"><span class="bullet">    -</span> SettingsSteps | enter Settings page</div><div class="line"><span class="bullet">    -</span> AccountSteps | logout</div></pre></td></tr></table></figure>
+<p>其中，<code>AccountFeatures</code>是features模块名称，用于区分不同的features模块，方便在<code>testcase</code>中进行引用。</p>
+<p>在引用steps模块的操作步骤时，需要同时指定steps模块名称和操作步骤的名称，并以<code>|</code>进行分隔。</p>
+<h3 id="testcases（测试用例描述）"><a href="#testcases（测试用例描述）" class="headerlink" title="testcases（测试用例描述）"></a>testcases（测试用例描述）</h3><p>在功能点描述的基础上，<code>AppiumBooster</code>就可以在第三个层面，简单清晰地描述测试用例了。</p>
+<p>具体做法很简单，针对每个测试用例创建一个<code>YAML</code>文件，并保存在<code>testcases</code>目录下。然后，通过对features模块中定义好的功能点描述进行引用并组合，即可实现对测试用例的描述。</p>
+<p>同样的，在引用features模块的功能点时，也需要同时指定features模块名称和功能点的名称，并以<code>|</code>进行分隔。</p>
+<p>如下示例便是实现了在商城中购买商品的整个流程，包括切换国家、登录、选择商品、添加购物车、下单完成支付等功能点。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line">Buy Phantom <span class="number">4</span>:</div><div class="line"><span class="bullet">  -</span> SettingsFeatures | initialize first startup</div><div class="line"><span class="bullet">  -</span> SettingsFeatures | Change Country to China</div><div class="line"><span class="bullet">  -</span> AccountFeatures | login with valid account</div><div class="line"><span class="bullet">  -</span> AccountFeatures | Change Shipping Address to China</div><div class="line"><span class="bullet">  -</span> StoreFeatures | add phantom <span class="number">4</span> to cart</div><div class="line"><span class="bullet">  -</span> StoreFeatures | finish order</div><div class="line"><span class="bullet">  -</span> AccountFeatures | logout</div></pre></td></tr></table></figure>
+<p>另外，在某些测试场景中可能需要重复进行某一个功能点的操作。虽然可以将需要重复的步骤多写几次，但会显得比较累赘，特别是重复次数较多时更是麻烦。</p>
+<p><code>AppiumBooster</code>的做法是，在测试用例的步骤中可指定执行次数，并以<code>|</code>进行分隔，如下例所示。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line">Send random text messages:</div><div class="line"><span class="bullet">  -</span> SettingsFeatures | initialize first startup</div><div class="line"><span class="bullet">  -</span> AccountFeatures | login with valid test account</div><div class="line"><span class="bullet">  -</span> MessageFeatures | enter follower user message page</div><div class="line"><span class="bullet">  -</span> MessageFeatures | send random text message | <span class="number">100</span></div></pre></td></tr></table></figure>
+<h2 id="测试用例引擎（CSV）"><a href="#测试用例引擎（CSV）" class="headerlink" title="测试用例引擎（CSV）"></a>测试用例引擎（CSV）</h2><p>基本上，<code>YAML</code>测试用例引擎已经可以很好地满足组织和管理自动化测试用例的需求。</p>
+<p>但考虑到部分用户会偏向于使用表格的形式，因为表格看上去更直观一些，<code>AppiumBooster</code>同时还支持<code>CSV</code>格式的测试用例引擎。</p>
+<h3 id="testcases（测试用例描述）-1"><a href="#testcases（测试用例描述）-1" class="headerlink" title="testcases（测试用例描述）"></a>testcases（测试用例描述）</h3><p>采用表格来编写测试用例时，只需要在任意表格工具，包括Microsoft Excel、iWork Numbers、WPS等，按照如下形式对测试用例进行描述。</p>
+<p><img src="/images/AppiumBooster_CSV_Testcase_example.jpg" alt="AppiumBooster CSV Testcase example"></p>
+<p>然后，将表格内容另存为<code>CSV</code>格式的文件，并放置于<code>testcases</code>目录中即可。</p>
+<p>可以看出，<code>CSV</code>格式的测试用例和<code>YAML</code>格式的测试用例是等价的，两者包含的信息内容完全相同。</p>
+<p>在具体实现上，<code>AppiumBooster</code>在执行测试用例之前，也会将两个测试用例引擎的测试用例描述转换为相同的数据结构，然后再进行统一的操作。</p>
+<p>统一转换后的数据结构如下所示：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"testcase_name"</span>: <span class="string">"Login and Logout"</span>,</div><div class="line">  <span class="attr">"features_suite"</span>: [</div><div class="line">    &#123;</div><div class="line">      <span class="attr">"feature_name"</span>: <span class="string">"login with valid account"</span>,</div><div class="line">      <span class="attr">"feature_steps"</span>: [</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnMenuMyAccount"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"tablecellMyAccountSystemSettings"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter My Account page"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"tablecellMyAccountLogin"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"btnForgetPassword"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter Login page"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"txtfieldEmailAddress"</span>, <span class="attr">"control_action"</span>: <span class="string">"type"</span>, <span class="attr">"data"</span>: <span class="string">"leo.lee@debugtalk.com"</span>, <span class="attr">"expectation"</span>: <span class="string">"sectxtfieldPassword"</span>, <span class="attr">"step_desc"</span>: <span class="string">"input EmailAddress"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"sectxtfieldPassword"</span>, <span class="attr">"control_action"</span>: <span class="string">"type"</span>, <span class="attr">"data"</span>: <span class="number">12345678</span>, <span class="attr">"expectation"</span>: <span class="string">"btnLogin"</span>, <span class="attr">"step_desc"</span>: <span class="string">"input Password"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnLogin"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"tablecellMyMessage"</span>, <span class="attr">"step_desc"</span>: <span class="string">"login"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnClose"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: nil, <span class="attr">"optional"</span>: <span class="literal">true</span>, <span class="attr">"step_desc"</span>: <span class="string">"close coupon popup window(optional)"</span>&#125;</div><div class="line">      ]</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      <span class="attr">"feature_name"</span>: <span class="string">"logout"</span>,</div><div class="line">      <span class="attr">"feature_steps"</span>: [</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnMenuMyAccount"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"tablecellMyAccountSystemSettings"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter My Account page"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"tablecellMyAccountSystemSettings"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"txtCountryDistrict"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter Settings page"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnLogout"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"uiviewMyAccount"</span>, <span class="attr">"step_desc"</span>: <span class="string">"logout"</span>&#125;</div><div class="line">      ]</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="测试用例转换器（yaml2csv）"><a href="#测试用例转换器（yaml2csv）" class="headerlink" title="测试用例转换器（yaml2csv）"></a>测试用例转换器（<code>yaml2csv</code>）</h3><p>既然<code>CSV</code>格式的测试用例和<code>YAML</code>格式的测试用例是等价的，那么两者之间的转换也就容易实现了。</p>
+<p>当前，<code>AppiumBooster</code>支持将<code>YAML</code>格式的测试用例转换为<code>CSV</code>格式的测试用例，只需要执行一条命令即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ruby start.rb -c <span class="string">"yaml2csv"</span> <span class="_">-f</span> ios/testcases/login_and_logout.yml</div></pre></td></tr></table></figure>
+<h2 id="过程记录及结果存储"><a href="#过程记录及结果存储" class="headerlink" title="过程记录及结果存储"></a>过程记录及结果存储</h2><p>在自动化测试执行过程中，应尽量对测试用例执行过程进行记录，方便后续对问题根据定位和追溯。</p>
+<h3 id="过程记录方式"><a href="#过程记录方式" class="headerlink" title="过程记录方式"></a>过程记录方式</h3><p>当前，<code>AppiumBooster</code>已实现的记录形式有如下三种：</p>
+<ul>
+<li>logger模块：可指定日志级别对测试过程进行记录</li>
+<li>截图功能：测试用例运行过程中，在每个步骤执行完成后进行截图</li>
+<li>DOM source：测试用例运行过程中，在每个步骤执行完成后保存当前页面的DOM内容</li>
+</ul>
+<h3 id="测试结果存储"><a href="#测试结果存储" class="headerlink" title="测试结果存储"></a>测试结果存储</h3><p>由于<code>Appium</code>分为Server端和Client端，因此<code>AppiumBooster</code>在记录日志的时候也将日志分为了三份：</p>
+<ul>
+<li><code>appium_server.log</code>: Appium Server端的日志，这部分日志是由<code>Appium框架</code>打印的</li>
+<li><code>appium_booster.log</code>: 包括测试环境初始化和测试用例执行记录，这部分日志是由<code>AppiumBooster</code>中采用logger模块打印的</li>
+<li><code>client_server.log</code>: 同时记录<code>AppiumBooster</code>和<code>Appium框架</code>的日志，相当于<code>appium_server.log</code>和<code>appium_booster.log</code>的并集，优点在于可以清晰地看到测试用例执行过程中Client端和Server端的通讯交互过程</li>
+</ul>
+<p>另外，当测试用例执行失败时，<code>AppiumBooster</code>会将执行失败的步骤截图和日志提取出来，单独保存到<code>errors</code>文件夹中，方便问题追溯。</p>
+<p>具体地，每次执行测试前，<code>AppiumBooster</code>会在指定的<code>results</code>目录下创建一个以当前时间（<code>%Y-%m-%d_%H:%M:%S</code>）命名的文件夹，存储结构如下所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">2016-08-28_16:28:48</div><div class="line">├── appium_server.log</div><div class="line">├── appium_booster.log</div><div class="line">├── client_server.log</div><div class="line">├── errors</div><div class="line">│   ├── 16_31_29_btnLogin.click.dom</div><div class="line">│   ├── 16_31_29_btnLogin.click.png</div><div class="line">│   ├── 16_32_03_btnMenuMyAccount.click.dom</div><div class="line">│   └── 16_32_03_btnMenuMyAccount.click.png</div><div class="line">├── screenshots</div><div class="line">│   ├── 16_30_34_tablecellMyAccountLogin.click.png</div><div class="line">│   ├── 16_30_41_txtfieldEmailAddress.type_leo.lee@debugtalk.com.png</div><div class="line">│   ├── 16_30_48_sectxtfieldPassword.type_123456.png</div><div class="line">│   ├── 16_31_29_btnLogin.click.png</div><div class="line">│   └── 16_32_03_btnMenuMyAccount.click.png</div><div class="line">└── xmls</div><div class="line">    ├── 16_30_34_tablecellMyAccountLogin.click.dom</div><div class="line">    ├── 16_30_41_txtfieldEmailAddress.type_leo.lee@debugtalk.com.dom</div><div class="line">    ├── 16_30_48_sectxtfieldPassword.type_123456.dom</div><div class="line">    ├── 16_31_29_btnLogin.click.dom</div><div class="line">    └── 16_32_03_btnMenuMyAccount.click.dom</div></pre></td></tr></table></figure>
+<p>对于每一个测试步骤的截图和DOM，存储文件命名格式为<code>%H_%M_%S_ControlID.ControlAction</code>。采用这种命名方式有两个好处：</p>
+<ul>
+<li>文件通过时间排序，对应着测试用例执行的步骤顺序</li>
+<li>可以在截图或DOM中直观地看到每一步操作指令对应的执行结果</li>
+</ul>
+<h2 id="环境初始化"><a href="#环境初始化" class="headerlink" title="环境初始化"></a>环境初始化</h2><h3 id="Appium-Server"><a href="#Appium-Server" class="headerlink" title="Appium Server"></a>Appium Server</h3><p>在执行自动化测试时，某些情况下可能会造成<code>Appium Server</code>出现异常情况（e.g. 500 error），并影响到下一次测试的执行。</p>
+<p>为了避免这类情况，<code>AppiumBooster</code>在每次执行测试前，会强制性地对<code>Appium Server</code>进行重启。方式也比较简单暴力，运行测试之前先检查系统是否有<code>bin/appium</code>的进程在运行，如果有，则先kill掉该进程，然后再启动<code>Appium Server</code>。</p>
+<p>需要说明的是，由于<code>Appium Server</code>的启动需要一定时间，为了防止运行<code>Appium Client</code>时<code>Appium Server</code>还未初始化完毕，因此启动<code>Appium Server</code>后最好能等待一段时间（e.g. sleep 10s）。</p>
+<h3 id="iOS-Android模拟器"><a href="#iOS-Android模拟器" class="headerlink" title="iOS/Android模拟器"></a><code>iOS/Android</code>模拟器</h3><p>在模拟器中运行一段时间后，也会存在缓存数据和文件，可能会对下一次测试造成影响。</p>
+<p>为了避免这类情况，<code>AppiumBooster</code>在每次执行测试前，会先删除已存在的模拟器，然后再用指定的模拟器配置创建新的模拟器。</p>
+<p>对于iOS模拟器，<code>AppiumBooster</code>通过调用<code>xcrun simctl</code>命令的方式来对模拟器进行操作，基本原理如下所示。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># delete iOS simulator: xcrun simctl delete device_id</span></div><div class="line">$ xcrun simctl delete F2F53866-50A5-4E0F-B164-5AC1702AD1BD</div><div class="line"><span class="comment"># create iOS simulator: xcrun simctl create device_type device_type_id runtime_id</span></div><div class="line">$ xcrun simctl create <span class="string">'iPhone 5'</span> <span class="string">'com.apple.CoreSimulator.SimDeviceType.iPhone-5'</span> <span class="string">'com.apple.CoreSimulator.SimRuntime.iOS-9-3'</span></div></pre></td></tr></table></figure>
+<p>其中，<code>device_id</code>/<code>device_type_id</code>/<code>runtime_id</code>这些属性值可以通过执行<code>xcrun simctl list</code>命令获取得到。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ xcrun simctl list</div><div class="line">== Device Types ==</div><div class="line">iPhone 5s (com.apple.CoreSimulator.SimDeviceType.iPhone-5s)</div><div class="line">iPhone 6 (com.apple.CoreSimulator.SimDeviceType.iPhone-6)</div><div class="line">== Runtimes ==</div><div class="line">iOS 8.4 (8.4 - 12H141) (com.apple.CoreSimulator.SimRuntime.iOS-8-4)</div><div class="line">iOS 9.3 (9.3 - 13E230) (com.apple.CoreSimulator.SimRuntime.iOS-9-3)</div><div class="line">== Devices ==</div><div class="line">-- iOS 8.4 --</div><div class="line">    iPhone 5s (E1BD9CC5-8E95-408F-849C-B0C6A44D669A) (Shutdown)</div><div class="line">-- iOS 9.3 --</div><div class="line">    iPhone 5s (BAFEFBE1-3ADB-45C4-9C4E-E3791D260524) (Shutdown)</div><div class="line">    iPhone 6 (F23B3F85-7B65-4999-9F1C-80111783F5A5) (Shutdown)</div><div class="line">== Device Pairs ==</div></pre></td></tr></table></figure>
+<h2 id="增强特性"><a href="#增强特性" class="headerlink" title="增强特性"></a>增强特性</h2><p>除了以上基础特性，<code>AppiumBooster</code>还支持一些辅助特性，可以增强测试框架的使用体验。</p>
+<h3 id="Data参数化"><a href="#Data参数化" class="headerlink" title="Data参数化"></a>Data参数化</h3><p>在某些场景下，测试用例执行时需要动态获取数值。例如，注册账号的测试用例中，每次执行测试用例时需要保证用户名为未注册的，常见的做法就是在注册用户名中包含时间戳。</p>
+<p><code>AppiumBooster</code>的做法是，可以在测试步骤的<code>data</code>字段中，传入Ruby表达式，格式为<code>${ruby_expression}</code>。在执行测试用例时，会先对<code>ruby_expression</code>进行<code>eval</code>计算，然后用计算得到的值作为实际参数。</p>
+<p>回到刚才的注册账号测试用例，填写用户名的步骤就可以按照如下形式指定参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">input test EmailAddress:</div><div class="line">  control_id: txtfieldEmailAddress</div><div class="line">  control_action: type</div><div class="line">  data: $&#123;Time.now.to_i&#125;@debugtalk.com</div><div class="line">  expectation: sectxtfieldPassword</div></pre></td></tr></table></figure>
+<p>实际执行测试用例时，<code>data</code>就会参数化为<code>1471318368@debugtalk.com</code>的形式。</p>
+<h3 id="全局参数配置"><a href="#全局参数配置" class="headerlink" title="全局参数配置"></a>全局参数配置</h3><p>对于某些配置参数，例如系统的登录账号密码等，虽然可以直接填写到测试用例的<code>steps</code>中，但是终究不够灵活。特别是当存在多个测试用例引用同一个参数时，涉及到参数改动时就需要同时修改多个地方。</p>
+<p>更好的做法是，将此类参数提取出来，在统一的地方进行配置。在<code>AppiumBooster</code>中，可以在<code>config.yml</code>文件中配置全局参数。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">TestEnvAccount:</span></div><div class="line"><span class="attr">  UserName:</span> test@debugtalk.com</div><div class="line"><span class="attr">  Password:</span> <span class="number">123456</span></div><div class="line"></div><div class="line"><span class="attr">ProductionEnvAccount:</span></div><div class="line"><span class="attr">  UserName:</span> production@debugtalk.com</div><div class="line"><span class="attr">  Password:</span> <span class="number">12345678</span></div></pre></td></tr></table></figure>
+<p>然后，在测试用例的<code>steps</code>就可以采用如下形式对全局参数进行引用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">AccountSteps:</div><div class="line">  input test EmailAddress:</div><div class="line">    control_id: txtfieldEmailAddress</div><div class="line">    control_action: type</div><div class="line">    data: $&#123;config.TestEnvAccount.UserName&#125;</div><div class="line">    expectation: sectxtfieldPassword</div><div class="line"></div><div class="line">  input test Password:</div><div class="line">    control_id: sectxtfieldPassword</div><div class="line">    control_action: type</div><div class="line">    data: $&#123;config.TestEnvAccount.Password&#125;</div><div class="line">    expectation: btnLogin</div></pre></td></tr></table></figure>
+<h3 id="optional选项"><a href="#optional选项" class="headerlink" title="optional选项"></a>optional选项</h3><p>在执行测试用例时，有时候可能会存在这样的场景：某个步骤作为非必要步骤，当其执行失败时，我们并不想将测试用例判定为不通过。</p>
+<p>基于该场景，在测试用例设计表格中增加了<code>optional</code>参数。该参数值默认不用填写。但如果在某个步骤对应的optional栏填写了true值后，那么该步骤就会作为非必要步骤，其执行结果不会影响整个用例的执行结果。</p>
+<p>例如，在电商类APP中，某些账号有优惠券，登录系统后，会弹出优惠券的提示框；而有的账号没有优惠券，登录后就不会有这样的弹框。那么关闭优惠券弹框的步骤就可以将其<code>optional</code>参数设置为true。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">AccountSteps:</span></div><div class="line">  close coupon popup window(optional):</div><div class="line"><span class="attr">    control_id:</span> btnClose</div><div class="line"><span class="attr">    control_action:</span> click</div><div class="line"><span class="attr">    expectation:</span> !btnViewMyCoupons</div><div class="line"><span class="attr">    optional:</span> <span class="literal">true</span></div></pre></td></tr></table></figure>
+<h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><p><code>AppiumBooster</code>通过在命令行中进行调用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ ruby start.rb -h</div><div class="line">Usage: start.rb [options]</div><div class="line">    -p, --app_path &lt;value&gt;           Specify app path</div><div class="line">    -t, --app_<span class="built_in">type</span> &lt;value&gt;           Specify app <span class="built_in">type</span>, ios or android</div><div class="line">    <span class="_">-f</span>, --testcase_file &lt;value&gt;      Specify testcase file(s)</div><div class="line">    <span class="_">-d</span>, --output_folder &lt;value&gt;      Specify output folder</div><div class="line">    -c, --convert_<span class="built_in">type</span> &lt;value&gt;       Specify testcase converter, yaml2csv or csv2yaml</div><div class="line">        --disable_output_color       Disable output color</div></pre></td></tr></table></figure>
+<h3 id="执行测试用例"><a href="#执行测试用例" class="headerlink" title="执行测试用例"></a>执行测试用例</h3><p>指定执行测试用例时支持多种方式，常见的几种使用方式示例如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> <span class="variable">$&#123;AppiumBooster&#125;</span></div><div class="line"><span class="comment"># 执行指定的测试用例文件（绝对路径）</span></div><div class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> <span class="_">-f</span> <span class="string">"/Users/Leo/MyProjects/AppiumBooster/ios/testcases/login.yml"</span></div><div class="line"></div><div class="line"><span class="comment"># 执行指定的测试用例文件（相对路径）</span></div><div class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> <span class="_">-f</span> <span class="string">"ios/testcases/login.yml"</span></div><div class="line"></div><div class="line"><span class="comment"># 执行所有yaml格式的测试用例文件</span></div><div class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> <span class="_">-f</span> <span class="string">"ios/testcases/*.yml"</span></div><div class="line"></div><div class="line"><span class="comment"># 执行ios目录下所有csv格式的测试用例文件</span></div><div class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> -t <span class="string">"ios"</span> <span class="_">-f</span> <span class="string">"*.csv"</span></div></pre></td></tr></table></figure>
+<h3 id="测试用例转换"><a href="#测试用例转换" class="headerlink" title="测试用例转换"></a>测试用例转换</h3><p>将YAML格式的测试用例转换为CSV格式的测试用例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ruby start.rb -c <span class="string">"yaml2csv"</span> <span class="_">-f</span> ios/testcases/login_and_logout.yml</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>什么才算是心目中理想的自动化测试框架？我也没有确切的答案。</p>
+<blockquote>
+<p>为什么要登山？<br>因为山在那里。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/AutomationTest/">AutomationTest</a><a href="/tags/Appium/">Appium</a><a href="/tags/AppiumBooster/">AppiumBooster</a><a href="/tags/UI-Test/">UI Test</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/build-ideal-app-automation-test-framework/" data-title="打造心目中理想的自动化测试框架（AppiumBooster） | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/locustplus-talk-about-performance-test/" title="【LocustPlus序】漫谈服务端性能测试">
+  <strong>上一篇：</strong><br/>
+  <span>
+  【LocustPlus序】漫谈服务端性能测试</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/make-Jenkins-Console-Output-Colorful/"  title="Jenkins的输出日志也可以变得色色的">
+ <strong>下一篇：</strong><br/> 
+ <span>Jenkins的输出日志也可以变得色色的
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UI交互基础"><span class="toc-number">2.</span> <span class="toc-text">UI交互基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#控件定位"><span class="toc-number">2.1.</span> <span class="toc-text">控件定位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#控件操作"><span class="toc-number">2.2.</span> <span class="toc-text">控件操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预期结果检查"><span class="toc-number">2.3.</span> <span class="toc-text">预期结果检查</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试用例引擎（YAML）"><span class="toc-number">3.</span> <span class="toc-text">测试用例引擎（YAML）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#steps（测试步骤描述）"><span class="toc-number">3.1.</span> <span class="toc-text">steps（测试步骤描述）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#features（功能点描述）"><span class="toc-number">3.2.</span> <span class="toc-text">features（功能点描述）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#testcases（测试用例描述）"><span class="toc-number">3.3.</span> <span class="toc-text">testcases（测试用例描述）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试用例引擎（CSV）"><span class="toc-number">4.</span> <span class="toc-text">测试用例引擎（CSV）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#testcases（测试用例描述）-1"><span class="toc-number">4.1.</span> <span class="toc-text">testcases（测试用例描述）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试用例转换器（yaml2csv）"><span class="toc-number">4.2.</span> <span class="toc-text">测试用例转换器（yaml2csv）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过程记录及结果存储"><span class="toc-number">5.</span> <span class="toc-text">过程记录及结果存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#过程记录方式"><span class="toc-number">5.1.</span> <span class="toc-text">过程记录方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试结果存储"><span class="toc-number">5.2.</span> <span class="toc-text">测试结果存储</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境初始化"><span class="toc-number">6.</span> <span class="toc-text">环境初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Appium-Server"><span class="toc-number">6.1.</span> <span class="toc-text">Appium Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iOS-Android模拟器"><span class="toc-number">6.2.</span> <span class="toc-text">iOS/Android模拟器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#增强特性"><span class="toc-number">7.</span> <span class="toc-text">增强特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Data参数化"><span class="toc-number">7.1.</span> <span class="toc-text">Data参数化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全局参数配置"><span class="toc-number">7.2.</span> <span class="toc-text">全局参数配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#optional选项"><span class="toc-number">7.3.</span> <span class="toc-text">optional选项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令行工具"><span class="toc-number">8.</span> <span class="toc-text">命令行工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#执行测试用例"><span class="toc-number">8.1.</span> <span class="toc-text">执行测试用例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试用例转换"><span class="toc-number">8.2.</span> <span class="toc-text">测试用例转换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">9.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

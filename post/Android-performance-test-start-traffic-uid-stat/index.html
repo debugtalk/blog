@@ -1,0 +1,603 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Android App持续集成性能测试：启动流量（1） | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。 说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持tcpdump工具，通过tcpdump，我们可以实现非常精准的流量测试。但tcpdump也有个问题，就是它捕捉到的流量是系统层面的，我们">
+<meta name="keywords" content="Android,流量测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android App持续集成性能测试：启动流量（1）">
+<meta property="og:url" content="http://debugtalk.com/post/Android-performance-test-start-traffic-uid-stat/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。 说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持tcpdump工具，通过tcpdump，我们可以实现非常精准的流量测试。但tcpdump也有个问题，就是它捕捉到的流量是系统层面的，我们">
+<meta property="og:locale" content="en-us">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android App持续集成性能测试：启动流量（1）">
+<meta name="twitter:description" content="本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。 说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持tcpdump工具，通过tcpdump，我们可以实现非常精准的流量测试。但tcpdump也有个问题，就是它捕捉到的流量是系统层面的，我们">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/Android-performance-test-start-traffic-uid-stat/" title="Android App持续集成性能测试：启动流量（1）" itemprop="url">Android App持续集成性能测试：启动流量（1）</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-05-02T16:00:00.000Z" itemprop="datePublished"> Published 2016-05-03</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#get-app-UID"><span class="toc-number">1.</span> <span class="toc-text">get app UID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取流量数据"><span class="toc-number">2.</span> <span class="toc-text">获取流量数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获得启动流量数据"><span class="toc-number">3.</span> <span class="toc-text">获得启动流量数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<p>本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。</p>
+<p>说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持<code>tcpdump</code>工具，通过<code>tcpdump</code>，我们可以实现非常精准的流量测试。但<code>tcpdump</code>也有个问题，就是它捕捉到的流量是系统层面的，我们很难区分捕捉得到的流量数据是否都是当前apk产生的。</p>
+<p>其实，对于特定apk的整体流量数据，在Android系统中都会存储到对应文件中，我们完全可以通过读取对应文件来获得当前apk的流量信息。</p>
+<h2 id="get-app-UID"><a href="#get-app-UID" class="headerlink" title="get app UID"></a>get app UID</h2><p>与流量相关的状态数据存储在<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下，其中，<code>&lt;UID&gt;</code>表示apk对应的UID。</p>
+<p>关于UID，简单地进行下说明。在Linux系统中，UID表示的是User Identifier，主要用于表示是哪位用户运行了该程序。但在Android系统中，由于Android系统本身就为单用户系统，这时UID就被赋予了新的使命，主要用于实现数据共享。具体地，Android系统为每个应用都分配了一个UID，不同apk的UID几乎都是互不相同的，而对于不同UID的apk，不能共享数据资源。之所以用“几乎”，是因为有时候同一厂家会存在多个产品，并且希望能在多个apk之间实现数据共享，这个时候，便可通过在menifest配置文件中指定相同的sharedUserId，然后在Android系统中安装应用时便会分配相同的UID。</p>
+<p>获取app UID的方式有多种，最简单的方式应该还是从<code>/data/system/packages.list</code>中读取，并通过apk的<code>&lt;PKGNAME&gt;</code>找到对应的UID。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root@hammerhead:/ # cat /data/system/packages.list | grep com.UCMobile.trunk</div><div class="line">com.UCMobile.trunk 10084 0 /data/data/com.UCMobile.trunk default 3003,1028,1015</div></pre></td></tr></table></figure>
+<p>在这里，10084即是<code>com.UCMobile.trunk</code>的UID。</p>
+<h2 id="获取流量数据"><a href="#获取流量数据" class="headerlink" title="获取流量数据"></a>获取流量数据</h2><p>流量数据分为接收流量（tcp_rcv）和发送流量（tcp_snd）两部分，这两个状态数值我们可以通过读取<code>/proc/uid_stat/&lt;UID&gt;</code>目录下的两个文件得到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_rcv</div><div class="line">3446837</div><div class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_snd</div><div class="line">134366</div></pre></td></tr></table></figure>
+<p>通过这种方式，我们就可以读取得到指定apk在当前时刻的累计流量数值。</p>
+<h2 id="获得启动流量数据"><a href="#获得启动流量数据" class="headerlink" title="获得启动流量数据"></a>获得启动流量数据</h2><p>有了前面的基础，我们要测试启动流量就很好实现了。只需要在启动前采集下累计流量数值，然后启动应用，完成启动后再采集一次累计流量数值，前后两次累计数值的差值便是当次启动耗费的流量数。需要注意的是，由于很多时候apk在启动后，会在系统后台异步加载一些数据资源，因此为了保证我们采集到当次启动耗费的全部流量数值，我们在启动应用后最好能等待一段时间。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_snd</div><div class="line">15068</div><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_rcv</div><div class="line">98021</div><div class="line"></div><div class="line"># start app activity, sleep 10s</div><div class="line"></div><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_snd</div><div class="line">23268</div><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_rcv</div><div class="line">965651</div></pre></td></tr></table></figure>
+<p>采集到前后两次流量数值后，即可计算得到当次启动耗费的总流量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">当次启动总流量 = (23268 + 965651) - (15068 + 98021) = 875830 bytes</div></pre></td></tr></table></figure>
+<p>当然，这里的启动还分为好几种，包括首次安装启动、非首次安装启动、覆盖安装启动等。具体的启动方式可根据实际场景来定，但在统计流量的方法方面都是相同的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文讲解了Android App启动流量测试的一种方法。然而，本次介绍的方法也存在一定局限性，因为<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下的<code>tcp_rcv</code>和<code>tcp_snd</code>文件中都只记录了总值，如果我们只关注总体的流量数值还好，但要是我们希望能测试得到更细化的数据，该方法就没法满足我们的测试需求了。</p>
+<p>举个例子，UC浏览器国际版在启动后，会和美国的服务器进行通讯交互。现在，我们想测试UC浏览器国际版在启动后与美国服务器的通讯流量。</p>
+<p>显然，本文中介绍的方法是没法实现上述例子中的测试需求的。那例子中的场景要怎么测呢？这就还是得用到<code>tcpdump</code>，在下一篇文章中我会再详细进行介绍。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/流量测试/">流量测试</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/Android-performance-test-start-traffic-uid-stat/" data-title="Android App持续集成性能测试：启动流量（1） | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/Android-performance-test-start-traffic-tcpdump-wireshark/" title="Android App持续集成性能测试：启动流量（2）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Android App持续集成性能测试：启动流量（2）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/manage-Jenkins-via-remote-api/"  title="通过API远程管理Jenkins">
+ <strong>下一篇：</strong><br/> 
+ <span>通过API远程管理Jenkins
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#get-app-UID"><span class="toc-number">1.</span> <span class="toc-text">get app UID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取流量数据"><span class="toc-number">2.</span> <span class="toc-text">获取流量数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获得启动流量数据"><span class="toc-number">3.</span> <span class="toc-text">获得启动流量数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

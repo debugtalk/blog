@@ -1,0 +1,623 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>300行Python代码打造实用接口测试框架 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在刚开始实现ApiTestEngine的时候，卡斯（kasi）提议做一个Java版的。对于这样的建议，我当然是拒绝的，瞬即回复了他，“人生苦短，回头是岸啊”。 当然，我没好意思跟他说的是，我不会Java啊。不过最主要的原因嘛，还是因为Python的语法简洁，可以采用很少的代码量实现丰富的功能。 有多简洁呢？ 刚在coveralls上看了下ApiTestEngine框架的代码统计行数，总行数只有26">
+<meta name="keywords" content="Python,接口测试,测试框架,HttpRunner">
+<meta property="og:type" content="article">
+<meta property="og:title" content="300行Python代码打造实用接口测试框架">
+<meta property="og:url" content="http://debugtalk.com/post/300-lines-python-code-api-test-framework/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在刚开始实现ApiTestEngine的时候，卡斯（kasi）提议做一个Java版的。对于这样的建议，我当然是拒绝的，瞬即回复了他，“人生苦短，回头是岸啊”。 当然，我没好意思跟他说的是，我不会Java啊。不过最主要的原因嘛，还是因为Python的语法简洁，可以采用很少的代码量实现丰富的功能。 有多简洁呢？ 刚在coveralls上看了下ApiTestEngine框架的代码统计行数，总行数只有26">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/ApiTestEngine-stat-ate.jpg">
+<meta property="og:image" content="http://debugtalk.com/images/ApiTestEngine-stat-all.jpg">
+<meta property="og:updated_time" content="2017-12-24T01:55:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="300行Python代码打造实用接口测试框架">
+<meta name="twitter:description" content="在刚开始实现ApiTestEngine的时候，卡斯（kasi）提议做一个Java版的。对于这样的建议，我当然是拒绝的，瞬即回复了他，“人生苦短，回头是岸啊”。 当然，我没好意思跟他说的是，我不会Java啊。不过最主要的原因嘛，还是因为Python的语法简洁，可以采用很少的代码量实现丰富的功能。 有多简洁呢？ 刚在coveralls上看了下ApiTestEngine框架的代码统计行数，总行数只有26">
+<meta name="twitter:image" content="http://debugtalk.com/images/ApiTestEngine-stat-ate.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/300-lines-python-code-api-test-framework/" title="300行Python代码打造实用接口测试框架" itemprop="url">300行Python代码打造实用接口测试框架</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2017-06-27T16:00:00.000Z" itemprop="datePublished"> Published 2017-06-28</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#阅读更多"><span class="toc-number">1.</span> <span class="toc-text">阅读更多</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后的最后"><span class="toc-number">2.</span> <span class="toc-text">最后的最后</span></a></li></ol>
+		
+		</div>
+		
+		<p>在刚开始实现<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的时候，<a href="https://testerhome.com/kasi" target="_blank" rel="external"><code>卡斯（kasi）</code></a>提议做一个Java版的。对于这样的建议，我当然是拒绝的，瞬即回复了他，“人生苦短，回头是岸啊”。</p>
+<p>当然，我没好意思跟他说的是，我不会Java啊。不过最主要的原因嘛，还是因为Python的语法简洁，可以采用很少的代码量实现丰富的功能。</p>
+<p>有多简洁呢？</p>
+<p>刚在<code>coveralls</code>上看了下<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>框架的<a href="https://coveralls.io/github/debugtalk/ApiTestEngine?branch=master" target="_blank" rel="external">代码统计行数</a>，总行数只有268行，还不足300行。</p>
+<p><img src="/images/ApiTestEngine-stat-ate.jpg" alt=""></p>
+<p>当然，这个行数指的是框架本身的<code>Python</code>代码行数，不包括示例注释的行数。从上图可以看出来，<code>LINES</code>列是文件总行数，<code>RELEVANT</code>列是实际的<code>Python</code>代码行数。例如<code>ate/runner.py</code>文件，注释的行数是远多于实际代码行数的。</p>
+<p>最极端的一个例子是，<code>ate/testcase.py</code>文件中的<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/ate/testcase.py" target="_blank" rel="external"><code>parse</code>函数</a>，示例注释行数35行，<code>Python</code>代码只有2行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, testcase_template)</span>:</span></div><div class="line">   <span class="string">""" parse testcase_template, replace all variables with bind value.</span></div><div class="line">   variables marker: $&#123;variable&#125;.</div><div class="line">   @param (dict) testcase_template</div><div class="line">       &#123;</div><div class="line">           "request": &#123;</div><div class="line">               "url": "http://127.0.0.1:5000/api/users/$&#123;uid&#125;",</div><div class="line">               "method": "POST",</div><div class="line">               "headers": &#123;</div><div class="line">                   "Content-Type": "application/json",</div><div class="line">                   "authorization": "$&#123;authorization&#125;",</div><div class="line">                   "random": "$&#123;random&#125;"</div><div class="line">               &#125;,</div><div class="line">               "body": "$&#123;data&#125;"</div><div class="line">           &#125;,</div><div class="line">           "response": &#123;</div><div class="line">               "status_code": "$&#123;expected_status&#125;"</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   @return (dict) parsed testcase with bind values</div><div class="line">       &#123;</div><div class="line">           "request": &#123;</div><div class="line">               "url": "http://127.0.0.1:5000/api/users/1000",</div><div class="line">               "method": "POST",</div><div class="line">               "headers": &#123;</div><div class="line">                   "Content-Type": "application/json",</div><div class="line">                   "authorization": "a83de0ff8d2e896dbd8efb81ba14e17d",</div><div class="line">                   "random": "A2dEx"</div><div class="line">               &#125;,</div><div class="line">               "body": '&#123;"name": "user", "password": "123456"&#125;'</div><div class="line">           &#125;,</div><div class="line">           "response": &#123;</div><div class="line">               "status_code": 201</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   """</div><div class="line">   <span class="keyword">return</span> self.substitute(testcase_template)</div></pre></td></tr></table></figure>
+<p>另外，如果算上单元测试用例的行数（731行），总的<code>Python</code>代码行数能达到1000行的样子。嗯，代码可以精简，但是单元测试覆盖率还是要保证的，不达到90%以上的单元测试覆盖率，真不好意思说自己做了开源项目啊。</p>
+<p><img src="/images/ApiTestEngine-stat-all.jpg" alt=""></p>
+<p>那这不足300行的Python代码，实际实现了哪些功能呢？</p>
+<p>对比下<a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a>中规划的特性，已经实现了大半（前六项），至少已经算是一个有模有样的接口测试框架了。</p>
+<ul>
+<li>支持API接口的多种请求方法，包括 GET/POST/HEAD/PUT/DELETE 等</li>
+<li>测试用例与代码分离，测试用例维护方式简洁优雅，支持<code>YAML/JSON</code></li>
+<li>测试用例描述方式具有表现力，可采用简洁的方式描述输入参数和预期输出结果</li>
+<li>接口测试用例具有可复用性，便于创建复杂测试场景</li>
+<li>测试执行方式简单灵活，支持单接口调用测试、批量接口调用测试、定时任务执行测试</li>
+<li>具有可扩展性，便于扩展实现Web平台化</li>
+<li>测试结果统计报告简洁清晰，附带详尽日志记录，包括接口请求耗时、请求响应数据等</li>
+<li>身兼多职，同时实现接口管理、接口自动化测试、接口性能测试（结合Locust）</li>
+</ul>
+<p>后面剩下的特性还在实现的过程中，但是可以预见得到，最后框架本身总的<code>Python</code>代码行数也不会超过500行。</p>
+<p>当然，单纯地比代码行数的确是没有什么意义，写得爽写得开心才是最重要的。</p>
+<p>最后引用下<code>Guido van Rossum</code>的语录：</p>
+<blockquote>
+<p>Life is short, go Pythonic!</p>
+</blockquote>
+<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
+<li><a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
+<li><a href="http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/">《ApiTestEngine 演化之路（0）开发未动，测试先行》</a></li>
+<li><a href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a></li>
+<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code> GitHub源码</a></li>
+</ul>
+<h2 id="最后的最后"><a href="#最后的最后" class="headerlink" title="最后的最后"></a>最后的最后</h2><p><a href="http://debugtalk.com/tags/ApiTestEngine">《ApiTestEngine 演进之路》</a>系列文章还在继续写，只是前几天主要精力在编码实现上，博客方面没有同步更新，接下来我会整理好思路，继续完成余下的部分。</p>
+<p>另外，如果大家对Python编程感兴趣，给大家推荐一个专注Python原创技术分享的公众号，⎡Python之禅⎦（VTtalk），里面关于Python的干货非常多，讲解也很通俗易懂，现在我如果有理解得不够透彻的概念，基本都会先到这个公众号里面去搜索下。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a><a href="/tags/接口测试/">接口测试</a><a href="/tags/测试框架/">测试框架</a><a href="/tags/HttpRunner/">HttpRunner</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/300-lines-python-code-api-test-framework/" data-title="300行Python代码打造实用接口测试框架 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/ApiTestEngine-2-best-testcase-description/" title="ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式">
+  <strong>上一篇：</strong><br/>
+  <span>
+  ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/ApiTestEngine-1-setup-basic-framework/"  title="ApiTestEngine 演进之路（1）搭建基础框架">
+ <strong>下一篇：</strong><br/> 
+ <span>ApiTestEngine 演进之路（1）搭建基础框架
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#阅读更多"><span class="toc-number">1.</span> <span class="toc-text">阅读更多</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后的最后"><span class="toc-number">2.</span> <span class="toc-text">最后的最后</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

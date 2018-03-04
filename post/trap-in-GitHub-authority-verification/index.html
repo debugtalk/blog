@@ -1,0 +1,633 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>GitHub权限校验失败给我的启发 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="背景描述众所周知，在GitHub中，每个仓库都有两个地址，分别基于HTTPS协议和SSH协议，两个协议对应的URL地址（repository_url）形式如下所示： 1234# HTTPShttps://github.com/XY/MobileStore.git# SSHgit@github.com:XY/MobileStore.git 正常情况下，只要在本地正确地配置好了git账号，采用这两个地">
+<meta name="keywords" content="GitHub,SSH,HTTPS，权限校验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitHub权限校验失败给我的启发">
+<meta property="og:url" content="http://debugtalk.com/post/trap-in-GitHub-authority-verification/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="背景描述众所周知，在GitHub中，每个仓库都有两个地址，分别基于HTTPS协议和SSH协议，两个协议对应的URL地址（repository_url）形式如下所示： 1234# HTTPShttps://github.com/XY/MobileStore.git# SSHgit@github.com:XY/MobileStore.git 正常情况下，只要在本地正确地配置好了git账号，采用这两个地">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/Mac_Keychain_GitHub.jpg">
+<meta property="og:updated_time" content="2017-09-04T05:28:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GitHub权限校验失败给我的启发">
+<meta name="twitter:description" content="背景描述众所周知，在GitHub中，每个仓库都有两个地址，分别基于HTTPS协议和SSH协议，两个协议对应的URL地址（repository_url）形式如下所示： 1234# HTTPShttps://github.com/XY/MobileStore.git# SSHgit@github.com:XY/MobileStore.git 正常情况下，只要在本地正确地配置好了git账号，采用这两个地">
+<meta name="twitter:image" content="http://debugtalk.com/images/Mac_Keychain_GitHub.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/trap-in-GitHub-authority-verification/" title="GitHub权限校验失败给我的启发" itemprop="url">GitHub权限校验失败给我的启发</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-06-13T16:00:00.000Z" itemprop="datePublished"> Published 2016-06-14</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景描述"><span class="toc-number">1.</span> <span class="toc-text">背景描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定位分析"><span class="toc-number">2.</span> <span class="toc-text">定位分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结回顾"><span class="toc-number">3.</span> <span class="toc-text">总结回顾</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>众所周知，在GitHub中，每个仓库都有两个地址，分别基于<code>HTTPS</code>协议和<code>SSH</code>协议，两个协议对应的URL地址（repository_url）形式如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># HTTPS</span></div><div class="line">https://github.com/XY/MobileStore.git</div><div class="line"><span class="comment"># SSH</span></div><div class="line">git@github.com:XY/MobileStore.git</div></pre></td></tr></table></figure>
+<p>正常情况下，只要在本地正确地配置好了<code>git</code>账号，采用这两个地址中的任意一个，都可以通过<code>git clone repository_url</code>获取代码。</p>
+<p>但最近我在Macbook Air中<code>clone</code>公司托管在GitHub私有库中的代码时，发现无法通过<code>HTTPS</code>协议的地址<code>clone</code>代码，始终提示<code>remote: Repository not found.</code>的错误。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜ git <span class="built_in">clone</span> https://github.com/XY/MobileStore.git</div><div class="line">Cloning into <span class="string">'MobileStore'</span>...</div><div class="line">remote: Repository not found.</div><div class="line">fatal: repository <span class="string">'https://github.com/XY/MobileStore.git/'</span> not found</div></pre></td></tr></table></figure>
+<p>首先，这个代码仓库是确实存在的，而且地址肯定也是没有问题的，通过URL地址也能在浏览器中访问到对应的GitHub仓库页面。</p>
+<p>其次，在本地对<code>git</code>的配置也是没有问题的，通过<code>SSH</code>协议的地址是可以正常<code>clone</code>代码的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜ git <span class="built_in">clone</span> git@github.com:XY/MobileStore.git</div><div class="line">Cloning into <span class="string">'MobileStore'</span>...</div><div class="line">Warning: Permanently added the RSA host key <span class="keyword">for</span> IP address <span class="string">'192.30.252.131'</span> to the list of known hosts.</div><div class="line">remote: Counting objects: 355, done.</div><div class="line">remote: Compressing objects: 100% (3/3), done.</div></pre></td></tr></table></figure>
+<p>并且，如果在<code>HTTPS</code>协议的URL地址中加上GitHub账号，也是可以正常<code>clone</code>代码的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜ git <span class="built_in">clone</span> https://leolee@github.com/XY/MobileStore.git</div><div class="line">Cloning into <span class="string">'MobileStore'</span>...</div><div class="line">remote: Counting objects: 355, done.</div><div class="line">remote: Compressing objects: 100% (3/3), done.</div></pre></td></tr></table></figure>
+<p>更奇怪的是，在我的另一台Mac Mini中，采用同样的账号配置，两种协议的URL地址却都能正常<code>clone</code>代码，仔细地对比了两台电脑的<code>git</code>配置，都是一样的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜ cat ~/.git-credentials</div><div class="line">https://leolee:340d247cxxxxxxxxf39556e38fe2b0baxxxxxxxx@github.com</div><div class="line">➜</div><div class="line">➜ cat ~/.gitconfig</div><div class="line">[credential]</div><div class="line">truehelper = store</div></pre></td></tr></table></figure>
+<p>那问题出在哪儿呢？</p>
+<h2 id="定位分析"><a href="#定位分析" class="headerlink" title="定位分析"></a>定位分析</h2><p>通过Google得知，产生<code>remote: Repository not found.</code>报错的原因主要有两个，一是仓库地址错误，二是权限校验不通过。显然，第一个原因可以直接排除，在Macbook Air中出现该问题应该就是账号权限校验失败造成的。</p>
+<p>对背景描述中的现象进行整理，重点关注两个疑点：</p>
+<ul>
+<li>通过<code>HTTPS</code>协议的URL地址进行<code>git clone</code>时，系统没有提示让输入用户名密码，就直接返回权限校验失败的异常；</li>
+<li>在<code>HTTPS</code>协议的URL地址中加上GitHub用户名，就可以正常<code>clone</code>，而且，系统也没有提示输入密码。</li>
+</ul>
+<p>这说明，在系统中的某个地方，应该是保存了GitHub账号密码的，所以在未指定账号的情况下，<code>git clone</code>时系统就不再要求用户输入账号密码，而是直接读取那个保存好的账号信息；但是，那个保存的GitHub账号密码应该是存在问题的，这就造成采用那个账号信息去GitHub校验时无法通过，从而返回异常报错。</p>
+<p>基于以上推测，寻找问题根源的当务之急是找到保存GitHub账号密码的地方。</p>
+<p>通过查看Git官方文档，存储Git用户信息的地方有三个：</p>
+<ul>
+<li><code>/etc/gitconfig</code>：存储当前系统所有用户的git配置信息；</li>
+<li><code>~/.gitconfig</code>或<code>~/.config/git/config</code>：存储当前用户的git配置信息；</li>
+<li>仓库的Git目录中的config文件（即<code>repo/.git/config</code>）：存储当前仓库的git配置信息。</li>
+</ul>
+<p>这三个配置项的优先级从上往下依次上升，即<code>repo/.git/config</code>会覆盖<code>~/.gitconfig</code>中的配置，<code>~/.gitconfig</code>会覆盖<code>/etc/gitconfig</code>中的配置。</p>
+<p>回到当前问题，由于还没有进入到具体的Git仓库，因此<code>repo/.git/config</code>可直接排除；然后是查看当前用户的git配置，在当前用户HOME目录下没有<code>~/.config/git/config</code>文件，只有<code>~/.gitconfig</code>，不过在<code>~/.gitconfig</code>中并没有账号信息；再去查看系统级的git配置信息，即<code>/etc/gitconfig</code>文件，但发现当前系统中并没有该文件。</p>
+<p>找遍了Git用户信息可能存储的地方，都没有看到账号配置信息，那还可能存储在哪儿呢？</p>
+<p>这时基本上是毫无思路了，只能靠各种胡乱猜测，甚至尝试采用Wireshark分别在两台Mac上对<code>git clone</code>的过程进行抓包，对比通讯数据的差异，但都没有找到答案。</p>
+<p>最后，无意中想到了Mac的<code>Keychain</code>机制。在Mac OSX的<code>Keychain</code>中，可以保存用户的账号密码等<code>credentials</code>，那git账号会不会也保存到<code>Keychain</code>中了呢？</p>
+<p>在Macbook Air中打开<code>Keychain Access</code>应用软件，搜索<code>github</code>，果然发现存在记录。</p>
+<p><img src="/images/Mac_Keychain_GitHub.jpg" alt="Mac Keychain of GitHub"></p>
+<p>而且，<code>github.com</code>这一项还存在两条记录。一条是我的个人账号<code>debugtalk</code>，另一条是公司的工作账号<code>leolee</code>。</p>
+<p><strong>至此，真相大白！！！</strong></p>
+<p>在我的Macbook Air中，<code>Keychain Access</code>中保存了我的GitHub个人账号（<code>debugtalk</code>），该账号是没有权限访问公司私有仓库的。但是在Terminal中执行<code>git clone</code>命令时，系统优先读取了我的个人账号，并用该账号向GitHub发起校验请求，从而造成读取公司私有仓库时权限校验失败。然而，在<code>HTTPS</code>协议的URL地址中加上GitHub工作账号（<code>leolee</code>）时，由于此时指定了账号名称，因此在<code>Keychain</code>中读取账号信息时就可以找到对应账号（包含密码），并且在无需输入密码的情况下就能成功通过GitHub的权限校验，进而成功<code>clone</code>得到代码。</p>
+<p>原因弄清楚之后，解决方式就很简单了，在<code>Keychain</code>中删除个人账号，然后就正常了。</p>
+<h2 id="总结回顾"><a href="#总结回顾" class="headerlink" title="总结回顾"></a>总结回顾</h2><p>但是，问题真的解决了么？</p>
+<p>并没有！</p>
+<p>简单粗暴地在Keychain中将个人GitHub账号删除了，虽然再次访问公司代码仓库时正常了，那我要再访问个人仓库时该怎么办呢？</p>
+<p>貌似并没有清晰的思路。虽然网上也有不少操作指导教程，但是对于操作背后的原理，还是有很多不清晰的地方。</p>
+<p>再回到前面的背景描述，以及定位问题的整个过程，不由地悲从中来。使用GitHub好歹也有好几年了，但是连最基本的概念都还一头雾水，所以遇到问题后只能靠瞎猜，东碰西撞，最后瞎猫碰到死耗子。</p>
+<p>GitHub的<code>HTTPS</code>协议和<code>SSH</code>协议，这本来就对应着两套完全独立的权限校验方式，而我在<code>HTTPS</code>协议不正常的情况下还去查看<code>SSH</code>协议，这本来就实属多余。</p>
+<p>借助这次“掉坑”的经历，我对<code>Git</code>权限校验的两种方式重头进行了梳理，并单独写了一篇博客，《深入浅出Git权限校验》，虽然花了些时间，但总算是扫清了萦绕多年的迷雾，感觉倍儿爽！</p>
+<p>如果你也对<code>Git的权限校验</code>没有清晰的了解，遇到权限校验出错时只能“换一种方法试试”，也不知道怎么让一台计算机同时支持多个GitHub账号，那么也推荐看下那篇博客。</p>
+<p>在微信公众号<code>debugtalk</code>中输入<code>Git权限校验</code>，获取《深入浅出Git权限校验》。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/GitHub/">GitHub</a><a href="/tags/SSH/">SSH</a><a href="/tags/HTTPS，权限校验/">HTTPS，权限校验</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/trap-in-GitHub-authority-verification/" data-title="GitHub权限校验失败给我的启发 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/head-first-git-authority-verification/" title="深入浅出Git权限校验">
+  <strong>上一篇：</strong><br/>
+  <span>
+  深入浅出Git权限校验</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/promotion-page-test/"  title="关于促销活动页面测试的那些事儿">
+ <strong>下一篇：</strong><br/> 
+ <span>关于促销活动页面测试的那些事儿
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景描述"><span class="toc-number">1.</span> <span class="toc-text">背景描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定位分析"><span class="toc-number">2.</span> <span class="toc-text">定位分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结回顾"><span class="toc-number">3.</span> <span class="toc-text">总结回顾</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

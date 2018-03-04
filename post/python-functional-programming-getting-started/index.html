@@ -1,0 +1,698 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Python的函数式编程--从入门到⎡放弃⎦ | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="很早以前就听说过了函数式编程，印象中是一种很晦涩难懂的编程模式，但却一直没有去进行了解。 恰好这周组内的周会轮到我主持，一时也没想到要分享什么。灵光一闪，就选定函数式编程这个主题吧，反正组里的同事都没有学过，只需要讲解入门方面的知识就好，也正好可以借这个机会逼迫自己去学习下这种新的编程方式。 经过初步了解，发现支持函数式编程的语言挺多的，除了像Lisp、Scheme、Haskell、Erlang这">
+<meta name="keywords" content="Python,函数式编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python的函数式编程--从入门到⎡放弃⎦">
+<meta property="og:url" content="http://debugtalk.com/post/python-functional-programming-getting-started/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="很早以前就听说过了函数式编程，印象中是一种很晦涩难懂的编程模式，但却一直没有去进行了解。 恰好这周组内的周会轮到我主持，一时也没想到要分享什么。灵光一闪，就选定函数式编程这个主题吧，反正组里的同事都没有学过，只需要讲解入门方面的知识就好，也正好可以借这个机会逼迫自己去学习下这种新的编程方式。 经过初步了解，发现支持函数式编程的语言挺多的，除了像Lisp、Scheme、Haskell、Erlang这">
+<meta property="og:locale" content="en-us">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python的函数式编程--从入门到⎡放弃⎦">
+<meta name="twitter:description" content="很早以前就听说过了函数式编程，印象中是一种很晦涩难懂的编程模式，但却一直没有去进行了解。 恰好这周组内的周会轮到我主持，一时也没想到要分享什么。灵光一闪，就选定函数式编程这个主题吧，反正组里的同事都没有学过，只需要讲解入门方面的知识就好，也正好可以借这个机会逼迫自己去学习下这种新的编程方式。 经过初步了解，发现支持函数式编程的语言挺多的，除了像Lisp、Scheme、Haskell、Erlang这">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/python-functional-programming-getting-started/" title="Python的函数式编程--从入门到⎡放弃⎦" itemprop="url">Python的函数式编程--从入门到⎡放弃⎦</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2016-04-07T16:00:00.000Z" itemprop="datePublished"> Published 2016-04-08</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目标"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令式编程-amp-函数式编程"><span class="toc-number">2.</span> <span class="toc-text">命令式编程 &amp; 函数式编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python函数式编程的基本单元"><span class="toc-number">3.</span> <span class="toc-text">Python函数式编程的基本单元</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lambda"><span class="toc-number">3.1.</span> <span class="toc-text">lambda</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#map"><span class="toc-number">3.2.</span> <span class="toc-text">map()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reduce"><span class="toc-number">3.3.</span> <span class="toc-text">reduce()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#filter"><span class="toc-number">3.4.</span> <span class="toc-text">filter()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#替换条件控制语句"><span class="toc-number">4.</span> <span class="toc-text">替换条件控制语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#替换循环控制语句"><span class="toc-number">5.</span> <span class="toc-text">替换循环控制语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#替换for循环"><span class="toc-number">5.1.</span> <span class="toc-text">替换for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#替换while循环"><span class="toc-number">5.2.</span> <span class="toc-text">替换while循环</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更多示例"><span class="toc-number">6.</span> <span class="toc-text">更多示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">8.</span> <span class="toc-text">参考链接</span></a></li></ol>
+		
+		</div>
+		
+		<p>很早以前就听说过了函数式编程，印象中是一种很晦涩难懂的编程模式，但却一直没有去进行了解。</p>
+<p>恰好这周组内的周会轮到我主持，一时也没想到要分享什么。灵光一闪，就选定函数式编程这个主题吧，反正组里的同事都没有学过，只需要讲解入门方面的知识就好，也正好可以借这个机会逼迫自己去学习下这种新的编程方式。</p>
+<p>经过初步了解，发现支持函数式编程的语言挺多的，除了像Lisp、Scheme、Haskell、Erlang这样专用的函数式编程语言，我们常用的好多通用型编程语言（如Java、Python、Ruby、Javascript等）都支持函数式编程模式。考虑了下实际情况，最终还是选择Python作为函数式编程的入门语言，因为组内同事都熟悉Python，以此作为切入点不会产生太大困难。</p>
+<p>经过查询资料和初步学习，对函数式编程有了些概念，经过整理，便形成了分享PPT。</p>
+<p>以下便是这次分享的内容。</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>通常，我们在新学习一门技术或者编程语言的时候，通常都会先从相关概念和特性入手。对于新接触函数式编程的人来说，可能会想知道如下几点：</p>
+<ul>
+<li>什么是函数式编程？</li>
+<li>函数式编程的特点？</li>
+<li>函数式编程的用途？</li>
+<li>函数式编程相比于命令式编程和面向对象编程的优缺点？</li>
+</ul>
+<p>但是我这次分享却没有按照这个思路，因为我感觉在一开始就向听众灌输太多概念性的东西，反倒会让听众感到迷糊。因为经过查询资料发现，对于什么是函数化编程，很难能有一个协调一致的定义。而且由于我也是新接触，自身的理解可能会存在较大的偏差。</p>
+<p>因此，我决定分享内容尽量从大家熟悉的命令式编程切入，通过大量实例来向听众展现函数式编程思维方式的不同之处。在这之后，再回过头看这几个问题，相信听众应该都会有更深刻的理解。</p>
+<p>考虑到实际情况，本次分享希望能达成的目标是：</p>
+<ul>
+<li>了解函数式编程与命令式编程的主要区别</li>
+<li>掌握Python语言函数式编程的基本函数和算子</li>
+<li>会将简单的命令式编程语句转换为函数式编程</li>
+</ul>
+<h2 id="命令式编程-amp-函数式编程"><a href="#命令式编程-amp-函数式编程" class="headerlink" title="命令式编程 &amp; 函数式编程"></a>命令式编程 &amp; 函数式编程</h2><p>首先从大家熟悉的命令式编程开始，我们先回顾下平时在写代码时主要的情景。</p>
+<p>其实，不管我们的业务代码有多复杂，都离不开以下几类操作：</p>
+<ul>
+<li>函数定义：def</li>
+<li>条件控制：if, elif, else</li>
+<li>循环控制：for, break, continue, while</li>
+</ul>
+<p>当然，这只是部分操作类型，除此之外还应该有类和模块、异常处理等等。但考虑到是入门，我们就先只关注上面这三种最常见的操作。</p>
+<p>对应地，函数式编程也有自己的关键字。在Python语言中，用于函数式编程的主要由3个基本函数和1个算子。</p>
+<ul>
+<li>基本函数：map()、reduce()、filter()</li>
+<li>算子(operator)：lambda</li>
+</ul>
+<p>令人惊讶的是，仅仅采用这几个函数和算子就基本上可以实现任意Python程序。</p>
+<p>当然，能实现是一回事儿，实际编码时是否这么写又是另外一回事儿。估计要真只采用这几个基本单元来写所有代码的话，不管是在表达上还是在阅读上应该都挺别扭的。不过，尝试采用这几个基本单元来替代上述的函数定义、条件控制、循环控制等操作，对理解函数式编程如何通过函数和递归表达流程控制应该会很有帮助。</p>
+<p>在开始尝试将命令式编程转换为函数式编程之前，我们还是需要先熟悉下这几个基本单元。</p>
+<h2 id="Python函数式编程的基本单元"><a href="#Python函数式编程的基本单元" class="headerlink" title="Python函数式编程的基本单元"></a>Python函数式编程的基本单元</h2><h3 id="lambda"><a href="#lambda" class="headerlink" title="lambda"></a>lambda</h3><p>lambda这个关键词在很多语言中都存在。简单地说，它可以实现函数创建的功能。</p>
+<p>如下便是lambda的两种使用方式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func1 = <span class="keyword">lambda</span> : &lt;expression()&gt;</div><div class="line">func2 = <span class="keyword">lambda</span> x : &lt;expression(x)&gt;</div><div class="line">func3 = <span class="keyword">lambda</span> x,y : &lt;expression(x,y)&gt;</div></pre></td></tr></table></figure>
+<p>在第一条语句中，采用lambda创建了一个无参的函数func1。这和下面采用def创建函数的效果是相同的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></div><div class="line">    &lt;expression()&gt;</div></pre></td></tr></table></figure>
+<p>在第二条和第三条语句中，分别采用lambda创建了需要传入1个参数的函数func2，以及传入2个参数的函数func3。这和下面采用<code>def</code>创建函数的效果是相同的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">(x)</span>:</span></div><div class="line">    &lt;expression(x)&gt;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">func3</span><span class="params">(x,y)</span>:</span></div><div class="line">    &lt;expression(x,y)&gt;</div></pre></td></tr></table></figure>
+<p>需要注意的是，调用func1的时候，虽然不需要传入参数，但是必须要带有括号<code>()</code>，否则返回的只是函数的定义，而非函数执行的结果。这个和在ruby中调用无参函数时有所不同，希望ruby程序员引起注意。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>func = <span class="keyword">lambda</span> : <span class="number">123</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>func</div><div class="line">&lt;function &lt;<span class="keyword">lambda</span>&gt; at <span class="number">0x100f4e1b8</span>&gt;</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>func()</div><div class="line"><span class="number">123</span></div></pre></td></tr></table></figure>
+<p>另外，虽然在上面例子中都将lambda创建的函数赋值给了一个函数名，但这并不是必须的。从下面的例子中大家可以看到，很多时候我们都是直接调用lambda创建的函数，而并没有命名一个函数，这也是我们常听说的匿名函数的由来。</p>
+<h3 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h3><p><code>map()</code>函数的常见调用形式如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">map(func, iterable)</div></pre></td></tr></table></figure>
+<p><code>map()</code>需要两个必填参数，第一个参数是一个函数名，第二个参数是一个可迭代的对象，如列表、元组等。</p>
+<p><code>map()</code>实现的功能很简单，就是将第二个参数（iterable）中的每一个元素分别传给第一个参数（func），依次执行函数得到结果，并将结果组成一个新的<code>list</code>对象后进行返回。返回结果永远都是一个<code>list</code>。</p>
+<p>简单示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>double_func = <span class="keyword">lambda</span> s : s * <span class="number">2</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(double_func, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</div><div class="line">[<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>]</div></pre></td></tr></table></figure>
+<p>除了传入一个可迭代对象这种常见的模式外，<code>map()</code>还支持传入多个可迭代对象。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">map(func, iterable1, iterable2)</div></pre></td></tr></table></figure>
+<p>在传入多个可迭代对象的情况下，<code>map()</code>会依次从所有可迭代对象中依次取一个元素，组成一个元组列表，然后将元组依次传给func；若可迭代对象的长度不一致，则会以None进行补上。</p>
+<p>通过以下示例应该就比较容易理解。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>plus = <span class="keyword">lambda</span> x,y : (x <span class="keyword">or</span> <span class="number">0</span>) + (y <span class="keyword">or</span> <span class="number">0</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(plus, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</div><div class="line">[<span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(plus, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</div><div class="line">[<span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">4</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(plus, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>])</div><div class="line">[<span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">7</span>]</div></pre></td></tr></table></figure>
+<p>在上面的例子中，之所以采用<code>x or 0</code>的形式，是为了防止<code>None + int</code>出现异常。</p>
+<p>需要注意的是，可迭代对象的个数应该与func的参数个数一致，否则就会出现异常，因为传参个数与函数参数个数不一致了，这个应该比较好理解。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>plus = <span class="keyword">lambda</span> x,y : x + y</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(plus, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: &lt;<span class="keyword">lambda</span>&gt;() takes exactly <span class="number">2</span> arguments (<span class="number">1</span> given)</div></pre></td></tr></table></figure>
+<p>另外，<code>map()</code>还存在一种特殊情况，就是func为None。这个时候，<code>map()</code>仍然是从所有可迭代对象中依次取一个元素，组成一个元组列表，然后将这个元组列表作为结果进行返回。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(<span class="keyword">None</span>, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(<span class="keyword">None</span>, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], [<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>])</div><div class="line">[(<span class="number">1</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">6</span>), (<span class="number">3</span>, <span class="number">7</span>), (<span class="number">4</span>, <span class="number">8</span>)]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(<span class="keyword">None</span>, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], [<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>])</div><div class="line">[(<span class="number">1</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">6</span>), (<span class="number">3</span>, <span class="number">7</span>), (<span class="number">4</span>, <span class="keyword">None</span>)]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(<span class="keyword">None</span>, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], [<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>], [<span class="number">11</span>,<span class="number">12</span>])</div><div class="line">[(<span class="number">1</span>, <span class="number">6</span>, <span class="number">11</span>), (<span class="number">2</span>, <span class="number">7</span>, <span class="number">12</span>), (<span class="number">3</span>, <span class="number">8</span>, <span class="keyword">None</span>), (<span class="number">4</span>, <span class="number">9</span>, <span class="keyword">None</span>)]</div></pre></td></tr></table></figure>
+<h3 id="reduce"><a href="#reduce" class="headerlink" title="reduce()"></a>reduce()</h3><p><code>reduce()</code>函数的调用形式如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reduce(func, iterable[, initializer])</div></pre></td></tr></table></figure>
+<p><code>reduce()</code>函数的功能是对可迭代对象（iterable）中的元素从左到右进行累计运算，最终得到一个数值。第三个参数initializer是初始数值，可以空置，空置为None时就从可迭代对象（iterable）的第二个元素开始，并将第一个元素作为之前的结果。</p>
+<p>文字描述可能不大清楚，看下<code>reduce()</code>的源码应该就比较清晰了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">reduce</span><span class="params">(function, iterable, initializer=None)</span>:</span></div><div class="line">    it = iter(iterable)</div><div class="line">    <span class="keyword">if</span> initializer <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            initializer = next(it)</div><div class="line">        <span class="keyword">except</span> StopIteration:</div><div class="line">            <span class="keyword">raise</span> TypeError(<span class="string">'reduce() of empty sequence with no initial value'</span>)</div><div class="line">    accum_value = initializer</div><div class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> it:</div><div class="line">        accum_value = function(accum_value, x)</div><div class="line">    <span class="keyword">return</span> accum_value</div></pre></td></tr></table></figure>
+<p>再加上如下示例，对<code>reduce()</code>的功能应该就能掌握了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>plus = <span class="keyword">lambda</span> x, y : x + y</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(plus, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</div><div class="line"><span class="number">15</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>reduce(plus, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>], <span class="number">10</span>)</div><div class="line"><span class="number">25</span></div></pre></td></tr></table></figure>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter()"></a>filter()</h3><p><code>filter()</code>函数的调用形式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">filter(func, iterable)</div></pre></td></tr></table></figure>
+<p><code>filter()</code>有且仅有两个参数，第一个参数是一个函数名，第二个参数是一个可迭代的对象，如列表、元组等。</p>
+<p><code>filter()</code>函数的调用形式与<code>map()</code>比较相近，都是将第二个参数（iterable）中的每一个元素分别传给第一个参数（func），依次执行函数得到结果；差异在于，<code>filter()</code>会判断每次执行结果的<code>bool</code>值，并只将<code>bool</code>值为<code>true</code>的筛选出来，组成一个新的列表并进行返回。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>mode2 = <span class="keyword">lambda</span> x : x % <span class="number">2</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>filter(mode2, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>])</div><div class="line">[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]</div></pre></td></tr></table></figure>
+<p>以上便是Python函数式编程基本单元的核心内容。</p>
+<p>接下来，我们就开始尝试采用新学习到的基本单元对命令式编程中的<code>条件控制</code>和<code>循环控制</code>进行转换。</p>
+<h2 id="替换条件控制语句"><a href="#替换条件控制语句" class="headerlink" title="替换条件控制语句"></a>替换条件控制语句</h2><p>在对<code>条件控制</code>进行替换之前，我们先来回顾下Python中对布尔表达式求值时进行的“短路”处理。</p>
+<p>什么叫“短路”处理？简单地讲，就是如下两点：</p>
+<ul>
+<li>在<code>f(x) and g(y)</code>中，当<code>f(x)</code>为<code>false</code>时，不会再执行<code>g(y)</code>，直接返回<code>false</code></li>
+<li>在<code>f(x) or g(y)</code>中，当<code>f(x)</code>为<code>true</code>时，不会再执行<code>g(y)</code>，直接返回<code>true</code></li>
+</ul>
+<p>结论是显然易现的，就不再过多解释。</p>
+<p>那么，对应到条件控制语句，我们不难理解，如下条件控制语句和表达式是等价的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># flow control statement</span></div><div class="line"><span class="keyword">if</span> &lt;cond1&gt;:   func1()</div><div class="line"><span class="keyword">elif</span> &lt;cond2&gt;: func2()</div><div class="line"><span class="keyword">else</span>:         func3()</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Equivalent "short circuit" expression</span></div><div class="line">(&lt;cond1&gt; <span class="keyword">and</span> func1()) <span class="keyword">or</span> (&lt;cond2&gt; <span class="keyword">and</span> func2()) <span class="keyword">or</span> (func3())</div></pre></td></tr></table></figure>
+<p>通过这个等价替换，我们就去除掉了<code>if/elif/else</code>关键词，将条件控制语句转换为一个表达式。那这个表达式和函数式编程有什么关系呢？</p>
+<p>这时我们回顾上面讲过的<code>lambda</code>，会发现<code>lambda</code>算子返回的就是一个表达式。</p>
+<p>基于这一点，我们就可以采用<code>lambda</code>创建如下函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>pr = <span class="keyword">lambda</span> s:s</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>print_num = <span class="keyword">lambda</span> x: (x==<span class="number">1</span> <span class="keyword">and</span> pr(<span class="string">"one"</span>)) \</div><div class="line">....                  <span class="keyword">or</span> (x==<span class="number">2</span> <span class="keyword">and</span> pr(<span class="string">"two"</span>)) \</div><div class="line">....                  <span class="keyword">or</span> (pr(<span class="string">"other"</span>))</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>print_num(<span class="number">1</span>)</div><div class="line"><span class="string">'one'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>print_num(<span class="number">2</span>)</div><div class="line"><span class="string">'two'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>print_num(<span class="number">3</span>)</div><div class="line"><span class="string">'other'</span></div></pre></td></tr></table></figure>
+<p>通过函数调用的结果可以看到，以上函数实现的功能与之前的条件控制语句实现的功能完全相同。</p>
+<p>到这里，我们就实现了命令式条件控制语句向函数式语句的转换。并且这个转换的方法是通用的，所有条件控制语句都可以采用这种方式转换为函数式语句。</p>
+<h2 id="替换循环控制语句"><a href="#替换循环控制语句" class="headerlink" title="替换循环控制语句"></a>替换循环控制语句</h2><p>接下来我们再看<code>循环控制</code>语句的转换。在Python中，循环控制是通过<code>for</code>和<code>while</code>这两种方式实现的。</p>
+<h3 id="替换for循环"><a href="#替换for循环" class="headerlink" title="替换for循环"></a>替换for循环</h3><p><code>for</code>循环语句的替换十分简单，采用<code>map()</code>函数就能轻松实现。这主要是因为<code>for</code>语句和<code>map()</code>原理相同，都是对可迭代对象里面的每一个元素进行操作，因此转换过程比较自然。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># statement-based for loop</span></div><div class="line"><span class="keyword">for</span> e <span class="keyword">in</span> lst:  func(e)</div><div class="line"></div><div class="line"><span class="comment"># Equivalent map()-based loop</span></div><div class="line">map(func, lst)</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>square = <span class="keyword">lambda</span> x : x * x</div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]: square(x)</div><div class="line">...</div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">4</span></div><div class="line"><span class="number">9</span></div><div class="line"><span class="number">16</span></div><div class="line"><span class="number">25</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>map(square, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</div><div class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>]</div></pre></td></tr></table></figure>
+<h3 id="替换while循环"><a href="#替换while循环" class="headerlink" title="替换while循环"></a>替换while循环</h3><p><code>while</code>循环语句的替换相比而言就复杂了许多。</p>
+<p>下面分别是<code>while</code>循环语句及其对应的函数式风格的代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># statement-based while loop</span></div><div class="line"><span class="keyword">while</span> &lt;condition&gt;:</div><div class="line">    &lt;pre-suite&gt;</div><div class="line">    <span class="keyword">if</span> &lt;break_condition&gt;:</div><div class="line">        <span class="keyword">break</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        &lt;suite&gt;</div><div class="line"></div><div class="line"><span class="comment"># Equivalent FP-style recursive while loop</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">while_block</span><span class="params">()</span>:</span></div><div class="line">    &lt;pre-suite&gt;</div><div class="line">    <span class="keyword">if</span> &lt;break_condition&gt;:</div><div class="line">        <span class="keyword">return</span> <span class="number">1</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        &lt;suite&gt;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span></div><div class="line"> </div><div class="line">while_FP = <span class="keyword">lambda</span>: &lt;condition&gt; <span class="keyword">and</span> (while_block() <span class="keyword">or</span> while_FP())</div><div class="line">while_FP()</div></pre></td></tr></table></figure>
+<p>这里的难点在于，函数式<code>while_FP</code>循环采用了递归的概念。当<code>&lt;condition&gt;</code>为<code>true</code>时，进入循环体，执行<code>while_block()</code>；若<code>&lt;break_condition&gt;</code>为<code>true</code>时，返回1，<code>while_FP()</code>调用结束；若<code>&lt;break_condition&gt;</code>为<code>false</code>时，返回0，会继续执行<code>or</code>右侧的<code>while_FP()</code>，从而实现递归调用；若<code>&lt;break_condition&gt;</code>始终为<code>false</code>，则会持续递归调用<code>while_FP()</code>，这就实现了<code>while</code>语句中同样的功能。</p>
+<p>为了对函数式的<code>while</code>循环有更深刻的理解，可以再看下如下示例。这个例子是在网上找的，实现的是<code>echo</code>功能：输入任意非”quit”字符时，打印输入的字符；输入”quit”字符时，退出程序。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  PythonFP python pyecho.py</div><div class="line">IMP -- 1</div><div class="line">1</div><div class="line">IMP -- 2</div><div class="line">2</div><div class="line">IMP -- abc</div><div class="line">abc</div><div class="line">IMP -- 1 + 1</div><div class="line">1 + 1</div><div class="line">IMP -- quit</div><div class="line">quit</div><div class="line">➜  PythonFP</div></pre></td></tr></table></figure>
+<p>如下便是分别采用过程式和函数式语句实现的”echo”功能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># imperative version of "echo()"</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">echo_IMP</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">while</span> <span class="number">1</span>:</div><div class="line">        x = raw_input(<span class="string">"IMP -- "</span>)</div><div class="line">        <span class="keyword">print</span> x</div><div class="line">        <span class="keyword">if</span> x == <span class="string">'quit'</span>:</div><div class="line">            <span class="keyword">break</span></div><div class="line"></div><div class="line">echo_IMP()</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">monadic_print</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="keyword">print</span> x</div><div class="line">    <span class="keyword">return</span> x</div><div class="line"></div><div class="line"><span class="comment"># FP version of "echo()"</span></div><div class="line">echo_FP = <span class="keyword">lambda</span>: monadic_print(raw_input(<span class="string">"FP -- "</span>))==<span class="string">'quit'</span> <span class="keyword">or</span> echo_FP()</div><div class="line">echo_FP()</div></pre></td></tr></table></figure>
+<h2 id="更多示例"><a href="#更多示例" class="headerlink" title="更多示例"></a>更多示例</h2><p>到此为止，我们对函数式编程总算有了点认识，到达之前设定的目标应该是没有问题了，看来函数式编程也并没有想象中的那么难懂。</p>
+<p>然而，这都只是函数式编程的皮毛而已，不信？再看下如下示例。</p>
+<p>这个示例也是在网上找的，实现的是两个列表笛卡尔积的筛选功能，找出笛卡尔积元组集合中两个元素之积大于25的所有元组。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">bigmuls = <span class="keyword">lambda</span> xs,ys: filter(<span class="keyword">lambda</span> (x,y):x*y &gt; <span class="number">25</span>, combine(xs,ys))</div><div class="line">combine = <span class="keyword">lambda</span> xs,ys: map(<span class="keyword">None</span>, xs*len(ys), dupelms(ys,len(xs)))</div><div class="line">dupelms = <span class="keyword">lambda</span> lst,n: reduce(<span class="keyword">lambda</span> s,t:s+t, map(<span class="keyword">lambda</span> l,n=n: [l]*n, lst))</div><div class="line"></div><div class="line"><span class="keyword">print</span> bigmuls([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">10</span>,<span class="number">15</span>,<span class="number">3</span>,<span class="number">22</span>])</div><div class="line"></div><div class="line">[(<span class="number">3</span>, <span class="number">10</span>), (<span class="number">4</span>, <span class="number">10</span>), (<span class="number">2</span>, <span class="number">15</span>), (<span class="number">3</span>, <span class="number">15</span>), (<span class="number">4</span>, <span class="number">15</span>), (<span class="number">2</span>, <span class="number">22</span>), (<span class="number">3</span>, <span class="number">22</span>), (<span class="number">4</span>, <span class="number">22</span>)]</div></pre></td></tr></table></figure>
+<p>虽然这个例子中<code>lambda/map/reduce/filter</code>都是我们已经比较熟悉了的基本单元，但是经过组合后，理解起来还是会比较吃力。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>看到这里，有的同学就开玩笑说我这标题名称非常贴切，《Python的函数式编程–从入门到⎡放弃⎦》，因为以后在工作中应该也不会再尝试使用函数式编程了，^_^。</p>
+<p>不过，我还是觉得函数式编程挺有意思的，更高级的特性后面值得再继续学习。即使代码不用写成pure函数式风格，但在某些时候局部使用<code>lambda/map/reduce/filter</code>也能大大简化代码，也是一个不错的选择。</p>
+<p>另外，通过此次分享，再次切身体会到了教授是最好的学习方式，只有当你真正能将一个概念讲解清楚的时候，你才算是掌握了这个概念。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://www.ibm.com/developerworks/linux/library/l-prog/index.html" target="_blank" rel="external">http://www.ibm.com/developerworks/linux/library/l-prog/index.html</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a><a href="/tags/函数式编程/">函数式编程</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/python-functional-programming-getting-started/" data-title="Python的函数式编程--从入门到⎡放弃⎦ | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/Android-performance-test-UI-Automation-with-Python/" title="Android App持续集成性能测试：使用Python实现UI自动化">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Android App持续集成性能测试：使用Python实现UI自动化</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/cheat-in-wechat-moments-voting-activity/"  title="微信朋友圈投票活动的刷票案例分析">
+ <strong>下一篇：</strong><br/> 
+ <span>微信朋友圈投票活动的刷票案例分析
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目标"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令式编程-amp-函数式编程"><span class="toc-number">2.</span> <span class="toc-text">命令式编程 &amp; 函数式编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python函数式编程的基本单元"><span class="toc-number">3.</span> <span class="toc-text">Python函数式编程的基本单元</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lambda"><span class="toc-number">3.1.</span> <span class="toc-text">lambda</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#map"><span class="toc-number">3.2.</span> <span class="toc-text">map()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reduce"><span class="toc-number">3.3.</span> <span class="toc-text">reduce()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#filter"><span class="toc-number">3.4.</span> <span class="toc-text">filter()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#替换条件控制语句"><span class="toc-number">4.</span> <span class="toc-text">替换条件控制语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#替换循环控制语句"><span class="toc-number">5.</span> <span class="toc-text">替换循环控制语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#替换for循环"><span class="toc-number">5.1.</span> <span class="toc-text">替换for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#替换while循环"><span class="toc-number">5.2.</span> <span class="toc-text">替换while循环</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更多示例"><span class="toc-number">6.</span> <span class="toc-text">更多示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">8.</span> <span class="toc-text">参考链接</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

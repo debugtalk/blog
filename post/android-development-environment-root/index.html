@@ -1,0 +1,624 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Android开发环境配置3：Root | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="What is rootroot的原理破解Android root权限的本质是： 在系统中加入一个任何用户都可能用于登陆的su命令。或者说替换掉系统中的su程序，因为系统中的默认su程序需要验证实际用户权限，只有root和shell用户才有权运行系统默认的su程序，其他用户运行都会返回错误。而破解后的su将不检查实际用户权限，这样普通的用户也将可以运行su程序，也可以通过su程序将自己的权限提升。">
+<meta name="keywords" content="Android,环境搭建,root">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android开发环境配置3：Root">
+<meta property="og:url" content="http://debugtalk.com/post/android-development-environment-root/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="What is rootroot的原理破解Android root权限的本质是： 在系统中加入一个任何用户都可能用于登陆的su命令。或者说替换掉系统中的su程序，因为系统中的默认su程序需要验证实际用户权限，只有root和shell用户才有权运行系统默认的su程序，其他用户运行都会返回错误。而破解后的su将不检查实际用户权限，这样普通的用户也将可以运行su程序，也可以通过su程序将自己的权限提升。">
+<meta property="og:locale" content="en-us">
+<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android开发环境配置3：Root">
+<meta name="twitter:description" content="What is rootroot的原理破解Android root权限的本质是： 在系统中加入一个任何用户都可能用于登陆的su命令。或者说替换掉系统中的su程序，因为系统中的默认su程序需要验证实际用户权限，只有root和shell用户才有权运行系统默认的su程序，其他用户运行都会返回错误。而破解后的su将不检查实际用户权限，这样普通的用户也将可以运行su程序，也可以通过su程序将自己的权限提升。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/android-development-environment-root/" title="Android开发环境配置3：Root" itemprop="url">Android开发环境配置3：Root</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2015-07-04T16:00:00.000Z" itemprop="datePublished"> Published 2015-07-05</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-is-root"><span class="toc-number">1.</span> <span class="toc-text">What is root</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#root的原理"><span class="toc-number">1.1.</span> <span class="toc-text">root的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断手机是否root"><span class="toc-number">1.2.</span> <span class="toc-text">判断手机是否root</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-to-root"><span class="toc-number">2.</span> <span class="toc-text">How to root</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#准备工作（Prerequisites）"><span class="toc-number">2.1.</span> <span class="toc-text">准备工作（Prerequisites）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法1：flash-rooted-boot-img"><span class="toc-number">2.2.</span> <span class="toc-text">方法1：flash rooted boot.img</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法2、在Recovery环境下安装SuperSU"><span class="toc-number">2.3.</span> <span class="toc-text">方法2、在Recovery环境下安装SuperSU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法3、采用TWRP-Recovery的OpenRecoveryScript引擎执行命令"><span class="toc-number">2.4.</span> <span class="toc-text">方法3、采用TWRP Recovery的OpenRecoveryScript引擎执行命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、传输root文件至Android设备"><span class="toc-number">2.4.1.</span> <span class="toc-text">1、传输root文件至Android设备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、获取临时root权限"><span class="toc-number">2.4.2.</span> <span class="toc-text">2、获取临时root权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、创建openrecoveryscript文件"><span class="toc-number">2.4.3.</span> <span class="toc-text">3、创建openrecoveryscript文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、写入openrecoveryscript文件"><span class="toc-number">2.4.4.</span> <span class="toc-text">4、写入openrecoveryscript文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5、启动TWRP-Recovery环境"><span class="toc-number">2.4.5.</span> <span class="toc-text">5、启动TWRP Recovery环境</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="What-is-root"><a href="#What-is-root" class="headerlink" title="What is root"></a>What is root</h2><h3 id="root的原理"><a href="#root的原理" class="headerlink" title="root的原理"></a>root的原理</h3><p>破解Android root权限的本质是：</p>
+<p>在系统中加入一个任何用户都可能用于登陆的su命令。或者说替换掉系统中的su程序，因为系统中的默认su程序需要验证实际用户权限，只有root和shell用户才有权运行系统默认的su程序，其他用户运行都会返回错误。而破解后的su将不检查实际用户权限，这样普通的用户也将可以运行su程序，也可以通过su程序将自己的权限提升。</p>
+<h3 id="判断手机是否root"><a href="#判断手机是否root" class="headerlink" title="判断手机是否root"></a>判断手机是否root</h3><p>通过<code>adb shell</code>连接至手机以后，执行<code>su</code>命令，如果无法执行，则说明该手机无<code>root</code>权限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ adb shell</div><div class="line">shell@hammerhead:/ $</div><div class="line">shell@hammerhead:/ $ su</div><div class="line">su <span class="built_in">command</span> not found</div></pre></td></tr></table></figure>
+<h2 id="How-to-root"><a href="#How-to-root" class="headerlink" title="How to root"></a>How to root</h2><p>本文中用到的操作系统为Linux（Debian）；Android设备型号为Nexus 5（HAMMERHEAD），Android版本为4.4.4（Build Num KTU84P）</p>
+<h3 id="准备工作（Prerequisites）"><a href="#准备工作（Prerequisites）" class="headerlink" title="准备工作（Prerequisites）"></a>准备工作（Prerequisites）</h3><ul>
+<li>配置Android调试环境：安装adb和fastboot工具，开启USB调试模式（USB debugging），建立手机与电脑之间的USB调试连接。</li>
+<li>Android设备的Bootloader已完成解锁（unlocked）。</li>
+<li>下载已经完成root的boot.img，例如，CF-Auto-Root-hammerhead-hammerhead-nexus5.img</li>
+<li>下载第三方<code>TWRP Recovery</code>镜像包，例如，openrecovery-twrp-2.8.7.1-hammerhead.img</li>
+</ul>
+<h3 id="方法1：flash-rooted-boot-img"><a href="#方法1：flash-rooted-boot-img" class="headerlink" title="方法1：flash rooted boot.img"></a>方法1：flash <code>rooted</code> boot.img</h3><p>进行root操作，最便捷方式的便是刷入已经root过的<code>boot.img</code>对原有<code>boot</code>区域进行擦写覆盖。<br>对于Nexus设备，可以在<a href="https://autoroot.chainfire.eu/" target="_blank" rel="external"><code>CF-Auto-Root Repository</code></a>网站上下载对应设备型号的镜像文件，该镜像中包含了<code>SuperSU</code>程序。</p>
+<p>在<code>flash</code>操作前，先将设备切换至<code>fastboot</code>模式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ adb reboot bootloader</div></pre></td></tr></table></figure>
+<p>在<code>fastboot</code>模式下，在电脑的命令终端中执行如下命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ fastboot flash boot CF-Auto-Root-hammerhead-hammerhead-nexus5.img</div><div class="line">sending <span class="string">'boot'</span> (9222 KB)...</div><div class="line">OKAY [  0.525s]</div><div class="line">writing <span class="string">'boot'</span>...</div><div class="line">OKAY [  0.787s]</div><div class="line">finished. total time: 1.313s</div><div class="line"></div><div class="line">$ fastboot reboot</div><div class="line">rebooting...</div><div class="line"></div><div class="line">finished. total time: 0.511s</div></pre></td></tr></table></figure>
+<p>采用<code>fastboot flash boot XXX_boot.img</code>进行操作时，手机会将<code>XXX_boot.img</code>下载至设备并对<code>boot</code>区域进行擦写覆盖，从而使手机获得root权限。即使手机再次重启，root权限仍然存在。</p>
+<p>再次通过<code>adb shell</code>连接至手机，可以看见，现在已经获取到了<code>root</code>权限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ adb shell</div><div class="line">root@hammerhead:/ <span class="comment">#</span></div></pre></td></tr></table></figure>
+<h3 id="方法2、在Recovery环境下安装SuperSU"><a href="#方法2、在Recovery环境下安装SuperSU" class="headerlink" title="方法2、在Recovery环境下安装SuperSU"></a>方法2、在<code>Recovery</code>环境下安装<code>SuperSU</code></h3><p>该种方法的实现思路在于，给手机安装<code>Custom Recovery</code>，然后在<code>recovery</code>模式下手工安装<code>SuperSU</code>。</p>
+<p>具体的操作方式在《<a href="!--￼12--">详解Recovery</a>》一文中进行了介绍。</p>
+<h3 id="方法3、采用TWRP-Recovery的OpenRecoveryScript引擎执行命令"><a href="#方法3、采用TWRP-Recovery的OpenRecoveryScript引擎执行命令" class="headerlink" title="方法3、采用TWRP Recovery的OpenRecoveryScript引擎执行命令"></a>方法3、采用<code>TWRP Recovery</code>的OpenRecoveryScript引擎执行命令</h3><p>对于<code>2.1</code>及以上版本的<code>TWRP Recovery</code>中，可以使用<code>OpenRecoveryScript</code>引擎，在<code>TWRP Recovery</code>启动时执行命令。</p>
+<h4 id="1、传输root文件至Android设备"><a href="#1、传输root文件至Android设备" class="headerlink" title="1、传输root文件至Android设备"></a>1、传输root文件至Android设备</h4><p>在Android设备未获得root权限之前，具有Write权限的文件夹并不多，通常可将要写入的文件传输至<code>/data/local/tmp/</code>路径下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ adb push UPDATE-SuperSU-v2.46.zip /data/<span class="built_in">local</span>/tmp/UPDATE-SuperSU-v2.46.zip</div><div class="line">$ adb push busybox-signed.zip /data/<span class="built_in">local</span>/tmp/busybox-signed.zip</div></pre></td></tr></table></figure>
+<h4 id="2、获取临时root权限"><a href="#2、获取临时root权限" class="headerlink" title="2、获取临时root权限"></a>2、获取临时root权限</h4><p>由于后续操作中要向<code>/cache/recovery/</code>目录写入文件，需要用到root权限。针对这种情况，可以采用已经root过的boot.img进行启动，临时获得root权限。</p>
+<p>首先，将设备切换至<code>fastboot</code>模式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ adb reboot bootloader</div></pre></td></tr></table></figure>
+<p>然后，采用已经root过的boot.img进行启动。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ fastboot boot modified_boot_hammerhead_4.4.4_KTU84P.img</div><div class="line">downloading <span class="string">'boot.img'</span>...</div><div class="line">OKAY [  0.463s]</div><div class="line">booting...</div><div class="line">OKAY [  0.110s]</div><div class="line">finished. total time: 0.573s</div></pre></td></tr></table></figure>
+<p>此处与方法1的区别在于，这里只是临时地采用已经root过的boot.img进行启动，但并没有对<code>boot</code>分区进行写入。当手机重启后，仍然是采用原有的<code>kernel</code>进行启动。</p>
+<h4 id="3、创建openrecoveryscript文件"><a href="#3、创建openrecoveryscript文件" class="headerlink" title="3、创建openrecoveryscript文件"></a>3、创建<code>openrecoveryscript</code>文件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ touch openrecoveryscript</div></pre></td></tr></table></figure>
+<p>在<code>openrecoveryscript</code>文件中，写入如下内容。其中，<code>zip</code>软件包的路径要求是存在于Android设备中的完整路径。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># openrecoveryscript</div><div class="line"><span class="keyword">set</span> tw_signed_zip_verify <span class="number">0</span></div><div class="line">install /data/local/tmp/perm-recovery-signed.zip</div><div class="line">install /data/local/tmp/UPDATE-SuperSU-v2.<span class="number">46</span>.zip</div><div class="line">install /data/local/tmp/busybox-signed.zip</div></pre></td></tr></table></figure>
+<h4 id="4、写入openrecoveryscript文件"><a href="#4、写入openrecoveryscript文件" class="headerlink" title="4、写入openrecoveryscript文件"></a>4、写入<code>openrecoveryscript</code>文件</h4><p>此处就是需要临时用到root权限的地方。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ adb push openrecoveryscript /cache/recovery/openrecoveryscript</div><div class="line">2 KB/s (169 bytes <span class="keyword">in</span> 0.057s)</div></pre></td></tr></table></figure>
+<p>如果没有root权限，写入文件时会提示<code>Permission denied</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ adb push openrecoveryscript /cache/recovery/openrecoveryscript</div><div class="line">failed to copy <span class="string">'openrecoveryscript'</span> to <span class="string">'/cache/recovery/openrecoveryscript'</span>: Permission denied</div></pre></td></tr></table></figure>
+<h4 id="5、启动TWRP-Recovery环境"><a href="#5、启动TWRP-Recovery环境" class="headerlink" title="5、启动TWRP Recovery环境"></a>5、启动<code>TWRP Recovery</code>环境</h4><p>启动<code>TWRP Recovery</code>时，会执行<code>/cache/recovery/openrecoveryscript</code>文件中的命令，即安装<code>SuperSU</code>等root软件。</p>
+<p>如果手机之前并未安装<code>TWRP Recovery</code>，也可以直接采用<code>TWRP Recovery</code>的镜像包进行启动，同样可以完成<code>/cache/recovery/openrecoveryscript</code>文件中命令的执行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastboot boot openrecovery-twrp-2.8.7.1-hammerhead.img</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/环境搭建/">环境搭建</a><a href="/tags/root/">root</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/android-development-environment-root/" data-title="Android开发环境配置3：Root | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/android-development-environment-device-configuration/" title="Android开发环境配置4：配置Android设备">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Android开发环境配置4：配置Android设备</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/android-development-environment-recovery/"  title="Android开发环境配置2：详解Recovery">
+ <strong>下一篇：</strong><br/> 
+ <span>Android开发环境配置2：详解Recovery
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-is-root"><span class="toc-number">1.</span> <span class="toc-text">What is root</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#root的原理"><span class="toc-number">1.1.</span> <span class="toc-text">root的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断手机是否root"><span class="toc-number">1.2.</span> <span class="toc-text">判断手机是否root</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-to-root"><span class="toc-number">2.</span> <span class="toc-text">How to root</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#准备工作（Prerequisites）"><span class="toc-number">2.1.</span> <span class="toc-text">准备工作（Prerequisites）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法1：flash-rooted-boot-img"><span class="toc-number">2.2.</span> <span class="toc-text">方法1：flash rooted boot.img</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法2、在Recovery环境下安装SuperSU"><span class="toc-number">2.3.</span> <span class="toc-text">方法2、在Recovery环境下安装SuperSU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法3、采用TWRP-Recovery的OpenRecoveryScript引擎执行命令"><span class="toc-number">2.4.</span> <span class="toc-text">方法3、采用TWRP Recovery的OpenRecoveryScript引擎执行命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、传输root文件至Android设备"><span class="toc-number">2.4.1.</span> <span class="toc-text">1、传输root文件至Android设备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、获取临时root权限"><span class="toc-number">2.4.2.</span> <span class="toc-text">2、获取临时root权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、创建openrecoveryscript文件"><span class="toc-number">2.4.3.</span> <span class="toc-text">3、创建openrecoveryscript文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、写入openrecoveryscript文件"><span class="toc-number">2.4.4.</span> <span class="toc-text">4、写入openrecoveryscript文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5、启动TWRP-Recovery环境"><span class="toc-number">2.4.5.</span> <span class="toc-text">5、启动TWRP Recovery环境</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

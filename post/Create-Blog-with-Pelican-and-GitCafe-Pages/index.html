@@ -1,0 +1,628 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用 Pelican + GitCafe Pages 创建 Blog | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="博客系统的技术实现博客系统采用 Pelican + GitCafe Pages 的技术架构。 其中，Pelican是一个由Python开发的用于生成静态页面的程序，可以将markdown等格式的文本生成模版格式化的html静态页面；而GitCafe提供的Pages服务可以通过项目的形式对Pelican生成的html文件进行托管，并可通过域名绑定的形式实现独立域名。 这种实现方式与 Jekyll +">
+<meta name="keywords" content="Pelican,Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Pelican + GitCafe Pages 创建 Blog">
+<meta property="og:url" content="http://debugtalk.com/post/Create-Blog-with-Pelican-and-GitCafe-Pages/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="博客系统的技术实现博客系统采用 Pelican + GitCafe Pages 的技术架构。 其中，Pelican是一个由Python开发的用于生成静态页面的程序，可以将markdown等格式的文本生成模版格式化的html静态页面；而GitCafe提供的Pages服务可以通过项目的形式对Pelican生成的html文件进行托管，并可通过域名绑定的形式实现独立域名。 这种实现方式与 Jekyll +">
+<meta property="og:locale" content="en-us">
+<meta property="og:updated_time" content="2017-09-04T05:28:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 Pelican + GitCafe Pages 创建 Blog">
+<meta name="twitter:description" content="博客系统的技术实现博客系统采用 Pelican + GitCafe Pages 的技术架构。 其中，Pelican是一个由Python开发的用于生成静态页面的程序，可以将markdown等格式的文本生成模版格式化的html静态页面；而GitCafe提供的Pages服务可以通过项目的形式对Pelican生成的html文件进行托管，并可通过域名绑定的形式实现独立域名。 这种实现方式与 Jekyll +">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/Create-Blog-with-Pelican-and-GitCafe-Pages/" title="使用 Pelican + GitCafe Pages 创建 Blog" itemprop="url">使用 Pelican + GitCafe Pages 创建 Blog</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2013-10-02T16:00:00.000Z" itemprop="datePublished"> Published 2013-10-03</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#博客系统的技术实现"><span class="toc-number">1.</span> <span class="toc-text">博客系统的技术实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#博客系统的初始化"><span class="toc-number">2.</span> <span class="toc-text">博客系统的初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置GitCafe"><span class="toc-number">3.</span> <span class="toc-text">配置GitCafe</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撰写文章"><span class="toc-number">4.</span> <span class="toc-text">撰写文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成html静态页面"><span class="toc-number">5.</span> <span class="toc-text">生成html静态页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上传到-GitCafe"><span class="toc-number">6.</span> <span class="toc-text">上传到 GitCafe</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更新博客"><span class="toc-number">7.</span> <span class="toc-text">更新博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">8.</span> <span class="toc-text">参考文章</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="博客系统的技术实现"><a href="#博客系统的技术实现" class="headerlink" title="博客系统的技术实现"></a>博客系统的技术实现</h2><p>博客系统采用 Pelican + GitCafe Pages 的技术架构。</p>
+<p>其中，Pelican是一个由Python开发的用于生成静态页面的程序，可以将markdown等格式的文本生成模版格式化的html静态页面；而GitCafe提供的Pages服务可以通过项目的形式对Pelican生成的html文件进行托管，并可通过域名绑定的形式实现独立域名。</p>
+<p>这种实现方式与 Jekyll + Github Pages 的实现方式大致相同，差别在于不同的静态页面生成系统和不同的托管平台。而为什么选择GitCafe而非GitHub，是因为GitHub服务器在国外，访问速度较慢，且存在偶尔无法访问的情况。</p>
+<h2 id="博客系统的初始化"><a href="#博客系统的初始化" class="headerlink" title="博客系统的初始化"></a>博客系统的初始化</h2><p>创建 Blog 目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir 52test.org</div><div class="line">cd 52test.org</div></pre></td></tr></table></figure></p>
+<p>初始化 Blog<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pelican-quickstart</div></pre></td></tr></table></figure></p>
+<p>根据提示一步步输入相应的配置项，完成配置后在Blog目录下会生成配置文件pelicanconf.py。但通过pelican-quickstart配置的选项较少，更多的配置选项可以参照Pelican官方网站中的教程对pelicanconf.py进行编辑。</p>
+<h2 id="配置GitCafe"><a href="#配置GitCafe" class="headerlink" title="配置GitCafe"></a>配置GitCafe</h2><p>在使用GitCafe之前，需要对电脑的Git客户端进行配置，使电脑与远程GitCafe服务器完成认证。<br>通常地，我们采用SSH Key认证方式，这需要我们在使用GitCafe前须先建创自已的SSH key。</p>
+<p><strong>进入SSH目录</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd ~/.ssh</div></pre></td></tr></table></figure>
+<p>如果还没有 ~/.ssh 目录的话，请先手工创建一个 <code>mkdir ~/.ssh</code></p>
+<p><strong>生成新的SSH秘钥</strong></p>
+<p>输入下面的代码，将命令中的 YOUR_EMAIL@YOUREMAIL.COM 改为你的Email地址，就可以生成新的key文件。当需要输入文件名的时候，点击回车键，即采用默认设置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -C &quot;YOUR_EMAIL@YOUREMAIL.COM&quot;</div><div class="line">Generating public/private rsa key pair.</div><div class="line">Enter file in which to save the key (/Users/your_user_directory/.ssh/id_rsa):&lt;回车就好&gt;</div></pre></td></tr></table></figure></p>
+<p>然后系统会要输入加密串（Passphrase）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Enter passphrase (empty for no passphrase):&lt;输入加密串&gt;</div><div class="line">Enter same passphrase again:&lt;再次输入加密串&gt;</div></pre></td></tr></table></figure></p>
+<p>最后看到如下的界面，即表示ssh key成功完成设置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Your identification has been saved in /c/Users/your_user_directory/.ssh/id_rsa.</div><div class="line">Your public key has been saved in /c/Users/your_user_directory/.ssh/id_rsa.pub.</div><div class="line">The key fingerprint is:</div><div class="line">15:81:d2:7a:c6:6c:0f:ec:b0:b6:d4:18:b8:d1:41:48 YOUR_EMAIL@YOUREMAIL.COM</div></pre></td></tr></table></figure></p>
+<p>SSH 秘钥生成结束后，可以在用户目录 (~/.ssh/) 下看到私钥 id_rsa 和公钥 id_rsa.pub 这两个文件，请妥善保管这两个文件。</p>
+<p><strong>添加 SSH 公钥到 GitCafe</strong></p>
+<p>用文本工具打开公钥文件 ~/.ssh/id_rsa.pub ，复制里面的所有内容到剪贴板。<br>进入 GitCafe-&gt;【账户设置】-&gt;【SSH 公钥管理】设置项，点击【添加新公钥】按钮，在Title文本框中输入标题，在Key文本框粘贴刚才复制的公钥字符串，输入GitCafe账户密码后按【保存】按钮完成操作。</p>
+<p><strong>测试连接</strong></p>
+<p>以上步骤完成后，就可以通过以下命令来测试是否可以连接 GitCafe 服务器了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -T git@gitcafe.com</div></pre></td></tr></table></figure></p>
+<p>如果是第一次连接的话，会出现以下警告，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">The authenticity of host &apos;gitcafe.com (50.116.2.223)&apos; can&apos;t be established.</div><div class="line">#RSA key fingerprint is 84:9e:c9:8e:7f:36:28:08:7e:13:bf:43:12:74:11:4e.</div><div class="line">#Are you sure you want to continue connecting (yes/no)?</div></pre></td></tr></table></figure></p>
+<p>正常情况下，显示的RSA key fingerprint应该与GitCafe提供的公钥一致，即84:9e:c9:8e:7f:36:28:08:7e:13:bf:43:12:74:11:4e。</p>
+<p>如果没有问题，输入yes按回车就可以了，中间会提示输入 passphrase 口令。</p>
+<p>最后，如果连接成功的话，会出现以下信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Hi USERNAME! You&apos;ve successfully authenticated, but GitCafe does not provide shell access.</div></pre></td></tr></table></figure></p>
+<p>测试通过后，就可以通过Git客户端向GitCafe服务器上传博客内容了。</p>
+<h2 id="撰写文章"><a href="#撰写文章" class="headerlink" title="撰写文章"></a>撰写文章</h2><p>在 content 目录下用 Markdown 语法来写一篇文章，格式大致如下所示，文件保存后缀为<code>.md</code>。<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Title: My First Blog #标题</div><div class="line">Date: 2013-10-05 #日期</div><div class="line">Tags: test, blog #标签</div><div class="line">Slug: my-first-post #URL</div><div class="line"></div><div class="line">文章内容</div></pre></td></tr></table></figure></p>
+<h2 id="生成html静态页面"><a href="#生成html静态页面" class="headerlink" title="生成html静态页面"></a>生成html静态页面</h2><p>创建输出目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir leolee</div></pre></td></tr></table></figure></p>
+<p>生成页面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pelican -s pelicanconf.py content -o leolee</div></pre></td></tr></table></figure></p>
+<h2 id="上传到-GitCafe"><a href="#上传到-GitCafe" class="headerlink" title="上传到 GitCafe"></a>上传到 GitCafe</h2><p>先到 GitCafe 上创建一个与用户名相同的项目，例如GitCafe帐号名称为leolee，则创建一个名为leolee的项目。</p>
+<p>进入静态页面输出目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd leolee</div></pre></td></tr></table></figure></p>
+<p>初始化 git 仓库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git init</div></pre></td></tr></table></figure></p>
+<p>创建一个gitcafe-pages的分支，并切换到该分支<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout -b gitcafe-pages</div></pre></td></tr></table></figure></p>
+<p>添加所有文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git add .</div></pre></td></tr></table></figure></p>
+<p>提交<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git commit -m &quot;init&quot;</div></pre></td></tr></table></figure></p>
+<p>添加远程仓库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git remote add origin git@gitcafe.com:leolee/leolee.git</div></pre></td></tr></table></figure></p>
+<p>push 到 GitCafe 仓库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push -u origin gitcafe-pages</div></pre></td></tr></table></figure></p>
+<p>完成<br>push 完成以后就可以在访问 GitCafe Pages 地址了。 <a href="http://leolee.gitcafe.com" target="_blank" rel="external">http://leolee.gitcafe.com</a></p>
+<p>注：不要用 make html 来构建 Blog ，它会删除输出目录后重新生成 Blog ，这意味着会删除 .git 库。</p>
+<h2 id="更新博客"><a href="#更新博客" class="headerlink" title="更新博客"></a>更新博客</h2><p>为了方便更新博客，可以创建了一个shell脚本，放置在Blog根目录下。在此创建的脚本名称为publish.sh，其内容如下所示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">pelican -s pelicanconf.py content -o leolee</div><div class="line">cd leolee</div><div class="line">git add .</div><div class="line">git commit -m &quot;Update&quot;</div><div class="line">git push</div><div class="line">cd ../</div></pre></td></tr></table></figure></p>
+<p>更新博客时，只需要将新增博客的markdown文件放入content目录中，然后运行如下命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ./publish.sh</div></pre></td></tr></table></figure></p>
+<p>当然，在正式发布前通常会先利用本地服务器进行预览，确定没问题后再进行正式发布。</p>
+<p>Makefile的内容如下所示：<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">PY=python</div><div class="line">PELICAN=pelican</div><div class="line">BASEDIR=<span class="variable">$(CURDIR)</span></div><div class="line">INPUTDIR=<span class="variable">$(BASEDIR)</span>/content</div><div class="line">OUTPUTDIR=<span class="variable">$(BASEDIR)</span>/output</div><div class="line">CONFFILE=<span class="variable">$(BASEDIR)</span>/pelicanconf.py</div><div class="line">PELICANOPTS=</div><div class="line"></div><div class="line"><span class="section">help:</span></div><div class="line">    @echo 'Makefile for a pelican Web site                                      '</div><div class="line">    @echo '                                                                     '</div><div class="line">    @echo 'Usage:                                                               '</div><div class="line">    @echo '   make clean                Empty the OUTPUTDIR                     '</div><div class="line">    @echo '   make generate             Generate static files for the web site  '</div><div class="line">    @echo '   make serve                Serve site at http://localhost:8000     '</div><div class="line"></div><div class="line"><span class="section">clean:</span></div><div class="line">    @echo -n 'Cleaning Output folder..............'</div><div class="line">    @rm -rf $(OUTPUTDIR)/*</div><div class="line">    @echo ''</div><div class="line">    @echo 'Done'</div><div class="line"></div><div class="line">generate: clean</div><div class="line">    $(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)</div><div class="line"></div><div class="line">serve: generate</div><div class="line">    cd $(OUTPUTDIR) &amp;&amp; $(PY) -m pelican.server</div><div class="line"></div><div class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>: help clean generate serve</span></div></pre></td></tr></table></figure></p>
+<p>要预览时，只需要输入如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ make serve</div></pre></td></tr></table></figure></p>
+<p>然后在浏览器中访问 <a href="http://localhost:8000" target="_blank" rel="external">http://localhost:8000</a> 即可进行本地预览。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[1]: http://riku.gitcafe.com/pelican-gitcafe.html</div><div class="line">[2]: https://gitcafe.com/GitCafe/Help/wiki/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%92%8C%E8%AE%BE%E7%BD%AE-Git#wiki</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Pelican/">Pelican</a><a href="/tags/Git/">Git</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/Create-Blog-with-Pelican-and-GitCafe-Pages/" data-title="使用 Pelican + GitCafe Pages 创建 Blog | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/post/html-character-entity/" title="HTML字符实体(Character Entity)">
+  <strong>上一篇：</strong><br/>
+  <span>
+  HTML字符实体(Character Entity)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/Evaluate-Largest-Online-Users/"  title="测试最大在线用户数">
+ <strong>下一篇：</strong><br/> 
+ <span>测试最大在线用户数
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#博客系统的技术实现"><span class="toc-number">1.</span> <span class="toc-text">博客系统的技术实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#博客系统的初始化"><span class="toc-number">2.</span> <span class="toc-text">博客系统的初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置GitCafe"><span class="toc-number">3.</span> <span class="toc-text">配置GitCafe</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撰写文章"><span class="toc-number">4.</span> <span class="toc-text">撰写文章</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成html静态页面"><span class="toc-number">5.</span> <span class="toc-text">生成html静态页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上传到-GitCafe"><span class="toc-number">6.</span> <span class="toc-text">上传到 GitCafe</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更新博客"><span class="toc-number">7.</span> <span class="toc-text">更新博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">8.</span> <span class="toc-text">参考文章</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

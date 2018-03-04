@@ -1,0 +1,604 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="DebugTalk">
+<meta property="og:url" content="http://debugtalk.com/page/6/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:locale" content="en-us">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DebugTalk">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/" title="从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划" itemprop="url">
+  
+    <h1 itemprop="name">从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划</h1>
+    
+     
+           <p itemprop="description" >背景最近新加入某项目组（以下均已M指代），需要从零开始搭建功能自动化测试平台。
+简单地说，M是一个典型的移动互联网产品，客户端包括iOS和Android，并在app中通过WebView嵌入了H5，后端基于Ruby on Rails实现。
+当前阶段，M项目除了Rails Serve</p>
+        
+    
+    <time datetime="2016-05-19T16:00:00.000Z" itemprop="datePublished">2016-05-20</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/post/Android-performance-test-start-traffic-tcpdump-wireshark/" title="Android App持续集成性能测试：启动流量（2）" itemprop="url">
+  
+    <h1 itemprop="name">Android App持续集成性能测试：启动流量（2）</h1>
+    
+     
+           <p itemprop="description" >在上一篇文章中，介绍了一种测试Android App启动流量的方法。当时也提到了，通过读取/proc/uid_stat/&amp;lt;UID&amp;gt;/目录下的tcp_rcv和tcp_snd文件，只能得到App的流量总值，无法得到更细化的数据。
+例如，UC浏览器国际版在启动后，会和美国的</p>
+        
+    
+    <time datetime="2016-05-02T16:00:00.000Z" itemprop="datePublished">2016-05-03</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/post/Android-performance-test-start-traffic-uid-stat/" title="Android App持续集成性能测试：启动流量（1）" itemprop="url">
+  
+    <h1 itemprop="name">Android App持续集成性能测试：启动流量（1）</h1>
+    
+     
+           <p itemprop="description" >本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。
+说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持tcpdump工</p>
+        
+    
+    <time datetime="2016-05-02T16:00:00.000Z" itemprop="datePublished">2016-05-03</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/post/manage-Jenkins-via-remote-api/" title="通过API远程管理Jenkins" itemprop="url">
+  
+    <h1 itemprop="name">通过API远程管理Jenkins</h1>
+    
+     
+           <p itemprop="description" >背景介绍最近接到一个需求，需要对公司内部的Android性能测试平台的分支管理模块进行改造。
+为了更好地说明问题，在下图中展示了一个精简的持续集成测试系统。
+
+在该系统中，Jenkins负责定时检测代码库（Code Repository）的代码更新情况，当检测到有新的代码提交时，</p>
+        
+    
+    <time datetime="2016-05-01T16:00:00.000Z" itemprop="datePublished">2016-05-02</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/post/traps-in-sql-null/" title="SQL语句中关于NULL的那些坑" itemprop="url">
+  
+    <h1 itemprop="name">SQL语句中关于NULL的那些坑</h1>
+    
+     
+           <p itemprop="description" >问题描述今天在跟进公司内部测试平台线上问题的时候，发现一个忽略已久的问题。
+为了简化问题描述，将其进行了抽象。
+有一张数据表qms_branch，里面包含了一批形式如下所示的数据：
+
+
+
+id
+name
+types
+
+
+
+
+1
+dashboard_trunk
+dashboard
+</p>
+        
+    
+    <time datetime="2016-04-24T16:00:00.000Z" itemprop="datePublished">2016-04-25</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/post/Android-CPU-lock-frequency/" title="对Android设备CPU进行锁频" itemprop="url">
+  
+    <h1 itemprop="name">对Android设备CPU进行锁频</h1>
+    
+     
+           <p itemprop="description" >本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。
+CPU频率首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这</p>
+        
+    
+    <time datetime="2016-04-17T16:00:00.000Z" itemprop="datePublished">2016-04-18</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/post/Android-performance-test-UI-Automation-with-Python/" title="Android App持续集成性能测试：使用Python实现UI自动化" itemprop="url">
+  
+    <h1 itemprop="name">Android App持续集成性能测试：使用Python实现UI自动化</h1>
+    
+     
+           <p itemprop="description" >在进行Android App持续集成性能测试的时候，需要自动化实现UI层面的一些操作，常见的几种场景包括：
+
+测试帧率时，需要模拟滑屏、拖拽操作；
+初次安装app后启动应用时，需要点击按钮跳过协议页面；
+从Android M(6.0)开始，首次启动应用时会进行系统权限校验，需要勾</p>
+        
+    
+    <time datetime="2016-04-16T16:00:00.000Z" itemprop="datePublished">2016-04-17</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/post/python-functional-programming-getting-started/" title="Python的函数式编程--从入门到⎡放弃⎦" itemprop="url">
+  
+    <h1 itemprop="name">Python的函数式编程--从入门到⎡放弃⎦</h1>
+    
+     
+           <p itemprop="description" >很早以前就听说过了函数式编程，印象中是一种很晦涩难懂的编程模式，但却一直没有去进行了解。
+恰好这周组内的周会轮到我主持，一时也没想到要分享什么。灵光一闪，就选定函数式编程这个主题吧，反正组里的同事都没有学过，只需要讲解入门方面的知识就好，也正好可以借这个机会逼迫自己去学习下这种新</p>
+        
+    
+    <time datetime="2016-04-07T16:00:00.000Z" itemprop="datePublished">2016-04-08</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/post/cheat-in-wechat-moments-voting-activity/" title="微信朋友圈投票活动的刷票案例分析" itemprop="url">
+  
+    <h1 itemprop="name">微信朋友圈投票活动的刷票案例分析</h1>
+    
+     
+           <p itemprop="description" >现阶段，在微信朋友圈举办的投票活动层出不穷，相信已经有不少同学对此不胜其烦，因为总会时不时地冒出个人（亲戚、朋友、or whatever）来请你帮TA投票。
+本文倒没有打算从道德或者情感层面来探讨这个问题，我所感兴趣的是，当前大多数投票活动其实都是存在明显漏洞的，通过简单的技术手</p>
+        
+    
+    <time datetime="2016-04-03T16:00:00.000Z" itemprop="datePublished">2016-04-04</time>
+  </a>
+</section>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix unexpand">
+    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+ </html>
