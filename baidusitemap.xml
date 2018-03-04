@@ -4,6 +4,61 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
+    <lastmod>2018-03-04T15:50:56.846Z</lastmod>
+    <data>
+        <display>
+        <title>【科普】互联网测试岗位的工作日常</title>
+        <pubTime>2017-06-14T16:00:00.000Z</pubTime>
+        
+        <tag>个人成长</tag>
+         
+        <tag>培训</tag>
+         
+        <tag>招聘</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
+    <lastmod>2018-03-04T15:50:56.846Z</lastmod>
+    <data>
+        <display>
+        <title>【大疆内推】岗位描述我只想这么写</title>
+        <pubTime>2017-08-08T16:00:00.000Z</pubTime>
+        
+        <tag>招聘</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/test-dev-in-dji/</loc>
+    <lastmod>2018-03-04T15:47:27.000Z</lastmod>
+    <data>
+        <display>
+        <title>在大疆做测试开发是一种什么体验？</title>
+        <pubTime>2018-03-05T16:00:00.000Z</pubTime>
+        
+        <tag>招聘</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/httprunner-data-driven/</loc>
     <lastmod>2018-02-16T08:42:22.000Z</lastmod>
     <data>
@@ -73,52 +128,6 @@
         <tag>年终总结</tag>
          
         <tag>个人成长</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
-        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
-        
-        <tag>HTTP</tag>
-         
-        <tag>自动化测试</tag>
-         
-        <tag>测试框架</tag>
-         
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 演进之路（0）开发未动，测试先行</title>
-        <pubTime>2017-06-19T16:00:00.000Z</pubTime>
-        
-        <tag>自动化测试</tag>
-         
-        <tag>测试框架</tag>
-         
-        <tag>HttpRunner</tag>
-         
-        <tag>Mock</tag>
          
          
            
@@ -245,16 +254,14 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
+    <loc>http://debugtalk.com/post/apitestengine-quickstart/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>HttpRunner 的测试用例分层机制</title>
-        <pubTime>2017-12-22T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine QuickStart</title>
+        <pubTime>2017-08-19T16:00:00.000Z</pubTime>
         
         <tag>HttpRunner</tag>
-         
-        <tag>testcase</tag>
          
          
            
@@ -264,13 +271,19 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/apitestengine-quickstart/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine QuickStart</title>
-        <pubTime>2017-08-19T16:00:00.000Z</pubTime>
+        <title>接口自动化测试的最佳工程实践（ApiTestEngine）</title>
+        <pubTime>2017-06-17T16:00:00.000Z</pubTime>
         
+        <tag>接口测试</tag>
+         
+        <tag>自动化测试</tag>
+         
+        <tag>测试框架</tag>
+         
         <tag>HttpRunner</tag>
          
          
@@ -359,6 +372,48 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>HttpRunner 的测试用例分层机制</title>
+        <pubTime>2017-12-22T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>testcase</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
+        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
+        
+        <tag>HTTP</tag>
+         
+        <tag>自动化测试</tag>
+         
+        <tag>测试框架</tag>
+         
+        <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
@@ -378,20 +433,20 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>接口自动化测试的最佳工程实践（ApiTestEngine）</title>
-        <pubTime>2017-06-17T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 演进之路（0）开发未动，测试先行</title>
+        <pubTime>2017-06-19T16:00:00.000Z</pubTime>
         
-        <tag>接口测试</tag>
-         
         <tag>自动化测试</tag>
          
         <tag>测试框架</tag>
          
         <tag>HttpRunner</tag>
+         
+        <tag>Mock</tag>
          
          
            
@@ -412,21 +467,6 @@
          
         <tag>HAR</tag>
          
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
-    <lastmod>2017-11-14T16:24:33.000Z</lastmod>
-    <data>
-        <display>
-        <title>【大疆内推】岗位描述我只想这么写</title>
-        <pubTime>2017-08-08T16:00:00.000Z</pubTime>
-        
          
            
         </display>
@@ -475,48 +515,6 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/head-first-locust-advanced-script/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>深入浅出开源性能测试工具Locust（脚本增强）</title>
-        <pubTime>2017-02-21T16:00:00.000Z</pubTime>
-        
-        <tag>性能测试</tag>
-         
-        <tag>Locust</tag>
-         
-        <tag>开源项目</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/head-first-locust-user-guide/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>深入浅出开源性能测试工具Locust（使用篇）</title>
-        <pubTime>2017-02-21T16:00:00.000Z</pubTime>
-        
-        <tag>性能测试</tag>
-         
-        <tag>Locust</tag>
-         
-        <tag>开源项目</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -550,25 +548,6 @@
         <tag>pyenv</tag>
          
         <tag>virtualenv</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>【科普】互联网测试岗位的工作日常</title>
-        <pubTime>2017-06-14T16:00:00.000Z</pubTime>
-        
-        <tag>个人成长</tag>
-         
-        <tag>培训</tag>
          
          
            
@@ -715,6 +694,27 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>基于WSDL或SOAP的WebService测试方法--对原理的思考</title>
+        <pubTime>2015-02-11T16:00:00.000Z</pubTime>
+        
+        <tag>WebService</tag>
+         
+        <tag>WSDL</tag>
+         
+        <tag>SOAP</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -729,27 +729,6 @@
         <tag>测试报告</tag>
          
         <tag>持续集成</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>基于WSDL或SOAP的WebService测试方法--对原理的思考</title>
-        <pubTime>2015-02-11T16:00:00.000Z</pubTime>
-        
-        <tag>WebService</tag>
-         
-        <tag>WSDL</tag>
-         
-        <tag>SOAP</tag>
          
          
            
@@ -1028,18 +1007,19 @@
     </url>
 
     
-    
   <url>
-    <loc>http://debugtalk.com/post/my-impression-on-italy-and-france/</loc>
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <loc>http://debugtalk.com/post/head-first-locust-advanced-script/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>春节旅行之意法印象</title>
-        <pubTime>2017-02-01T16:00:00.000Z</pubTime>
+        <title>深入浅出开源性能测试工具Locust（脚本增强）</title>
+        <pubTime>2017-02-21T16:00:00.000Z</pubTime>
         
-        <tag>个人成长</tag>
+        <tag>性能测试</tag>
          
-        <tag>旅行</tag>
+        <tag>Locust</tag>
+         
+        <tag>开源项目</tag>
          
          
            
@@ -1047,6 +1027,28 @@
     </data>
     </url>
 
+    
+  <url>
+    <loc>http://debugtalk.com/post/head-first-locust-user-guide/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>深入浅出开源性能测试工具Locust（使用篇）</title>
+        <pubTime>2017-02-21T16:00:00.000Z</pubTime>
+        
+        <tag>性能测试</tag>
+         
+        <tag>Locust</tag>
+         
+        <tag>开源项目</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
@@ -1562,9 +1564,6 @@
     </url>
 
     
-    
-    
-    
   <url>
     <loc>http://debugtalk.com/post/render-multi-level-table-in-webpage/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -1576,6 +1575,28 @@
         <tag>报表</tag>
          
         <tag>Javascript</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+    
+  <url>
+    <loc>http://debugtalk.com/post/my-impression-on-italy-and-france/</loc>
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>春节旅行之意法印象</title>
+        <pubTime>2017-02-01T16:00:00.000Z</pubTime>
+        
+        <tag>个人成长</tag>
+         
+        <tag>旅行</tag>
          
          
            

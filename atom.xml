@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://debugtalk.com/"/>
-  <updated>2018-02-16T08:42:22.000Z</updated>
+  <updated>2018-03-04T15:47:27.000Z</updated>
   <id>http://debugtalk.com/</id>
   
   <author>
@@ -14,6 +14,44 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>在大疆做测试开发是一种什么体验？</title>
+    <link href="http://debugtalk.com/post/test-dev-in-dji/"/>
+    <id>http://debugtalk.com/post/test-dev-in-dji/</id>
+    <published>2018-03-05T16:00:00.000Z</published>
+    <updated>2018-03-04T15:47:27.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>提到测试开发这个岗位，可能有的人会有些陌生，都听说过软件测试和软件开发，但测试开发又是干什么的呢？</p>
+<p>说到这里，我又想起之前在阿里移动事业群的一件趣事儿。当时也是做测试开发岗位，我所在的组在公司内部有一个响当当的名号，“牲畜组”，生产力促进组嘛。有的同事更直接，亲切地叫我们组为”畜牲组“，促进生产力组的简称。</p>
+<p>可以看到，不管是”牲畜“还是”畜牲“，测试开发这个岗位的核心都是提升团队生产力，也就是工作效率。更具体地，在大多数公司内部，测试开发岗位的职责就是提升业务测试人员的测试效率。</p>
+<p>接触过软件测试的同学都知道，在项目版本迭代的过程中，业务测试人员需要进行大量的回归测试，重复工作量较大，在短暂的时间内也很难保证较大的测试覆盖率。这就需要测试开发人员来辅助开发相应的工具和平台，常见的包括实现接口测试自动化、UI自动化、性能专项、持续集成、线上监控等，将测试人员从重复性的工作解放出来，从而能有更多的时间精力投入到探索性测试当中去。</p>
+<p>从这个层面上来讲，当前各个互联网公司的做法都差不多，只是不同公司可能会因为业务类型差异而有所侧重而已。</p>
+<p>但回归生产力的本质，我们会发现，测试效率只能算是团队生产力的一部分。这就好比一个木桶，测试效率只是其中的一块木板，而研发效率、运维效率、项目管理等木板，同样制约着项目团队的整体工作效率。</p>
+<p>可能有人会说，这些都不是测试开发的工作范畴啊！</p>
+<p>事实上，很多公司的测试开发的确是没法触及到测试以外的工作内容的。甚至很多时候，整个测试团队都是直接向研发团队进行工作汇报，即使在提升测试效率的本职工作中话语权也是少之又少，更别谈测试以外的了。</p>
+<p><strong>那么，在大疆互联网事业部做测试开发又有什么不同呢？</strong></p>
+<p>得益于大疆“<em>激极尽致，求真品诚</em>”的企业文化，岗位并没有那么严格的界限划分。如果你发现一件事确实有价值，但当前却没有人去做，那么即使这不在你的工作范畴之内，你也可以主动站出来挑起这块儿的担子。</p>
+<p>对于大疆的测试开发岗位同样如此，岗位性质决定了我们会比其它任何岗位都更关注团队的生产力和工作效率，那么不管是研发、运维、测试、运营还是项目管理，假如其中任何一个环节存在效率低下的问题，我们都可以申请立项，通过开发工具或平台来解决团队的痛点。当然，可能某些事情并不是测试开发岗位的同学就能独自完成的，那也没有关系，只要提出的问题确实具有业务价值，那么我们也可以申请到其它岗位的同学来协作一起完成。可能对于某些公司来说不可想象，但这在大疆确实就是切实可行的。</p>
+<p>另一方面，大疆发展极其迅速，触及的领域也越来越广。这对我们测试开发来说，既是机遇，也是挑战。在这种环境下，我们有机会充分发挥主观能动性，去挖掘并解决团队中实际存在的痛点。分析需求、设计方案、技术选型、编码实现、收集反馈、迭代优化，这么一个流程下来，产出的工具或平台就如同自己精心打造的产品，成就感和按部就班地搬砖是完全不一样的。也许，我们测试开发岗位才是最接近”全栈“的工程师？</p>
+<p>除此之外，在大疆的测试开发工程师还兼具着更多的职责。例如，整个互联网事业部的所有系统，遇到新品发布、技术升级改造、系统架构重构等重大事件时，压力测试都是由我们测试开发组来主导完成的。在质量部内部，我们测试开发组还会兼顾对业务测试同学进行测试技术和编程语言的培训，以及协助业务测试同学解决一些技术难题等。在这个过程中，我们测试开发本身的技术视野和解决问题的能力也得到了极大的增强。</p>
+<p>最后，如果你对我们的岗位感兴趣，欢迎加入我们！</p>
+<h2 id="广告时间"><a href="#广告时间" class="headerlink" title="广告时间"></a>广告时间</h2><p>近期，大疆创新开启新的一轮招聘啦，深圳总部、北京研发中心、上海分公司均有大量岗位招聘需求。</p>
+<p>详细的招聘需求和日程安排请见：<a href="https://mp.weixin.qq.com/s/vlhAWho2hMOiWIVwkfIf0A" target="_blank" rel="noopener">【内推】大疆创新春季招聘开启啦（深圳+北京）</a></p>
+<p>如需找我内推，请发送简历至我的个人邮箱: mail@debugtalk.com</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;提到测试开发这个岗位，可能有的人会有些陌生，都听说过软件测试和软件开发，但测试开发又是干什么的呢？&lt;/p&gt;
+&lt;p&gt;说到这里，我又想起之前在阿里移动事业群的一件趣事儿。当时也是做测试开发岗位，我所在的组在公司内部有一个响当当的名号，“牲畜组”，生产力促进组嘛。有的同事更直接，
+    
+    </summary>
+    
+    
+      <category term="招聘" scheme="http://debugtalk.com/tags/%E6%8B%9B%E8%81%98/"/>
+    
+  </entry>
   
   <entry>
     <title>HttpRunner 实现参数化数据驱动机制</title>
@@ -932,12 +970,12 @@
     <link href="http://debugtalk.com/post/d-test-hire-info/"/>
     <id>http://debugtalk.com/post/d-test-hire-info/</id>
     <published>2017-08-08T16:00:00.000Z</published>
-    <updated>2017-11-14T16:24:33.000Z</updated>
+    <updated>2018-03-04T15:50:56.846Z</updated>
     
     <content type="html"><![CDATA[<p>近期，大疆互联网事业部广招各路英豪，各类岗位都有大量的<code>Hire Count</code>。</p>
 <p>在我们质量部，现急需招聘<code>软件测试工程师</code>、<code>测试开发工程师</code>和<code>QA</code>，名额无限制。</p>
 <p>如果你对我们的岗位感兴趣，可能你还想了解如下信息。</p>
-<h2 id="关于我们"><a href="#关于我们" class="headerlink" title="关于我们"></a>关于我们</h2><p>大疆这家公司我就不介绍了，大家有兴趣可以看下我们的<a href="http://www.dji.com/" target="_blank" rel="external">公司主页</a>，或者在网上自行搜索。</p>
+<h2 id="关于我们"><a href="#关于我们" class="headerlink" title="关于我们"></a>关于我们</h2><p>大疆这家公司我就不介绍了，大家有兴趣可以看下我们的<a href="http://www.dji.com/" target="_blank" rel="noopener">公司主页</a>，或者在网上自行搜索。</p>
 <p>可能很多人都知道大疆是一家做无人机的公司，但却不知道我们一直在探索着与互联网各种跨界融合的方式，在移动互联网、云计算、大数据、物联网、电子商务等领域同样投入了大量的资源。而互联网事业部，则肩负着该项重要使命。</p>
 <p>我们质量部作为互联网事业部的测试团队，对接了整个部门的所有产品和项目，一直致力于提升整个部门的软件质量的研发效率。</p>
 <h2 id="岗位职责及要求"><a href="#岗位职责及要求" class="headerlink" title="岗位职责及要求"></a>岗位职责及要求</h2><p>当前我们有<code>测试</code>、<code>测试开发</code>、<code>QA</code>这三类岗位。</p>
@@ -966,6 +1004,8 @@
     
     </summary>
     
+    
+      <category term="招聘" scheme="http://debugtalk.com/tags/%E6%8B%9B%E8%81%98/"/>
     
   </entry>
   
@@ -1624,114 +1664,6 @@
       <category term="测试框架" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
     
       <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ApiTestEngine 演进之路（0）开发未动，测试先行</title>
-    <link href="http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/"/>
-    <id>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</id>
-    <published>2017-06-19T16:00:00.000Z</published>
-    <updated>2017-12-24T01:55:19.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>在<a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a>一文中，我详细介绍了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>诞生的背景，并对其核心特性进行了详尽的剖析。</p>
-<p>接下来，我将在《ApiTestEngine演进之路》系列文章中讲解<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>是如何从第一行代码开始，逐步实现接口自动化测试框架的核心功能特性的。</p>
-<p>相信大家都有听说过<code>TDD</code>（<code>测试驱动开发</code>）这种开发模式，虽然网络上对该种开发模式存在异议，但我个人是非常推荐使用该种开发方式的。关于<code>TDD</code>的优势，我就不在此赘述了，我就只说下自己受益最深的两个方面。</p>
-<ul>
-<li>测试驱动，其实也是需求驱动。在开发正式代码之前，可以先将需求转换为单元测试用例，然后再逐步实现正式代码，直至将所有单元测试用例跑通。这可以帮助我们总是聚焦在要实现的功能特性上，避免跑偏。特别是像我们做测试开发的，通常没有需求文档和设计文档，如果没有清晰的思路，很可能做着做着就不知道自己做到哪儿了。</li>
-<li>高覆盖率的单元测试代码，对项目质量有充足的信心。因为是先写测试再写实现，所以正常情况下，所有的功能特性都应该能被单元测试覆盖到。再结合持续集成的手段，我们可以轻松保证每个版本都是高质量并且可用的。</li>
-</ul>
-<p>所以，<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>项目也将采用<code>TDD</code>的开发模式。本篇文章就重点介绍下采用<code>TDD</code>之前需要做的一些准备工作。</p>
-<h2 id="搭建API接口服务（Mock-Server）"><a href="#搭建API接口服务（Mock-Server）" class="headerlink" title="搭建API接口服务（Mock Server）"></a>搭建API接口服务（Mock Server）</h2><p>接口测试框架要运行起来，必然需要有可用的API接口服务。因此，在开始构建我们的接口测试框架之前，最好先搭建一套简单的API接口服务，也就是<code>Mock Server</code>，然后我们在采用<code>TDD</code>开发模式的时候，就可以随时随地将框架代码跑起来，开发效率也会大幅提升。</p>
-<p>为什么不直接采用已有的业务系统API接口服务呢？</p>
-<p>这是因为通常业务系统的接口比较复杂，并且耦合了许多业务逻辑，甚至还可能涉及到和其它业务系统的交互，搭建或维护一套测试环境的成本可能会非常高。另一方面，接口测试框架需要具有一定的通用性，其功能特性很难在一个特定的业务系统中找到所有合适的接口。就拿最简单的接口请求方法来说，测试框架需要支持<code>GET/POST/HEAD/PUT/DELETE</code>方法，但是可能在我们已有的业务系统中只有<code>GET/POST</code>接口。</p>
-<p>自行搭建API接口服务的另一个好处在于，我们可以随时调整接口的实现方式，来满足接口测试框架特定的功能特性，从而使我们总是能将注意力集中在测试框架本身。比较好的做法是，先搭建最简单的接口服务，在此基础上将接口测试框架搭建起来，实现最基本的功能；后面在实现框架的高级功能特性时，我们再对该接口服务进行拓展升级，例如增加签名校验机制等，来适配测试框架的高级功能特性。</p>
-<p>幸运的是，使用<code>Python</code>搭建API接口服务十分简单，特别是在结合使用<a href="http://flask.pocoo.org/" target="_blank" rel="external"><code>Flask</code></a>框架的情况下。</p>
-<p>例如，我们想实现一套可以对用户账号进行增删改查（<code>CRUD</code>）功能的接口服务，用户账号的存储结构大致如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">users_dict = &#123;</div><div class="line">   'uid1': &#123;</div><div class="line">       'name': 'name1',</div><div class="line">       'password': 'pwd1'</div><div class="line">   &#125;,</div><div class="line">   'uid2': &#123;</div><div class="line">       'name': 'name2',</div><div class="line">       'password': 'pwd2'</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>那么，新增（Create）和更新（Update）功能的接口就可以通过如下方式实现。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request, make_response</div><div class="line"></div><div class="line">app = Flask(__name__)</div><div class="line">users_dict = &#123;&#125;</div><div class="line"></div><div class="line"><span class="meta">@app.route('/api/users/&lt;int:uid&gt;', methods=['POST'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_user</span><span class="params">(uid)</span>:</span></div><div class="line">    user = request.get_json()</div><div class="line">    <span class="keyword">if</span> uid <span class="keyword">not</span> <span class="keyword">in</span> users_dict:</div><div class="line">        result = &#123;</div><div class="line">            <span class="string">'success'</span>: <span class="keyword">True</span>,</div><div class="line">            <span class="string">'msg'</span>: <span class="string">"user created successfully."</span></div><div class="line">        &#125;</div><div class="line">        status_code = <span class="number">201</span></div><div class="line">        users_dict[uid] = user</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        result = &#123;</div><div class="line">            <span class="string">'success'</span>: <span class="keyword">False</span>,</div><div class="line">            <span class="string">'msg'</span>: <span class="string">"user already existed."</span></div><div class="line">        &#125;</div><div class="line">        status_code = <span class="number">500</span></div><div class="line"></div><div class="line">    response = make_response(json.dumps(result), status_code)</div><div class="line">    response.headers[<span class="string">"Content-Type"</span>] = <span class="string">"application/json"</span></div><div class="line">    <span class="keyword">return</span> response</div><div class="line"></div><div class="line"><span class="meta">@app.route('/api/users/&lt;int:uid&gt;', methods=['PUT'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_user</span><span class="params">(uid)</span>:</span></div><div class="line">    user = users_dict.get(uid, &#123;&#125;)</div><div class="line">    <span class="keyword">if</span> user:</div><div class="line">        user = request.get_json()</div><div class="line">        success = <span class="keyword">True</span></div><div class="line">        status_code = <span class="number">200</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        success = <span class="keyword">False</span></div><div class="line">        status_code = <span class="number">404</span></div><div class="line"></div><div class="line">    result = &#123;</div><div class="line">        <span class="string">'success'</span>: success,</div><div class="line">        <span class="string">'data'</span>: user</div><div class="line">    &#125;</div><div class="line">    response = make_response(json.dumps(result), status_code)</div><div class="line">    response.headers[<span class="string">"Content-Type"</span>] = <span class="string">"application/json"</span></div><div class="line">    <span class="keyword">return</span> response</div></pre></td></tr></table></figure>
-<p>限于篇幅，其它类型的接口实现就不在此赘述，完整的接口实现可以参考<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/tests/api_server.py" target="_blank" rel="external">项目源码</a>。</p>
-<p>接口服务就绪后，按照<code>Flask</code>官方文档，可以通过如下方式进行启动：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ export FLASK_APP=tests/api_server.py</div><div class="line">$ flask run</div><div class="line"> * Serving Flask app &quot;tests.api_server&quot;</div><div class="line"> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</div></pre></td></tr></table></figure>
-<p>启动后，我们就可以通过请求接口来调用已经实现的接口功能了。例如，先创建一个用户，然后查看所有用户的信息，在<code>Python</code>终端中的调用方式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ python</div><div class="line">Python 3.6.0 (default, Mar 24 2017, 16:58:25)</div><div class="line">&gt;&gt;&gt; import requests</div><div class="line">&gt;&gt;&gt; requests.post(&apos;http://127.0.0.1:5000/api/users/1000&apos;, json=&#123;&apos;name&apos;: &apos;user1&apos;, &apos;password&apos;: &apos;123456&apos;&#125;)</div><div class="line">&lt;Response [201]&gt;</div><div class="line">&gt;&gt;&gt; resp = requests.get(&apos;http://127.0.0.1:5000/api/users&apos;)</div><div class="line">&gt;&gt;&gt; resp.content</div><div class="line">b&apos;&#123;&quot;success&quot;: true, &quot;count&quot;: 1, &quot;items&quot;: [&#123;&quot;name&quot;: &quot;user1&quot;, &quot;password&quot;: &quot;123456&quot;&#125;]&#125;&apos;</div><div class="line">&gt;&gt;&gt;</div></pre></td></tr></table></figure>
-<p>通过接口请求结果可见，接口服务运行正常。</p>
-<h2 id="在单元测试用例中使用-Mock-Server"><a href="#在单元测试用例中使用-Mock-Server" class="headerlink" title="在单元测试用例中使用 Mock Server"></a>在单元测试用例中使用 Mock Server</h2><p>API接口服务（<code>Mock Server</code>）已经有了，但是如果每次运行单元测试时都要先在外部手工启动API接口服务的话，做法实在是不够优雅。</p>
-<p>推荐的做法是，制作一个<code>ApiServerUnittest</code>基类，在其中添加<code>setUpClass</code>类方法，用于启动API接口服务（<code>Mock Server</code>）；添加<code>tearDownClass</code>类方法，用于停止API接口服务。由于<code>setUpClass</code>会在单元测试用例集初始化的时候执行一次，所以可以保证单元测试用例在运行的时候API服务处于可用状态；而<code>tearDownClass</code>会在单元测试用例集执行完毕后运行一次，停止API接口服务，从而避免对下一次启动产生影响。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># tests/base.py</span></div><div class="line"><span class="keyword">import</span> multiprocessing</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> unittest</div><div class="line"><span class="keyword">from</span> . <span class="keyword">import</span> api_server</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiServerUnittest</span><span class="params">(unittest.TestCase)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Test case class that sets up an HTTP server which can be used within the tests</div><div class="line">    """</div><div class="line"><span class="meta">    @classmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setUpClass</span><span class="params">(cls)</span>:</span></div><div class="line">        cls.api_server_process = multiprocessing.Process(</div><div class="line">            target=api_server.app.run</div><div class="line">        )</div><div class="line">        cls.api_server_process.start()</div><div class="line">        time.sleep(<span class="number">0.1</span>)</div><div class="line"></div><div class="line"><span class="meta">    @classmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tearDownClass</span><span class="params">(cls)</span>:</span></div><div class="line">        cls.api_server_process.terminate()</div></pre></td></tr></table></figure>
-<p>这里采用的是多进程的方式（<code>multiprocessing</code>），所以我们的单元测试用例可以和API接口服务（<code>Mock Server</code>）同时运行。除了多进程的方式，我看到<code>locust</code>项目采用的是<a href="https://github.com/locustio/locust/blob/master/locust/test/test_web.py" target="_blank" rel="external"><code>gevent.pywsgi.WSGIServer</code></a>的方式，不过由于在<code>gevent</code>中要实现异步需要先<code>monkey.patch_all()</code>，感觉比较麻烦，而且还需要引入<code>gevent</code>这么一个第三方依赖库，所以还是决定采用<code>multiprocessing</code>的方式了。至于为什么没有选择多线程模型（<code>threading</code>），是因为线程至不支持显式终止的（<code>terminate</code>），要实现终止服务会比使用<code>multiprocessing</code>更为复杂。</p>
-<p>不过需要注意的是，由于启动<code>Server</code>存在一定的耗时，因此在启动完毕后必须要等待一段时间（本例中<code>0.1秒</code>就足够了），否则在执行单元测试用例时，调用的API接口可能还处于不可用状态。</p>
-<p><code>ApiServerUnittest</code>基类就绪后，对于需要用到<code>Mock Server</code>的单元测试用例集，只需要继承<code>ApiServerUnittest</code>即可；其它的写法跟普通的单元测试完全一致。</p>
-<p>例如，下例包含一个单元测试用例，测试“创建一个用户，该用户之前不存在”的场景。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># tests/test_apiserver.py</span></div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">from</span> .base <span class="keyword">import</span> ApiServerUnittest</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestApiServer</span><span class="params">(ApiServerUnittest)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setUp</span><span class="params">(self)</span>:</span></div><div class="line">        super(TestApiServer, self).setUp()</div><div class="line">        self.host = <span class="string">"http://127.0.0.1:5000"</span></div><div class="line">        self.api_client = requests.Session()</div><div class="line">        self.clear_users()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tearDown</span><span class="params">(self)</span>:</span></div><div class="line">        super(TestApiServer, self).tearDown()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_create_user_not_existed</span><span class="params">(self)</span>:</span></div><div class="line">        self.clear_users()</div><div class="line"></div><div class="line">        url = <span class="string">"%s/api/users/%d"</span> % (self.host, <span class="number">1000</span>)</div><div class="line">        data = &#123;</div><div class="line">            <span class="string">"name"</span>: <span class="string">"user1"</span>,</div><div class="line">            <span class="string">"password"</span>: <span class="string">"123456"</span></div><div class="line">        &#125;</div><div class="line">        resp = self.api_client.post(url, json=data)</div><div class="line"></div><div class="line">        self.assertEqual(<span class="number">201</span>, resp.status_code)</div><div class="line">        self.assertEqual(<span class="keyword">True</span>, resp.json()[<span class="string">"success"</span>])</div></pre></td></tr></table></figure>
-<h2 id="为项目添加持续集成构建检查（Travis-CI）"><a href="#为项目添加持续集成构建检查（Travis-CI）" class="headerlink" title="为项目添加持续集成构建检查（Travis CI）"></a>为项目添加持续集成构建检查（Travis CI）</h2><p>当我们的项目具有单元测试之后，我们就可以为项目添加持续集成构建检查，从而在每次提交代码至<code>GitHub</code>时都运行测试，确保我们每次提交的代码都是可正常部署及运行的。</p>
-<p>要实现这个功能，推荐使用<a href="https://travis-ci.org/" target="_blank" rel="external"><code>Travis CI</code></a>提供的服务，该服务对于GitHub公有仓库是免费的。要完成配置，操作也很简单，基本上只有三步：</p>
-<ul>
-<li>在<a href="https://travis-ci.org/" target="_blank" rel="external"><code>Travis CI</code></a>使用GitHub账号授权登录；</li>
-<li>在<a href="https://travis-ci.org/" target="_blank" rel="external"><code>Travis CI</code></a>的个人<code>profile</code>页面开启需要持续集成的项目；</li>
-<li>在<code>Github</code>项目的根目录下添加<code>.travis.yml</code>配置文件。</li>
-</ul>
-<p>大多数情况下，<code>.travis.yml</code>配置文件可以很简单，例如<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的配置就只有如下几行：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="attr">sudo:</span> <span class="literal">false</span></div><div class="line"><span class="attr">language:</span> python</div><div class="line"><span class="attr">python:</span></div><div class="line"><span class="bullet">  -</span> <span class="number">2.7</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.3</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.4</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.5</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.6</span></div><div class="line"><span class="attr">install:</span></div><div class="line"><span class="bullet">  -</span> pip install -r requirements.txt</div><div class="line"><span class="attr">script:</span></div><div class="line"><span class="bullet">  -</span> python -m unittest discover</div></pre></td></tr></table></figure>
-<p>具体含义不用解释也可以很容易看懂，其中<code>install</code>中包含我们项目的依赖库安装命令，<code>script</code>中包含执行构建测试的命令。</p>
-<p>配置完毕后，后续每次提交代码时，<code>GitHub</code>就会调用<code>Travis CI</code>实现构建检查；并且更赞的在于，构建检查可以同时在多个指定的<code>Python</code>版本环境中进行。</p>
-<p>下图是某次提交代码时的构建结果。</p>
-<p><img src="/images/travis-check-result.jpg" alt=""></p>
-<p>另外，我们还可以在<code>GitHub</code>项目的<code>README.md</code>中添加一个<code>Status Image</code>，实时显示项目的构建状态，就像下图显示的样子。</p>
-<p><img src="/images/github-readme-travis-status-image.jpg" alt=""></p>
-<p>配置方式也是很简单，只需要先在<code>Travis CI</code>中获取到项目<code>Status Image</code>的URL地址，然后添加到<code>README.md</code>即可。</p>
-<p><img src="/images/travis-status-image-url.jpg" alt=""></p>
-<h2 id="为项目添加单元测试覆盖率检查（coveralls）"><a href="#为项目添加单元测试覆盖率检查（coveralls）" class="headerlink" title="为项目添加单元测试覆盖率检查（coveralls）"></a>为项目添加单元测试覆盖率检查（coveralls）</h2><p>对项目添加持续集成构建检查以后，就能完全保证我们提交的代码运行没问题么？</p>
-<p>答案是并不能。试想，假如我们整个项目中就只有一条单元测试用例，甚至这一条单元测试用例还是个假用例，即没有调用任何代码，那么可想而知，我们的持续集成构建检查总是成功的，并没有起到检查的作用。</p>
-<p>因此，这里还涉及到一个单元测试覆盖率的问题。</p>
-<p>怎么理解单元测试覆盖率呢？简单地说，就是我们在执行单元测试时运行代码的行数，与项目总代码数的比值。</p>
-<p>对于主流的编程语言，都存在大量的覆盖率检查工具，可以帮助我们快速统计单元测试覆盖率。在Python中，用的最多的覆盖率检查工具是<a href="https://coverage.readthedocs.io" target="_blank" rel="external"><code>coverage</code></a>。</p>
-<p>要使用<a href="https://coverage.readthedocs.io" target="_blank" rel="external"><code>coverage</code></a>，需要先进行安装，采用<code>pip</code>的安装方式如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pip install coverage</div></pre></td></tr></table></figure>
-<p>然后，我们就可以采用如下命令执行单元测试。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ coverage run --source=ate -m unittest discover</div></pre></td></tr></table></figure>
-<p>这里需要说明的是，<code>--source</code>参数的作用是指定统计的目录，如果不指定该参数，则会将所有依赖库也计算进去，但由于很多依赖库在安装时是没有包含测试代码的，因此会造成统计得到的单元测试覆盖率远低于实际的情况。在上面的命令中，就只统计了<code>ate</code>目录下的单元测试覆盖率；如果要统计当前项目的覆盖率，那么可以指定<code>--source=.</code>（即当前目录下的所有子文夹）。</p>
-<p>采用上述命令执行完单元测试后，会在当前目录下生成一个统计结果文件，<code>.coverage</code>，里面包含了详细的统计结果。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">cat .coverage</div><div class="line">!coverage.py: This is a private format, don&apos;t read it directly!&#123;&quot;lines&quot;:&#123;&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/__init__.py&quot;:[1],&quot;/Users/Leo/MyProjects/</div><div class="line">ApiTestEngine/ate/testcase.py&quot;:[1,2,4,6,9,15,42,7,12,40,46,64,67,68,69,70,48,49,62,72,74,13,65,51,52,53,56,60,58,54,55],&quot;/Users/Leo/MyProjects/ApiTestEngi</div><div class="line">ne/ate/exception.py&quot;:[2,4,5,9,12,15,16,6,7],&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/utils.py&quot;:[1,2,3,4,5,7,9,11,12,14,15,18,22,25,47,51,55,65,77,90,129,1</div><div class="line">41,27,31,32,19,20,23,34,41,43,45,56,57,59,60,48,49,154,163,166,170,172,173,174,176,177,181,182,183,186,187,189,91,92,66,67,72,73,74,94,95,97,98,101,102,78</div><div class="line">,80,81,82,84,85,88,103,104,106,108,110,115,121,122,124,125,127,58,52,53,184,185,109,116,118,119,112,113,132,134,135,136,137,139,63,164,155,157,158,159,161</div><div class="line">,167,168,192,68,69],&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/context.py&quot;:[1,3,5,6,10,16,30,45,7,8,25,26,28,41,42,43,49,55,58,59,63,64,56,74,65,68,69,72,66</div><div class="line">,27,13,14,50,53,52,70],&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/main.py&quot;:[1,2,4,7,9,10,15,21,38,51,25,27,28,29,30,32,33,11,12,13,34,36,42,43,45,46,47,49],</div><div class="line">&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/runner.py&quot;:[1,3,4,5,8,10,15,46,68,97,135,11,12,13,35,36,38,39,41,42,44,82,63,65,66,84,86,87,88,92,93,94,95,124,12</div><div class="line">6,127,128,129,130,131,133,154]&#125;&#125;%</div></pre></td></tr></table></figure>
-<p>但是，这个结果就不是给人看的。要想直观地看到统计报告，需要再执行命令<code>coverage report -m</code>，执行完后，就可以看到详细的统计数据了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  ApiTestEngine git:(master) ✗ coverage report -m</div><div class="line">Name               Stmts   Miss  Cover   Missing</div><div class="line">------------------------------------------------</div><div class="line">ate/__init__.py        0      0   100%</div><div class="line">ate/context.py        35      0   100%</div><div class="line">ate/exception.py      11      2    82%   10, 13</div><div class="line">ate/main.py           34      7    79%   18-19, 54-62</div><div class="line">ate/runner.py         44      2    95%   89-90</div><div class="line">ate/testcase.py       30      0   100%</div><div class="line">ate/utils.py         112      8    93%   13, 29, 36-39, 178-179</div><div class="line">------------------------------------------------</div><div class="line">TOTAL                266     19    93%</div></pre></td></tr></table></figure>
-<p>通过这个报告，可以看到项目整体的单元测试覆盖率为<code>93%</code>，并清晰地展示了每个源代码文件的具体覆盖率数据，以及没有覆盖到的代码行数。</p>
-<p>那要怎么将覆盖率检查添加到我们的持续集成（Travis CI）中呢？</p>
-<p>事实上，当前存在多个可选服务，可以与<code>Travis CI</code>配合使用。当前，使用得比较广泛的是<a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>，针对Public类型的GitHub仓库，这也是一个免费服务。</p>
-<p><a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>的使用方式与<a href="https://travis-ci.org/" target="_blank" rel="external"><code>Travis CI</code></a>类似，也需要先在<a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>网站上采用GitHub账号授权登录，然后开启需要进行检查的GitHub仓库。而要执行的命令，也可以在<code>.travis.yml</code>配置文件中指定。</p>
-<p>增加覆盖率检查后的<code>.travis.yml</code>配置文件内容如下。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="attr">sudo:</span> <span class="literal">false</span></div><div class="line"><span class="attr">language:</span> python</div><div class="line"><span class="attr">python:</span></div><div class="line"><span class="bullet">  -</span> <span class="number">2.7</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.3</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.4</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.5</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.6</span></div><div class="line"><span class="attr">install:</span></div><div class="line"><span class="bullet">  -</span> pip install -r requirements.txt</div><div class="line"><span class="bullet">  -</span> pip install coverage</div><div class="line"><span class="bullet">  -</span> pip install coveralls</div><div class="line"><span class="attr">script:</span></div><div class="line"><span class="bullet">  -</span> coverage run --source=. -m unittest discover</div><div class="line"><span class="attr">after_success:</span></div><div class="line"><span class="bullet">  -</span> coveralls</div></pre></td></tr></table></figure>
-<p>如上配置应该也很好理解，要使用<code>coveralls</code>的服务，需要先安装<code>coveralls</code>。在采用<code>coverage</code>执行完单元测试后，要将结果上报到<a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>网站，需要再执行<code>coveralls</code>命令。由于<code>coveralls</code>命令只有在测试覆盖率检查成功以后运行才有意义，因此可将其放在<code>after_success</code>部分。</p>
-<p>配置完毕后，后续每次提交代码时，<code>GitHub</code>就会调用<code>Travis CI</code>实现构建检查，并同时统计得到单元测试覆盖率。</p>
-<p>下图是某次提交代码时的覆盖率检查。</p>
-<p><img src="/images/coveralls-result.jpg" alt=""></p>
-<p>另外，我们在<code>GitHub</code>项目的<code>README.md</code>中也同样可以添加一个<code>Status Image</code>，实时显示项目的单元测试覆盖率。</p>
-<p><img src="/images/github-coveralls-badge.jpg" alt=""></p>
-<p>配置方式也跟之前类似，在<a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>中获取到项目<code>Status Image</code>的URL地址，然后添加到<code>README.md</code>即可。</p>
-<p><img src="/images/coveralls-image-url.jpg" alt=""></p>
-<p>最后需要说明的是，项目的单元测试覆盖率只能起到参考作用，没有被单元测试覆盖到的代码我们不能说它肯定有问题，100%覆盖率的代码也并不能保证它肯定没有问题。归根结底，这还是要依赖于单元测试的策略实现，因此我们在写单元测试的时候也要尽可能多地覆盖到各种逻辑路径，以及兼顾到各种异常情况。</p>
-<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>通过本文中的工作，我们就对项目搭建好了测试框架，并实现了持续集成构建检查机制。从下一篇开始，我们就将开始逐步实现接口自动化测试框架的核心功能特性了。</p>
-<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
-<li><a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
-<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code> GitHub源码</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在&lt;a href=&quot;http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/&quot;&gt;《接口自动化测试的最佳工程实践（ApiTestEngine）》&lt;/a&gt;一文中，我详细介绍了&lt;a href=&quot;https://
-    
-    </summary>
-    
-    
-      <category term="自动化测试" scheme="http://debugtalk.com/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="测试框架" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
-    
-      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
-    
-      <category term="Mock" scheme="http://debugtalk.com/tags/Mock/"/>
     
   </entry>
   
