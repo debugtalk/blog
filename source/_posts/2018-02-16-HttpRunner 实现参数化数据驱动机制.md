@@ -7,6 +7,9 @@ tags:
   - Data-Driven
 ---
 
+> 从 1.1.0 版本开始，数据驱动机制进行了较大的优化和调整。
+> 请参考：[《HttpRunner 再议参数化数据驱动机制》](http://debugtalk.com/post/httprunner-data-driven/)
+
 ## 背景
 
 在自动化测试中，经常会遇到如下场景：
