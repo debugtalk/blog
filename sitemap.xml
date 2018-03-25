@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://debugtalk.com/post/httprunner-data-driven/</loc>
+    
+    <lastmod>2018-03-25T08:29:12.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/httprunner-data-driven/</loc>
+    
+    <lastmod>2018-03-25T08:28:20.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/post/test-dev-in-dji/</loc>
     
     <lastmod>2018-03-04T16:00:12.000Z</lastmod>
@@ -19,13 +33,6 @@
     <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
     
     <lastmod>2018-03-04T15:50:56.846Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/httprunner-data-driven/</loc>
-    
-    <lastmod>2018-02-16T08:42:22.000Z</lastmod>
     
   </url>
   
@@ -51,14 +58,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -93,7 +93,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -107,7 +107,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -128,14 +128,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -149,7 +149,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -170,7 +177,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/clean-sensitive-data-from-git-history-commits/</loc>
+    <loc>http://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -178,13 +185,6 @@
   
   <url>
     <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -352,16 +352,16 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com//about/index.html</loc>
+    <loc>http://debugtalk.com/post/clean-sensitive-data-from-git-history-commits/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
+    <loc>http://debugtalk.com//about/index.html</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
@@ -492,14 +492,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/android-development-environment-device-configuration/</loc>
+    <loc>http://debugtalk.com/post/iOS-Android-Packing-with-Jenkins/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
+    <loc>http://debugtalk.com/post/android-development-environment-device-configuration/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
@@ -548,6 +548,13 @@
   </url>
   
   <url>
+    <loc>http://debugtalk.com/post/my-impression-on-italy-and-france/</loc>
+    
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/baidu_verify_WfVJyFbNZp.html</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -569,7 +576,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/my-impression-on-italy-and-france/</loc>
+    <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
@@ -590,7 +597,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/iOS-Android-Packing-with-Jenkins/</loc>
+    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     

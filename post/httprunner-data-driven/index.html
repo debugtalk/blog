@@ -11,20 +11,20 @@
     
 
     
-    <meta name="description" content="背景在自动化测试中，经常会遇到如下场景：  1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。  这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是在我们的自动化测试脚本中存在参数，并且我们需要采用不同的参数去运行。 经过概括，参数基本上分为两种类型：  单个独立参数：例">
+    <meta name="description" content="从 1.1.0 版本开始，数据驱动机制进行了较大的优化和调整。请参考：《HttpRunner 再议参数化数据驱动机制》  背景在自动化测试中，经常会遇到如下场景：  1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。  这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是">
 <meta name="keywords" content="HttpRunner,Parameter,Data-Driven">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HttpRunner 实现参数化数据驱动机制">
 <meta property="og:url" content="http://debugtalk.com/post/httprunner-data-driven/index.html">
 <meta property="og:site_name" content="DebugTalk">
-<meta property="og:description" content="背景在自动化测试中，经常会遇到如下场景：  1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。  这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是在我们的自动化测试脚本中存在参数，并且我们需要采用不同的参数去运行。 经过概括，参数基本上分为两种类型：  单个独立参数：例">
+<meta property="og:description" content="从 1.1.0 版本开始，数据驱动机制进行了较大的优化和调整。请参考：《HttpRunner 再议参数化数据驱动机制》  背景在自动化测试中，经常会遇到如下场景：  1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。  这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是">
 <meta property="og:locale" content="en-us">
 <meta property="og:image" content="http://debugtalk.com/images/loadrunner-parameterize.jpg">
 <meta property="og:image" content="http://debugtalk.com/images/httprunner-parameterize.jpg">
-<meta property="og:updated_time" content="2018-02-16T08:42:22.000Z">
+<meta property="og:updated_time" content="2018-03-25T08:29:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HttpRunner 实现参数化数据驱动机制">
-<meta name="twitter:description" content="背景在自动化测试中，经常会遇到如下场景：  1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。  这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是在我们的自动化测试脚本中存在参数，并且我们需要采用不同的参数去运行。 经过概括，参数基本上分为两种类型：  单个独立参数：例">
+<meta name="twitter:description" content="从 1.1.0 版本开始，数据驱动机制进行了较大的优化和调整。请参考：《HttpRunner 再议参数化数据驱动机制》  背景在自动化测试中，经常会遇到如下场景：  1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。  这里只是随意找了两个典型的例子，相信大家都有遇到过很多类似的场景。总结下来，就是">
 <meta name="twitter:image" content="http://debugtalk.com/images/loadrunner-parameterize.jpg">
 
     
@@ -110,7 +110,10 @@
 		
 		</div>
 		
-		<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在自动化测试中，经常会遇到如下场景：</p>
+		<blockquote>
+<p>从 1.1.0 版本开始，数据驱动机制进行了较大的优化和调整。<br>请参考：<a href="http://debugtalk.com/post/httprunner-data-driven/">《HttpRunner 再议参数化数据驱动机制》</a></p>
+</blockquote>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在自动化测试中，经常会遇到如下场景：</p>
 <blockquote>
 <p>1、测试搜索功能，只有一个搜索输入框，但有10种不同类型的搜索关键字；<br>2、测试账号登录功能，需要输入用户名和密码，按照等价类划分后有20种组合情况。</p>
 </blockquote>
@@ -122,7 +125,7 @@
 </ul>
 <p>然后，对于参数而言，我们可能具有一个参数列表，在脚本运行时需要按照不同的规则去取值，例如顺序取值、随机取值、循环取值等等。</p>
 <p>对于这一块儿，没有太多新的概念，这就是典型的参数化和数据驱动。遗憾的是，当前<code>HttpRunner</code>并未支持该功能特性。</p>
-<p>考虑到该需求的普遍性，并且近期提到该需求的的人也越来越多（<a href="https://github.com/HttpRunner/HttpRunner/issues/74" target="_blank" rel="external">issue #74</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/87" target="_blank" rel="external">issue #87</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/88" target="_blank" rel="external">issue #88</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/97" target="_blank" rel="external">issue #97</a>），因此趁着春节假期的空闲时间，决定优先实现下。</p>
+<p>考虑到该需求的普遍性，并且近期提到该需求的的人也越来越多（<a href="https://github.com/HttpRunner/HttpRunner/issues/74" target="_blank" rel="noopener">issue #74</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/87" target="_blank" rel="noopener">issue #87</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/88" target="_blank" rel="noopener">issue #88</a>, <a href="https://github.com/HttpRunner/HttpRunner/issues/97" target="_blank" rel="noopener">issue #97</a>），因此趁着春节假期的空闲时间，决定优先实现下。</p>
 <p>经过前面的场景分析，我们的目标已经很明确了，接下来就是如何实现的问题了。</p>
 <h2 id="借鉴-LoadRunner-的数据参数化"><a href="#借鉴-LoadRunner-的数据参数化" class="headerlink" title="借鉴 LoadRunner 的数据参数化"></a>借鉴 LoadRunner 的数据参数化</h2><p>要造一个轮子，最好是先看下现有知名轮子的实现机制。之前有用过一段时间的 LoadRunner，对其参数化机制印象蛮深的，虽然它是性能测试工具，但在脚本参数化方面是通用的。</p>
 <p>我们先看下在 LoadRunner 中是如何实现参数化的。</p>
@@ -180,7 +183,7 @@
 <p>针对参数取值采用<code>Random</code>方式的这个问题，我们不妨换个思路。从数据驱动的角度来看，我们期望在自动化测试时能遍历数据源文件中的所有数据，那么重复采用相同参数进行测试的意义就不大了。因此，在选择<code>Random</code>的取值方式时，我们可以先将参数列表进行乱序排序，然后采用顺序的方式进行遍历；对于存在多组参数的情况，也可以实现乱序排序后再进行笛卡尔积的组合方式了。</p>
 <p>到此为止，我们的参数化配置方式应该算是十分简洁了，而且在功能上也能满足常规参数化的配置需求。</p>
 <p>最后，我们再回过头来看脚本参数化设计思路的演变历程，基本上都可以概括为<code>约定大于配置</code>，这的确也是<code>HttpRunner</code>崇尚和遵循的准则。</p>
-<h2 id="开发实现"><a href="#开发实现" class="headerlink" title="开发实现"></a>开发实现</h2><p>设计思路理顺了，实现起来就比较简单了，点击此处查看<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d" target="_blank" rel="external">相关代码</a>，就会发现实际的代码量并不多。</p>
+<h2 id="开发实现"><a href="#开发实现" class="headerlink" title="开发实现"></a>开发实现</h2><p>设计思路理顺了，实现起来就比较简单了，点击此处查看<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d" target="_blank" rel="noopener">相关代码</a>，就会发现实际的代码量并不多。</p>
 <p>在这里我就只挑几个典型的点讲下。</p>
 <h3 id="数据源格式约定"><a href="#数据源格式约定" class="headerlink" title="数据源格式约定"></a>数据源格式约定</h3><p>既然是参数化，那么肯定会存在数据源的问题，我们约定采用<code>.csv</code>文件格式来存储参数列表。同时，在同一个测试场景中可能会存在多个参数的情况，为了降低问题的复杂度，我们可以约定独立参数存放在独立的<code>.csv</code>文件中，多个具有关联性的参数存放在一个<code>.csv</code>文件中。另外，我们同时约定在<code>.csv</code>文件中的第一行必须为参数名称，并且要与文件名保持一致；从第二行开始为参数值，每个值占一行。</p>
 <p>例如，<code>keyword</code>这种独立的参数就可以存放在<code>keyword.csv</code>中，内容形式如下：</p>
@@ -188,7 +191,7 @@
 <p><code>username</code>和<code>password</code>这种具有关联性的参数就可以存放在<code>username-password.csv</code>中，内容形式如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">username,password</div><div class="line">test1,111111</div><div class="line">test2,222222</div><div class="line">test3,333333</div></pre></td></tr></table></figure>
 <h3 id="csv-解析器"><a href="#csv-解析器" class="headerlink" title="csv 解析器"></a>csv 解析器</h3><p>数据源的格式约定好了，我们要想进行读取，那么就得有一个对应的解析器。因为我们后续想要遍历每一行数据，并且还会涉及到多个参数进行组合的情况，因此我们希望解析出来的每一行数据应该同时包含参数名称和参数值。</p>
-<p>于是，我们的数据结构就约定采用<code>list of dict</code>的形式。即每一个<code>.csv</code>文件解析后会得到一个列表（list），而列表中的每一个元素为一个字典结构（dict），对应着一行数据的参数名称和参数值。具体实现的代码函数为<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d#diff-1ef6376047562e36a304745bca9ade9aR47" target="_blank" rel="external"><code>_load_csv_file</code></a>。</p>
+<p>于是，我们的数据结构就约定采用<code>list of dict</code>的形式。即每一个<code>.csv</code>文件解析后会得到一个列表（list），而列表中的每一个元素为一个字典结构（dict），对应着一行数据的参数名称和参数值。具体实现的代码函数为<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d#diff-1ef6376047562e36a304745bca9ade9aR47" target="_blank" rel="noopener"><code>_load_csv_file</code></a>。</p>
 <p>例如，上面的<code>username-password.csv</code>经过解析，会生成如下形式的数据结构。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">    &#123;'username': 'test1', 'password': '111111'&#125;,</div><div class="line">    &#123;'username': 'test2', 'password': '222222'&#125;,</div><div class="line">    &#123;'username': 'test3', 'password': '333333'&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
 <p>这里还会涉及到一个问题，就是参数取值顺序。</p>
@@ -201,7 +204,7 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">    &#123;'a': 1, 'x': 111, 'y': 112&#125;,</div><div class="line">    &#123;'a': 1, 'x': 121, 'y': 122&#125;,</div><div class="line">    &#123;'a': 2, 'x': 111, 'y': 112&#125;,</div><div class="line">    &#123;'a': 2, 'x': 121, 'y': 122&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
 <p>这里需要强调的是，多个参数经过笛卡尔积运算转换后，仍然是<code>list of dict</code>的数据结构，列表中的每一个字典（dict）代表着参数的一种组合情况。</p>
 <h3 id="参数化数据驱动"><a href="#参数化数据驱动" class="headerlink" title="参数化数据驱动"></a>参数化数据驱动</h3><p>现在，我们已经实现了在<code>YAML/JSON</code>测试用例文件中对参数进行配置，从<code>.csv</code>数据源文件中解析出参数列表，并且生成所有可能的组合情况。最后还差一步，就是如何使用参数值来驱动测试用例的执行。</p>
-<p>听上去很高大上，但实际却异常简单，直接对照着<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d#diff-fe4aef5754006b3e9100eb41eb3ca28cR57" target="_blank" rel="external">代码</a>来说吧。</p>
+<p>听上去很高大上，但实际却异常简单，直接对照着<a href="https://github.com/HttpRunner/HttpRunner/commit/f8569aad914d4fe47ec24ac2e2e472b7b93c310d#diff-fe4aef5754006b3e9100eb41eb3ca28cR57" target="_blank" rel="noopener">代码</a>来说吧。</p>
 <p><img src="/images/httprunner-parameterize.jpg" alt=""></p>
 <p>对于每一组参数组合情况来说，我们完全可以将其视为当前用例集运行时定义的变量值。而在 HttpRunner 中每一次运行测试用例集的时候都需要对<code>runner.Runner</code>做一次初始化，里面会用到定义的变量（即<code>config_dict[&quot;variables&quot;]</code>），那么，我们完全可以在每次初始化的时候将组合好的参数作为变量传进去，假如存在同名的变量，就进行覆盖。</p>
 <p>这样一来，我们就可以使用所有的参数组合情况来依次驱动测试用例的执行，并且每次执行时都采用了不同的参数，从而也就实现了参数化数据驱动的目的。</p>
@@ -306,7 +309,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>18</sup></a></li>
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>19</sup></a></li>
 			
 		
 			
