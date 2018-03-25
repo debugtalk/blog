@@ -1,0 +1,618 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>HttpRunner 再议参数化数据驱动机制 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在《HttpRunner 实现参数化数据驱动机制》一文中，我们实现了参数化数据驱动的需求，并阐述了其设计思路的演变历程和开发实现涉及的核心要素。 问题及思考经过一段时间的实际应用后，虽然参数化数据驱动的功能可以正常使用，但终究感觉不够优雅。 概括下来，主要有如下 4 个方面。 1、调用方式不够自然，描述方式比较繁琐。 12345- config:    name: &quot;user management">
+<meta name="keywords" content="HttpRunner,Parameter,Data-Driven">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HttpRunner 再议参数化数据驱动机制">
+<meta property="og:url" content="http://debugtalk.com/post/httprunner-data-driven-refactor/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在《HttpRunner 实现参数化数据驱动机制》一文中，我们实现了参数化数据驱动的需求，并阐述了其设计思路的演变历程和开发实现涉及的核心要素。 问题及思考经过一段时间的实际应用后，虽然参数化数据驱动的功能可以正常使用，但终究感觉不够优雅。 概括下来，主要有如下 4 个方面。 1、调用方式不够自然，描述方式比较繁琐。 12345- config:    name: &quot;user management">
+<meta property="og:locale" content="en-us">
+<meta property="og:updated_time" content="2018-03-25T08:31:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HttpRunner 再议参数化数据驱动机制">
+<meta name="twitter:description" content="在《HttpRunner 实现参数化数据驱动机制》一文中，我们实现了参数化数据驱动的需求，并阐述了其设计思路的演变历程和开发实现涉及的核心要素。 问题及思考经过一段时间的实际应用后，虽然参数化数据驱动的功能可以正常使用，但终究感觉不够优雅。 概括下来，主要有如下 4 个方面。 1、调用方式不够自然，描述方式比较繁琐。 12345- config:    name: &quot;user management">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/httprunner-data-driven-refactor/" title="HttpRunner 再议参数化数据驱动机制" itemprop="url">HttpRunner 再议参数化数据驱动机制</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2018-03-24T16:00:00.000Z" itemprop="datePublished"> Published 2018-03-25</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题及思考"><span class="toc-number">1.</span> <span class="toc-text">问题及思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#新的实现"><span class="toc-number">2.</span> <span class="toc-text">新的实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遗留问题"><span class="toc-number">3.</span> <span class="toc-text">遗留问题</span></a></li></ol>
+		
+		</div>
+		
+		<p>在<a href="http://debugtalk.com/post/httprunner-data-driven/">《HttpRunner 实现参数化数据驱动机制》</a>一文中，我们实现了参数化数据驱动的需求，并阐述了其设计思路的演变历程和开发实现涉及的核心要素。</p>
+<h2 id="问题及思考"><a href="#问题及思考" class="headerlink" title="问题及思考"></a>问题及思考</h2><p>经过一段时间的实际应用后，虽然参数化数据驱动的功能可以正常使用，但终究感觉不够优雅。</p>
+<p>概括下来，主要有如下 4 个方面。</p>
+<p>1、调用方式不够自然，描述方式比较繁琐。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"user management testset."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - user_agent:</span> Random</div><div class="line"><span class="attr">        - app_version:</span> Sequential</div></pre></td></tr></table></figure>
+<p>描述参数取值方式的时候，需要采用<code>Sequential</code>和<code>Random</code>来进行指定是要顺序取值还是随机乱序取值。暂且不说<code>Sequential</code>这个单词大家能否总是保证拼写正确，绝大多数情况下都是顺序取值，却也总是需要指定<code>Sequential</code>，的确会比较繁琐。</p>
+<p>2、即使是简单的数据驱动场景，也同样需要准备 CSV 文件，问题复杂化。</p>
+<p>指定数据驱动的数据源时，必须创建一个 CSV 文件，并将参数化数据放置在其中。对于大数据量的情况可能没啥问题，但是假如是非常简单的场景，例如上面的例子中，我们只需要对<code>app_version</code>设定参数列表 <code>[&#39;2.8.5&#39;, &#39;2.8.6&#39;]</code>，虽然只有两个参数值，也同样需要去单独创建一个 CSV 文件，就会显得比较繁琐了。</p>
+<p>试想，假如对于简单的参数化数据驱动场景，我们可以直接在 YAML/JSON 测试用例中描述参数列表，如下所示，那就简单得多了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"user management testset."</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - user_agent:</span> [<span class="string">'iOS/10.1'</span>, <span class="string">'iOS/10.2'</span>, <span class="string">'iOS/10.3'</span>]</div><div class="line"><span class="attr">        - app_version:</span> [<span class="string">'2.8.5'</span>, <span class="string">'2.8.6'</span>]</div></pre></td></tr></table></figure>
+<p>3、无法兼顾没有现成参数列表，或者需要更灵活的方式动态生成参数列表的情况。</p>
+<p>例如，假如我们期望每次执行测试用例的时候，里面的参数列表都是按照特定规则动态生成的。那在之前的模式下，我们就只能写一个动态生成参数的函数，然后在每次运行测试用例之前，先执行函数生成参数列表，然后将这些参数值导入到 CSV 文件中。想想都感觉好复杂。</p>
+<p>既然 HttpRunner 已经实现了在 YAML/JSON 测试用例中调用函数的功能，那为啥不将函数调用与获取参数化列表的功能实现和描述语法统一起来呢？</p>
+<p>试想，假如我们需要动态地生成 10 个账号，包含用户名和密码，那我们就可以将动态生成参数的函数放置到 <code>debugtalk.py</code> 中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_account</span><span class="params">(num)</span>:</span></div><div class="line">    accounts = []</div><div class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">1</span>, num+<span class="number">1</span>):</div><div class="line">        accounts.append(</div><div class="line">            &#123;<span class="string">"username"</span>: <span class="string">"user%s"</span> % index, <span class="string">"password"</span>: str(index) * <span class="number">6</span>&#125;,</div><div class="line">        )</div><div class="line"></div><div class="line">    <span class="keyword">return</span> accounts</div></pre></td></tr></table></figure>
+<p>然后，在 YAML/JSON 测试用例中，再使用 <code>${}</code> 的语法来调用函数，并将函数返回的参数列表传给需要参数化的变量。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - username-password:</span> $&#123;get_account(<span class="number">10</span>)&#125;</div></pre></td></tr></table></figure>
+<p>实现了这一特性后，要再兼容从 CSV 文件数据源中读取参数列表的方式也很简单了。我们只需要在 HttpRunner 中内置一个解析 CSV 文件的 <code>parameterize</code> 函数（也可以简写为 <code>P</code> 函数），然后就可以在 YAML/JSON 中通过函数调用的方式引用 CSV 文件了。如下例中的 user_id 所示。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"demo"</span></div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - user_agent:</span> [<span class="string">"iOS/10.1"</span>, <span class="string">"iOS/10.2"</span>, <span class="string">"iOS/10.3"</span>]</div><div class="line"><span class="attr">        - user_id:</span> $&#123;P(user_id.csv)&#125;</div><div class="line"><span class="attr">        - username-password:</span> $&#123;get_account(<span class="number">10</span>)&#125;</div></pre></td></tr></table></figure>
+<p>这样一来，我们就可以优雅地实现参数列表数据源的指定了，并且从概念理解和框架实现的角度也能完成统一，即对于 <code>parameters</code> 中的参数变量而言，传入的都是一个参数列表，这个列表可以是直接指定的，可以是从 CSV 文件中加载的，也可以是通过调用自定义函数动态生成的。</p>
+<p>4、数据驱动只能在测试用例集（testset）层面，不能针对单个测试用例（testcse）进行数据驱动。</p>
+<p>例如，用例集里面有两个接口，第一个接口是获取 token，第二个接口是创建用户（参考 <a href="http://cn.httprunner.org/quickstart/#_12" target="_blank" rel="noopener">QuickStart</a> 中的 <a href="http://cn.httprunner.org/data/demo-quickstart-6.json" target="_blank" rel="noopener">demo-quickstart-6.json</a>）。那么按照之前的设计，在 config 中配置了参数化之后，就是针对整个测试用例集（testset）层面的数据驱动，使用每一组参数运行的时候都要先执行第一个接口，再执行第二个接口。</p>
+<p>这可能就跟我们预期的情况不一样了。假如我们期望的是只针对第二个接口做数据驱动，即第一个接口只需要调用一次获取到 token，然后使用参数列表中的数值分别调用第二个接口创建用户，那么之前的方法就行不通了。</p>
+<p>既然有这类需求，因此数据驱动也应该具有作用域的概念。</p>
+<p>类似于定义的 <code>variables</code>，定义在 config 中是全局有效的，定义在 test 中就只对当前测试用例有效。同样地，我们也可以针对 parameters 增加作用域的概念，若只需实现对当前用例（testcase）的参数化数据驱动，就可以将 parameters 配置放置到当前 test 中。</p>
+<h2 id="新的实现"><a href="#新的实现" class="headerlink" title="新的实现"></a>新的实现</h2><p>想法明确了，改造实现也就比较简单了。</p>
+<p>从版本 <code>1.1.0</code> 开始，HttpRunner 便支持了上述新的数据驱动方式。详细的使用方法，可参考如下使用说明文档：</p>
+<p><a href="http://cn.httprunner.org/advanced/data-driven/" target="_blank" rel="noopener">http://cn.httprunner.org/advanced/data-driven/</a></p>
+<p>至此，HttpRunner 的数据驱动机制就比较完善和稳定了，应该可以解决绝大多数数据驱动场景的需求。</p>
+<h2 id="遗留问题"><a href="#遗留问题" class="headerlink" title="遗留问题"></a>遗留问题</h2><p>不过，还有一类场景暂时没有实现支持，即需要根据先前接口返回结果来对后续接口进行数据驱动的情况。</p>
+<p>以如下场景为例：</p>
+<ul>
+<li>加载用户列表，获取当前用户列表中的所有用户；</li>
+<li>依次对每一个用户进行点赞或者发送消息的操作。</li>
+</ul>
+<p>这和前面的第三条有点类似，都需要先动态获取参数列表，然后再使用获取得到的参数列表进行数据驱动。但也存在较大的差异，即获取用户列表的操作也是测试场景的一部分，并且通常因为需要共享 session 和 cookies，因此不能将第一步的请求放置到 debugtalk.py 中。</p>
+<p>之前的一个想法是，在第一个接口中，将结果返回的用户列表提取（extract）出来保存至变量（user_list），然后在后续需要做数据驱动的接口中，在 parameters 中引用前面提取出的用户列表（$user_list）；若有需要，还可以自定义函数（parse_users），将前面提取出来的用户列表转换至框架支持的格式。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> load user list</div><div class="line"><span class="attr">    request:</span> &#123;...&#125;</div><div class="line"><span class="attr">    extract:</span></div><div class="line"><span class="attr">        - user_list:</span> content.users</div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> send message to user</div><div class="line"><span class="attr">    parameters:</span></div><div class="line"><span class="attr">        - user:</span> $&#123;parse_users($user_list)&#125;</div><div class="line"><span class="attr">    request:</span> &#123;...&#125;</div></pre></td></tr></table></figure>
+<p>这个方式乍一看是可行的，但实际却是行不通的。</p>
+<p>问题在于，在 HttpRunner 的数据驱动机制中，采用参数列表构造测试用例是在初始化阶段，做的工作主要是根据参数列表中的数据生成测试用例并添加至 unittest 的 TestSuite 中，此时测试用例还没有进入执行环节，因此也没法从接口的响应结果中提取参数列表。</p>
+<p>若非要解决这个问题，针对 test 的数据驱动，可以将解析 parameters 的实现放置到 request 中；这的确可以实现上述场景中的功能，但在测试用例执行统计方面就会出现问题。以该场景为例，假如获取到的用户列表有100个用户，那么整个用例集将执行101次测试用例，但最终生成的测试报告中却只会展示运行了2条测试用例。</p>
+<p>针对该场景，我还没有想到很好的解决方案，暂且将其作为一个遗留问题吧。若你有比较好的实现方案，欢迎反馈给我，或者直接提交 <a href="https://github.com/HttpRunner/HttpRunner" target="_blank" rel="noopener">PR</a>。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HttpRunner/">HttpRunner</a><a href="/tags/Parameter/">Parameter</a><a href="/tags/Data-Driven/">Data-Driven</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/httprunner-data-driven-refactor/" data-title="HttpRunner 再议参数化数据驱动机制 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/post/test-dev-in-dji/"  title="在大疆做测试开发是一种什么体验？">
+ <strong>下一篇：</strong><br/> 
+ <span>在大疆做测试开发是一种什么体验？
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题及思考"><span class="toc-number">1.</span> <span class="toc-text">问题及思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#新的实现"><span class="toc-number">2.</span> <span class="toc-text">新的实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#遗留问题"><span class="toc-number">3.</span> <span class="toc-text">遗留问题</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>19</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

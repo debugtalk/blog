@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://debugtalk.com/"/>
-  <updated>2018-03-25T08:28:20.000Z</updated>
+  <updated>2018-03-25T08:31:10.000Z</updated>
   <id>http://debugtalk.com/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>HttpRunner 实现参数化数据驱动机制</title>
-    <link href="http://debugtalk.com/post/httprunner-data-driven/"/>
-    <id>http://debugtalk.com/post/httprunner-data-driven/</id>
+    <title>HttpRunner 再议参数化数据驱动机制</title>
+    <link href="http://debugtalk.com/post/httprunner-data-driven-refactor/"/>
+    <id>http://debugtalk.com/post/httprunner-data-driven-refactor/</id>
     <published>2018-03-24T16:00:00.000Z</published>
-    <updated>2018-03-25T08:28:20.000Z</updated>
+    <updated>2018-03-25T08:31:10.000Z</updated>
     
     <content type="html"><![CDATA[<p>在<a href="http://debugtalk.com/post/httprunner-data-driven/">《HttpRunner 实现参数化数据驱动机制》</a>一文中，我们实现了参数化数据驱动的需求，并阐述了其设计思路的演变历程和开发实现涉及的核心要素。</p>
 <h2 id="问题及思考"><a href="#问题及思考" class="headerlink" title="问题及思考"></a>问题及思考</h2><p>经过一段时间的实际应用后，虽然参数化数据驱动的功能可以正常使用，但终究感觉不够优雅。</p>

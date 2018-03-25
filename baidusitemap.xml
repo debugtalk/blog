@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/httprunner-data-driven/</loc>
-    <lastmod>2018-03-25T08:29:12.000Z</lastmod>
+    <loc>http://debugtalk.com/post/httprunner-data-driven-refactor/</loc>
+    <lastmod>2018-03-25T08:31:10.000Z</lastmod>
     <data>
         <display>
-        <title>HttpRunner 实现参数化数据驱动机制</title>
-        <pubTime>2018-02-15T16:00:00.000Z</pubTime>
+        <title>HttpRunner 再议参数化数据驱动机制</title>
+        <pubTime>2018-03-24T16:00:00.000Z</pubTime>
         
         <tag>HttpRunner</tag>
          
@@ -26,11 +26,11 @@
     
   <url>
     <loc>http://debugtalk.com/post/httprunner-data-driven/</loc>
-    <lastmod>2018-03-25T08:28:20.000Z</lastmod>
+    <lastmod>2018-03-25T08:29:12.000Z</lastmod>
     <data>
         <display>
         <title>HttpRunner 实现参数化数据驱动机制</title>
-        <pubTime>2018-03-24T16:00:00.000Z</pubTime>
+        <pubTime>2018-02-15T16:00:00.000Z</pubTime>
         
         <tag>HttpRunner</tag>
          
