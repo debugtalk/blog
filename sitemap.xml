@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://debugtalk.com/post/httprunner-hook/</loc>
+    
+    <lastmod>2018-05-12T09:47:40.267Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com//about/index.html</loc>
     
     <lastmod>2018-03-25T09:01:32.408Z</lastmod>
@@ -65,14 +72,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -100,7 +100,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -121,21 +121,21 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
+    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -149,7 +149,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -163,7 +163,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
+    
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -180,13 +187,6 @@
     <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/</loc>
     
     <lastmod>2017-11-14T16:24:33.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
@@ -359,16 +359,16 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/</loc>
+    <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/</loc>
+    <loc>http://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
@@ -555,6 +555,13 @@
   </url>
   
   <url>
+    <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
+    
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/baidu_verify_WfVJyFbNZp.html</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -576,7 +583,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
+    <loc>http://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     

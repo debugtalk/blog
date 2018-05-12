@@ -3,6 +3,25 @@
 
 
     
+  <url>
+    <loc>http://debugtalk.com/post/httprunner-hook/</loc>
+    <lastmod>2018-05-12T09:47:40.267Z</lastmod>
+    <data>
+        <display>
+        <title>HttpRunner 实现 hook 机制</title>
+        <pubTime>2018-05-11T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>hook</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>http://debugtalk.com/post/httprunner-data-driven-refactor/</loc>
@@ -159,29 +178,12 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine 正式更名为 HttpRunner</title>
-        <pubTime>2017-11-07T16:00:00.000Z</pubTime>
-        
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用</title>
-        <pubTime>2017-07-16T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 演进之路（3）测试用例中实现 Python 函数的定义</title>
+        <pubTime>2017-07-10T16:00:00.000Z</pubTime>
         
         <tag>Python</tag>
          
@@ -190,6 +192,8 @@
         <tag>测试框架</tag>
          
         <tag>HttpRunner</tag>
+         
+        <tag>lambda</tag>
          
          
            
@@ -262,20 +266,20 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>300行Python代码打造实用接口测试框架</title>
-        <pubTime>2017-06-27T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</title>
+        <pubTime>2017-07-06T16:00:00.000Z</pubTime>
         
-        <tag>Python</tag>
-         
-        <tag>接口测试</tag>
+        <tag>自动化测试</tag>
          
         <tag>测试框架</tag>
          
         <tag>HttpRunner</tag>
+         
+        <tag>测试用例</tag>
          
          
            
@@ -325,22 +329,14 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine 演进之路（3）测试用例中实现 Python 函数的定义</title>
-        <pubTime>2017-07-10T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 正式更名为 HttpRunner</title>
+        <pubTime>2017-11-07T16:00:00.000Z</pubTime>
         
-        <tag>Python</tag>
-         
-        <tag>自动化测试</tag>
-         
-        <tag>测试框架</tag>
-         
         <tag>HttpRunner</tag>
-         
-        <tag>lambda</tag>
          
          
            
@@ -350,20 +346,102 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
-        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用</title>
+        <pubTime>2017-07-16T16:00:00.000Z</pubTime>
         
-        <tag>HTTP</tag>
+        <tag>Python</tag>
          
         <tag>自动化测试</tag>
          
         <tag>测试框架</tag>
          
         <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>300行Python代码打造实用接口测试框架</title>
+        <pubTime>2017-06-27T16:00:00.000Z</pubTime>
+        
+        <tag>Python</tag>
+         
+        <tag>接口测试</tag>
+         
+        <tag>测试框架</tag>
+         
+        <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>HttpRunner 的结果校验器优化</title>
+        <pubTime>2017-12-12T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>validator</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>约定大于配置：ApiTestEngine实现热加载机制</title>
+        <pubTime>2017-09-08T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>热加载</tag>
+         
+        <tag>debugtalk.py</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>HttpRunner 的测试用例分层机制</title>
+        <pubTime>2017-12-22T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>testcase</tag>
          
          
            
@@ -396,79 +474,20 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>HttpRunner 的结果校验器优化</title>
-        <pubTime>2017-12-12T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
+        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
         
-        <tag>HttpRunner</tag>
+        <tag>HTTP</tag>
          
-        <tag>validator</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</title>
-        <pubTime>2017-07-06T16:00:00.000Z</pubTime>
-        
         <tag>自动化测试</tag>
          
         <tag>测试框架</tag>
          
         <tag>HttpRunner</tag>
-         
-        <tag>测试用例</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>HttpRunner 的测试用例分层机制</title>
-        <pubTime>2017-12-22T16:00:00.000Z</pubTime>
-        
-        <tag>HttpRunner</tag>
-         
-        <tag>testcase</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>约定大于配置：ApiTestEngine实现热加载机制</title>
-        <pubTime>2017-09-08T16:00:00.000Z</pubTime>
-        
-        <tag>HttpRunner</tag>
-         
-        <tag>热加载</tag>
-         
-        <tag>debugtalk.py</tag>
          
          
            
@@ -509,27 +528,6 @@
         <tag>Appium</tag>
          
         <tag>F0T1</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>LoadRunner基于WSDL的WebService测试方法</title>
-        <pubTime>2013-08-01T16:00:00.000Z</pubTime>
-        
-        <tag>LoadRunner</tag>
-         
-        <tag>WebService</tag>
-         
-        <tag>WSDL</tag>
          
          
            
@@ -1051,6 +1049,27 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>LoadRunner基于WSDL的WebService测试方法</title>
+        <pubTime>2013-08-01T16:00:00.000Z</pubTime>
+        
+        <tag>LoadRunner</tag>
+         
+        <tag>WebService</tag>
+         
+        <tag>WSDL</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -1063,25 +1082,6 @@
         <tag>pyenv</tag>
          
         <tag>virtualenv</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/</loc>
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    <data>
-        <display>
-        <title>微信朋友圈投票活动的刷票案例分析</title>
-        <pubTime>2016-04-03T16:00:00.000Z</pubTime>
-        
-        <tag>案例分析</tag>
-         
-        <tag>security</tag>
          
          
            
@@ -1606,9 +1606,6 @@
     </url>
 
     
-    
-    
-    
   <url>
     <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -1618,6 +1615,28 @@
         <pubTime>2016-03-07T16:00:00.000Z</pubTime>
         
         <tag>Development</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+    
+  <url>
+    <loc>http://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/</loc>
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>微信朋友圈投票活动的刷票案例分析</title>
+        <pubTime>2016-04-03T16:00:00.000Z</pubTime>
+        
+        <tag>案例分析</tag>
+         
+        <tag>security</tag>
          
          
            

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://debugtalk.com/"/>
-  <updated>2018-03-25T08:31:10.000Z</updated>
+  <updated>2018-05-12T09:47:40.267Z</updated>
   <id>http://debugtalk.com/</id>
   
   <author>
@@ -14,6 +14,82 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HttpRunner 实现 hook 机制</title>
+    <link href="http://debugtalk.com/post/httprunner-hook/"/>
+    <id>http://debugtalk.com/post/httprunner-hook/</id>
+    <published>2018-05-11T16:00:00.000Z</published>
+    <updated>2018-05-12T09:47:40.267Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在自动化测试中，通常在测试开始前需要做一些预处理操作，以及在测试结束后做一些清理性的工作。</p>
+<p>例如，测试使用手机号注册账号的接口：</p>
+<ul>
+<li>测试开始前需要确保该手机号未进行过注册，常用的做法是先在数据库中删除该手机号相关的账号数据（若存在）；</li>
+<li>测试结束后，为了减少对测试环境的影响，常用的做法是在数据库中将本次测试产生的相关数据删除掉。</li>
+</ul>
+<p>显然，在自动化测试中的这类预处理操作和清理性工作，由人工来做肯定是不合适的，我们最好的方式还是在测试脚本中进行实现，也就是我们常说的 hook 机制。</p>
+<p>hook 机制的概念很简单，在各个主流的测试工具和测试框架中也很常见。</p>
+<p>例如 Python 的 unittest 框架，常用的就有如下几种 hook 函数。</p>
+<ul>
+<li>setUp：在每个 test 运行前执行</li>
+<li>tearDown：在每个 test 运行后执行</li>
+<li>setUpClass：在整个用例集运行前执行</li>
+<li>tearDownClass：在整个用例集运行后执行</li>
+</ul>
+<p>概括地讲，就是针对自动化测试用例，要在单个测试用例和整个测试用例集的前后实现 hook 函数。</p>
+<h2 id="描述方式设想"><a href="#描述方式设想" class="headerlink" title="描述方式设想"></a>描述方式设想</h2><p>在 HttpRunner 的 YAML/JSON 测试用例文件中，本身就具有分层的思想，用例集层面的配置在 config 中，用例层面的配置在 test 中；同时，在 YAML/JSON 中也实现了比较方便的函数调用机制，<code>$func($a, $b)</code>。</p>
+<p>因此，我们可以新增两个关键字：<code>setup_hooks</code> 和 <code>teardown_hooks</code>。类似于 variables 和 parameters 关键字，根据关键字放置的位置来决定是用例集层面还是单个用例层面。</p>
+<p>根据设想，我们就可以采用如下形式来描述 hook 机制。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> basic test with httpbin</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        base_url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">3458</span>/</div><div class="line"><span class="attr">    setup_hooks:</span></div><div class="line"><span class="bullet">        -</span> $&#123;hook_print(setup_testset)&#125;</div><div class="line"><span class="attr">    teardown_hooks:</span></div><div class="line"><span class="bullet">        -</span> $&#123;hook_print(teardown_testset)&#125;</div><div class="line"></div><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get headers</div><div class="line"><span class="attr">    times:</span> <span class="number">2</span></div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /headers</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    setup_hooks:</span></div><div class="line"><span class="bullet">        -</span> $&#123;hook_print(---setup-testcase)&#125;</div><div class="line"><span class="attr">    teardown_hooks:</span></div><div class="line"><span class="bullet">        -</span> $&#123;hook_print(---teardown-testcase)&#125;</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [content.headers.Host, <span class="string">"127.0.0.1:3458"</span>]</div></pre></td></tr></table></figure>
+<p>同时，hook 函数需要定义在项目的 debugtalk.py 中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hook_print</span><span class="params">(msg)</span>:</span></div><div class="line">    print(msg)</div></pre></td></tr></table></figure>
+<h2 id="基本实现方式"><a href="#基本实现方式" class="headerlink" title="基本实现方式"></a>基本实现方式</h2><p>基于 hook 机制的简单概念，要在 HttpRunner 中实现类似功能也就很容易了。</p>
+<p>在 HttpRunner 中，负责测试执行的类为 <code>httprunner/runner.py</code> 中的 Runner。因此，要实现用例集层面的 hook 机制，只需要将用例集的 setup_hooks 放置到 <code>__init__</code> 中，将 teardown_hooks 放置到 <code>__del__</code> 中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Runner</span><span class="params">(object)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, config_dict=None, http_client_session=None)</span>:</span></div><div class="line">        <span class="comment"># 省略</span></div><div class="line"></div><div class="line">        <span class="comment"># testset setup hooks</span></div><div class="line">        testset_setup_hooks = config_dict.pop(<span class="string">"setup_hooks"</span>, [])</div><div class="line">        <span class="keyword">if</span> testset_setup_hooks:</div><div class="line">            self.do_hook_actions(testset_setup_hooks)</div><div class="line"></div><div class="line">        <span class="comment"># testset teardown hooks</span></div><div class="line">        self.testset_teardown_hooks = config_dict.pop(<span class="string">"teardown_hooks"</span>, [])</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__del__</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">if</span> self.testset_teardown_hooks:</div><div class="line">            self.do_hook_actions(self.testset_teardown_hooks)</div></pre></td></tr></table></figure>
+<p>类似地，要实现单个用例层面的 hook 机制，只需要将单个用例的 setup_hooks 放置到 request 之前，将 teardown_hooks 放置到 request 之后。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Runner</span><span class="params">(object)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run_test</span><span class="params">(self, testcase_dict)</span>:</span></div><div class="line"></div><div class="line">        <span class="comment"># 省略</span></div><div class="line"></div><div class="line">        <span class="comment"># setup hooks</span></div><div class="line">        setup_hooks = testcase_dict.get(<span class="string">"setup_hooks"</span>, [])</div><div class="line">        self.do_hook_actions(setup_hooks)</div><div class="line"></div><div class="line">        <span class="comment"># request</span></div><div class="line">        resp = self.http_client_session.request(method, url, name=group_name, **parsed_request)</div><div class="line"></div><div class="line">        <span class="comment"># teardown hooks</span></div><div class="line">        teardown_hooks = testcase_dict.get(<span class="string">"teardown_hooks"</span>, [])</div><div class="line">        <span class="keyword">if</span> teardown_hooks:</div><div class="line">            self.do_hook_actions(teardown_hooks)</div><div class="line"></div><div class="line">        <span class="comment"># 省略</span></div></pre></td></tr></table></figure>
+<p>至于具体执行 hook 函数的 do_hook_actions，因为之前我们已经实现了文本格式函数描述的解析器 <code>context.eval_content</code>，因此直接调用就可以了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">do_hook_actions</span><span class="params">(self, actions)</span>:</span></div><div class="line">    <span class="keyword">for</span> action <span class="keyword">in</span> actions:</div><div class="line">        logger.log_debug(<span class="string">"call hook: &#123;&#125;"</span>.format(action))</div><div class="line">        self.context.eval_content(action)</div></pre></td></tr></table></figure>
+<p>通过以上方式，我们就在 HttpRunner 中实现了用例集和单个用例层面的 hook 机制。</p>
+<p>还是上面的测试用例，我们执行的效果如下所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">$ hrun tests/httpbin/hooks.yml</div><div class="line">setup_testset</div><div class="line">get headers</div><div class="line">INFO     GET /headers</div><div class="line">---setup-testcase</div><div class="line">INFO     status_code: 200, response_time(ms): 10.29 ms, response_length: 151 bytes</div><div class="line">---teardown-testcase</div><div class="line">.</div><div class="line">get headers</div><div class="line">INFO     GET /headers</div><div class="line">---setup-testcase</div><div class="line">INFO     status_code: 200, response_time(ms): 4.46 ms, response_length: 151 bytes</div><div class="line">---teardown-testcase</div><div class="line">.</div><div class="line"></div><div class="line">----------------------------------------------------------------------</div><div class="line">Ran 2 tests in 0.028s</div><div class="line"></div><div class="line">OK</div><div class="line">teardown_testset</div></pre></td></tr></table></figure>
+<p>可以看出，这的确已经满足了我们在用例集和单个用例层面的 hook 需求。</p>
+<h2 id="进一步优化"><a href="#进一步优化" class="headerlink" title="进一步优化"></a>进一步优化</h2><p>以上实现已经可以满足大多数场景的测试需求了，不过还有两种场景无法满足：</p>
+<ul>
+<li>需要对请求的 request 内容进行预处理，例如，根据请求方法和请求的 Content-Type 来对请求的 data 进行加工处理；</li>
+<li>需要根据响应结果来进行不同的后续处理，例如，根据接口响应的状态码来进行不同时间的延迟等待。</li>
+</ul>
+<p>在之前的实现方式中，我们无法实现上述两个场景，是因为我们无法将请求的 request 内容和响应的结果传给 hook 函数。</p>
+<p>问题明确了，要进行进一步优化也就容易了。</p>
+<p>因为我们在 hook 函数（类似于<code>$func($a, $b)</code>）中，是可以传入变量的，而变量都是存在于当前测试用例的上下文（context）中的，那么我们只要将 request 内容和请求响应分别作为变量绑定到当前测试用例的上下文即可。</p>
+<p>具体地，我们可以约定两个变量，<code>$request</code>和<code>$response</code>，分别对应测试用例的请求内容（request）和响应实例（requests.Response）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Runner</span><span class="params">(object)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run_test</span><span class="params">(self, testcase_dict)</span>:</span></div><div class="line"></div><div class="line">        self.context.bind_variables(&#123;<span class="string">"request"</span>: parsed_request&#125;, level=<span class="string">"testcase"</span>)</div><div class="line"></div><div class="line">        <span class="comment"># 省略</span></div><div class="line"></div><div class="line">        <span class="comment"># setup hooks</span></div><div class="line">        setup_hooks = testcase_dict.get(<span class="string">"setup_hooks"</span>, [])</div><div class="line">        self.do_hook_actions(setup_hooks)</div><div class="line"></div><div class="line">        <span class="comment"># request</span></div><div class="line">        resp = self.http_client_session.request(method, url, name=group_name, **parsed_request)</div><div class="line"></div><div class="line">        <span class="comment"># teardown hooks</span></div><div class="line">        teardown_hooks = testcase_dict.get(<span class="string">"teardown_hooks"</span>, [])</div><div class="line">        <span class="keyword">if</span> teardown_hooks:</div><div class="line">            self.context.bind_variables(&#123;<span class="string">"response"</span>: resp&#125;, level=<span class="string">"testcase"</span>)</div><div class="line">            self.do_hook_actions(teardown_hooks)</div><div class="line"></div><div class="line">        <span class="comment"># 省略</span></div></pre></td></tr></table></figure>
+<p>在优化后的实现中，新增了两次调用，<code>self.context.bind_variables</code>，作用就是将解析后的 request 内容和请求的响应实例绑定到当前测试用例的上下文中。</p>
+<p>然后，我们在 YAML/JSON 测试用例中就可以在需要的时候调用<code>$request</code>和<code>$response</code>了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> headers</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> /headers</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    setup_hooks:</span></div><div class="line"><span class="bullet">        -</span> $&#123;setup_hook_prepare_kwargs($request)&#125;</div><div class="line"><span class="attr">    teardown_hooks:</span></div><div class="line"><span class="bullet">        -</span> $&#123;teardown_hook_sleep_N_secs($response, <span class="number">1</span>)&#125;</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, <span class="number">200</span>]</div><div class="line"><span class="attr">        - eq:</span> [content.headers.Host, <span class="string">"127.0.0.1:3458"</span>]</div></pre></td></tr></table></figure>
+<p>对应的 hook 函数如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">setup_hook_prepare_kwargs</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">if</span> request[<span class="string">"method"</span>] == <span class="string">"POST"</span>:</div><div class="line">        content_type = request.get(<span class="string">"headers"</span>, &#123;&#125;).get(<span class="string">"content-type"</span>)</div><div class="line">        <span class="keyword">if</span> content_type <span class="keyword">and</span> <span class="string">"data"</span> <span class="keyword">in</span> request:</div><div class="line">            <span class="comment"># if request content-type is application/json, request data should be dumped</span></div><div class="line">            <span class="keyword">if</span> content_type.startswith(<span class="string">"application/json"</span>) <span class="keyword">and</span> isinstance(request[<span class="string">"data"</span>], (dict, list)):</div><div class="line">                request[<span class="string">"data"</span>] = json.dumps(request[<span class="string">"data"</span>])</div><div class="line"></div><div class="line">            <span class="keyword">if</span> isinstance(request[<span class="string">"data"</span>], str):</div><div class="line">                request[<span class="string">"data"</span>] = request[<span class="string">"data"</span>].encode(<span class="string">'utf-8'</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">teardown_hook_sleep_N_secs</span><span class="params">(response, n_secs)</span>:</span></div><div class="line">    <span class="string">""" sleep n seconds after request</span></div><div class="line">    """</div><div class="line">    <span class="keyword">if</span> response.status_code == <span class="number">200</span>:</div><div class="line">        time.sleep(<span class="number">0.1</span>)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        time.sleep(n_secs)</div></pre></td></tr></table></figure>
+<p>值得特别说明的是，因为 request 是可变参数类型（dict），因此该函数参数为引用传递，我们在 hook 函数里面对 request 进行修改后，后续在实际请求时也同样会发生改变，这对于我们需要对请求参数进行预处理时尤其有用。</p>
+<h2 id="更多内容"><a href="#更多内容" class="headerlink" title="更多内容"></a>更多内容</h2><ul>
+<li>中文使用说明文档：<a href="http://cn.httprunner.org/advanced/request-hook/" target="_blank" rel="noopener">http://cn.httprunner.org/advanced/request-hook/</a></li>
+<li>代码实现：<a href="https://github.com/HttpRunner/HttpRunner/commit/2bb84b38745d004d336ed9867df5e63534b596bc" target="_blank" rel="noopener">GitHub commit</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;在自动化测试中，通常在测试开始前需要做一些预处理操作，以及在测试结束后做一些清理性的工作。&lt;/p&gt;
+&lt;p&gt;例如，测试使用手机号注册账号的接口
+    
+    </summary>
+    
+    
+      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
+    
+      <category term="hook" scheme="http://debugtalk.com/tags/hook/"/>
+    
+  </entry>
   
   <entry>
     <title>HttpRunner 再议参数化数据驱动机制</title>
@@ -1580,68 +1656,6 @@
       <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
     
       <category term="测试用例" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>300行Python代码打造实用接口测试框架</title>
-    <link href="http://debugtalk.com/post/300-lines-python-code-api-test-framework/"/>
-    <id>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</id>
-    <published>2017-06-27T16:00:00.000Z</published>
-    <updated>2017-12-24T01:55:19.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>在刚开始实现<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的时候，<a href="https://testerhome.com/kasi" target="_blank" rel="external"><code>卡斯（kasi）</code></a>提议做一个Java版的。对于这样的建议，我当然是拒绝的，瞬即回复了他，“人生苦短，回头是岸啊”。</p>
-<p>当然，我没好意思跟他说的是，我不会Java啊。不过最主要的原因嘛，还是因为Python的语法简洁，可以采用很少的代码量实现丰富的功能。</p>
-<p>有多简洁呢？</p>
-<p>刚在<code>coveralls</code>上看了下<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>框架的<a href="https://coveralls.io/github/debugtalk/ApiTestEngine?branch=master" target="_blank" rel="external">代码统计行数</a>，总行数只有268行，还不足300行。</p>
-<p><img src="/images/ApiTestEngine-stat-ate.jpg" alt=""></p>
-<p>当然，这个行数指的是框架本身的<code>Python</code>代码行数，不包括示例注释的行数。从上图可以看出来，<code>LINES</code>列是文件总行数，<code>RELEVANT</code>列是实际的<code>Python</code>代码行数。例如<code>ate/runner.py</code>文件，注释的行数是远多于实际代码行数的。</p>
-<p>最极端的一个例子是，<code>ate/testcase.py</code>文件中的<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/ate/testcase.py" target="_blank" rel="external"><code>parse</code>函数</a>，示例注释行数35行，<code>Python</code>代码只有2行。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, testcase_template)</span>:</span></div><div class="line">   <span class="string">""" parse testcase_template, replace all variables with bind value.</span></div><div class="line">   variables marker: $&#123;variable&#125;.</div><div class="line">   @param (dict) testcase_template</div><div class="line">       &#123;</div><div class="line">           "request": &#123;</div><div class="line">               "url": "http://127.0.0.1:5000/api/users/$&#123;uid&#125;",</div><div class="line">               "method": "POST",</div><div class="line">               "headers": &#123;</div><div class="line">                   "Content-Type": "application/json",</div><div class="line">                   "authorization": "$&#123;authorization&#125;",</div><div class="line">                   "random": "$&#123;random&#125;"</div><div class="line">               &#125;,</div><div class="line">               "body": "$&#123;data&#125;"</div><div class="line">           &#125;,</div><div class="line">           "response": &#123;</div><div class="line">               "status_code": "$&#123;expected_status&#125;"</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   @return (dict) parsed testcase with bind values</div><div class="line">       &#123;</div><div class="line">           "request": &#123;</div><div class="line">               "url": "http://127.0.0.1:5000/api/users/1000",</div><div class="line">               "method": "POST",</div><div class="line">               "headers": &#123;</div><div class="line">                   "Content-Type": "application/json",</div><div class="line">                   "authorization": "a83de0ff8d2e896dbd8efb81ba14e17d",</div><div class="line">                   "random": "A2dEx"</div><div class="line">               &#125;,</div><div class="line">               "body": '&#123;"name": "user", "password": "123456"&#125;'</div><div class="line">           &#125;,</div><div class="line">           "response": &#123;</div><div class="line">               "status_code": 201</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   """</div><div class="line">   <span class="keyword">return</span> self.substitute(testcase_template)</div></pre></td></tr></table></figure>
-<p>另外，如果算上单元测试用例的行数（731行），总的<code>Python</code>代码行数能达到1000行的样子。嗯，代码可以精简，但是单元测试覆盖率还是要保证的，不达到90%以上的单元测试覆盖率，真不好意思说自己做了开源项目啊。</p>
-<p><img src="/images/ApiTestEngine-stat-all.jpg" alt=""></p>
-<p>那这不足300行的Python代码，实际实现了哪些功能呢？</p>
-<p>对比下<a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a>中规划的特性，已经实现了大半（前六项），至少已经算是一个有模有样的接口测试框架了。</p>
-<ul>
-<li>支持API接口的多种请求方法，包括 GET/POST/HEAD/PUT/DELETE 等</li>
-<li>测试用例与代码分离，测试用例维护方式简洁优雅，支持<code>YAML/JSON</code></li>
-<li>测试用例描述方式具有表现力，可采用简洁的方式描述输入参数和预期输出结果</li>
-<li>接口测试用例具有可复用性，便于创建复杂测试场景</li>
-<li>测试执行方式简单灵活，支持单接口调用测试、批量接口调用测试、定时任务执行测试</li>
-<li>具有可扩展性，便于扩展实现Web平台化</li>
-<li>测试结果统计报告简洁清晰，附带详尽日志记录，包括接口请求耗时、请求响应数据等</li>
-<li>身兼多职，同时实现接口管理、接口自动化测试、接口性能测试（结合Locust）</li>
-</ul>
-<p>后面剩下的特性还在实现的过程中，但是可以预见得到，最后框架本身总的<code>Python</code>代码行数也不会超过500行。</p>
-<p>当然，单纯地比代码行数的确是没有什么意义，写得爽写得开心才是最重要的。</p>
-<p>最后引用下<code>Guido van Rossum</code>的语录：</p>
-<blockquote>
-<p>Life is short, go Pythonic!</p>
-</blockquote>
-<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
-<li><a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
-<li><a href="http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/">《ApiTestEngine 演化之路（0）开发未动，测试先行》</a></li>
-<li><a href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a></li>
-<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code> GitHub源码</a></li>
-</ul>
-<h2 id="最后的最后"><a href="#最后的最后" class="headerlink" title="最后的最后"></a>最后的最后</h2><p><a href="http://debugtalk.com/tags/ApiTestEngine">《ApiTestEngine 演进之路》</a>系列文章还在继续写，只是前几天主要精力在编码实现上，博客方面没有同步更新，接下来我会整理好思路，继续完成余下的部分。</p>
-<p>另外，如果大家对Python编程感兴趣，给大家推荐一个专注Python原创技术分享的公众号，⎡Python之禅⎦（VTtalk），里面关于Python的干货非常多，讲解也很通俗易懂，现在我如果有理解得不够透彻的概念，基本都会先到这个公众号里面去搜索下。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在刚开始实现&lt;a href=&quot;https://github.com/debugtalk/ApiTestEngine&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;&lt;code&gt;ApiTestEngine&lt;/code&gt;&lt;/a&gt;的时候，&lt;a href=&quot;http
-    
-    </summary>
-    
-    
-      <category term="Python" scheme="http://debugtalk.com/tags/Python/"/>
-    
-      <category term="接口测试" scheme="http://debugtalk.com/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="测试框架" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
-    
-      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
     
   </entry>
   
