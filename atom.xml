@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://debugtalk.com/"/>
-  <updated>2018-05-12T09:47:40.267Z</updated>
+  <updated>2018-05-27T17:02:21.927Z</updated>
   <id>http://debugtalk.com/</id>
   
   <author>
@@ -14,6 +14,97 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用爬虫技术实现 Web 页面资源可用性检测</title>
+    <link href="http://debugtalk.com/post/requests-crawler/"/>
+    <id>http://debugtalk.com/post/requests-crawler/</id>
+    <published>2018-05-27T16:00:00.000Z</published>
+    <updated>2018-05-27T17:02:21.927Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>对于电商类型和内容服务类型的网站，经常会出现因为配置错误造成页面链接无法访问的情况（404）。</p>
+<p>显然，要确保网站中的所有链接都具有可访问性，通过人工进行检测肯定是不现实的，常用的做法是使用爬虫技术定期对网站进行资源爬取，及时发现访问异常的链接。</p>
+<p>对于网络爬虫，当前市面上已经存在大量的开源项目和技术讨论的文章。不过，感觉大家普遍都将焦点集中在爬取效率方面，例如当前就存在大量讨论不同并发机制哪个效率更高的文章，而在爬虫的其它特性方面探讨的不多。</p>
+<p>个人认为，爬虫的核心特性除了<code>快</code>，还应该包括<code>全</code>和<code>稳</code>，并且从重要性的排序来看，<code>全</code>、<code>稳</code>、<code>快</code>应该是从高到低的。</p>
+<p><code>全</code>排在第一位，是因为这是爬虫的基本功能，若爬取的页面不全，就会出现信息遗漏的情况，这种情况肯定是不允许的；而<code>稳</code>排在第二位，是因为爬虫通常都是需要长期稳定运行的，若因为策略处理不当造成爬虫运行过程中偶尔无法正常访问页面，肯定也是无法接受的；最后才是<code>快</code>，我们通常需要爬取的页面链接会非常多，因此效率就很关键，但这也必须建立在<code>全</code>和<code>稳</code>的基础上。</p>
+<p>当然，爬虫本身是一个很深的技术领域，我接触的也只是皮毛。本文只针对使用爬虫技术实现 Web 页面资源可用性检测的实际场景，详细剖析下其中涉及到的几个技术点，重点解决如下几个问题：</p>
+<ul>
+<li>全：如何才能爬取网站所有的页面链接？特别是当前许多网站的页面内容都是要靠前端渲染生成的，爬虫要如何支持这种情况？</li>
+<li>稳：很多网站都有访问频率限制，若爬虫策略处理不当，就常出现 403 和 503 的问题，该种问题要怎么解决？</li>
+<li>快：如何在保障爬虫功能正常的前提下，尽可能地提升爬虫效率？</li>
+</ul>
+<h2 id="爬虫实现前端页面渲染"><a href="#爬虫实现前端页面渲染" class="headerlink" title="爬虫实现前端页面渲染"></a>爬虫实现前端页面渲染</h2><p>在早些年，基本上绝大多数网站都是通过后端渲染的，即在服务器端组装形成完整的 HTML 页面，然后再将完整页面返回给前端进行展现。而近年来，随着 AJAX 技术的不断普及，以及 AngularJS 这类 SPA 框架的广泛应用，前端渲染的页面越来越多。</p>
+<p>不知大家有没有听说过，前端渲染相比于后端渲染，是不利于进行 SEO 的，因为对爬虫不友好。究其原因，就是因为前端渲染的页面是需要在浏览器端执行 JavaScript 代码（即 AJAX 请求）才能获取后端数据，然后才能拼装成完整的 HTML 页面。</p>
+<p>针对这类情况，当前也已经有很多解决方案，最常用的就是借助 PhantomJS、<a href="https://github.com/GoogleChrome/puppeteer" target="_blank" rel="noopener">puppeteer</a> 这类 Headless 浏览器工具，相当于在爬虫中内置一个浏览器内核，对抓取的页面先渲染（执行 Javascript 脚本），然后再对页面内容进行抓取。</p>
+<p>不过，要使用这类技术，通常都是需要使用 Javascript 来开发爬虫工具，对于我这种写惯了 Python 的人来说的确有些痛苦。</p>
+<p>直到某一天，<a href="https://github.com/kennethreitz" target="_blank" rel="noopener">kennethreitz</a> 大神发布了开源项目 <a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a>，看到项目介绍中的那句 <code>Full JavaScript support!</code> 时不禁热泪盈眶，就是它了！该项目在 GitHub 上发布后不到三天，star 数就达到 5000 以上，足见其影响力。</p>
+<p><a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a> 为啥会这么火？</p>
+<p>写过 Python 的人，基本上都会使用 <a href="https://github.com/requests/requests" target="_blank" rel="noopener">requests</a> 这么一个 HTTP 库，说它是最好的 HTTP 库一点也不夸张（不限编程语言），对于其介绍语 <code>HTTP Requests for Humans</code> 也当之无愧。也是因为这个原因，<a href="https://github.com/locustio/locust" target="_blank" rel="noopener">Locust</a> 和 <a href="https://github.com/HttpRunner/HttpRunner" target="_blank" rel="noopener">HttpRunner</a> 都是基于 <a href="https://github.com/requests/requests" target="_blank" rel="noopener">requests</a> 来进行开发的。</p>
+<p>而 <a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a>，则是 <a href="https://github.com/kennethreitz" target="_blank" rel="noopener">kennethreitz</a> 在 <a href="https://github.com/requests/requests" target="_blank" rel="noopener">requests</a> 的基础上开发的另一个开源项目，除了可以复用 <a href="https://github.com/requests/requests" target="_blank" rel="noopener">requests</a> 的全部功能外，还实现了对 HTML 页面的解析，即支持对 Javascript 的执行，以及通过 CSS 和 XPath 对 HTML 页面元素进行提取的功能，这些都是编写爬虫工具非常需要的功能。</p>
+<p>在实现 Javascript 执行方面，<a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a> 也并没有自己造轮子，而是借助了 <a href="https://github.com/miyakogi/pyppeteer" target="_blank" rel="noopener">pyppeteer</a> 这个开源项目。还记得前面提到的 <a href="https://github.com/GoogleChrome/puppeteer" target="_blank" rel="noopener">puppeteer</a> 项目么，这是 GoogleChrome 官方实现的 <code>Node API</code>；而 <a href="https://github.com/miyakogi/pyppeteer" target="_blank" rel="noopener">pyppeteer</a> 这个项目，则相当于是使用 Python 语言对 puppeteer 的非官方实现，基本具有 <a href="https://github.com/GoogleChrome/puppeteer" target="_blank" rel="noopener">puppeteer</a> 的所有功能。</p>
+<p>理清了以上关系后，相信大家对 <a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a> 也就有了更好的理解。</p>
+<p>在使用方面，<a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a> 也十分简单，用法与 <a href="https://github.com/requests/requests" target="_blank" rel="noopener">requests</a> 基本相同，只是多了 <code>render</code> 功能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> requests_html <span class="keyword">import</span> HTMLSession</div><div class="line"></div><div class="line">session = HTMLSession()</div><div class="line">r = session.get(<span class="string">'http://python-requests.org'</span>)</div><div class="line">r.html.render()</div></pre></td></tr></table></figure>
+<p>在执行 <code>render()</code> 之后，返回的就是经过渲染后的页面内容。</p>
+<h2 id="爬虫实现访问频率控制"><a href="#爬虫实现访问频率控制" class="headerlink" title="爬虫实现访问频率控制"></a>爬虫实现访问频率控制</h2><p>为了防止流量攻击，很多网站都有访问频率限制，即限制单个 IP 在一定时间段内的访问次数。若超过这个设定的限制，服务器端就会拒绝访问请求，即响应状态码为 403（Forbidden）。</p>
+<p>这用来应对外部的流量攻击或者爬虫是可以的，但在这个限定策略下，公司内部的爬虫测试工具同样也无法正常使用了。针对这个问题，常用的做法就是在应用系统中开设白名单，将公司内部的爬虫测试服务器 IP 加到白名单中，然后针对白名单中的 IP 不做限制，或者提升限额。但这同样可能会出现问题。因为应用服务器的性能不是无限的，假如爬虫的访问频率超过了应用服务器的处理极限，那么就会造成应用服务器不可用的情况，即响应状态码为 503（Service Unavailable Error）。</p>
+<p>基于以上原因，爬虫的访问频率应该是要与项目组的开发和运维进行统一评估后确定的；而对于爬虫工具而言，实现对访问频率的控制也就很有必要了。</p>
+<p>那要怎样实现访问频率的控制呢？</p>
+<p>我们可以先回到爬虫本身的实现机制。对于爬虫来说，不管采用什么实现形式，应该都可以概括为生产者和消费者模型，即：</p>
+<ul>
+<li>消费者：爬取新的页面</li>
+<li>生产者：对爬取的页面进行解析，得到需要爬取的页面链接</li>
+</ul>
+<p>对于这种模型，最简单的做法是使用一个 FIFO 的队列，用于存储未爬取的链接队列（unvisited_urls_queue）。不管是采用何种并发机制，这个队列都可以在各个 worker 中共享。对于每一个 worker 来说，都可以按照如下做法：</p>
+<ul>
+<li>从 unvisited_urls_queue 队首中取出一个链接进行访问；</li>
+<li>解析出页面中的链接，遍历所有的链接，找出未访问过的链接；</li>
+<li>将未访问过的链接加入到 unvisited_urls_queue 队尾</li>
+<li>直到 unvisited_urls_queue 为空时终止任务</li>
+</ul>
+<p>然后回到我们的问题，要限制访问频率，即单位时间内请求的链接数目。显然，worker 之间相互独立，要在执行端层面协同实现整体的频率控制并不容易。但从上面的步骤中可以看出，unvisited_urls_queue 被所有 worker 共享，并且作为源头供给的角色。那么只要我们可以实现对 unvisited_urls_queue 补充的数量控制，就实现了爬虫整体的访问频率控制。</p>
+<p>以上思路是正确的，但在具体实现的时候会存在几个问题：</p>
+<ul>
+<li>需要一个用于存储已经访问链接的集合（visited_urls_set），该集合需要在各个 worker 中实现共享；</li>
+<li>需要一个全局的计数器，统计到达设定时间间隔（rps即1秒，rpm即1分钟）时已访问的总链接数；</li>
+</ul>
+<p>并且在当前的实际场景中，最佳的并发机制是选择多进程（下文会详细说明原因），每个 worker 在不同的进程中，那要实现对集合的共享就不大容易了。同时，如果每个 worker 都要负责对总请求数进行判断，即将访问频率的控制逻辑放到 worker 中实现，那对于 worker 来说会是一个负担，逻辑上也会比较复杂。</p>
+<p>因此比较好的方式是，除了未访问链接队列（unvisited_urls_queue），另外再新增一个爬取结果的存储队列（fetched_urls_queue），这两个队列都在各个 worker 中共享。那么，接下来逻辑就变得简单了：</p>
+<ul>
+<li>在各个 worker 中，只需要从 unvisited_urls_queue 中取数据，解析出结果后统统存储到 fetched_urls_queue，无需关注访问频率的问题；</li>
+<li>在主进程中，不断地从 fetched_urls_queue 取数据，将未访问过的链接添加到 unvisited_urls_queue，在添加之前进行访问频率控制。</li>
+</ul>
+<p>具体的控制方法也很简单，假设我们是要实现 RPS 的控制，那么就可以使用如下方式（只截取关键片段）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">start_timer = time.time()</div><div class="line">requests_queued = <span class="number">0</span></div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        url = self.fetched_urls_queue.get(timeout=<span class="number">5</span>)</div><div class="line">    <span class="keyword">except</span> queue.Empty:</div><div class="line">        <span class="keyword">break</span></div><div class="line"></div><div class="line">    <span class="comment"># visited url will not be crawled twice</span></div><div class="line">    <span class="keyword">if</span> url <span class="keyword">in</span> self.visited_urls_set:</div><div class="line">        <span class="keyword">continue</span></div><div class="line"></div><div class="line">    <span class="comment"># limit rps or rpm</span></div><div class="line">    <span class="keyword">if</span> requests_queued &gt;= self.requests_limit:</div><div class="line">        runtime_secs = time.time() - start_timer</div><div class="line">        <span class="keyword">if</span> runtime_secs &lt; self.interval_limit:</div><div class="line">            sleep_secs = self.interval_limit - runtime_secs</div><div class="line">            <span class="comment"># exceed rps limit, sleep</span></div><div class="line">            time.sleep(sleep_secs)</div><div class="line"></div><div class="line">        start_timer = time.time()</div><div class="line">        requests_queued = <span class="number">0</span></div><div class="line"></div><div class="line">    self.unvisited_urls_queue.put(url)</div><div class="line">    self.visited_urls_set.add(url)</div><div class="line">    requests_queued += <span class="number">1</span></div></pre></td></tr></table></figure>
+<h2 id="提升爬虫效率"><a href="#提升爬虫效率" class="headerlink" title="提升爬虫效率"></a>提升爬虫效率</h2><p>对于提升爬虫效率这部分，当前已经有大量的讨论了，重点都是集中在不同的并发机制上面，包括多进程、多线程、asyncio等。</p>
+<p>不过，他们的并发测试结果对于本文中讨论的爬虫场景并不适用。因为在本文的爬虫场景中，实现前端页面渲染是最核心的一项功能特性，而要实现前端页面渲染，底层都是需要使用浏览器内核的，相当于每个 worker 在运行时都会跑一个 Chromium 实例。</p>
+<p>众所周知，Chromium 对于 CPU 和内存的开销都是比较大的，因此为了避免机器资源出现瓶颈，使用多进程机制（multiprocessing）充分调用多处理器的硬件资源无疑是最佳的选择。</p>
+<p>另一个需要注意也是比较被大家忽略的点，就是在页面链接的请求方法上。</p>
+<p>请求页面链接，不都是使用 GET 方法么？</p>
+<p>的确，使用 GET 请求肯定是可行的，但问题在于，GET 请求时会加载页面中的所有资源信息，这本身会是比较耗时的，特别是遇到链接为比较大的图片或者附件的时候。这无疑会耗费很多无谓的时间，毕竟我们的目的只是为了检测链接资源是否可访问而已。</p>
+<p>比较好的的做法是对网站的链接进行分类：</p>
+<ul>
+<li>资源型链接，包括图片、CSS、JS、文件、视频、附件等，这类链接只需检测可访问性；</li>
+<li>外站链接，这类链接只需检测该链接本身的可访问性，无需进一步检测该链接加载后页面中包含的链接；</li>
+<li>本站页面链接，这类链接除了需要检测该链接本身的可访问性，还需要进一步检测该链接加载后页面中包含的链接的可访问性；</li>
+</ul>
+<p>在如上分类中，除了第三类是必须要使用 GET 方法获取页面并加载完整内容（render），前两类完全可以使用 HEAD 方法进行代替。一方面，HEAD 方法只会获取状态码和 headers 而不获取 body，比 GET 方法高效很多；另一方面，前两类链接也无需进行页面渲染，省去了调用 Chromium 进行解析的步骤，执行效率的提高也会非常明显。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文针对如何使用爬虫技术实现 Web 页面资源可用性检测进行了讲解，重点围绕爬虫如何实现 <code>全</code>、<code>稳</code>、<code>快</code> 三个核心特性进行了展开。对于爬虫技术的更多内容，后续有机会我们再进一步进行探讨。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;对于电商类型和内容服务类型的网站，经常会出现因为配置错误造成页面链接无法访问的情况（404）。&lt;/p&gt;
+&lt;p&gt;显然，要确保网站中的所有链接都
+    
+    </summary>
+    
+    
+      <category term="requests-crawler" scheme="http://debugtalk.com/tags/requests-crawler/"/>
+    
+      <category term="requests-html" scheme="http://debugtalk.com/tags/requests-html/"/>
+    
+  </entry>
   
   <entry>
     <title>HttpRunner 实现 hook 机制</title>
@@ -1576,86 +1667,6 @@
       <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
     
       <category term="lambda" scheme="http://debugtalk.com/tags/lambda/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</title>
-    <link href="http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/"/>
-    <id>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</id>
-    <published>2017-07-06T16:00:00.000Z</published>
-    <updated>2017-12-24T01:55:19.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>在<a href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a>一文中，我们完成了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>基础框架的搭建，并实现了简单接口的测试功能。</p>
-<p>接下来，我们就针对复杂类型的接口（例如包含签名校验等机制），通过对接口的业务参数和技术细节进行分离，实现简洁优雅的接口测试用例描述。</p>
-<h2 id="传统的测试用例编写方式"><a href="#传统的测试用例编写方式" class="headerlink" title="传统的测试用例编写方式"></a>传统的测试用例编写方式</h2><p>对于在自动化测试中将<code>测试数据</code>与<code>代码实现</code>进行分离的好处，我之前已经讲过多次，这里不再重复。</p>
-<p>测试数据与代码实现分离后，简单的接口还好，测试用例编写不会有什么问题；但是当面对复杂一点的接口（例如包含签名校验等机制）时，我们编写自动化测试用例还是会比较繁琐。</p>
-<p>我们从一个最常见的案例入手，看下编写自动化测试用例的过程，相信大家看完后就会对上面那段话有很深的感受。</p>
-<p>以API接口服务（<code>Mock Server</code>）的创建新用户功能为例，该接口描述如下：</p>
-<blockquote>
-<p>请求数据：<br>Url: <a href="http://127.0.0.1:5000/api/users/1000" target="_blank" rel="external">http://127.0.0.1:5000/api/users/1000</a><br>Method: POST<br>Headers: {“content-type”: “application/json”, “Random”: “A2dEx”, “Authorization”: “47f135c33e858f2e3f55156ae9f78ee1”}<br>Body: {“name”: “user1”, “password”: “123456”}</p>
-<p>预期的正常响应数据：<br>Status_Code: 201<br>Headers: {‘Date’: ‘Fri, 23 Jun 2017 07:05:41 GMT’, ‘Content-Length’: ‘54’, ‘Content-Type’: ‘application/json’, ‘Server’: ‘Werkzeug/0.12.2 Python/2.7.13’}<br>Body: {“msg”: “user created successfully.”, “success”: true, “uuid”: “JsdfwerL”}</p>
-</blockquote>
-<p>其中，请求<code>Headers</code>中的<code>Random</code>字段是一个5位长的随机字符串，<code>Authorization</code>字段是一个签名值，签名方式为<code>TOKEN+RequestBody+Random</code>拼接字符串的<code>MD5</code>值。更具体的，<code>RequestBody</code>要求字典的<code>Key</code>值按照由小到大的排序方式。接口请求成功后，返回的是一个<code>JSON</code>结构，里面的<code>success</code>字段标识请求成功与否的状态，如果成功，<code>uuid</code>字段标识新创建用户的唯一ID。</p>
-<p>相信只要是接触过接口测试的同学对此应该都会很熟悉，这也是后台系统普遍采用的签名校验方式。在具体的系统中，可能字符串拼接方式或签名算法存在差异，但是模式基本上都是类似的。</p>
-<p>那么面对这样一个接口，我们会怎样编写接口测试用例呢？</p>
-<p>首先，请求的数据是要有的，我们会先准备一个可用的账号，例如<code>{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}</code>。</p>
-<p>然后，由于接口存在签名校验机制，因此我们除了要知道服务器端使用的TOKEN（假设为<code>debugtalk</code>）外，还要准备好<code>Random</code>字段和<code>Authorization</code>字段。<code>Random</code>字段好说，我们随便生成一个，例如<code>A2dEx</code>；<code>Authorization</code>字段就会复杂不少，需要我们按照规定先将<code>RequestBody</code>根据字典的<code>Key</code>值进行排序，得到<code>{&quot;name&quot;: &quot;user1&quot;, &quot;password&quot;: &quot;123456&quot;}</code>，然后与<code>TOKEN</code>和<code>Random</code>字段拼接字符串得到<code>debugtalk{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}A2dEx</code>，接着再找一个<code>MD5</code>工具，计算得到签名值<code>a83de0ff8d2e896dbd8efb81ba14e17d</code>。</p>
-<p>最后，我们才可以完成测试用例的编写。假如我们采用<code>YAML</code>编写测试用例，那么用例写好后应该就是如下样子。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="bullet">-</span></div><div class="line"><span class="attr">    name:</span> create user which does not exist</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/users/<span class="number">1000</span></div><div class="line"><span class="attr">        method:</span> POST</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Content-Type:</span> application/json</div><div class="line"><span class="attr">            authorization:</span> a83de0ff8d2e896dbd8efb81ba14e17d</div><div class="line"><span class="attr">            random:</span> A2dEx</div><div class="line"><span class="attr">    data:</span></div><div class="line"><span class="attr">        name:</span> user1</div><div class="line"><span class="attr">        password:</span> <span class="number">123456</span></div><div class="line"><span class="attr">    response:</span></div><div class="line"><span class="attr">        status_code:</span> <span class="number">201</span></div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Content-Type:</span> application/json</div><div class="line"><span class="attr">        body:</span></div><div class="line"><span class="attr">            success:</span> <span class="literal">true</span></div><div class="line"><span class="attr">            msg:</span> user created successfully.</div><div class="line"><span class="attr">            uuid:</span> JsdfwerL</div></pre></td></tr></table></figure>
-<p>该测试用例可以在<code>ApiTestEngine</code>中正常运行，我们也可以采用同样的方式，对系统的所有接口编写测试用例，以此实现项目的接口自动化测试覆盖。</p>
-<p>但问题在于，每个接口通常会对应多条测试用例，差异只是在于请求的数据会略有不同，而测试用例量越大，我们人工去准备测试数据的工作量也就越大。更令人抓狂的是，我们的系统接口不是一直不变的，有时候会根据业务需求的变化进行一些调整，相应地，我们的测试数据也需要进行同步更新，这样一来，所有相关的测试用例数据就又得重新计算一遍（任意字段数据产生变化，签名值就会大不相同）。</p>
-<p>可以看出，如果是采用这种方式编写维护接口测试用例，人力和时间成本都会非常高，最终的结果必然是接口自动化测试难以在实际项目中得以开展。</p>
-<h2 id="理想的用例描述方式"><a href="#理想的用例描述方式" class="headerlink" title="理想的用例描述方式"></a>理想的用例描述方式</h2><p>在上面案例中，编写接口测试用例时之所以会很繁琐，主要是因为接口存在签名校验机制，导致我们在准备测试数据时耗费了太多时间在这上面。</p>
-<p>然而，对于测试人员来说，接口的业务功能才是需要关注的，至于接口采用什么签名校验机制这类技术细节，的确不应耗费过多时间和精力。所以，我们的接口测试框架应该设法将接口的技术细节实现和业务参数进行拆分，并能自动处理与技术细节相关的部分，从而让业务测试人员只需要关注业务参数部分。</p>
-<p>那要怎么实现呢？</p>
-<p>在开始实现之前，我们不妨借鉴<code>BDD</code>（行为驱动开发）的思想，先想下如何编写接口测试用例的体验最友好，换句话说，就是让业务测试人员写用例写得最爽。</p>
-<p>还是上面案例的接口测试用例，可以看出，最耗时的地方主要是计算签名校验值部分。按理说，签名校验算法我们是已知的，要是可以在测试用例中直接调用签名算法函数就好了。</p>
-<p>事实上，这也是各种模板语言普遍采用的方式，例如<code>Jinja2</code>模板语言，可以在<code>{% %}</code>中执行函数语句，在<code>{{ }}</code>中可以调用变量参数。之前我在设计[<code>AppiumBooster</code>][AppiumBooster]时也采用了类似的思想，可以通过<code>${config.TestEnvAccount.UserName}</code>的方式在测试用例中引用预定义的全局变量。</p>
-<p>基于该思路，假设我们已经实现了<code>gen_random_string</code>这样一个生成指定位数的随机字符串的函数，以及<code>gen_md5</code>这样一个计算签名校验值的函数，那么我们就可以尝试采用如下方式来描述我们的测试用例：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> create user which does not exist</div><div class="line"><span class="attr">    variables:</span></div><div class="line"><span class="attr">        - TOKEN:</span> debugtalk</div><div class="line"><span class="attr">        - random:</span> $&#123;gen_random_string(<span class="number">5</span>)&#125;</div><div class="line"><span class="attr">        - json:</span> &#123;<span class="string">"name"</span>: <span class="string">"user"</span>, <span class="string">"password"</span>: <span class="string">"123456"</span>&#125;</div><div class="line"><span class="attr">        - authorization:</span> $&#123;gen_md5($TOKEN, $json, $random)&#125;</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/users/<span class="number">1000</span></div><div class="line"><span class="attr">        method:</span> POST</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Content-Type:</span> application/json</div><div class="line"><span class="attr">            authorization:</span> $authorization</div><div class="line"><span class="attr">            random:</span> $random</div><div class="line"><span class="attr">        json:</span> $json</div><div class="line"><span class="attr">    extractors:</span></div><div class="line"><span class="attr">        user_uuid:</span> content.uuid</div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expected"</span>: <span class="number">201</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"content.success"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expected"</span>: <span class="literal">true</span>&#125;</div></pre></td></tr></table></figure>
-<p>在如上用例中，用到了两种转义符：</p>
-<ul>
-<li><code>$</code>作为变量转义符，<code>$var</code>将不再代表的是普遍的字符串，而是<code>var</code>变量的值；</li>
-<li><code>${}</code>作为函数的转义符，<code>${}</code>内可以直接填写函数名称及调用参数，甚至可以包含变量。</li>
-</ul>
-<p>为什么会选择采用这种描述方式？（<code>Why？</code>）</p>
-<p>其实这也是我经过大量思考和实践之后，才最终确定的描述方式。如果真要讲述这个思路历程。。。还是不细说了，此处可省下一万字。（主要的思路无非就是要实现转义的效果，并且表达要简洁清晰，因此必然会用到特殊字符；而特殊字符在<code>YAML</code>中大多都已经有了特定的含义，排除掉不可用的之后，剩下的真没几个了，然后再借鉴其它框架常用的符号，所以说最终选择<code>$</code>和<code>${}</code>也算是必然。）</p>
-<p>可以确定的是，这种描述方式的好处非常明显，不仅可以实现复杂计算逻辑的函数调用，还可以实现变量的定义和引用。</p>
-<p>除了转义符，由于接口测试中经常需要对结果中的特定字段进行提取，作为后续接口请求的参数，因此我们实现了<code>extractors</code>这样一个结果提取器，只要返回结果是JSON类型，就可以将其中的任意字段进行提取，并保存到一个变量中，方便后续接口请求进行引用。</p>
-<p>另外，为了更好地实现对接口响应结果的校验，我们废弃了先前的方式，实现了独立的结果校验器<code>validators</code>。这是因为，很多时候在比较响应结果时，并不能简单地按照字段值是否相等来进行校验，除此之外，我们可能还需要检查某个字段的长度是否为指定位数，元素列表个数是否大于某个数值，甚至某个字符串是否满足正则匹配等等。</p>
-<p>相信你们肯定会想，以上这些描述方式的确是很简洁，但更多地感觉是在臆想，就像开始说的<code>gen_random_string</code>和<code>gen_md5</code>函数，我们只是假设已经定义好了。就算描述得再优雅再完美，终究也还只是<code>YAML/JSON</code>文本格式而已，要怎样才能转换为执行的代码呢？</p>
-<p>这就要解决<code>How？</code>的问题了。</p>
-<p>嗯，这就是用例模板引擎的核心了，也算是<code>ApiTestEngine</code>最核心的功能特性。</p>
-<p>更具体的，从技术实现角度，主要分为三大块：</p>
-<ul>
-<li>如何在用例描述（<code>YAML/JSON</code>）中实现函数的定义和调用</li>
-<li>如何在用例描述中实现参数的定义和引用，包括用例内部和用例集之间</li>
-<li>如何在用例描述中实现预期结果的描述和测试结果的校验</li>
-</ul>
-<p>这三大块内容涉及到较多的技术实现细节，我们将在后续的文章中结合代码逐个深入进行讲解。</p>
-<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
-<li><a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
-<li><a href="http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/">《ApiTestEngine 演化之路（0）开发未动，测试先行》</a></li>
-<li><a href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a></li>
-<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code> GitHub源码</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在&lt;a href=&quot;http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/&quot;&gt;《ApiTestEngine 演进之路（1）搭建基础框架》&lt;/a&gt;一文中，我们完成了&lt;a href=&quot;https://gi
-    
-    </summary>
-    
-    
-      <category term="自动化测试" scheme="http://debugtalk.com/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="测试框架" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/"/>
-    
-      <category term="HttpRunner" scheme="http://debugtalk.com/tags/HttpRunner/"/>
-    
-      <category term="测试用例" scheme="http://debugtalk.com/tags/%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/"/>
     
   </entry>
   

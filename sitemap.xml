@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://debugtalk.com/post/requests-crawler/</loc>
+    
+    <lastmod>2018-05-27T17:02:21.927Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/post/httprunner-hook/</loc>
     
     <lastmod>2018-05-12T09:47:40.267Z</lastmod>
@@ -37,14 +44,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
+    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
     
     <lastmod>2018-03-04T15:50:56.846Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
+    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
     
     <lastmod>2018-03-04T15:50:56.846Z</lastmod>
     
@@ -72,7 +79,42 @@
   </url>
   
   <url>
+    <loc>http://debugtalk.com/post/apitestengine-quickstart/</loc>
+    
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
+    
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</loc>
+    
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -86,21 +128,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/apitestengine-quickstart/</loc>
+    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -128,20 +163,6 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
@@ -149,7 +170,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -157,20 +178,6 @@
   
   <url>
     <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -191,69 +198,6 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/loadrunner-parameter-variable/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/LoadRunner-SOAP-WebService/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Create-Blog-with-Pelican-and-GitCafe-Pages/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Evaluate-Largest-Online-Users/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/html-character-entity/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
@@ -268,7 +212,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/scenario-design-scripts-percent-controll/</loc>
+    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -296,6 +247,13 @@
   </url>
   
   <url>
+    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/post/head-first-git-authority-verification/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
@@ -304,6 +262,13 @@
   
   <url>
     <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/html-character-entity/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -331,7 +296,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/concept-about-webservice/</loc>
+    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -359,13 +324,6 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
@@ -373,9 +331,51 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/python-functional-programming-getting-started/</loc>
+    <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/Evaluate-Largest-Online-Users/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/Create-Blog-with-Pelican-and-GitCafe-Pages/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/LoadRunner-SOAP-WebService/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/loadrunner-parameter-variable/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/concept-about-webservice/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/scenario-design-scripts-percent-controll/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
@@ -499,14 +499,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/android-development-environment-device-configuration/</loc>
+    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/Jenkins-CI-Automation-Test/</loc>
+    <loc>http://debugtalk.com/post/android-development-environment-device-configuration/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
@@ -562,6 +562,13 @@
   </url>
   
   <url>
+    <loc>http://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/</loc>
+    
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/baidu_verify_WfVJyFbNZp.html</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -583,7 +590,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/</loc>
+    <loc>http://debugtalk.com/post/python-functional-programming-getting-started/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
@@ -604,7 +611,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
+    <loc>http://debugtalk.com/post/Jenkins-CI-Automation-Test/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
