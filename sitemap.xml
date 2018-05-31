@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://debugtalk.com/about/index.html</loc>
+    
+    <lastmod>2018-05-31T10:35:04.535Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/post/requests-crawler/</loc>
     
     <lastmod>2018-05-27T17:02:21.927Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>http://debugtalk.com/post/httprunner-hook/</loc>
     
     <lastmod>2018-05-12T09:47:40.267Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com//about/index.html</loc>
-    
-    <lastmod>2018-03-25T09:01:32.408Z</lastmod>
     
   </url>
   
