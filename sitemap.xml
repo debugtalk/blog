@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://debugtalk.com/post/dji-hire-test-leader/</loc>
+    
+    <lastmod>2018-06-30T16:31:29.295Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/about/index.html</loc>
     
     <lastmod>2018-05-31T10:35:04.535Z</lastmod>
@@ -100,7 +107,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -128,7 +135,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -198,27 +205,6 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
@@ -240,14 +226,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/trap-in-GitHub-authority-verification/</loc>
+    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
+    <loc>http://debugtalk.com/post/trap-in-GitHub-authority-verification/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -261,6 +247,13 @@
   </url>
   
   <url>
+    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
@@ -268,14 +261,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/html-character-entity/</loc>
+    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-refactor-testcase-scripts/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-refactor-testcase-scripts/</loc>
+    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -296,7 +289,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
+    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -332,6 +325,20 @@
   
   <url>
     <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/html-character-entity/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -376,13 +383,6 @@
     <loc>http://debugtalk.com/post/scenario-design-scripts-percent-controll/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/traps-in-sql-null/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
   </url>
   
@@ -569,6 +569,13 @@
   </url>
   
   <url>
+    <loc>http://debugtalk.com/post/python-functional-programming-getting-started/</loc>
+    
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/baidu_verify_WfVJyFbNZp.html</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -590,7 +597,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/python-functional-programming-getting-started/</loc>
+    <loc>http://debugtalk.com/post/traps-in-sql-null/</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     

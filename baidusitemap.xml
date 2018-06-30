@@ -3,6 +3,23 @@
 
 
     
+  <url>
+    <loc>http://debugtalk.com/post/dji-hire-test-leader/</loc>
+    <lastmod>2018-06-30T16:31:29.295Z</lastmod>
+    <data>
+        <display>
+        <title>【大疆招聘】招聘核心项目测试负责人，诚意十足（附文末福利）</title>
+        <pubTime>2018-06-30T16:00:00.000Z</pubTime>
+        
+        <tag>招聘</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>http://debugtalk.com/post/requests-crawler/</loc>
@@ -260,20 +277,20 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</title>
-        <pubTime>2017-07-06T16:00:00.000Z</pubTime>
+        <title>300行Python代码打造实用接口测试框架</title>
+        <pubTime>2017-06-27T16:00:00.000Z</pubTime>
         
-        <tag>自动化测试</tag>
+        <tag>Python</tag>
+         
+        <tag>接口测试</tag>
          
         <tag>测试框架</tag>
          
         <tag>HttpRunner</tag>
-         
-        <tag>测试用例</tag>
          
          
            
@@ -354,20 +371,20 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>300行Python代码打造实用接口测试框架</title>
-        <pubTime>2017-06-27T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</title>
+        <pubTime>2017-07-06T16:00:00.000Z</pubTime>
         
-        <tag>Python</tag>
-         
-        <tag>接口测试</tag>
+        <tag>自动化测试</tag>
          
         <tag>测试框架</tag>
          
         <tag>HttpRunner</tag>
+         
+        <tag>测试用例</tag>
          
          
            
@@ -556,67 +573,6 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>LoadRunner中获取当前系统时间</title>
-        <pubTime>2013-10-27T16:00:00.000Z</pubTime>
-        
-        <tag>LoadRunner</tag>
-         
-        <tag>脚本开发</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>基于HTTP的WebService测试方法</title>
-        <pubTime>2015-02-12T16:00:00.000Z</pubTime>
-        
-        <tag>LoadRunner</tag>
-         
-        <tag>WebService</tag>
-         
-        <tag>HTTP</tag>
-         
-        <tag>Fiddler</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>在Pelican中使用多说评论系统</title>
-        <pubTime>2013-10-04T16:00:00.000Z</pubTime>
-        
-        <tag>Pelican</tag>
-         
-        <tag>评论系统</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -690,6 +646,27 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>基于WSDL或SOAP的WebService测试方法--对原理的思考</title>
+        <pubTime>2015-02-11T16:00:00.000Z</pubTime>
+        
+        <tag>WebService</tag>
+         
+        <tag>WSDL</tag>
+         
+        <tag>SOAP</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/trap-in-GitHub-authority-verification/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -702,29 +679,6 @@
         <tag>SSH</tag>
          
         <tag>HTTPS，权限校验</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>解决Jenkins中无法展示HTML样式的问题</title>
-        <pubTime>2017-07-23T16:00:00.000Z</pubTime>
-        
-        <tag>Jenkins</tag>
-         
-        <tag>Plugin</tag>
-         
-        <tag>测试报告</tag>
-         
-        <tag>持续集成</tag>
          
          
            
@@ -757,6 +711,29 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>解决Jenkins中无法展示HTML样式的问题</title>
+        <pubTime>2017-07-23T16:00:00.000Z</pubTime>
+        
+        <tag>Jenkins</tag>
+         
+        <tag>Plugin</tag>
+         
+        <tag>测试报告</tag>
+         
+        <tag>持续集成</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -769,25 +746,6 @@
         <tag>Appium</tag>
          
         <tag>AppiumBooster</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/html-character-entity/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>HTML字符实体(Character Entity)</title>
-        <pubTime>2013-10-03T16:00:00.000Z</pubTime>
-        
-        <tag>Encoding</tag>
-         
-        <tag>HTML</tag>
          
          
            
@@ -815,6 +773,25 @@
         <tag>Ruby</tag>
          
         <tag>RSpec</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>在Pelican中使用多说评论系统</title>
+        <pubTime>2013-10-04T16:00:00.000Z</pubTime>
+        
+        <tag>Pelican</tag>
+         
+        <tag>评论系统</tag>
          
          
            
@@ -866,18 +843,16 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
+    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>基于WSDL或SOAP的WebService测试方法--对原理的思考</title>
-        <pubTime>2015-02-11T16:00:00.000Z</pubTime>
+        <title>LoadRunner中获取当前系统时间</title>
+        <pubTime>2013-10-27T16:00:00.000Z</pubTime>
         
-        <tag>WebService</tag>
+        <tag>LoadRunner</tag>
          
-        <tag>WSDL</tag>
-         
-        <tag>SOAP</tag>
+        <tag>脚本开发</tag>
          
          
            
@@ -981,6 +956,48 @@
         <tag>WebService</tag>
          
         <tag>WSDL</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>基于HTTP的WebService测试方法</title>
+        <pubTime>2015-02-12T16:00:00.000Z</pubTime>
+        
+        <tag>LoadRunner</tag>
+         
+        <tag>WebService</tag>
+         
+        <tag>HTTP</tag>
+         
+        <tag>Fiddler</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/html-character-entity/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>HTML字符实体(Character Entity)</title>
+        <pubTime>2013-10-03T16:00:00.000Z</pubTime>
+        
+        <tag>Encoding</tag>
+         
+        <tag>HTML</tag>
          
          
            
@@ -1101,23 +1118,6 @@
         <tag>LoadRunner</tag>
          
         <tag>场景设计</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/traps-in-sql-null/</loc>
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    <data>
-        <display>
-        <title>SQL语句中关于NULL的那些坑</title>
-        <pubTime>2016-04-24T16:00:00.000Z</pubTime>
-        
-        <tag>SQL</tag>
          
          
            
@@ -1640,9 +1640,6 @@
     </url>
 
     
-    
-    
-    
   <url>
     <loc>http://debugtalk.com/post/python-functional-programming-getting-started/</loc>
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
@@ -1654,6 +1651,26 @@
         <tag>Python</tag>
          
         <tag>函数式编程</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+    
+  <url>
+    <loc>http://debugtalk.com/post/traps-in-sql-null/</loc>
+    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>SQL语句中关于NULL的那些坑</title>
+        <pubTime>2016-04-24T16:00:00.000Z</pubTime>
+        
+        <tag>SQL</tag>
          
          
            
