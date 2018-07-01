@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://debugtalk.com/"/>
-  <updated>2018-07-01T04:19:50.246Z</updated>
+  <updated>2018-07-01T04:38:28.159Z</updated>
   <id>http://debugtalk.com/</id>
   
   <author>
@@ -20,10 +20,9 @@
     <link href="http://debugtalk.com/post/dji-hire-test-leader/"/>
     <id>http://debugtalk.com/post/dji-hire-test-leader/</id>
     <published>2018-06-30T16:00:00.000Z</published>
-    <updated>2018-07-01T04:19:50.246Z</updated>
+    <updated>2018-07-01T04:38:28.159Z</updated>
     
-    <content type="html"><![CDATA[<p>#【大疆招聘】招聘核心项目测试负责人，诚意十足（附文末福利）</p>
-<p>近期，大疆互联网事业部急招项目测试负责人，岗位很核心，诚意也很足。</p>
+    <content type="html"><![CDATA[<p>近期，大疆互联网事业部急招项目测试负责人，岗位很核心，诚意也很足。</p>
 <h2 id="关于我们"><a href="#关于我们" class="headerlink" title="关于我们"></a>关于我们</h2><p>关于大疆这家公司的介绍，直接引用下大疆互联网 Ruby 团队的<a href="https://ruby-china.org/topics/36849" target="_blank" rel="noopener">招聘文案</a>。</p>
 <blockquote>
 <p>DJI 大疆创新是全球领先的无人机公司，以“The Future of Possible（未来无所不能）”为理念，不断在各领域开拓创新，目前在全球有11000名员工，2017 年销售额破 180 亿元，估值超 150 亿美元。DJI 近几年每年都实现接近翻倍的增长，业务领域也不断拓展，产品目前已经广泛应用在农业、测绘、消防、公共安全、动物保护、地产、能源等多个领域。 DJI 目前在控制、算法、通信、IOT等方向技术积累深厚，在国内可以说难有匹敌。未来大疆将不仅是一家无人机硬件公司，很可能会逐步转变为智能机器人的解决方案公司，通过可以影响三维空间的技术，深刻的改变人类的生活。很多人说大疆在这样一种转型中，互联网、物联网方向的人才可以说是不可或缺。如果你想要跳上一艘正在高速运行的火箭飞船，尝试机遇与挑战并存的职业机会，大疆应该是个很不错的选择。</p>
@@ -40,7 +39,7 @@
 <li><a href="http://debugtalk.com/post/test-dev-in-dji/">《在大疆做测试开发是一种什么体验？》</a></li>
 </ul>
 <p>接下来我就重点介绍下当前急招的岗位吧。</p>
-<h2 id="岗位职责及要求"><a href="#岗位职责及要求" class="headerlink" title="岗位职责及要求"></a>岗位职责及要求</h2><p>大疆作为一家全球化的智能硬件生产制造企业，生产运营体系、ERP、智能工厂、全球供应链等都是非常重要的环节，相关系统的质量保证工作自然也是极其重要。近期重点招聘的岗位，主要也是围绕这些业务方向，期望新加入的成员能成为项目测试负责人或核心测试骨干的角色。</p>
+<h2 id="岗位职责及要求"><a href="#岗位职责及要求" class="headerlink" title="岗位职责及要求"></a>岗位职责及要求</h2><p>大疆作为一家全球化的智能硬件生产制造企业，生产运营体系、ERP、智能工厂、全球供应链等都是非常重要的环节，相关系统的质量保证工作自然也是极其重要。近期重点招聘的岗位，主要也是围绕这些业务方向，期望新加入的成员能成为<strong>项目测试负责人</strong>或<strong>核心测试骨干</strong>的角色。</p>
 <p>对于岗位的工作职责和任职资格，已经在拉勾网的 <a href="https://www.lagou.com/jobs/4688215.html" target="_blank" rel="noopener">JD</a> 中进行了描述，在此我只强调如下几点：</p>
 <ul>
 <li>具有丰富的项目测试经验，具备独立负责项目整体测试工作的能力；</li>
@@ -57,18 +56,17 @@
 <p>当然，除了单纯的薪资福利，相信公司业务迅猛发展带来的个人能力成长空间，也是你所期待的。在大疆，公司的口号是探索未来无限可能（The future of possible），这对员工个人来说也同样适用。</p>
 <h2 id="其它岗位"><a href="#其它岗位" class="headerlink" title="其它岗位"></a>其它岗位</h2><p>除了上面提到的岗位，大疆其它各岗位也具有大量的招聘需求，尤其是前后端开发、iOS/Android、运维等方向，工作地点覆盖深圳、北京、上海等地，详情以官方招聘网站为准。这些岗位我也都可以帮忙内推到对应的负责人。</p>
 <p>至于测试开发岗位，招聘长期有效，欢迎直接联系我，进行推荐或自荐。</p>
-<h2 id="投递方式"><a href="#投递方式" class="headerlink" title="投递方式"></a>投递方式</h2><p>请将简历直接发到我的工作邮箱：<code>leo.lee#dji.com</code>。</p>
+<h2 id="投递方式"><a href="#投递方式" class="headerlink" title="投递方式"></a>投递方式</h2><p>请将简历直接发到我的工作邮箱：<code>leo.lee#dji.com</code></p>
 <p>如果对岗位还有所疑问，也欢迎与我联系，只要是在不违反公司信息安全和保密规定的前提下，我都可以为你答疑解惑。</p>
 <h2 id="文末福利"><a href="#文末福利" class="headerlink" title="文末福利"></a>文末福利</h2><p>在即将到来的中国移动互联网测试开发大会（简称MTSC2018）中，我将代表公司分享一个题目，《大疆互联网的一站式自动化测试解决方案（基于HttpRunner）》，期待届时能跟各位同行进行更多的交流。</p>
-<p>在大会开始（7.13）前，若成功完成推荐或自荐的（通过一面就算），则送出价值1600元的MTSC2018门票一张！数量有限，先到先得。</p>
+<p>在大会开始（7.13）前，若成功完成推荐或自荐的（通过一面就算），则送出价值1600元的 <a href="https://www.bagevent.com/event/1193113" target="_blank" rel="noopener"><strong>MTSC2018</strong></a> 门票一张！数量有限，先到先得。</p>
 <p>期待你的加入！</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;#【大疆招聘】招聘核心项目测试负责人，诚意十足（附文末福利）&lt;/p&gt;
-&lt;p&gt;近期，大疆互联网事业部急招项目测试负责人，岗位很核心，诚意也很足。&lt;/p&gt;
-&lt;h2 id=&quot;关于我们&quot;&gt;&lt;a href=&quot;#关于我们&quot; class=&quot;headerlink&quot; title=&quot;关于我们&quot;
+      &lt;p&gt;近期，大疆互联网事业部急招项目测试负责人，岗位很核心，诚意也很足。&lt;/p&gt;
+&lt;h2 id=&quot;关于我们&quot;&gt;&lt;a href=&quot;#关于我们&quot; class=&quot;headerlink&quot; title=&quot;关于我们&quot;&gt;&lt;/a&gt;关于我们&lt;/h2&gt;&lt;p&gt;关于大疆这家公司的介绍，直接引用下大疆互联
     
     </summary>
     
