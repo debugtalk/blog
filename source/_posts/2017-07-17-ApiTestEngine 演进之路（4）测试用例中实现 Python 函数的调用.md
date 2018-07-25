@@ -199,7 +199,7 @@ function_meta = {
 func_name = function_meta['func_name']
 args = function_meta['args']
 kwargs = function_meta['kwargs']
-custom_functions_dict[func_name]](*args, **kwargs)
+custom_functions_dict[func_name](*args, **kwargs)
 ```
 
 具体的，在`ApiTestEngine`中对应的`Python`代码片段如下：
