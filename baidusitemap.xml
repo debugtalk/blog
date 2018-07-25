@@ -4,6 +4,29 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
+    <lastmod>2018-07-25T06:20:24.422Z</lastmod>
+    <data>
+        <display>
+        <title>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用</title>
+        <pubTime>2017-07-16T16:00:00.000Z</pubTime>
+        
+        <tag>Python</tag>
+         
+        <tag>自动化测试</tag>
+         
+        <tag>测试框架</tag>
+         
+        <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/dji-hire-test-leader/</loc>
     <lastmod>2018-07-01T04:38:28.159Z</lastmod>
     <data>
@@ -119,6 +142,23 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
+    <lastmod>2018-03-04T15:50:56.846Z</lastmod>
+    <data>
+        <display>
+        <title>【大疆内推】岗位描述我只想这么写</title>
+        <pubTime>2017-08-08T16:00:00.000Z</pubTime>
+        
+        <tag>招聘</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
     <lastmod>2018-03-04T15:50:56.846Z</lastmod>
     <data>
@@ -130,23 +170,6 @@
          
         <tag>培训</tag>
          
-        <tag>招聘</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
-    <lastmod>2018-03-04T15:50:56.846Z</lastmod>
-    <data>
-        <display>
-        <title>【大疆内推】岗位描述我只想这么写</title>
-        <pubTime>2017-08-08T16:00:00.000Z</pubTime>
-        
         <tag>招聘</tag>
          
          
@@ -316,29 +339,6 @@
         <tag>HttpRunner</tag>
          
         <tag>lambda</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用</title>
-        <pubTime>2017-07-16T16:00:00.000Z</pubTime>
-        
-        <tag>Python</tag>
-         
-        <tag>自动化测试</tag>
-         
-        <tag>测试框架</tag>
-         
-        <tag>HttpRunner</tag>
          
          
            
@@ -573,25 +573,6 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>使用SIPp对基于SIP协议的IP电话通信服务器进行性能测试</title>
-        <pubTime>2014-05-10T16:00:00.000Z</pubTime>
-        
-        <tag>性能测试</tag>
-         
-        <tag>SIP</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -646,27 +627,6 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>基于WSDL或SOAP的WebService测试方法--对原理的思考</title>
-        <pubTime>2015-02-11T16:00:00.000Z</pubTime>
-        
-        <tag>WebService</tag>
-         
-        <tag>WSDL</tag>
-         
-        <tag>SOAP</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/trap-in-GitHub-authority-verification/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
@@ -679,6 +639,25 @@
         <tag>SSH</tag>
          
         <tag>HTTPS，权限校验</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>LoadRunner中获取当前系统时间</title>
+        <pubTime>2013-10-27T16:00:00.000Z</pubTime>
+        
+        <tag>LoadRunner</tag>
+         
+        <tag>脚本开发</tag>
          
          
            
@@ -702,6 +681,25 @@
         <tag>HTTPS</tag>
          
         <tag>权限校验</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>使用SIPp对基于SIP协议的IP电话通信服务器进行性能测试</title>
+        <pubTime>2014-05-10T16:00:00.000Z</pubTime>
+        
+        <tag>性能测试</tag>
+         
+        <tag>SIP</tag>
          
          
            
@@ -843,16 +841,20 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
+    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>LoadRunner中获取当前系统时间</title>
-        <pubTime>2013-10-27T16:00:00.000Z</pubTime>
+        <title>基于HTTP的WebService测试方法</title>
+        <pubTime>2015-02-12T16:00:00.000Z</pubTime>
         
         <tag>LoadRunner</tag>
          
-        <tag>脚本开发</tag>
+        <tag>WebService</tag>
+         
+        <tag>HTTP</tag>
+         
+        <tag>Fiddler</tag>
          
          
            
@@ -965,20 +967,18 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
+    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>基于HTTP的WebService测试方法</title>
-        <pubTime>2015-02-12T16:00:00.000Z</pubTime>
+        <title>基于WSDL或SOAP的WebService测试方法--对原理的思考</title>
+        <pubTime>2015-02-11T16:00:00.000Z</pubTime>
         
-        <tag>LoadRunner</tag>
-         
         <tag>WebService</tag>
          
-        <tag>HTTP</tag>
+        <tag>WSDL</tag>
          
-        <tag>Fiddler</tag>
+        <tag>SOAP</tag>
          
          
            

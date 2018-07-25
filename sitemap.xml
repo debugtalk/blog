@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
+    
+    <lastmod>2018-07-25T06:20:24.422Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/post/dji-hire-test-leader/</loc>
     
     <lastmod>2018-07-01T04:38:28.159Z</lastmod>
@@ -51,14 +58,14 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
+    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
     
     <lastmod>2018-03-04T15:50:56.846Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
+    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
     
     <lastmod>2018-03-04T15:50:56.846Z</lastmod>
     
@@ -115,13 +122,6 @@
   
   <url>
     <loc>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
     
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     
@@ -205,13 +205,6 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
@@ -226,13 +219,6 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://debugtalk.com/post/trap-in-GitHub-authority-verification/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
@@ -240,7 +226,21 @@
   </url>
   
   <url>
+    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://debugtalk.com/post/head-first-git-authority-verification/</loc>
+    
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -289,7 +289,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
+    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
@@ -331,7 +331,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
+    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
     
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     
