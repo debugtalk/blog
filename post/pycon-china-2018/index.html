@@ -4,25 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Android App持续集成性能测试：启动流量（1） | DebugTalk</title>
+    <title>PyCon China 2018 归来，感谢曾经没有怂的自己 | DebugTalk</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="九毫">
     
 
     
-    <meta name="description" content="本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。 说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持tcpdump工具，通过tcpdump，我们可以实现非常精准的流量测试。但tcpdump也有个问题，就是它捕捉到的流量是系统层面的，我们">
-<meta name="keywords" content="Android,流量测试">
+    <meta name="description" content="今天有幸作为 PyCon China 2018 的分享嘉宾，在主会场面向近千名 Python 开发工程师做了一场关于自动化测试框架方面的分享。虽然之前多少有些忐忑和不自信，但终究挺过来了，最终现场效果也还不错，总算松了口气，个人也算是完成了一次自我突破。这会儿在返回深圳的航班上，借着这段空闲时间进行下总结和记录。 本件事情的起源挺有意思的，下面重点说下。 大概在两三个月前，无意中在微信公众号中看到">
+<meta name="keywords" content="个人成长">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android App持续集成性能测试：启动流量（1）">
-<meta property="og:url" content="http://debugtalk.com/post/Android-performance-test-start-traffic-uid-stat/index.html">
+<meta property="og:title" content="PyCon China 2018 归来，感谢曾经没有怂的自己">
+<meta property="og:url" content="http://debugtalk.com/post/pycon-china-2018/index.html">
 <meta property="og:site_name" content="DebugTalk">
-<meta property="og:description" content="本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。 说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持tcpdump工具，通过tcpdump，我们可以实现非常精准的流量测试。但tcpdump也有个问题，就是它捕捉到的流量是系统层面的，我们">
+<meta property="og:description" content="今天有幸作为 PyCon China 2018 的分享嘉宾，在主会场面向近千名 Python 开发工程师做了一场关于自动化测试框架方面的分享。虽然之前多少有些忐忑和不自信，但终究挺过来了，最终现场效果也还不错，总算松了口气，个人也算是完成了一次自我突破。这会儿在返回深圳的航班上，借着这段空闲时间进行下总结和记录。 本件事情的起源挺有意思的，下面重点说下。 大概在两三个月前，无意中在微信公众号中看到">
 <meta property="og:locale" content="en-us">
-<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta property="og:updated_time" content="2018-10-15T13:13:08.359Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android App持续集成性能测试：启动流量（1）">
-<meta name="twitter:description" content="本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。 说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持tcpdump工具，通过tcpdump，我们可以实现非常精准的流量测试。但tcpdump也有个问题，就是它捕捉到的流量是系统层面的，我们">
+<meta name="twitter:title" content="PyCon China 2018 归来，感谢曾经没有怂的自己">
+<meta name="twitter:description" content="今天有幸作为 PyCon China 2018 的分享嘉宾，在主会场面向近千名 Python 开发工程师做了一场关于自动化测试框架方面的分享。虽然之前多少有些忐忑和不自信，但终究挺过来了，最终现场效果也还不错，总算松了口气，个人也算是完成了一次自我突破。这会儿在返回深圳的航班上，借着这段空闲时间进行下总结和记录。 本件事情的起源挺有意思的，下面重点说下。 大概在两三个月前，无意中在微信公众号中看到">
 
     
     <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
@@ -82,14 +82,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/post/Android-performance-test-start-traffic-uid-stat/" title="Android App持续集成性能测试：启动流量（1）" itemprop="url">Android App持续集成性能测试：启动流量（1）</a>
+      <a href="/post/pycon-china-2018/" title="PyCon China 2018 归来，感谢曾经没有怂的自己" itemprop="url">PyCon China 2018 归来，感谢曾经没有怂的自己</a>
   </h1>
   <!-- <p class="article-author">By
        
 		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
 		 -->
   <p class="article-time">
-    <time datetime="2016-05-02T16:00:00.000Z" itemprop="datePublished"> Published 2016-05-03</time>
+    <time datetime="2018-10-13T16:00:00.000Z" itemprop="datePublished"> Published 2018-10-14</time>
     
     <span id="busuanzi_container_page_pv">
       | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
@@ -103,29 +103,26 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#get-app-UID"><span class="toc-number">1.</span> <span class="toc-text">get app UID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取流量数据"><span class="toc-number">2.</span> <span class="toc-text">获取流量数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获得启动流量数据"><span class="toc-number">3.</span> <span class="toc-text">获得启动流量数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+			
 		
 		</div>
 		
-		<p>本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。</p>
-<p>说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持<code>tcpdump</code>工具，通过<code>tcpdump</code>，我们可以实现非常精准的流量测试。但<code>tcpdump</code>也有个问题，就是它捕捉到的流量是系统层面的，我们很难区分捕捉得到的流量数据是否都是当前apk产生的。</p>
-<p>其实，对于特定apk的整体流量数据，在Android系统中都会存储到对应文件中，我们完全可以通过读取对应文件来获得当前apk的流量信息。</p>
-<h2 id="get-app-UID"><a href="#get-app-UID" class="headerlink" title="get app UID"></a>get app UID</h2><p>与流量相关的状态数据存储在<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下，其中，<code>&lt;UID&gt;</code>表示apk对应的UID。</p>
-<p>关于UID，简单地进行下说明。在Linux系统中，UID表示的是User Identifier，主要用于表示是哪位用户运行了该程序。但在Android系统中，由于Android系统本身就为单用户系统，这时UID就被赋予了新的使命，主要用于实现数据共享。具体地，Android系统为每个应用都分配了一个UID，不同apk的UID几乎都是互不相同的，而对于不同UID的apk，不能共享数据资源。之所以用“几乎”，是因为有时候同一厂家会存在多个产品，并且希望能在多个apk之间实现数据共享，这个时候，便可通过在menifest配置文件中指定相同的sharedUserId，然后在Android系统中安装应用时便会分配相同的UID。</p>
-<p>获取app UID的方式有多种，最简单的方式应该还是从<code>/data/system/packages.list</code>中读取，并通过apk的<code>&lt;PKGNAME&gt;</code>找到对应的UID。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root@hammerhead:/ # cat /data/system/packages.list | grep com.UCMobile.trunk</div><div class="line">com.UCMobile.trunk 10084 0 /data/data/com.UCMobile.trunk default 3003,1028,1015</div></pre></td></tr></table></figure>
-<p>在这里，10084即是<code>com.UCMobile.trunk</code>的UID。</p>
-<h2 id="获取流量数据"><a href="#获取流量数据" class="headerlink" title="获取流量数据"></a>获取流量数据</h2><p>流量数据分为接收流量（tcp_rcv）和发送流量（tcp_snd）两部分，这两个状态数值我们可以通过读取<code>/proc/uid_stat/&lt;UID&gt;</code>目录下的两个文件得到。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_rcv</div><div class="line">3446837</div><div class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_snd</div><div class="line">134366</div></pre></td></tr></table></figure>
-<p>通过这种方式，我们就可以读取得到指定apk在当前时刻的累计流量数值。</p>
-<h2 id="获得启动流量数据"><a href="#获得启动流量数据" class="headerlink" title="获得启动流量数据"></a>获得启动流量数据</h2><p>有了前面的基础，我们要测试启动流量就很好实现了。只需要在启动前采集下累计流量数值，然后启动应用，完成启动后再采集一次累计流量数值，前后两次累计数值的差值便是当次启动耗费的流量数。需要注意的是，由于很多时候apk在启动后，会在系统后台异步加载一些数据资源，因此为了保证我们采集到当次启动耗费的全部流量数值，我们在启动应用后最好能等待一段时间。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_snd</div><div class="line">15068</div><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_rcv</div><div class="line">98021</div><div class="line"></div><div class="line"># start app activity, sleep 10s</div><div class="line"></div><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_snd</div><div class="line">23268</div><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_rcv</div><div class="line">965651</div></pre></td></tr></table></figure>
-<p>采集到前后两次流量数值后，即可计算得到当次启动耗费的总流量。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">当次启动总流量 = (23268 + 965651) - (15068 + 98021) = 875830 bytes</div></pre></td></tr></table></figure>
-<p>当然，这里的启动还分为好几种，包括首次安装启动、非首次安装启动、覆盖安装启动等。具体的启动方式可根据实际场景来定，但在统计流量的方法方面都是相同的。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文讲解了Android App启动流量测试的一种方法。然而，本次介绍的方法也存在一定局限性，因为<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下的<code>tcp_rcv</code>和<code>tcp_snd</code>文件中都只记录了总值，如果我们只关注总体的流量数值还好，但要是我们希望能测试得到更细化的数据，该方法就没法满足我们的测试需求了。</p>
-<p>举个例子，UC浏览器国际版在启动后，会和美国的服务器进行通讯交互。现在，我们想测试UC浏览器国际版在启动后与美国服务器的通讯流量。</p>
-<p>显然，本文中介绍的方法是没法实现上述例子中的测试需求的。那例子中的场景要怎么测呢？这就还是得用到<code>tcpdump</code>，在下一篇文章中我会再详细进行介绍。</p>
+		<p>今天有幸作为 PyCon China 2018 的分享嘉宾，在主会场面向近千名 Python 开发工程师做了一场关于自动化测试框架方面的分享。虽然之前多少有些忐忑和不自信，但终究挺过来了，最终现场效果也还不错，总算松了口气，个人也算是完成了一次自我突破。这会儿在返回深圳的航班上，借着这段空闲时间进行下总结和记录。</p>
+<p>本件事情的起源挺有意思的，下面重点说下。</p>
+<p>大概在两三个月前，无意中在微信公众号中看到了 PyCon China 2018 的主题征集，在里面看到了测试的字眼。因为近些年来 Python 一直都是我的主要工作语言，也是我个人最喜欢的编程语言，因此我也产生了些许兴趣，加了文章中主办方联系人（辛庆姐）的微信，主要是想询问下大会中会有哪些跟测试相关的主题分享。</p>
+<p>在简单聊了下后，得知当前还没有测试相关的主题，对方也向我咨询是否有啥好的建议，同时也欢迎我参加大会进行下测试方面的分享。当时我也表达了我的疑虑，毕竟大会的参会者基本都是 Python 开发者，感觉测试相关的 topic 不一定受欢迎。然后就没继续聊了，这事儿我也就忘了。结果大概过了近一个月后，辛庆姐又跟我联系，还是希望我能做一场测试方面的分享，毕竟 Python 的应用领域这么广泛，当前在测试领域也有较多的应用。我想了下，那就参加下深圳分场的大会吧，多认识些珠三角地区的 Python 大佬也好。当然，我也存在点私心，就是想借这个机会再推广下我的开源项目 HttpRunner，要是能得到些指点就更好了，毕竟参会者基本都是 Python 开发者。</p>
+<p>结果令我万万没想到的是，几天后的一个早晨，我睡醒后看到辛庆姐的信息，说是希望我能到北京主会场千人峰会进行分享。我顿时懵逼了，觉得很不可思议。我又再次确认了下，大会总共就一天，主会场总共就 4 个主题，而其它三位嘉宾中一位是洪教授，另外两位是国外嘉宾，他们都是 Python 领域非常资深的前辈，编程年限都快跟我岁数差不多了。我还是觉得难以置信，测试主题居然也可以排进主会场（不是对测试不自信，毕竟是开发者大会）？而且在之前的主题征集中，基本都是围绕 Python 核心语言特性、当前火热的机器学习、大数据方面，测试只是放在其它类别中，所以在被告知安排后的确觉得非常诧异。再三询问才得知，今年大会也是在做改革，想做 Pythoneer 想听的大会，而且组委会中也有成员之前看过我的博客，所以比较支持我（非常感谢）。当然，面对这前所未有的自我挑战的机会，虽然心里没底儿，我也挺想尝试的，就当作一次突破自己的机会好了。不过我也跟组委会说希望他们能再考虑下，因为我还是担心最终不能达成好的效果。再后来，组委会又进行了一轮投票，最终超过一半的成员同意将我的 topic 安排在主会场，这件事就这么定下来了。在此我也非常感谢组委会的认可和信任。</p>
+<p>后来的事情就没啥特别的了，无非就是鼓足勇气，尽量克服内心的忐忑和不自信，然后尽量做好准备硬上了。最终结果证明，面对近千名听众进行分享也没那么可怕，和上一次 MTSC2018 服务端专场中面对三四百名听众相比感觉也都差不多，主要的差异还是在上台前的自我暗示。很庆幸，当初我克服了自身的恐惧心理将这件事答应下来了，我才能借助这次机会完成了一次自我突破，后面等我儿子长大了也多了件向他吹牛逼的素材。</p>
+<p>说到这里，可能有人希望我能分享下如何克服在大会进行主题分享的恐惧心理。</p>
+<p>其实对于这一点，我觉得也没有太多的秘诀，主要还是要多讲。如果还没有过技术分享的经历，不妨从公司的组内分享开始，勇敢地跨出第一步，然后不断地逼迫自己迎接更大的挑战，在部门层面、公司层面、行业沙龙活动等等，机会是非常多的。在这个过程中，积极地收集听众反馈并进行改进，多做几次之后，肯定大不一样。</p>
+<p>另外，在分享准备阶段，推荐给大家两个比较有可操作性的做法。</p>
+<ul>
+<li>首先是分享的主题思路一定要清晰和明确，各部分内容的内在衔接尽量做到自然和不生硬，做到这一点后，听众会更便于掌握主题的思路，分享人也能讲得更流畅，避免因为生硬的内容切换造成忘词儿的尴尬情况。同时，分享的内容一定要都是分享者充分理解的内容，避免在网上抄一些自己都不清楚真实含义的概念和解释。</li>
+<li>另一个很重要的点就是要充分重视开场白，如果心里没底儿，建议将开场白逐字写出来并反复进行斟酌，最终修改形成一份让自己满意的开场白，并多次自我演练直至熟练。之所以这么强调开场白，除了是要跟听众尽量留下好的第一印象外，还因为在开场阶段是演讲者最容易紧张的阶段，如果开场讲得不流畅，很容易造成演讲者变得更加紧张，影响后续一连串的表现，甚至会出现大脑一片空白，完全讲不下去的尴尬场面（之前我就有过这样的经历）。而如果开场经过精心准备并且有了一个比较好的表现后，就可以很好地建立自信，并且在这个过程中也熟悉了面向听众的感觉，后续的演讲也就不会有什么问题了。</li>
+</ul>
+<p>当然，这里只是列举了我个人觉得比较重要的两个点，对于其他人不一定适用。提升演讲和分享能力是一个持久的过程，我当前也是在不断摸索和提升的过程中。希望大家也能在留言中分享下这方面的经验，大家互相学习，共同进步。</p>
+<p>最后，再说件比较尴尬的事情。</p>
+<p>在会后，有几家出版社（也包括 GitChat 这类在线知识付费平台）的编辑跟我联系，询问我是否有意向进行合作和出版。我当然是非常难为情啦，去年年初跟博文视点签的出版合同，本来还打算在小坚果出生前出版呢，现在儿子都快满一岁了，至今还没交稿呢（确切地说，是搁置好久了）。唉，时间是一方面，主要还是执行力不够啊。所以现在对于出书的作者我是格外佩服的，内容好坏暂且不说，能坚持下来就真的很不容易了。如今我也有幸认识了不少畅销书的作者了，向他们看齐，加油吧。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -134,7 +131,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/流量测试/">流量测试</a>
+  <span></span> <a href="/tags/个人成长/">个人成长</a>
   </div>
 
 </div>
@@ -143,7 +140,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://debugtalk.com/post/Android-performance-test-start-traffic-uid-stat/" data-title="Android App持续集成性能测试：启动流量（1） | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  <div data-url="http://debugtalk.com/post/pycon-china-2018/" data-title="PyCon China 2018 归来，感谢曾经没有怂的自己 | DebugTalk" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -156,19 +153,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/post/Android-performance-test-start-traffic-tcpdump-wireshark/" title="Android App持续集成性能测试：启动流量（2）">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Android App持续集成性能测试：启动流量（2）</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/post/manage-Jenkins-via-remote-api/"  title="通过API远程管理Jenkins">
+<a href="/post/dji-hire-test-leader/"  title="【大疆招聘】招聘核心项目测试负责人，诚意十足（附文末福利）">
  <strong>下一篇：</strong><br/> 
- <span>通过API远程管理Jenkins
+ <span>【大疆招聘】招聘核心项目测试负责人，诚意十足（附文末福利）
 </span>
 </a>
 </div>
@@ -189,7 +178,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#get-app-UID"><span class="toc-number">1.</span> <span class="toc-text">get app UID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取流量数据"><span class="toc-number">2.</span> <span class="toc-text">获取流量数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获得启动流量数据"><span class="toc-number">3.</span> <span class="toc-text">获得启动流量数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
  
   </div>
 
