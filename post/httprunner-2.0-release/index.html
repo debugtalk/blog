@@ -1,0 +1,668 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>HttpRunner 2.0 正式发布 | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="九毫">
+    
+
+    
+    <meta name="description" content="在 2017 年 6 月份的时候我写了一篇博客，《接口自动化测试的最佳工程实践（ApiTestEngine）》，并同时开始了 ApiTestEngine（HttpRunner的前身）的开发工作。转眼间一年半过去了，回顾历程不禁感慨万千。HttpRunner 从最开始的个人业余练手项目，居然一路迭代至今，不仅在大疆内部成为了测试技术体系的基石，在测试业界也有了一定的知名度，形成了一定的开源生态并被众">
+<meta name="keywords" content="HttpRunner">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HttpRunner 2.0 正式发布">
+<meta property="og:url" content="http://debugtalk.com/post/httprunner-2.0-release/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在 2017 年 6 月份的时候我写了一篇博客，《接口自动化测试的最佳工程实践（ApiTestEngine）》，并同时开始了 ApiTestEngine（HttpRunner的前身）的开发工作。转眼间一年半过去了，回顾历程不禁感慨万千。HttpRunner 从最开始的个人业余练手项目，居然一路迭代至今，不仅在大疆内部成为了测试技术体系的基石，在测试业界也有了一定的知名度，形成了一定的开源生态并被众">
+<meta property="og:locale" content="en-us">
+<meta property="og:image" content="http://debugtalk.com/images/HttpRunner-logo.png">
+<meta property="og:updated_time" content="2019-01-03T13:34:47.690Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HttpRunner 2.0 正式发布">
+<meta name="twitter:description" content="在 2017 年 6 月份的时候我写了一篇博客，《接口自动化测试的最佳工程实践（ApiTestEngine）》，并同时开始了 ApiTestEngine（HttpRunner的前身）的开发工作。转眼间一年半过去了，回顾历程不禁感慨万千。HttpRunner 从最开始的个人业余练手项目，居然一路迭代至今，不仅在大疆内部成为了测试技术体系的基石，在测试业界也有了一定的知名度，形成了一定的开源生态并被众">
+<meta name="twitter:image" content="http://debugtalk.com/images/HttpRunner-logo.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/httprunner-2.0-release/" title="HttpRunner 2.0 正式发布" itemprop="url">HttpRunner 2.0 正式发布</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2018-12-31T16:00:00.000Z" itemprop="datePublished"> Published 2019-01-01</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#功能实现"><span class="toc-number">1.</span> <span class="toc-text">功能实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试用例组织调整"><span class="toc-number">1.1.</span> <span class="toc-text">测试用例组织调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模块化拆分（Pipline）"><span class="toc-number">1.2.</span> <span class="toc-text">模块化拆分（Pipline）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开源项目管理"><span class="toc-number">2.</span> <span class="toc-text">开源项目管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#logo"><span class="toc-number">2.1.</span> <span class="toc-text">logo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#版本号机制"><span class="toc-number">2.2.</span> <span class="toc-text">版本号机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HREPs"><span class="toc-number">2.3.</span> <span class="toc-text">HREPs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#License"><span class="toc-number">2.4.</span> <span class="toc-text">License</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<p>在 2017 年 6 月份的时候我写了一篇博客，<a href="https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a>，并同时开始了 ApiTestEngine（HttpRunner的前身）的开发工作。转眼间一年半过去了，回顾历程不禁感慨万千。HttpRunner 从最开始的个人业余练手项目，居然一路迭代至今，不仅在大疆内部成为了测试技术体系的基石，在测试业界也有了一定的知名度，形成了一定的开源生态并被众多公司广泛使用，这都是我始料未及的。</p>
+<p>但随着 HttpRunner 的发展，我在收获成就感的同时，亦感到巨大的压力。HttpRunner 在被广泛使用的过程中暴露出了不少缺陷，而且有些缺陷是设计理念层面的，这主要都是源于我个人对自动化测试理解的偏差造成的。因此，在近期相当长的一段时间内，我仔细研究了当前主流自动化测试工具，更多的从产品的角度，学习它们的设计理念，并回归测试的本质，对 HttpRunner 的概念重新进行了梳理。</p>
+<p>难以避免地，HttpRunner 面临着一些与之前版本兼容的问题。对此我也纠结了许久，到底要不要保持兼容性。如果不兼容，那么对于老用户来说可能会造成一定的升级成本；但如果保持兼容，那么就相当于继续保留之前错误的设计理念，对后续的推广和迭代也会造成沉重的负担。最终，我还是决定告别过去，给 HttpRunner 一个新的开始。</p>
+<p>经过两个月的迭代开发，HttpRunner 2.0 版本的核心功能已开发完毕，并且在大疆内部数十个项目中都已投入使用（实践证明，升级也并没有多么痛苦）。趁着 2019 开年之际，HttpRunner 2.0 正式在 <a href="https://pypi.org/project/HttpRunner/" target="_blank" rel="noopener">PyPI</a> 上发布了。从版本号可以看出，这会是一个全新的版本，本文就围绕 HttpRunner 2.0 的功能实现和开源项目管理两方面进行下介绍。</p>
+<h2 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h2><p>在 2.0 版本中，功能实现方面变化最大的有两部分，测试用例的组织描述方式，以及 HttpRunner 本身的模块化拆分。当时也是为了完成这两部分的改造，基本上对 HttpRunner 80% 以上的代码进行了重构。除了这两大部分的改造，2.0 版本对于测试报告展现、性能测试支持、参数传参机制等一系列功能特性都进行了较大的优化和提升。</p>
+<p>本文就只针对测试用例组织调整和模块化拆分的变化进行下介绍，其它功能特性后续会在使用说明文档中进行详细描述。</p>
+<h3 id="测试用例组织调整"><a href="#测试用例组织调整" class="headerlink" title="测试用例组织调整"></a>测试用例组织调整</h3><p>之所以要对测试用例的组织描述方式进行改造，是因为 HttpRunner 在一开始并没有清晰准确的定义。对于 HttpRunner 的老用户应该会有印象，在之前的博客文章中会提到 <code>YAML/JSON</code> 文件中的上下文作用域包含了 <code>测试用例集（testset）</code> 和 <code>测试用例（test）</code> 两个层级；而在测试用例分层机制中，又存在 <code>模块存储目录（suite）</code>、<code>场景文件存储目录（testcases）</code> 这样的概念，实在是令人困惑和费解。</p>
+<p>事实上，之前的概念本身就是有问题的，而这些概念又是自动化测试工具（框架）中最核心的内容，必须尽快纠正。这也是推动 HttpRunner 升级到 2.0 版本最根本的原因。</p>
+<p>在此我也不再针对之前错误的概念进行过多阐述了，我们不妨回归测试用例的本质，多思考下测试用例的定义及其关键要素。</p>
+<p>那么，测试用例（testcase）的准确定义是什么呢？我们不妨看下 <a href="https://en.wikipedia.org/wiki/Test_case" target="_blank" rel="noopener">wiki</a> 上的描述。</p>
+<blockquote>
+<p>A test case is a specification of the inputs, execution conditions, testing procedure, and expected results that define a single test to be executed to achieve a particular software testing objective, such as to exercise a particular program path or to verify compliance with a specific requirement.</p>
+</blockquote>
+<p>概括下来，一条测试用例（testcase）应该是为了测试某个特定的功能逻辑而精心设计的，并且至少包含如下几点：</p>
+<ul>
+<li>明确的测试目的（achieve a particular software testing objective）</li>
+<li>明确的输入（inputs）</li>
+<li>明确的运行环境（execution conditions）</li>
+<li>明确的测试步骤描述（testing procedure）</li>
+<li>明确的预期结果（expected results）</li>
+</ul>
+<p>对应地，我们就可以对 HttpRunner 的测试用例描述方式进行如下设计：</p>
+<ul>
+<li>测试用例应该是完整且独立的，每条测试用例应该是都可以独立运行的；在 HttpRunner 中，每个 <code>YAML/JSON</code> 文件对应一条测试用例。</li>
+<li>测试用例包含<code>测试脚本</code>和<code>测试数据</code>两部分：<ul>
+<li>测试用例 = 测试脚本 + 测试数据</li>
+<li><code>测试脚本</code>重点是描述测试的<code>业务功能逻辑</code>，包括预置条件、测试步骤、预期结果等，并且可以结合辅助函数（debugtalk.py）实现复杂的运算逻辑；可以将<code>测试脚本</code>理解为编程语言中的<code>类（class）</code>；</li>
+<li><code>测试数据</code>重点是对应测试的<code>业务数据逻辑</code>，可以理解为类的实例化数据；<code>测试数据</code>和<code>测试脚本</code>分离后，就可以比较方便地实现数据驱动测试，通过对测试脚本传入一组数据，实现同一业务功能在不同数据逻辑下的测试验证。</li>
+</ul>
+</li>
+<li>测试用例是测试步骤的<code>有序</code>集合，而对于接口测试来说，每一个测试步骤应该就对应一个 API 的请求描述。</li>
+<li>测试场景和测试用例集应该是同一概念，它们都是测试用例的<code>无序</code>集合，集合中的测试用例应该都是相互独立，不存在先后依赖关系的；如果确实存在先后依赖关系怎么办，例如登录功能和下单功能；正确的做法应该是，在下单测试用例的预置条件中执行登录操作。</li>
+</ul>
+<p>理清这些概念后，那么 <code>接口（API）</code>、<code>测试用例（testcase）</code>、<code>辅助函数（debugtalk.py）</code>、<code>YAML/JSON</code>、<code>hooks</code>、<code>validate</code>、<code>环境变量</code>、<code>数据驱动</code>、<code>测试场景</code>、<code>测试用例集</code> 这些概念及其相互之间的关系也就清晰了。关于更具体的内容本文不再展开，后续会单独写文档并结合示例进行详细的讲解。</p>
+<h3 id="模块化拆分（Pipline）"><a href="#模块化拆分（Pipline）" class="headerlink" title="模块化拆分（Pipline）"></a>模块化拆分（Pipline）</h3><p>随着 HttpRunner 功能的逐步增长，如何避免代码出现臃肿，如何提升功能特性迭代开发效率，如何提高代码单元测试覆盖率，如何保证框架本身的灵活性，这些都是 HttpRunner 本身的架构设计需要重点考虑的。</p>
+<p>具体怎么去做呢？我采用的方式是遵循 Unix 哲学，重点围绕如下两点原则：</p>
+<ul>
+<li>Write programs that do one thing and do it well.</li>
+<li>Write programs to work together.</li>
+</ul>
+<p>简而言之，就是在 HttpRunner 内部将功能进行模块化拆分，每一个模块只单独负责一个具体的功能，并且对该功能定义好输入和输出，各个功能模块也是可以独立运行的；从总体层面，将这个功能模块组装起来，就形成了 HttpRunner 的核心功能，包括自动化测试和性能测试等。</p>
+<p>具体地，HttpRunner 被主要拆分为 6 个模块。</p>
+<ul>
+<li><code>load_tests</code>: 加载测试项目文件，包括测试脚本（YAML/JSON）、辅助函数（debugtalk.py）、环境变量（.env）、数据文件（csv）等；该阶段主要负责文件加载，不会涉及解析和动态运算的操作。</li>
+<li><code>parse_tests</code>: 对加载后的项目文件内容进行解析，包括 变量（variables）、base_url 的优先级替换和运算，辅助函数运算，引用 API 和 testcase 的查找和替换，参数化生成测试用例集等。</li>
+<li>add tests to test suite: 将解析后的测试用例添加到 unittest，组装成 <code>unittest.TestSuite</code>。</li>
+<li>run test suite: 使用 unittest 运行组装好的 <code>unittest.TestSuite</code>。</li>
+<li>aggregate results: 对测试过程的结果数据进行汇总，得到汇总结果数据。</li>
+<li>generate html report: 基于 Jinja2 测试报告模板，使用汇总结果数据生成 html 测试报告。</li>
+</ul>
+<p>为了更好地展现自动化测试的运行过程，提升出现问题时排查的效率，HttpRunner 在运行时还可以通过增加 <code>--save-tests</code> 参数，将各个阶段的数据保存为 JSON 文件。</p>
+<ul>
+<li>XXX.loaded.json: load_tests 运行后加载生成的数据结构</li>
+<li>XXX.parsed.json: parse_tests 运行后解析生成的数据结构</li>
+<li>XXX.summary.json: 最终汇总得到的测试结果数据结构</li>
+</ul>
+<p>可以看出，这 6 个模块组装在一起，就像一条流水线（Pipline）一样，各模块分工协作各司其职，最终完成了整个测试流程。</p>
+<p>基于这样的模块化拆分，HttpRunner 极大地避免了代码臃肿的问题，每个模块都专注于解决具体的问题，不仅可测试性得到了保障，遇到问题时排查起来也方便了很多。同时，因为每个模块都可以独立运行，在基于 HttpRunner 做二次开发时也十分方便，减少了很多重复开发工作量。</p>
+<h2 id="开源项目管理"><a href="#开源项目管理" class="headerlink" title="开源项目管理"></a>开源项目管理</h2><p>除了功能实现方面的调整，为了 HttpRunner 能有更长远的发展，我也开始思考如何借助社区的力量，吸引更多的人加入进来。特别地，近期在学习 ASF（Apache Software Foundation）如何运作开源项目时，也对 <code>Community Over Code</code> 理念颇为赞同。</p>
+<p>当然，HttpRunner 现在仍然是一个很小的项目，不管是产品设计还是代码实现都还很稚嫩。但我也不希望它只是一个个人自嗨的项目，因此从 2.0 版本开始，我希望能尽可能地将项目管理规范化，并寻找更多志同道合的人加入进来共同完善它。</p>
+<p>开源项目管理是一个很大的话题，当前我也还处于初学者的状态，因此本文就不再进行展开，只介绍下 HttpRunner 在 2.0 版本中将改进的几个方面。</p>
+<h3 id="logo"><a href="#logo" class="headerlink" title="logo"></a>logo</h3><p>作为一个产品，不仅要有个好名字，也要有个好的 logo。这个“好”的评价标准可能因人而异，但它应该是唯一的，能与产品本身定位相吻合的。</p>
+<p>之前 HttpRunner 也有个 logo，但说来惭愧，那个 logo 是在网上找的，可能存在侵权的问题是一方面，logo 展示的含义与产品本身也没有太多的关联。</p>
+<p>因此，借着 2.0 版本发布之际，我自己用 Keynote 画了一个。</p>
+<p><img src="/images/HttpRunner-logo.png" alt="HttpRunner-logo"></p>
+<p>个人的美工水平实在有限，让大家见笑了。</p>
+<p>对于 logo 设计的解释，主要有如下三点：</p>
+<ul>
+<li>中间是个拼图（puzzle pieces），形似 H 字母，恰好是 HttpRunner 的首字母</li>
+<li>拼图的寓意，对应的也是 HttpRunner 的设计理念；HttpRunner 本身作为一个基础框架，可以组装形成各种类型的测试平台，而在 HttpRunner 内部，也是充分解耦的各个模块组装在一起形成的</li>
+<li>最后从实际的展示效果来看，个人感觉看着还是比较舒服的，在 <code>HttpRunner 天使用户群</code> 里给大家看了下，普遍反馈也都不错</li>
+</ul>
+<h3 id="版本号机制"><a href="#版本号机制" class="headerlink" title="版本号机制"></a>版本号机制</h3><p>作为一个开源的基础框架，版本号是至关重要的。但在之前，HttpRunner 缺乏版本规划，也没有规范的版本号机制，版本号管理的确存在较大的问题。</p>
+<p>因此，从 2.0 版本开始，HttpRunner 在版本号机制方面需要规范起来。经过一轮调研，最终确定使用 <a href="https://semver.org/" target="_blank" rel="noopener"><code>Semantic Versioning</code></a> 的机制。该机制由 GitHub 联合创始人 Tom Preston-Werner 编写，当前被广泛采用，遵循该机制也可以更好地与开源生态统一，避免出现 “dependency hell” 的情况。</p>
+<p>具体地，HttpRunner 将采用 <code>MAJOR.MINOR.PATCH</code> 的版本号机制。</p>
+<ul>
+<li>MAJOR: 重大版本升级并出现前后版本不兼容时加 1</li>
+<li>MINOR: 大版本内新增功能并且保持版本内兼容性时加 1</li>
+<li>PATCH: 功能迭代过程中进行问题修复（bugfix）时加 1</li>
+</ul>
+<p>当然，在实际迭代开发过程中，肯定也不会每次提交（commit）都对 PATCH 加 1；在遵循如上主体原则的前提下，也会根据需要，在版本号后面添加先行版本号（-alpha/beta/rc）或版本编译元数据（+20190101）作为延伸。</p>
+<h3 id="HREPs"><a href="#HREPs" class="headerlink" title="HREPs"></a>HREPs</h3><p>在今年的一些大会上，我分享 HttpRunner 的开发设计思路时提到了<code>博客驱动开发</code>，主要思路就是在开发重要的功能特性之前，不是直接开始写代码，而是先写一篇博客详细介绍该功能的需求背景、目标达成的效果、以及设计思路。通过这种方式，一方面可以帮助自己真正地想清楚要做的事情，同时也可以通过开源社区的反馈来从更全面的角度审视自己的想法，继而纠正可能存在的偏差，或弥补思考的不足。</p>
+<p>直到我后来更深入地了解到了 <a href="https://www.python.org/dev/peps/" target="_blank" rel="noopener"><code>PEPs</code></a>(Python Enhancement Proposals)，以及类似的 <a href="https://github.com/ipython/ipython/wiki/IPEPs:-IPython-Enhancement-Proposals" target="_blank" rel="noopener"><code>IPEPs</code></a>(IPython Enhancement Proposals)，我才知道原来我曾经使用过的<code>博客驱动开发</code>并不是一个新方法，而是已经被广泛使用且行之有效的开发方式。</p>
+<p>因此，从 2.0 版本开始，在 HttpRunner 的开发方面我想继续沿用这种方式，并且将其固化为一种机制。形式方面，会借鉴 <a href="https://www.python.org/dev/peps/" target="_blank" rel="noopener"><code>PEPs</code></a> 的方式，新增 <a href="https://github.com/HttpRunner/HREP" target="_blank" rel="noopener">HREPs</a>(HttpRunner Enhancement Proposals)；关于 HREPs 的分类和运作机制，后面我再具体进行梳理。</p>
+<h3 id="License"><a href="#License" class="headerlink" title="License"></a>License</h3><p>最后再说下 License 方面。</p>
+<p>HttpRunner 最开始选择的是 <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT</a> 开源协议，从 2.0 版本开始，将切换为 <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache-2.0</a> 协议。</p>
+<p>如果熟悉这两个 License 的具体含义，应该清楚这两个协议对于用户来说都是十分友好的，不管是个人或商业使用，还是基于 HttpRunner 的二次开发，开源或闭源，都是没有任何限制的，因此协议切换对于大家来说没有任何影响。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上，便是 HttpRunner 2.0 发布将带来的主要变化。</p>
+<p>截止当前，HttpRunner 在 <a href="https://github.com/HttpRunner/HttpRunner" target="_blank" rel="noopener">GitHub</a> 上已经收获了近一千个star，在 TesterHome 的<a href="https://testerhome.com/opensource_projects" target="_blank" rel="noopener">开源项目列表</a>中也排到了第二名的位置，在此十分感谢大家的支持和认可。</p>
+<p>希望 HttpRunner 2.0 会是一个新的开始，朝着更高的目标迈进。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HttpRunner/">HttpRunner</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/httprunner-2.0-release/" data-title="HttpRunner 2.0 正式发布 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/post/pycon-china-2018/"  title="PyCon China 2018 归来，感谢曾经没有怂的自己">
+ <strong>下一篇：</strong><br/> 
+ <span>PyCon China 2018 归来，感谢曾经没有怂的自己
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#功能实现"><span class="toc-number">1.</span> <span class="toc-text">功能实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#测试用例组织调整"><span class="toc-number">1.1.</span> <span class="toc-text">测试用例组织调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模块化拆分（Pipline）"><span class="toc-number">1.2.</span> <span class="toc-text">模块化拆分（Pipline）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开源项目管理"><span class="toc-number">2.</span> <span class="toc-text">开源项目管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#logo"><span class="toc-number">2.1.</span> <span class="toc-text">logo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#版本号机制"><span class="toc-number">2.2.</span> <span class="toc-text">版本号机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HREPs"><span class="toc-number">2.3.</span> <span class="toc-text">HREPs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#License"><span class="toc-number">2.4.</span> <span class="toc-text">License</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br />
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px" />
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019
+		
+		<a href="/about" target="_blank" title="九毫">九毫</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

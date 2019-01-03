@@ -4,6 +4,23 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/httprunner-2.0-release/</loc>
+    <lastmod>2019-01-03T13:34:47.690Z</lastmod>
+    <data>
+        <display>
+        <title>HttpRunner 2.0 正式发布</title>
+        <pubTime>2018-12-31T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/pycon-china-2018/</loc>
     <lastmod>2018-10-15T13:13:08.359Z</lastmod>
     <data>
@@ -159,23 +176,6 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
-    <lastmod>2018-03-04T15:50:56.846Z</lastmod>
-    <data>
-        <display>
-        <title>【大疆内推】岗位描述我只想这么写</title>
-        <pubTime>2017-08-08T16:00:00.000Z</pubTime>
-        
-        <tag>招聘</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
     <lastmod>2018-03-04T15:50:56.846Z</lastmod>
     <data>
@@ -187,6 +187,23 @@
          
         <tag>培训</tag>
          
+        <tag>招聘</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
+    <lastmod>2018-03-04T15:50:56.846Z</lastmod>
+    <data>
+        <display>
+        <title>【大疆内推】岗位描述我只想这么写</title>
+        <pubTime>2017-08-08T16:00:00.000Z</pubTime>
+        
         <tag>招聘</tag>
          
          
@@ -254,23 +271,6 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>ApiTestEngine 正式更名为 HttpRunner</title>
-        <pubTime>2017-11-07T16:00:00.000Z</pubTime>
-        
-        <tag>HttpRunner</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://debugtalk.com/post/apitestengine-supersede-locust/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
@@ -281,6 +281,25 @@
         <tag>Locust</tag>
          
         <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>HttpRunner 的结果校验器优化</title>
+        <pubTime>2017-12-12T16:00:00.000Z</pubTime>
+        
+        <tag>HttpRunner</tag>
+         
+        <tag>validator</tag>
          
          
            
@@ -311,6 +330,29 @@
 
     
   <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
+        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
+        
+        <tag>HTTP</tag>
+         
+        <tag>自动化测试</tag>
+         
+        <tag>测试框架</tag>
+         
+        <tag>HttpRunner</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
@@ -323,25 +365,6 @@
         <tag>热加载</tag>
          
         <tag>debugtalk.py</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>HttpRunner 的结果校验器优化</title>
-        <pubTime>2017-12-12T16:00:00.000Z</pubTime>
-        
-        <tag>HttpRunner</tag>
-         
-        <tag>validator</tag>
          
          
            
@@ -527,19 +550,13 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
     <lastmod>2017-12-24T01:55:19.000Z</lastmod>
     <data>
         <display>
-        <title>ApiTestEngine 演进之路（1）搭建基础框架</title>
-        <pubTime>2017-06-21T16:00:00.000Z</pubTime>
+        <title>ApiTestEngine 正式更名为 HttpRunner</title>
+        <pubTime>2017-11-07T16:00:00.000Z</pubTime>
         
-        <tag>HTTP</tag>
-         
-        <tag>自动化测试</tag>
-         
-        <tag>测试框架</tag>
-         
         <tag>HttpRunner</tag>
          
          
@@ -604,27 +621,6 @@
         <tag>iOS</tag>
          
         <tag>CI</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://debugtalk.com/post/LoadRunner-SOAP-WebService/</loc>
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>LoadRunner基于SOAP的WebService测试方法</title>
-        <pubTime>2013-08-05T16:00:00.000Z</pubTime>
-        
-        <tag>LoadRunner</tag>
-         
-        <tag>WebService</tag>
-         
-        <tag>SOAP</tag>
          
          
            
@@ -768,20 +764,16 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
+    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>解决Jenkins中无法展示HTML样式的问题</title>
-        <pubTime>2017-07-23T16:00:00.000Z</pubTime>
+        <title>在Pelican中使用多说评论系统</title>
+        <pubTime>2013-10-04T16:00:00.000Z</pubTime>
         
-        <tag>Jenkins</tag>
+        <tag>Pelican</tag>
          
-        <tag>Plugin</tag>
-         
-        <tag>测试报告</tag>
-         
-        <tag>持续集成</tag>
+        <tag>评论系统</tag>
          
          
            
@@ -862,16 +854,20 @@
 
     
   <url>
-    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
+    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
     <lastmod>2017-09-04T05:28:54.000Z</lastmod>
     <data>
         <display>
-        <title>在Pelican中使用多说评论系统</title>
-        <pubTime>2013-10-04T16:00:00.000Z</pubTime>
+        <title>解决Jenkins中无法展示HTML样式的问题</title>
+        <pubTime>2017-07-23T16:00:00.000Z</pubTime>
         
-        <tag>Pelican</tag>
+        <tag>Jenkins</tag>
          
-        <tag>评论系统</tag>
+        <tag>Plugin</tag>
+         
+        <tag>测试报告</tag>
+         
+        <tag>持续集成</tag>
          
          
            
@@ -1135,6 +1131,27 @@
         <tag>LoadRunner</tag>
          
         <tag>脚本开发</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://debugtalk.com/post/LoadRunner-SOAP-WebService/</loc>
+    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>LoadRunner基于SOAP的WebService测试方法</title>
+        <pubTime>2013-08-05T16:00:00.000Z</pubTime>
+        
+        <tag>LoadRunner</tag>
+         
+        <tag>WebService</tag>
+         
+        <tag>SOAP</tag>
          
          
            
