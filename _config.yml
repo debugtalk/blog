@@ -72,5 +72,5 @@ stylus:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: https://github.com/debugtalk/debugtalk.github.io
-  # coding.net: git@git.coding.net:ezlippi/ezlippi.git,coding-pages
+  repository: https://github.com/debugtalk/blog
+  branch: gh-pages
