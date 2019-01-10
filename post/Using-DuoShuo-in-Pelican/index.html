@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>在Pelican中使用多说评论系统 | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -107,21 +107,21 @@
 		
 		</div>
 		
-		<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Pelican默认采用的是Disqus评论系统，但由于Disqus附带的Facebook和Twitter社交功能在国内无法使用，因此我们更希望使用一些国内的SNS平台，比如QQ，新浪微博，豆瓣，人人等。在国产的评论系统中，使用较多的有<a href="http://duoshuo.com" target="_blank" rel="external">多说</a>、<a href="http://www.uyan.cc/" target="_blank" rel="external">有言</a>等，本文将介绍如何在Pelican博客系统中采用多说评论系统。</p>
-<h2 id="获取多说代码"><a href="#获取多说代码" class="headerlink" title="获取多说代码"></a>获取多说代码</h2><p>在<a href="http://duoshuo.com" target="_blank" rel="external">多说首页</a>点击【我要安装】，进入创建站点界面；完成站点信息填写后，点击【创建】按钮，即可获得多说代码，大致如下所示。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;!-- Duoshuo Comment BEGIN --&gt;</div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ds-thread"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line"><span class="keyword">var</span> duoshuoQuery = &#123;short_name:<span class="string">"leolee"</span>&#125;;</div><div class="line">    (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> ds = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</div><div class="line">        ds.type = <span class="string">'text/javascript'</span>;ds.async = <span class="literal">true</span>;</div><div class="line">        ds.src = <span class="string">'http://static.duoshuo.com/embed.js'</span>;</div><div class="line">        ds.charset = <span class="string">'UTF-8'</span>;</div><div class="line">        (<span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>]</div><div class="line">        || <span class="built_in">document</span>.getElementsByTagName(<span class="string">'body'</span>)[<span class="number">0</span>]).appendChild(ds);</div><div class="line">    &#125;)();</div><div class="line"><span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div><div class="line">&lt;!-- Duoshuo Comment END --&gt;</div></pre></td></tr></table></figure></p>
+		<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Pelican默认采用的是Disqus评论系统，但由于Disqus附带的Facebook和Twitter社交功能在国内无法使用，因此我们更希望使用一些国内的SNS平台，比如QQ，新浪微博，豆瓣，人人等。在国产的评论系统中，使用较多的有<a href="http://duoshuo.com" target="_blank" rel="noopener">多说</a>、<a href="http://www.uyan.cc/" target="_blank" rel="noopener">有言</a>等，本文将介绍如何在Pelican博客系统中采用多说评论系统。</p>
+<h2 id="获取多说代码"><a href="#获取多说代码" class="headerlink" title="获取多说代码"></a>获取多说代码</h2><p>在<a href="http://duoshuo.com" target="_blank" rel="noopener">多说首页</a>点击【我要安装】，进入创建站点界面；完成站点信息填写后，点击【创建】按钮，即可获得多说代码，大致如下所示。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Duoshuo Comment BEGIN --&gt;</span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"ds-thread"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line"><span class="keyword">var</span> duoshuoQuery = &#123;<span class="attr">short_name</span>:<span class="string">"leolee"</span>&#125;;</span><br><span class="line">    (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> ds = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line">        ds.type = <span class="string">'text/javascript'</span>;ds.async = <span class="literal">true</span>;</span><br><span class="line">        ds.src = <span class="string">'http://static.duoshuo.com/embed.js'</span>;</span><br><span class="line">        ds.charset = <span class="string">'UTF-8'</span>;</span><br><span class="line">        (<span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>]</span><br><span class="line">        || <span class="built_in">document</span>.getElementsByTagName(<span class="string">'body'</span>)[<span class="number">0</span>]).appendChild(ds);</span><br><span class="line">    &#125;)();</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;!-- Duoshuo Comment END --&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>在上面的代码中，short_name即是注册的多说域名。</p>
 <h2 id="修改模板系统"><a href="#修改模板系统" class="headerlink" title="修改模板系统"></a>修改模板系统</h2><p>获得多说代码后，在博客正文末尾对其进行引用，便可使用多说的评论功能。<br>由于我们采用的是模板，因此只需要在article模板中添加对多说代码的引用，便可以一劳永逸。<br>针对Pelican的模板系统，需要修改如下几个地方。</p>
 <p><strong>在 pelicanconf.py 中开启多说评论功能</strong></p>
-<p>模仿Pelican默认的DISQUS，在配置文件pelicanconf.py中添加如下代码。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DUOSHUO_SITENAME = <span class="string">"leolee"</span></div></pre></td></tr></table></figure></p>
+<p>模仿Pelican默认的DISQUS，在配置文件pelicanconf.py中添加如下代码。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DUOSHUO_SITENAME = <span class="string">"leolee"</span></span><br></pre></td></tr></table></figure></p>
 <p>需要注意的是，DUOSHUO_SITENAME需要全部字母大写，因为只有这样Pelican才会将其作为全局变量，供其它文件引用。</p>
 <p><strong>添加 DuoShuo_Script.html</strong></p>
-<p>将获取得到的多说代码保存至单个文件中，方便在其它文件中对其进行引用。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&#123;% <span class="keyword">if</span> DUOSHUO_SITENAME %&#125;</div><div class="line">&lt;!-- Duoshuo Comment BEGIN --&gt;</div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ds-thread"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line"><span class="keyword">var</span> duoshuoQuery = &#123;short_name:<span class="string">"&#123;&#123; DUOSHUO_SITENAME &#125;&#125;"</span>&#125;;</div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> ds = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</div><div class="line">    ds.type = <span class="string">'text/javascript'</span>;</div><div class="line">    ds.async = <span class="literal">true</span>;</div><div class="line">    ds.src = <span class="string">'http://static.duoshuo.com/embed.js'</span>;</div><div class="line">    ds.charset = <span class="string">'UTF-8'</span>;</div><div class="line">    (<span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>]</div><div class="line">        || <span class="built_in">document</span>.getElementsByTagName(<span class="string">'body'</span>)[<span class="number">0</span>]).appendChild(ds);</div><div class="line">&#125;)();</div><div class="line"><span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div><div class="line">&lt;!-- Duoshuo Comment END --&gt;</div><div class="line">&#123;% endif %&#125;</div></pre></td></tr></table></figure></p>
+<p>将获取得到的多说代码保存至单个文件中，方便在其它文件中对其进行引用。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> DUOSHUO_SITENAME %&#125;</span><br><span class="line">&lt;!-- Duoshuo Comment BEGIN --&gt;</span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"ds-thread"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line"><span class="keyword">var</span> duoshuoQuery = &#123;<span class="attr">short_name</span>:<span class="string">"&#123;&#123; DUOSHUO_SITENAME &#125;&#125;"</span>&#125;;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ds = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line">    ds.type = <span class="string">'text/javascript'</span>;</span><br><span class="line">    ds.async = <span class="literal">true</span>;</span><br><span class="line">    ds.src = <span class="string">'http://static.duoshuo.com/embed.js'</span>;</span><br><span class="line">    ds.charset = <span class="string">'UTF-8'</span>;</span><br><span class="line">    (<span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>]</span><br><span class="line">        || <span class="built_in">document</span>.getElementsByTagName(<span class="string">'body'</span>)[<span class="number">0</span>]).appendChild(ds);</span><br><span class="line">&#125;)();</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;!-- Duoshuo Comment END --&gt;</span></span><br><span class="line"><span class="regexp">&#123;% endif %&#125;</span></span><br></pre></td></tr></table></figure></p>
 <p>在该文件中，添加了一个if语句，即只有在pelicanconf.py中对DUOSHUO_SITENAME进行设置后才开启多说评论功能。</p>
 <p><strong>添加 DuoShuo_thread.html</strong></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">noscript</span>&gt;</span></div><div class="line">Please enable JavaScript to view the comments powered by <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://duoshuo.com/"</span>&gt;</span>DuoShuo<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.</div><div class="line"><span class="tag">&lt;/<span class="name">noscript</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">noscript</span>&gt;</span></span><br><span class="line">Please enable JavaScript to view the comments powered by <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://duoshuo.com/"</span>&gt;</span>DuoShuo<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.</span><br><span class="line"><span class="tag">&lt;/<span class="name">noscript</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>添加这个文件的作用是，当浏览器禁用Javascript后，用户无法看见评论框，而这个代码便是对用户进行提示。</p>
 <p><strong>修改 article.html</strong></p>
-<p>由于评论功能总是出现在文章末尾，因此应该将评论功能模块放在文章模版末尾，即对article.html进行修改，修改内容如下所示。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&#123;% raw %&#125;</div><div class="line">&#123;% extends "base.html" %&#125;</div><div class="line">&#123;% block title %&#125;&#123;&#123; article.title|striptags &#125;&#125;&#123;% endblock %&#125;</div><div class="line">&#123;% block content %&#125;</div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">article</span> <span class="attr">class</span>=<span class="string">"hentry"</span> <span class="attr">role</span>=<span class="string">"article"</span>&gt;</span></div><div class="line">    &#123;% include '_includes/article.html' %&#125;</div><div class="line">    <span class="tag">&lt;<span class="name">footer</span>&gt;</span></div><div class="line">      &#123;% include '_includes/article_infos.html' %&#125;</div><div class="line">    <span class="tag">&lt;/<span class="name">footer</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">article</span>&gt;</span></div><div class="line"></div><div class="line">  &#123;% if DUOSHUO_SITENAME and SITEURL and article.status != "draft" %&#125;</div><div class="line">  <span class="tag">&lt;<span class="name">section</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Comments<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"DuoShuoComment"</span> <span class="attr">aria-live</span>=<span class="string">"polite"</span>&gt;</span></div><div class="line">      &#123;% include '_includes/DuoShuo_Script.html' %&#125;</div><div class="line">      &#123;% include '_includes/DuoShuo_thread.html' %&#125;</div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">section</span>&gt;</span></div><div class="line">  &#123;% endif %&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">&#123;% endblock %&#125;</div><div class="line">&#123;% endraw %&#125;</div></pre></td></tr></table></figure></p>
+<p>由于评论功能总是出现在文章末尾，因此应该将评论功能模块放在文章模版末尾，即对article.html进行修改，修改内容如下所示。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">&#123;% extends "base.html" %&#125;</span><br><span class="line">&#123;% block title %&#125;&#123;&#123; article.title|striptags &#125;&#125;&#123;% endblock %&#125;</span><br><span class="line">&#123;% block content %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">article</span> <span class="attr">class</span>=<span class="string">"hentry"</span> <span class="attr">role</span>=<span class="string">"article"</span>&gt;</span></span><br><span class="line">    &#123;% include '_includes/article.html' %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">footer</span>&gt;</span></span><br><span class="line">      &#123;% include '_includes/article_infos.html' %&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  &#123;% if DUOSHUO_SITENAME and SITEURL and article.status != "draft" %&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">section</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Comments<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"DuoShuoComment"</span> <span class="attr">aria-live</span>=<span class="string">"polite"</span>&gt;</span></span><br><span class="line">      &#123;% include '_includes/DuoShuo_Script.html' %&#125;</span><br><span class="line">      &#123;% include '_includes/DuoShuo_thread.html' %&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">&#123;% endblock %&#125;</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure></p>
 <p>通过以上修改，便可在Pelican博客系统中使用多说评论系统。</p>
   
 	</div>
@@ -153,9 +153,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/loadrunner-get-system-time/" title="LoadRunner中获取当前系统时间">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   LoadRunner中获取当前系统时间</span>
 </a>
@@ -163,8 +163,8 @@
 
 
 <div class="next">
-<a href="/post/html-character-entity/"  title="HTML字符实体(Character Entity)">
- <strong>下一篇：</strong><br/> 
+<a href="/post/html-character-entity/" title="HTML字符实体(Character Entity)">
+ <strong>下一篇：</strong><br> 
  <span>HTML字符实体(Character Entity)
 </span>
 </a>
@@ -195,16 +195,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -228,6 +218,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -240,15 +234,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -256,11 +242,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -268,7 +258,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -280,15 +270,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -333,10 +323,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -347,7 +337,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -580,7 +570,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

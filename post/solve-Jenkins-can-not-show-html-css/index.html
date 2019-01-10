@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>解决Jenkins中无法展示HTML样式的问题 | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -110,16 +110,16 @@
 		<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>对于测试报告来说，除了内容的简洁精炼，样式的美观也很重要。常用的做法是，采用<code>HTML</code>格式的文档，并搭配<code>CSS</code>和<code>JS</code>，实现自定义的样式和动画效果（例如展开、折叠等）。</p>
 <p>在<code>Jenkins</code>中要展示<code>HTML</code>文档，通常采用的方式有两种：</p>
 <ul>
-<li>使用<a href="https://wiki.jenkins.io/display/JENKINS/HTML+Publisher+Plugin" target="_blank" rel="external"><code>HTML Publisher Plugin</code></a>；</li>
+<li>使用<a href="https://wiki.jenkins.io/display/JENKINS/HTML+Publisher+Plugin" target="_blank" rel="noopener"><code>HTML Publisher Plugin</code></a>；</li>
 <li>使用<code>Files to archive</code>功能，在<code>Build Artifacts</code>中显示<code>HTML</code>文档链接。</li>
 </ul>
 <p>第一种方式配合插件，可以通过图形化操作实现简易配置，并且展示效果也不错；而第二种方式的优势在于使用<code>Jenkins</code>自带的功能，不依赖插件也能实现基本的需求。</p>
 <p>然而，不管是采用哪种方式，都有可能会遇到一种情况，就是展示出来的<code>HTML</code>报告样式全无。在浏览器的<code>Network</code>中查看资源加载情况，会发现相关的<code>CSS</code>和<code>JS</code>都没法正常加载。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Refused to load the stylesheet &apos;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css&apos; because it violates the following Content Security Policy directive: &quot;style-src &apos;self&apos;&quot;.</div><div class="line">Refused to apply inline style because it violates the following Content Security Policy directive: &quot;style-src &apos;self&apos;&quot;. Either the &apos;unsafe-inline&apos; keyword, a hash (&apos;sha256-0EZqoz+oBhx7gF4nvY2bSqoGyy4zLjNF+SDQXGp/ZrY=&apos;), or a nonce (&apos;nonce-...&apos;) is required to enable inline execution.</div><div class="line">Blocked script execution in &apos;http://10.13.0.146:8888/job/SkyPixel-SmokeTest/34/artifact/reports/SkyPixel-smoketest/34.html&apos; because the document&apos;s frame is sandboxed and the &apos;allow-scripts&apos; permission is not set.</div><div class="line">Refused to load the stylesheet &apos;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css&apos; because it violates the following Content Security Policy directive: &quot;style-src &apos;self&apos;&quot;.</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Refused to load the stylesheet &apos;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css&apos; because it violates the following Content Security Policy directive: &quot;style-src &apos;self&apos;&quot;.</span><br><span class="line">Refused to apply inline style because it violates the following Content Security Policy directive: &quot;style-src &apos;self&apos;&quot;. Either the &apos;unsafe-inline&apos; keyword, a hash (&apos;sha256-0EZqoz+oBhx7gF4nvY2bSqoGyy4zLjNF+SDQXGp/ZrY=&apos;), or a nonce (&apos;nonce-...&apos;) is required to enable inline execution.</span><br><span class="line">Blocked script execution in &apos;http://10.13.0.146:8888/job/SkyPixel-SmokeTest/34/artifact/reports/SkyPixel-smoketest/34.html&apos; because the document&apos;s frame is sandboxed and the &apos;allow-scripts&apos; permission is not set.</span><br><span class="line">Refused to load the stylesheet &apos;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css&apos; because it violates the following Content Security Policy directive: &quot;style-src &apos;self&apos;&quot;.</span><br></pre></td></tr></table></figure>
 <h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>出现该现象的原因在于<code>Jenkins</code>中配置的<code>CSP</code>（<code>Content Security Policy</code>）。</p>
 <p>简单地说，这是<code>Jenkins</code>的一个安全策略，默认会设置为一个非常严格的权限集，以防止Jenkins用户在<code>workspace</code>、<code>/userContent</code>、<code>archived artifacts</code>中受到恶意<code>HTML/JS</code>文件的攻击。</p>
 <p>默认地，该权限集会设置为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sandbox; default-src &apos;none&apos;; img-src &apos;self&apos;; style-src &apos;self&apos;;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sandbox; default-src &apos;none&apos;; img-src &apos;self&apos;; style-src &apos;self&apos;;</span><br></pre></td></tr></table></figure>
 <p>在该配置下，只允许加载：</p>
 <ul>
 <li>Jenkins服务器上托管的<code>CSS</code>文件</li>
@@ -139,9 +139,9 @@
 <p>可以看出，这个限制非常严格，在此限制下也就不难理解为什么我们的<code>HTML</code>没法正常展示样式了。</p>
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="临时解决方案"><a href="#临时解决方案" class="headerlink" title="临时解决方案"></a>临时解决方案</h3><p>要解决该问题，方式也比较简单，就是修改<code>Content Security Policy</code>的默认配置。</p>
 <p>修改方式为，进入<code>Manage Jenkins</code>-&gt;<code>Script console</code>，输入如下命令并进行执行。</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">System.setProperty(<span class="string">"hudson.model.DirectoryBrowserSupport.CSP"</span>, <span class="string">""</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(<span class="string">"hudson.model.DirectoryBrowserSupport.CSP"</span>, <span class="string">""</span>)</span><br></pre></td></tr></table></figure>
 <p>当看到如下结果后，则说明配置修改已经生效。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Result</div><div class="line">Result:</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Result</span><br><span class="line">Result:</span><br></pre></td></tr></table></figure>
 <p>再次进行构建，新生成的<code>HTML</code>就可以正常展示样式了。需要说明的是，该操作对之前构建生成的<code>HTML</code>报告无效。</p>
 <h3 id="永久解决方案"><a href="#永久解决方案" class="headerlink" title="永久解决方案"></a>永久解决方案</h3><p>不过，该方法还存在一个问题：该配置只是临时生效，当重启<code>Jenkins</code>后，<code>Content Security Policy</code>又会恢复为默认值，从而<code>HTML</code>样式又没法展示了。</p>
 <p>当前，<code>Jenkins</code>官方还没有相应的解决方法，我们只能在每次启动或重启<code>Jenkins</code>时，重新修改该安全策略。</p>
@@ -149,8 +149,8 @@
 <p>回到刚才的<code>Script console</code>，会发现我们执行的命令其实就是一段<code>Groovy</code>代码；那么，如果我们可以实现在<code>Jenkins</code>每次启动时自动地执行该<code>Groovy</code>代码，那么也就同样能解决我们的问题了。</p>
 <p>好在<code>Jenkins</code>已经有相应的插件：</p>
 <ul>
-<li><a href="https://wiki.jenkins.io/display/JENKINS/Startup+Trigger" target="_blank" rel="external"><code>Startup Trigger</code></a>: 可实现在<code>Jenkins</code>节点(master/slave)启动时触发构建；</li>
-<li><a href="https://wiki.jenkins.io/display/JENKINS/Groovy+plugin" target="_blank" rel="external"><code>Groovy plugin</code></a>: 可实现直接执行<code>Groovy</code>代码。</li>
+<li><a href="https://wiki.jenkins.io/display/JENKINS/Startup+Trigger" target="_blank" rel="noopener"><code>Startup Trigger</code></a>: 可实现在<code>Jenkins</code>节点(master/slave)启动时触发构建；</li>
+<li><a href="https://wiki.jenkins.io/display/JENKINS/Groovy+plugin" target="_blank" rel="noopener"><code>Groovy plugin</code></a>: 可实现直接执行<code>Groovy</code>代码。</li>
 </ul>
 <p>搜索安装<code>startup-trigger-plugin</code>和<code>Groovy</code>插件后，我们就可以进行配置了。</p>
 <p>配置方式如下：</p>
@@ -159,15 +159,15 @@
 <li>在<code>Build Triggers</code>模块下，勾选<code>Build when job nodes start</code>；</li>
 <li>在<code>Build</code>模块下，<code>Add build step</code>-&gt;<code>Execute system Groovy script</code>，在<code>Groovy Script</code>中输入配置命令，<code>System.setProperty(&quot;hudson.model.DirectoryBrowserSupport.CSP&quot;, &quot;&quot;)</code>。</li>
 </ul>
-<p>需要注意的是，添加构建步骤的时候，应该选择<code>Execute system Groovy script</code>，而不是<code>Execute Groovy script</code>。关于这两者之间的差异，简单地说，<code>Groovy Script</code>相当于是运行在<code>master/slave</code>系统<code>JVM</code>环境中，而<code>system groovy script</code>，则是运行在<code>Jenkins master</code>的<code>JVM</code>环境中，与前面提到的<code>Jenkins Script Console</code>功能相同。如需了解更多信息，可查看<a href="https://wiki.jenkins.io/display/JENKINS/Groovy+plugin" target="_blank" rel="external"><code>Groovy plugin</code>的详细说明</a>。</p>
+<p>需要注意的是，添加构建步骤的时候，应该选择<code>Execute system Groovy script</code>，而不是<code>Execute Groovy script</code>。关于这两者之间的差异，简单地说，<code>Groovy Script</code>相当于是运行在<code>master/slave</code>系统<code>JVM</code>环境中，而<code>system groovy script</code>，则是运行在<code>Jenkins master</code>的<code>JVM</code>环境中，与前面提到的<code>Jenkins Script Console</code>功能相同。如需了解更多信息，可查看<a href="https://wiki.jenkins.io/display/JENKINS/Groovy+plugin" target="_blank" rel="noopener"><code>Groovy plugin</code>的详细说明</a>。</p>
 <p>至此，我们就彻底解决<code>HTML</code>样式展示异常的问题了。</p>
 <p>但还有一点需要格外注意，在本文的演示中，我们修改<code>CSP</code>（<code>Content Security Policy</code>）配置时关闭了的所有安全保护策略，即将<code>hudson.model.DirectoryBrowserSupport.CSP</code>设置为空，其实这是存在很大的安全隐患的。</p>
 <p>正确的做法，我们应该是结合项目的实际情况，选择对应的安全策略。例如，如果我们需要开启脚本文件加载，但是只限于Jenkins服务器上托管的<code>CSS</code>文件，那么就可以采用如下配置。</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">System.setProperty(<span class="string">"hudson.model.DirectoryBrowserSupport.CSP"</span>, <span class="string">"sandbox; style-src 'self';"</span>)</div></pre></td></tr></table></figure>
-<p>除此之外，<code>CSP</code>可以实现非常精细的权限配置，详细配置可参考<a href="https://content-security-policy.com/" target="_blank" rel="external"><code>Content Security Policy Reference</code></a>。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.setProperty(<span class="string">"hudson.model.DirectoryBrowserSupport.CSP"</span>, <span class="string">"sandbox; style-src 'self';"</span>)</span><br></pre></td></tr></table></figure>
+<p>除此之外，<code>CSP</code>可以实现非常精细的权限配置，详细配置可参考<a href="https://content-security-policy.com/" target="_blank" rel="noopener"><code>Content Security Policy Reference</code></a>。</p>
 <h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
-<li><a href="https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy" target="_blank" rel="external">Configuring Content Security Policy</a></li>
-<li><a href="https://content-security-policy.com/" target="_blank" rel="external">Content Security Policy Reference</a></li>
+<li><a href="https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy" target="_blank" rel="noopener">Configuring Content Security Policy</a></li>
+<li><a href="https://content-security-policy.com/" target="_blank" rel="noopener">Content Security Policy Reference</a></li>
 </ul>
   
 	</div>
@@ -199,9 +199,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/" title="How to install a package from Github that has other github dependencies ?">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   How to install a package from Github that has other github dependencies ?</span>
 </a>
@@ -209,8 +209,8 @@
 
 
 <div class="next">
-<a href="/post/ApiTestEngine-4-call-functions-in-yaml-testcases/"  title="ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用">
- <strong>下一篇：</strong><br/> 
+<a href="/post/ApiTestEngine-4-call-functions-in-yaml-testcases/" title="ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用">
+ <strong>下一篇：</strong><br> 
  <span>ApiTestEngine 演进之路（4）测试用例中实现 Python 函数的调用
 </span>
 </a>
@@ -241,16 +241,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -274,6 +264,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -286,15 +280,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -302,11 +288,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -314,7 +304,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -326,15 +316,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -379,10 +369,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -393,7 +383,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -626,7 +616,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>【LocustPlus序】漫谈服务端性能测试 | DebugTalk</title>
@@ -39,14 +39,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -69,17 +69,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -265,8 +265,8 @@
 <p>同样地，Jmeter的并发机制也是基于线程，并发效率存在同样的问题；另外，Jmeter在脚本编写和描述方面是基于GUI操作，个人感觉操作比较繁琐（这个因人而异），因此不是很喜欢。</p>
 <p>那么，我重点推荐的<code>Locust</code>有啥特别的地方呢？</p>
 <p>如果从整体功能上来看的话，<code>Locust</code>的功能的确比较单薄。不过，作为性能测试工具最核心的压力发生器部分，却是非常不错的。抛开官方文档的介绍，个人觉得最赞的有两点。</p>
-<p>首先是模拟用户操作，也就是测试脚本描述方面。Locust采用Pure Python脚本描述，并且HTTP请求完全基于<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external"><code>Requests</code></a>库。用过<code>Requests</code>的都知道，这个库非常简洁易用，但功能十分强大，很多其它编程语言的HTTP库都借鉴了它的思想和模式，如果将其评选为最好用的HTTP库之一（不限语言），应该也不会有太大的争议。除了HTTP(S)协议，Locust也可以测试其它任意协议的系统，只需要采用Python调用对应的库进行请求描述即可。</p>
-<p>另外一点就是并发机制了。Locust的并发机制摒弃了进程和线程，采用协程（<a href="http://xlambda.com/gevent-tutorial/" target="_blank" rel="external"><code>gevent</code></a>）的机制。采用多线程来模拟多用户时，线程数会随着并发数的增加而增加，而线程之间的切换是需要占用资源的，IO的阻塞和线程的sleep会不可避免的导致并发效率下降；正因如此，LoadRunner和Jmeter这类采用进程和线程的测试工具，都很难在单机上模拟出较高的并发压力。而协程和线程的区别在于，协程避免了系统级资源调度，由此大幅提高了性能。正常情况下，单台普通配置的测试机可以生产数千并发压力，这是LoadRunner和Jmeter都无法实现的。</p>
+<p>首先是模拟用户操作，也就是测试脚本描述方面。Locust采用Pure Python脚本描述，并且HTTP请求完全基于<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="noopener"><code>Requests</code></a>库。用过<code>Requests</code>的都知道，这个库非常简洁易用，但功能十分强大，很多其它编程语言的HTTP库都借鉴了它的思想和模式，如果将其评选为最好用的HTTP库之一（不限语言），应该也不会有太大的争议。除了HTTP(S)协议，Locust也可以测试其它任意协议的系统，只需要采用Python调用对应的库进行请求描述即可。</p>
+<p>另外一点就是并发机制了。Locust的并发机制摒弃了进程和线程，采用协程（<a href="http://xlambda.com/gevent-tutorial/" target="_blank" rel="noopener"><code>gevent</code></a>）的机制。采用多线程来模拟多用户时，线程数会随着并发数的增加而增加，而线程之间的切换是需要占用资源的，IO的阻塞和线程的sleep会不可避免的导致并发效率下降；正因如此，LoadRunner和Jmeter这类采用进程和线程的测试工具，都很难在单机上模拟出较高的并发压力。而协程和线程的区别在于，协程避免了系统级资源调度，由此大幅提高了性能。正常情况下，单台普通配置的测试机可以生产数千并发压力，这是LoadRunner和Jmeter都无法实现的。</p>
 <p>有了一个不错的引擎，外表装饰简陋点也都是可以接受的了。不过虽然Locust功能单薄，特别是在性能指标监控和测试报告图表方面比较缺失，但是Locust的代码结构清晰，核心代码量也只有几百行，可扩展性也非常不错。换言之，Locust的可玩性（<code>hackable</code>）极强，对于一个想深入挖掘性能测试工具原理的人来说，<code>Locust</code>非常适合。</p>
 <p>好了，Locust的介绍暂且到这儿，后续我会再对Locust的使用方法和二次开发进行详细介绍，也算是弥补官方文档的不足吧。</p>
   
@@ -299,9 +299,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/switch-macOS-web-proxy-in-elegant-way/" title="如何优雅地一键实现macOS网络代理切换">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   如何优雅地一键实现macOS网络代理切换</span>
 </a>
@@ -309,8 +309,8 @@
 
 
 <div class="next">
-<a href="/post/build-ideal-app-automation-test-framework/"  title="打造心目中理想的自动化测试框架（AppiumBooster）">
- <strong>下一篇：</strong><br/> 
+<a href="/post/build-ideal-app-automation-test-framework/" title="打造心目中理想的自动化测试框架（AppiumBooster）">
+ <strong>下一篇：</strong><br> 
  <span>打造心目中理想的自动化测试框架（AppiumBooster）
 </span>
 </a>
@@ -341,16 +341,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -374,6 +364,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -386,15 +380,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -402,11 +388,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -414,7 +404,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -426,15 +416,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -479,10 +469,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -493,7 +483,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -726,7 +716,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

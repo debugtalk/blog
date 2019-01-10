@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>Android开发环境配置1：详解Bootloader | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -122,15 +122,15 @@
 <li>开机时采用组合按键：将手机关机，同时按住组合按键数秒；不同机型的组合按键略有不同，Nexus 5的组合按键为<code>Volume Down</code>和<code>Power</code>。</li>
 </ul>
 <p>进入到<code>fastboot</code>模式后，可以看到如下信息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">FASTBOOT MODE</div><div class="line">PRODUCT_NAME - hammerhead</div><div class="line">VARIANT - hammerhead D821(E) 16GB</div><div class="line">HW VERSION - rev_11</div><div class="line">BOOTLOADER VERSION - HHZ11k</div><div class="line">BASEBAND VERSION - M897aA-2.0.50.1.16</div><div class="line">CARRIER INFO - None</div><div class="line">SERIAL NUMBER - 03f7fc7ad0081a10</div><div class="line">SIGNING - production</div><div class="line">SECURE BOOT - enabled</div><div class="line">LOCK STATE - locked</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FASTBOOT MODE</span><br><span class="line">PRODUCT_NAME - hammerhead</span><br><span class="line">VARIANT - hammerhead D821(E) 16GB</span><br><span class="line">HW VERSION - rev_11</span><br><span class="line">BOOTLOADER VERSION - HHZ11k</span><br><span class="line">BASEBAND VERSION - M897aA-2.0.50.1.16</span><br><span class="line">CARRIER INFO - None</span><br><span class="line">SERIAL NUMBER - 03f7fc7ad0081a10</span><br><span class="line">SIGNING - production</span><br><span class="line">SECURE BOOT - enabled</span><br><span class="line">LOCK STATE - locked</span><br></pre></td></tr></table></figure>
 <p>在<code>LOCK STATE</code>一项中，可以看到手机当前处于锁定（locked）状态，若需要进行<code>root</code>操作，则必须先进行解锁（unlock）。如果手机已经处于解锁（unlocked）状态了，则不用再进行<code>unlock</code>操作。</p>
 <h3 id="3、对锁定（locked）设备进行解锁（unlock）操作"><a href="#3、对锁定（locked）设备进行解锁（unlock）操作" class="headerlink" title="3、对锁定（locked）设备进行解锁（unlock）操作"></a>3、对锁定（locked）设备进行解锁（unlock）操作</h3><p>解锁操作需要将手机通过USB数据线与电脑连接，在电脑的命令终端中通过<code>fastboot</code>工具命令进行解锁操作。</p>
 <p>首先，保持手机与电脑的USB连接，在命令终端中查看手机在<code>fastboot</code>模式下与电脑的连接状态。若连接正常，则可以看到如下信息。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ fastboot devices</div><div class="line">03f7<span class="built_in">fc</span>7ad0081a10	fastboot</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot devices</span><br><span class="line">03f7fc7ad0081a10	fastboot</span><br></pre></td></tr></table></figure>
 <p>然后，在电脑的命令终端中输入如下命令。在手机上会显示<code>Unblock bootloader?</code>警告提示信息，用手机的音量键选择<code>Yes</code>后，按下手机的电源键进行确认。接下来手机便会进行unlock操作。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ fastboot oem unlock</div><div class="line">...</div><div class="line">OKAY [ 14.907s]</div><div class="line">finished. total time: 14.907s</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot oem unlock</span><br><span class="line">...</span><br><span class="line">OKAY [ 14.907s]</span><br><span class="line">finished. total time: 14.907s</span><br></pre></td></tr></table></figure>
 <p>出现如上响应信息后，则表明手机已经解锁成功。在手机屏幕上，也可以看到<code>fastboot</code>模式页面中，<code>LOCK STATE</code>的属性值已经变为<code>unlocked</code>。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ fastboot reboot</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot reboot</span><br></pre></td></tr></table></figure>
 <p>手机unlock完成后，会恢复到出厂设置，<code>USB调试模式</code>设置也已失效，需要重新进行设置。</p>
   
 	</div>
@@ -162,9 +162,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/android-development-environment-recovery/" title="Android开发环境配置2：详解Recovery">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   Android开发环境配置2：详解Recovery</span>
 </a>
@@ -172,8 +172,8 @@
 
 
 <div class="next">
-<a href="/post/android-development-environment-adb-and-fastboot/"  title="Android开发环境配置0：adb和fastboot">
- <strong>下一篇：</strong><br/> 
+<a href="/post/android-development-environment-adb-and-fastboot/" title="Android开发环境配置0：adb和fastboot">
+ <strong>下一篇：</strong><br> 
  <span>Android开发环境配置0：adb和fastboot
 </span>
 </a>
@@ -204,16 +204,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -237,6 +227,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -249,15 +243,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -265,11 +251,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -277,7 +267,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -289,15 +279,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -342,10 +332,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -356,7 +346,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -589,7 +579,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

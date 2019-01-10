@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>测试工程师的自我修养--理解WebService | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -121,11 +121,11 @@
 <p>对于不了解WebService的测试人员，可能刚开始的时候会一头雾水，不明白WSDL和SOAP的含义，对于WebService测试任务如何开展就更是不知所措了。</p>
 <p>经过在网上一番搜索，看见好多帖子都说使用LoadRunner测试WebService可以采用基于WSDL的【Add Service Call】和基于SOAP的【Import SOAP】的方法。看到这里，新手可能会感到更加迷惑了，WSDL和SOAP到底有啥关联，这两种测试方法到底有啥区别？</p>
 <p>实际上，WSDL与SOAP只是WebService的两大标准，它们之间并没有必然的联系。我们可以先比较一下较为官方的名词解释。</p>
-<p>如下是<a href="http://www.w3.org/TR/wsdl" target="_blank" rel="external">W3C</a>上关于WSDL的解释。</p>
+<p>如下是<a href="http://www.w3.org/TR/wsdl" target="_blank" rel="noopener">W3C</a>上关于WSDL的解释。</p>
 <blockquote>
 <p>WSDL is an XML format for describing network services as a set of endpoints operating on messages containing either document-oriented or procedure-oriented information. The operations and messages are described abstractly, and then bound to a concrete network protocol and message format to define an endpoint. Related concrete endpoints are combined into abstract endpoints (services). WSDL is extensible to allow description of endpoints and their messages regardless of what message formats or network protocols are used to communicate.</p>
 </blockquote>
-<p>如下是<a href="http://en.wikipedia.org/wiki/SOAP" target="_blank" rel="external">wikipedia</a>上关于SOAP的解释。</p>
+<p>如下是<a href="http://en.wikipedia.org/wiki/SOAP" target="_blank" rel="noopener">wikipedia</a>上关于SOAP的解释。</p>
 <blockquote>
 <p>SOAP, originally defined as Simple Object Access Protocol, is a protocol specification for exchanging structured information in the implementation of Web Services in computer networks. It relies on XML Information Set for its message format, and usually relies on other Application Layer protocols, most notably Hypertext Transfer Protocol (HTTP) or Simple Mail Transfer Protocol (SMTP), for message negotiation and transmission.</p>
 </blockquote>
@@ -135,12 +135,12 @@
 <li>SOAP本身就是一种通信协议，利用它以WSDL定义的形式对Service的调用方式进行描述，包括调用的具体Service名称、参数名称和参数数值。</li>
 <li>对于WebService来说，WSDL是必须的，而SOAP只是通信协议中较为常用的一种，可以用其它通信协议代替；例如可以直接采用HTTP GET/POST的形式对WebService进行调用。</li>
 </ul>
-<h2 id="演示案例"><a href="#演示案例" class="headerlink" title="演示案例"></a>演示案例</h2><p>为了便于直观理解，本文选取互联网上常用的<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx" target="_blank" rel="external">天气预报WebService服务</a>作为案例进行讲解。</p>
+<h2 id="演示案例"><a href="#演示案例" class="headerlink" title="演示案例"></a>演示案例</h2><p>为了便于直观理解，本文选取互联网上常用的<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx" target="_blank" rel="noopener">天气预报WebService服务</a>作为案例进行讲解。</p>
 <p>从介绍页面可知，该WeatherWebService一共提供了5项服务：getSupportCity、getSupportDataSet、getSupportProvince、getWeatherbyCityName和getWeatherbyCityNamePro。</p>
-<p>对于该WeatherWebService，服务提供商通过<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx?WSDL" target="_blank" rel="external">WSDL</a>对服务进行了完整的定义，大家可通过这个链接了解一下WSDL文档的结构。</p>
+<p>对于该WeatherWebService，服务提供商通过<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx?WSDL" target="_blank" rel="noopener">WSDL</a>对服务进行了完整的定义，大家可通过这个链接了解一下WSDL文档的结构。</p>
 <p>对于每一项服务，服务商提供了4种调用方式：SOAP 1.1、SOAP 1.2、HTTP GET、HTTP POST，并对每一种调用方式都给出了请求和响应示例。</p>
 <p>不管是有了WSDL，还是有了SOAP或HTTP的请求和响应示例，就可以对WebService开展测试工作了。而且，这三者分别对应了3种不同的测试方法，可在项目中根据实际情况进行选择。</p>
-<p>后续，<a href="http://52test.org" target="_blank" rel="external">52test.org</a>将基于WeatherWebService天气服务，分3篇文章分别对采用LoadRunner测试WebService的方法进行详细介绍，并进行案例演示。</p>
+<p>后续，<a href="http://52test.org" target="_blank" rel="noopener">52test.org</a>将基于WeatherWebService天气服务，分3篇文章分别对采用LoadRunner测试WebService的方法进行详细介绍，并进行案例演示。</p>
 <ul>
 <li>《LoadRunner基于WSDL的WebService测试方法》</li>
 <li>《LoadRunner基于SOAP的WebService测试方法》</li>
@@ -177,9 +177,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/LoadRunner-SOAP-WebService/" title="LoadRunner基于SOAP的WebService测试方法">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   LoadRunner基于SOAP的WebService测试方法</span>
 </a>
@@ -187,8 +187,8 @@
 
 
 <div class="next">
-<a href="/post/LoadRunner-WSDL-WebService/"  title="LoadRunner基于WSDL的WebService测试方法">
- <strong>下一篇：</strong><br/> 
+<a href="/post/LoadRunner-WSDL-WebService/" title="LoadRunner基于WSDL的WebService测试方法">
+ <strong>下一篇：</strong><br> 
  <span>LoadRunner基于WSDL的WebService测试方法
 </span>
 </a>
@@ -219,16 +219,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -252,6 +242,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -264,15 +258,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -280,11 +266,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -292,7 +282,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -304,15 +294,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -357,10 +347,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -371,7 +361,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -604,7 +594,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

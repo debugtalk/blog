@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>HttpRunner 支持 HAR 意味着什么？ | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -109,7 +109,7 @@
 		
 		<p><code>HttpRunner</code>开始支持<code>HAR</code>啦！！！</p>
 <p>如果你还没有体会到这三个感叹号的含义，那们你可能对<code>HAR</code>还不了解。</p>
-<h2 id="HAR-是什么？"><a href="#HAR-是什么？" class="headerlink" title="HAR 是什么？"></a>HAR 是什么？</h2><p><code>HAR</code>的全称为<code>HTTP Archive</code>，是<a href="https://www.w3.org/" target="_blank" rel="external"><code>W3C(World Wide Web Consortium)</code></a>发布的一个通用标准。简单地说，<code>HAR</code>是一个约定的<code>JSON</code>文件格式，用于记录<code>HTTP</code>请求交互的所有内容，包括请求响应的详细记录和性能度量数据。</p>
+<h2 id="HAR-是什么？"><a href="#HAR-是什么？" class="headerlink" title="HAR 是什么？"></a>HAR 是什么？</h2><p><code>HAR</code>的全称为<code>HTTP Archive</code>，是<a href="https://www.w3.org/" target="_blank" rel="noopener"><code>W3C(World Wide Web Consortium)</code></a>发布的一个通用标准。简单地说，<code>HAR</code>是一个约定的<code>JSON</code>文件格式，用于记录<code>HTTP</code>请求交互的所有内容，包括请求响应的详细记录和性能度量数据。</p>
 <p>虽然当前<code>HAR</code>标准还处于<code>Draft</code>状态，但它已经被业界广泛地采用了，许多我们日常使用的工具都已支持<code>HAR</code>。在下面罗列的工具中，相信大家都已经比较熟悉了。</p>
 <ul>
 <li>Fiddler</li>
@@ -129,38 +129,38 @@
 <p>我们不妨先研究下<code>HAR</code>的格式。</p>
 <h2 id="HAR-格式详解"><a href="#HAR-格式详解" class="headerlink" title="HAR 格式详解"></a>HAR 格式详解</h2><p>通过如上列出的任意一款工具，都可以将录制得到的数据包导出为<code>.har</code>的文件。我们采用文本编辑器打开<code>.har</code>文件后，会发现是一个<code>JSON</code>的数据结构。</p>
 <p>默认情况下，<code>.har</code>文件的<code>JSON</code>数据结构是经过压缩的，直接看可能不够直观。推荐大家可以在文本编辑器中安装<code>Prettify JSON</code>的插件，然后就可以将压缩后的<code>JSON</code>数据一键转换为美观的格式。</p>
-<p>更好的方式是，我们可以直接查看<code>W3C</code>编写的<a href="https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/HAR/Overview.html" target="_blank" rel="external"><code>HAR</code>格式标准</a>。</p>
+<p>更好的方式是，我们可以直接查看<code>W3C</code>编写的<a href="https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/HAR/Overview.html" target="_blank" rel="noopener"><code>HAR</code>格式标准</a>。</p>
 <p>通过文档可知，<code>HAR</code>是只有一个key的<code>JSON</code>数据结构，并且key值只能为<code>log</code>；而<code>log</code>的值也为一个<code>JSON</code>结构，里面的key包括：<code>version</code>、<code>creator</code>、<code>browser</code>、<code>pages</code>、<code>entries</code>、<code>comment</code>。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"log"</span>: &#123;</div><div class="line">        <span class="attr">"version"</span>: <span class="string">""</span>,</div><div class="line">        <span class="attr">"creator"</span>: &#123;&#125;,</div><div class="line">        <span class="attr">"browser"</span>: &#123;&#125;,</div><div class="line">        <span class="attr">"pages"</span>: [],</div><div class="line">        <span class="attr">"entries"</span>: [],</div><div class="line">        <span class="attr">"comment"</span>: <span class="string">""</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"log"</span>: &#123;</span><br><span class="line">        <span class="attr">"version"</span>: <span class="string">""</span>,</span><br><span class="line">        <span class="attr">"creator"</span>: &#123;&#125;,</span><br><span class="line">        <span class="attr">"browser"</span>: &#123;&#125;,</span><br><span class="line">        <span class="attr">"pages"</span>: [],</span><br><span class="line">        <span class="attr">"entries"</span>: [],</span><br><span class="line">        <span class="attr">"comment"</span>: <span class="string">""</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>其中，<code>version</code>、<code>creator</code>和<code>entries</code>是必有字段，不管是哪款工具导出的<code>.har</code>文件，肯定都会包含这三个字段。而我们在转换生成自动化测试用例时，只需获取HTTP请求和响应的内容，这些全都包含在<code>entries</code>里面，因此我们只需要关注<code>entries</code>的内容即可。</p>
 <p><code>entries</code>字段对应的值为一个列表型数据结构，里面的值按照请求时间进行排序，罗列出各个HTTP请求的详细内容。具体地，HTTP请求记录的信息如下所示：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">"entries": [</div><div class="line">    &#123;</div><div class="line">        "pageref": "page_0",</div><div class="line">        "startedDateTime": "2009-04-16T12:07:23.596Z",</div><div class="line">        "time": 50,</div><div class="line">        "request": &#123;...&#125;,</div><div class="line">        "response": &#123;...&#125;,</div><div class="line">        "cache": &#123;...&#125;,</div><div class="line">        "timings": &#123;&#125;,</div><div class="line">        "serverIPAddress": "10.0.0.1",</div><div class="line">        "connection": "52492",</div><div class="line">        "comment": ""</div><div class="line">    &#125;,</div><div class="line">]</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">"entries": [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"pageref"</span>: <span class="string">"page_0"</span>,</span><br><span class="line">        <span class="attr">"startedDateTime"</span>: <span class="string">"2009-04-16T12:07:23.596Z"</span>,</span><br><span class="line">        <span class="attr">"time"</span>: <span class="number">50</span>,</span><br><span class="line">        "request": &#123;...&#125;,</span><br><span class="line">        "response": &#123;...&#125;,</span><br><span class="line">        "cache": &#123;...&#125;,</span><br><span class="line">        "timings": &#123;&#125;,</span><br><span class="line">        "serverIPAddress": "10.0.0.1",</span><br><span class="line">        "connection": "52492",</span><br><span class="line">        "comment": ""</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 <p>由此可见，记录的HTTP信息非常全面，包含了HTTP请求交互过程中的所有内容。</p>
 <p>而从生成自动化测试用例的角度来看，我们并不需要那么多信息，我们只需从中提取关键信息即可。</p>
 <p>编写自动化测试用例，最关键的信息是要知道接口的请求URL、请求方法、请求headers、请求数据等，这些都包含在<code>request</code>字段对应的字典中。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">"request": &#123;</div><div class="line">    "method": "GET",</div><div class="line">    "url": "http://www.example.com/path/?param=value",</div><div class="line">    "httpVersion": "HTTP/1.1",</div><div class="line">    "cookies": [],</div><div class="line">    "headers": [],</div><div class="line">    "queryString" : [],</div><div class="line">    "postData" : &#123;&#125;,</div><div class="line">    "headersSize" : 150,</div><div class="line">    "bodySize" : 0,</div><div class="line">    "comment" : ""</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">"request": &#123;</span><br><span class="line">    "method": "GET",</span><br><span class="line">    "url": "http://www.example.com/path/?param=value",</span><br><span class="line">    "httpVersion": "HTTP/1.1",</span><br><span class="line">    "cookies": [],</span><br><span class="line">    "headers": [],</span><br><span class="line">    "queryString" : [],</span><br><span class="line">    "postData" : &#123;&#125;,</span><br><span class="line">    "headersSize" : 150,</span><br><span class="line">    "bodySize" : 0,</span><br><span class="line">    "comment" : ""</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>根据这些信息，我们就可以完成HTTP请求的构造。</p>
 <p>当请求发送出去后，我们要想实现自动化地判断接口响应是否正确，我们还需要设置一些断言。而与HTTP响应相关的所有信息全都包含在<code>response</code>字段对应的字典中。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">"response": &#123;</div><div class="line">    "status": 200,</div><div class="line">    "statusText": "OK",</div><div class="line">    "httpVersion": "HTTP/1.1",</div><div class="line">    "cookies": [],</div><div class="line">    "headers": [],</div><div class="line">    "content": &#123;&#125;,</div><div class="line">    "redirectURL": "",</div><div class="line">    "headersSize" : 160,</div><div class="line">    "bodySize" : 850,</div><div class="line">    "comment" : ""</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">"response": &#123;</span><br><span class="line">    "status": 200,</span><br><span class="line">    "statusText": "OK",</span><br><span class="line">    "httpVersion": "HTTP/1.1",</span><br><span class="line">    "cookies": [],</span><br><span class="line">    "headers": [],</span><br><span class="line">    "content": &#123;&#125;,</span><br><span class="line">    "redirectURL": "",</span><br><span class="line">    "headersSize" : 160,</span><br><span class="line">    "bodySize" : 850,</span><br><span class="line">    "comment" : ""</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>从通用性的角度考虑，我们会判断HTTP响应的状态码是否正确，这对应着<code>status</code>字段；如果我们还想在接口业务层面具有更多的判断，我们还会判断响应内容中的一些关键字段是否符合预期，这对应着<code>content</code>字段。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">"content": &#123;</div><div class="line">    "size": 33,</div><div class="line">    "compression": 0,</div><div class="line">    "mimeType": "text/html; charset=utf-8",</div><div class="line">    "text": "\n",</div><div class="line">    "comment": ""</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">"content": &#123;</span><br><span class="line">    "size": 33,</span><br><span class="line">    "compression": 0,</span><br><span class="line">    "mimeType": "text/html; charset=utf-8",</span><br><span class="line">    "text": "\n",</span><br><span class="line">    "comment": ""</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对于<code>content</code>字段，可能会稍微复杂一些，因为接口响应内容的格式可能多种多样。</p>
 <p>例如，响应内容可能<code>text/html</code>页面的形式，也可能是<code>application/json</code>的形式，具体类型可以查看<code>mimeType</code>得到，而具体的内容存储在<code>text</code>字段中。</p>
 <p>另外，有时候响应数据还可能是经过编码的，用的最多的编码方式为<code>base64</code>。我们可以根据<code>encoding</code>字段获取得到具体的编码形式，然后采用对应的解码方式对<code>text</code>进行解码，最终获得原始的响应内容。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"content": &#123;</div><div class="line">    "size": 63,</div><div class="line">    "mimeType": "application/json; charset=utf-8",</div><div class="line">    "text": "eyJJc1N1Y2Nlc3MiOnRydWUsIkNvZGUiOjIwMCwiVmFsdWUiOnsiQmxuUmVzdWx0Ijp0cnVlfX0=",</div><div class="line">    "encoding": "base64"</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">"content": &#123;</span><br><span class="line">    "size": 63,</span><br><span class="line">    "mimeType": "application/json; charset=utf-8",</span><br><span class="line">    "text": "eyJJc1N1Y2Nlc3MiOnRydWUsIkNvZGUiOjIwMCwiVmFsdWUiOnsiQmxuUmVzdWx0Ijp0cnVlfX0=",</span><br><span class="line">    "encoding": "base64"</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
 <p>以上面的<code>content</code>为例，我们通过<code>encoding</code>查看到编码形式为<code>base64</code>，并通过<code>text</code>字段获取到编码后的内容；那么我们就可以采用<code>base64</code>的解码函数，转换得到原始的内容。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; import base64</div><div class="line">&gt;&gt;&gt; base64.b64decode(text)</div><div class="line">b<span class="string">'&#123;"IsSuccess":true,"Code":200,"Value":&#123;"BlnResult":true&#125;&#125;'</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import base64</span><br><span class="line">&gt;&gt;&gt; base64.b64decode(text)</span><br><span class="line">b<span class="string">'&#123;"IsSuccess":true,"Code":200,"Value":&#123;"BlnResult":true&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
 <p>同时，我们根据<code>mimeType</code>可以得到响应内容<code>application/json</code>数据类型，那么就可以对其再进行<code>json.loads</code>操作，最终得到可供程序处理的<code>JSON</code>数据结构。</p>
 <p>通过上述对<code>HAR</code>格式的详细介绍，可以看出<code>HAR</code>格式十分清晰，在对其充分了解的基础上，再编写测试用例转换工具就很简单了。</p>
 <h2 id="har2case"><a href="#har2case" class="headerlink" title="har2case"></a>har2case</h2><p>编码过程没有太多值得说的，直接看最终成品吧。</p>
-<p>最终产出的工具就是<a href="https://github.com/HttpRunner/har2case" target="_blank" rel="external"><code>har2case</code></a>，是一个命令行工具，可以直接将<code>.har</code>文件转换为<code>YAML</code>或<code>JSON</code>格式的自动化测试用例。</p>
+<p>最终产出的工具就是<a href="https://github.com/HttpRunner/har2case" target="_blank" rel="noopener"><code>har2case</code></a>，是一个命令行工具，可以直接将<code>.har</code>文件转换为<code>YAML</code>或<code>JSON</code>格式的自动化测试用例。</p>
 <p>当前<code>har2case</code>已经上传到<code>PYPI</code>上了，通过<code>pip</code>或<code>easy_install</code>即可安装。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ pip install har2<span class="keyword">case</span></div><div class="line"><span class="comment"># or</span></div><div class="line">$ easy_install har2<span class="keyword">case</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ pip install har2case</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">$ easy_install har2case</span><br></pre></td></tr></table></figure>
 <p>使用方式很简单，只需在<code>har2case</code>命令后分别带上<code>HAR</code>源文件路径和目标生成的<code>YAML/JSON</code>路径即可。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ har2<span class="keyword">case</span> tests/data/demo.har demo.yml</div><div class="line">INFO:root:Generate YAML testset successfully: demo.yml</div><div class="line"></div><div class="line">$ har2<span class="keyword">case</span> tests/data/demo.har demo.json</div><div class="line">INFO:root:Generate JSON testset successfully: demo.json</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ har2case tests/data/demo.har demo.yml</span><br><span class="line">INFO:root:Generate YAML testset successfully: demo.yml</span><br><span class="line"></span><br><span class="line">$ har2case tests/data/demo.har demo.json</span><br><span class="line">INFO:root:Generate JSON testset successfully: demo.json</span><br></pre></td></tr></table></figure>
 <p>可以看出，具体是生成<code>YAML</code>还是<code>JSON</code>格式的问题，取决于指定目标文件的后缀：后缀为<code>.yml</code>或<code>.yaml</code>则生成<code>YAML</code>文件，后缀为<code>.json</code>则生成<code>JSON</code>文件。</p>
 <p>如果不指定目标文件也行，则会默认生成<code>JSON</code>文件，文件名称和路径与<code>.har</code>源文件相同。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ har2<span class="keyword">case</span> tests/data/demo.har</div><div class="line">INFO:root:Generate JSON testset successfully: tests/data/demo.json</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ har2case tests/data/demo.har</span><br><span class="line">INFO:root:Generate JSON testset successfully: tests/data/demo.json</span><br></pre></td></tr></table></figure>
 <p>具体的使用方式可以通过执行<code>har2case -h</code>查看。</p>
 <p>在大多数情况下，生成的用例可直接在<code>HttpRunner</code>中使用，当然，是做接口自动化测试、接口性能测试，还是持续集成线上监控，这都取决于你。</p>
 <p>不过，假如录制的场景中包含动态关联的情况，即后续接口请求参数依赖于前面接口的响应，并且每次调用接口时参数都会动态变化，那么就需要人工再对生成的脚本进行关联处理，甚至包括编写一些自定义函数等。</p>
@@ -204,9 +204,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/HttpRunner-validator-optimization/" title="HttpRunner 的结果校验器优化">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   HttpRunner 的结果校验器优化</span>
 </a>
@@ -214,8 +214,8 @@
 
 
 <div class="next">
-<a href="/post/ApiTestEngine-rename-to-HttpRunner/"  title="ApiTestEngine 正式更名为 HttpRunner">
- <strong>下一篇：</strong><br/> 
+<a href="/post/ApiTestEngine-rename-to-HttpRunner/" title="ApiTestEngine 正式更名为 HttpRunner">
+ <strong>下一篇：</strong><br> 
  <span>ApiTestEngine 正式更名为 HttpRunner
 </span>
 </a>
@@ -246,16 +246,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -279,6 +269,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -291,15 +285,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -307,11 +293,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -319,7 +309,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -331,15 +321,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -384,10 +374,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -398,7 +388,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -631,7 +621,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

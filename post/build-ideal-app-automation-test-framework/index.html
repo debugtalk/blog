@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>打造心目中理想的自动化测试框架（AppiumBooster） | DebugTalk</title>
@@ -38,14 +38,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -68,17 +68,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -110,14 +110,14 @@
 		</div>
 		
 		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>做过自动化测试的人应该都会有这样一种体会，要写个自动化demo测试用例很容易，但是要真正将自动化测试落地，对成百上千的自动化测试用例实现较好的可复用性和可维护性就很难了。</p>
-<p>基于这一痛点，我开发了<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="external"><code>AppiumBooster</code></a>框架。顾名思义，<code>AppiumBooster</code>基于<code>Appium</code>实现，但更简单和易于使用；测试人员不用接触任何代码，就可以直接采用简洁优雅的方式来编写和维护自动化测试用例。</p>
+<p>基于这一痛点，我开发了<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="noopener"><code>AppiumBooster</code></a>框架。顾名思义，<code>AppiumBooster</code>基于<code>Appium</code>实现，但更简单和易于使用；测试人员不用接触任何代码，就可以直接采用简洁优雅的方式来编写和维护自动化测试用例。</p>
 <p>原型开发完毕后，我将其应用在当前所在团队的项目上，并在使用的过程中，按照自己心目中理想的自动化测试框架的模样对其进行迭代优化，最终打磨成了一个自己还算用得顺手的自动化测试框架。</p>
 <p>本文便是对<code>AppiumBooster</code>的核心特性及其设计思想进行介绍。在内容组织上，本文的各个部分相对独立，大家可直接选择自己感兴趣的部分进行阅读。</p>
 <h2 id="UI交互基础"><a href="#UI交互基础" class="headerlink" title="UI交互基础"></a>UI交互基础</h2><p>UI交互是自动化测试的基础，主要分为三部分内容：定位控件、操作控件、检测结果。</p>
 <h3 id="控件定位"><a href="#控件定位" class="headerlink" title="控件定位"></a>控件定位</h3><p>定位控件时，统一采用元素ID进行定位。这里的ID包括<code>accessibility_id</code>或<code>accessibility_label</code>，需要在iOS工程项目中预先进行设置。</p>
 <p>另外，考虑到控件可能出现延迟加载的情况，定位控件时统一执行<code>wait</code>操作；定位成功后会立即返回控件对象，定位失败时会进行等待并不断尝试定位，直到超时（30秒）后抛出异常。</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wait &#123; id control_id &#125;</div></pre></td></tr></table></figure>
-<p>源码路径：<a href="https://github.com/debugtalk/AppiumBooster/blob/master/lib/pages/control.rb" target="_blank" rel="external"><code>AppiumBooster/lib/pages/control.rb</code></a></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wait &#123; id control_id &#125;</span><br></pre></td></tr></table></figure>
+<p>源码路径：<a href="https://github.com/debugtalk/AppiumBooster/blob/master/lib/pages/control.rb" target="_blank" rel="noopener"><code>AppiumBooster/lib/pages/control.rb</code></a></p>
 <h3 id="控件操作"><a href="#控件操作" class="headerlink" title="控件操作"></a>控件操作</h3><p>根据实践证明，UI的控件操作基本主要就是点击、输入和滑动，这三个操作基本上可以覆盖绝大多数场景。</p>
 <ul>
 <li><code>scrollToDisplay</code>: 根据指定控件的坐标位置，对屏幕进行<code>上/下/左/右</code>滑动操作，直至将指定控件展示在屏幕中</li>
@@ -126,7 +126,7 @@
 <li><code>tapByCoordinate</code>: 先执行<code>scrollToDisplay</code>，确保指定控件在当前屏幕中；获取指定控件的坐标值，然后对坐标进行<code>tap</code>操作</li>
 <li><code>scroll(direction)</code>: 对屏幕进行指定方向的滑动</li>
 </ul>
-<p>源码路径：<a href="https://github.com/debugtalk/AppiumBooster/blob/master/lib/pages/actions.rb" target="_blank" rel="external"><code>AppiumBooster/lib/pages/actions.rb</code></a></p>
+<p>源码路径：<a href="https://github.com/debugtalk/AppiumBooster/blob/master/lib/pages/actions.rb" target="_blank" rel="noopener"><code>AppiumBooster/lib/pages/actions.rb</code></a></p>
 <h3 id="预期结果检查"><a href="#预期结果检查" class="headerlink" title="预期结果检查"></a>预期结果检查</h3><p>每次执行一步操作后，需要对执行结果进行判断，以此来确定测试用例的各个步骤是否执行成功。</p>
 <p>当前，<code>AppiumBooster</code>采用控件的ID作为检查对象，并统一封装到<code>check_elements(control_ids)</code>方法中。</p>
 <p>在实际使用过程中，需要先确定当前步骤执行完成后的跳转页面的特征控件，即当前步骤执行前不存在该控件，但执行成功后的页面中具有该控件。然后在操作步骤描述的<code>expectation</code>属性中指定特征控件的ID。</p>
@@ -139,14 +139,14 @@
 <li><code>A&amp;&amp;!B</code>: 预期控件A存在，但控件B不存在；</li>
 <li><code>!A&amp;&amp;!B</code>: 预期控件A和控件B都不存在。</li>
 </ul>
-<p>源码路径：<a href="https://github.com/debugtalk/AppiumBooster/blob/master/lib/pages/inner_screen.rb" target="_blank" rel="external"><code>AppiumBooster/lib/pages/inner_screen.rb</code></a></p>
+<p>源码路径：<a href="https://github.com/debugtalk/AppiumBooster/blob/master/lib/pages/inner_screen.rb" target="_blank" rel="noopener"><code>AppiumBooster/lib/pages/inner_screen.rb</code></a></p>
 <h2 id="测试用例引擎（YAML）"><a href="#测试用例引擎（YAML）" class="headerlink" title="测试用例引擎（YAML）"></a>测试用例引擎（YAML）</h2><p>对于自动化测试而言，自动化测试用例的组织与管理是最为重要的部分，直接关系到自动化测试用例的可复用性和可维护性。</p>
 <p>经过综合考虑，<code>AppiumBooster</code>从三个层面来描述测试用例，从低到高分别是<code>step</code>、<code>feature</code>和<code>testcase</code>；描述方式推荐使用<code>YAML</code>格式。</p>
 <h3 id="steps（测试步骤描述）"><a href="#steps（测试步骤描述）" class="headerlink" title="steps（测试步骤描述）"></a>steps（测试步骤描述）</h3><p>首先是对于单一操作步骤的描述。</p>
 <p>从UI层面来看，每一个操作步骤都可以归纳为三个方面：定位控件、操作控件和检查结果。</p>
 <p><code>AppiumBooster</code>的做法是，将App根据功能模块进行拆分，每一个模块单独创建一个<code>YAML</code>文件，并保存在<code>steps</code>目录下。然后，在每个模块中以控件为单位，分别进行定义。</p>
 <p>现以如下示例进行详细说明。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">AccountSteps:</span></div><div class="line">  enter Login page:</div><div class="line"><span class="attr">    control_id:</span> tablecellMyAccountLogin</div><div class="line"><span class="attr">    control_action:</span> click</div><div class="line"><span class="attr">    expectation:</span> btnForgetPassword</div><div class="line"></div><div class="line">  input test EmailAddress:</div><div class="line"><span class="attr">    control_id:</span> txtfieldEmailAddress</div><div class="line"><span class="attr">    control_action:</span> type</div><div class="line"><span class="attr">    data:</span> leo.lee@debugtalk.com</div><div class="line"><span class="attr">    expectation:</span> sectxtfieldPassword</div><div class="line"></div><div class="line">  check if coupon popup window exists(optional):</div><div class="line"><span class="attr">    control_id:</span> inner_screen</div><div class="line"><span class="attr">    control_action:</span> has_control</div><div class="line"><span class="attr">    data:</span> btnViewMyCoupons</div><div class="line"><span class="attr">    expectation:</span> btnClose</div><div class="line"><span class="attr">    optional:</span> <span class="literal">true</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">AccountSteps:</span></span><br><span class="line">  <span class="string">enter</span> <span class="string">Login</span> <span class="attr">page:</span></span><br><span class="line"><span class="attr">    control_id:</span> <span class="string">tablecellMyAccountLogin</span></span><br><span class="line"><span class="attr">    control_action:</span> <span class="string">click</span></span><br><span class="line"><span class="attr">    expectation:</span> <span class="string">btnForgetPassword</span></span><br><span class="line"></span><br><span class="line">  <span class="string">input</span> <span class="string">test</span> <span class="attr">EmailAddress:</span></span><br><span class="line"><span class="attr">    control_id:</span> <span class="string">txtfieldEmailAddress</span></span><br><span class="line"><span class="attr">    control_action:</span> <span class="string">type</span></span><br><span class="line"><span class="attr">    data:</span> <span class="string">leo.lee@debugtalk.com</span></span><br><span class="line"><span class="attr">    expectation:</span> <span class="string">sectxtfieldPassword</span></span><br><span class="line"></span><br><span class="line">  <span class="string">check</span> <span class="string">if</span> <span class="string">coupon</span> <span class="string">popup</span> <span class="string">window</span> <span class="string">exists(optional):</span></span><br><span class="line"><span class="attr">    control_id:</span> <span class="string">inner_screen</span></span><br><span class="line"><span class="attr">    control_action:</span> <span class="string">has_control</span></span><br><span class="line"><span class="attr">    data:</span> <span class="string">btnViewMyCoupons</span></span><br><span class="line"><span class="attr">    expectation:</span> <span class="string">btnClose</span></span><br><span class="line"><span class="attr">    optional:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 <p>其中，<code>AccountSteps</code>是steps模块名称，用于区分不同的steps模块，方便在<code>features</code>模块中进行引用。</p>
 <p>描述单个步骤时，有三项是必不可少的：步骤名称、控件ID（<code>control_id</code>）和控件操作方式（<code>control_action</code>）。当控件操作方式为输入（<code>type</code>）时，则还需指定<code>data</code>属性，即输入内容。</p>
 <p>在检查步骤执行结果方面，可通过在<code>expectation</code>属性中指定控件ID进行实现，前面在<code>预期结果检查</code>一节中已经详细介绍了使用方法。该属性可以置空或不进行填写，相当于不对当前步骤进行检测。</p>
@@ -154,17 +154,17 @@
 <h3 id="features（功能点描述）"><a href="#features（功能点描述）" class="headerlink" title="features（功能点描述）"></a>features（功能点描述）</h3><p>各个模块的单一操作步骤定义完毕后，虽然可以直接将多个步骤进行组合形成对测试场景的描述，即测试用例，但是操作起来会过于局限细节；特别是当测试用例较多时，可维护性是一个很大的问题。</p>
 <p><code>AppiumBooster</code>的做法是，将App根据功能模块进行拆分，每一个模块单独创建一个<code>YAML</code>文件，并保存在<code>features</code>目录下。然后，在每个模块中以功能点为单位，通过对steps模块中定义好的操作步骤进行引用并组合，即可实现对功能点的描述。</p>
 <p>以<code>系统登录</code>功能为例，功能点的描述可采用如下形式。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">AccountFeatures:</span></div><div class="line">  login with valid test account:</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter My Account page</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter Login page</div><div class="line"><span class="bullet">    -</span> AccountSteps | input test EmailAddress</div><div class="line"><span class="bullet">    -</span> AccountSteps | input test Password</div><div class="line"><span class="bullet">    -</span> AccountSteps | login</div><div class="line"><span class="bullet">    -</span> AccountSteps | close coupon popup window(optional)</div><div class="line"></div><div class="line">  login with valid production account:</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter My Account page</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter Login page</div><div class="line"><span class="bullet">    -</span> AccountSteps | input production EmailAddress</div><div class="line"><span class="bullet">    -</span> AccountSteps | input production Password</div><div class="line"><span class="bullet">    -</span> AccountSteps | login</div><div class="line"><span class="bullet">    -</span> AccountSteps | close coupon popup window(optional)</div><div class="line"></div><div class="line"><span class="attr">  logout:</span></div><div class="line"><span class="bullet">    -</span> AccountSteps | enter My Account page</div><div class="line"><span class="bullet">    -</span> SettingsSteps | enter Settings page</div><div class="line"><span class="bullet">    -</span> AccountSteps | logout</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">AccountFeatures:</span></span><br><span class="line">  <span class="string">login</span> <span class="string">with</span> <span class="string">valid</span> <span class="string">test</span> <span class="attr">account:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">AccountSteps</span> <span class="string">| enter My Account page</span></span><br><span class="line"><span class="string">    - AccountSteps | enter Login page</span></span><br><span class="line"><span class="string">    - AccountSteps | input test EmailAddress</span></span><br><span class="line"><span class="string">    - AccountSteps | input test Password</span></span><br><span class="line"><span class="string">    - AccountSteps | login</span></span><br><span class="line"><span class="string">    - AccountSteps | close coupon popup window(optional)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  login with valid production account:</span></span><br><span class="line"><span class="string">    - AccountSteps | enter My Account page</span></span><br><span class="line"><span class="string">    - AccountSteps | enter Login page</span></span><br><span class="line"><span class="string">    - AccountSteps | input production EmailAddress</span></span><br><span class="line"><span class="string">    - AccountSteps | input production Password</span></span><br><span class="line"><span class="string">    - AccountSteps | login</span></span><br><span class="line"><span class="string">    - AccountSteps | close coupon popup window(optional)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span><span class="attr">  logout:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">AccountSteps</span> <span class="string">| enter My Account page</span></span><br><span class="line"><span class="string">    - SettingsSteps | enter Settings page</span></span><br><span class="line"><span class="string">    - AccountSteps | logout</span></span><br></pre></td></tr></table></figure>
 <p>其中，<code>AccountFeatures</code>是features模块名称，用于区分不同的features模块，方便在<code>testcase</code>中进行引用。</p>
 <p>在引用steps模块的操作步骤时，需要同时指定steps模块名称和操作步骤的名称，并以<code>|</code>进行分隔。</p>
 <h3 id="testcases（测试用例描述）"><a href="#testcases（测试用例描述）" class="headerlink" title="testcases（测试用例描述）"></a>testcases（测试用例描述）</h3><p>在功能点描述的基础上，<code>AppiumBooster</code>就可以在第三个层面，简单清晰地描述测试用例了。</p>
 <p>具体做法很简单，针对每个测试用例创建一个<code>YAML</code>文件，并保存在<code>testcases</code>目录下。然后，通过对features模块中定义好的功能点描述进行引用并组合，即可实现对测试用例的描述。</p>
 <p>同样的，在引用features模块的功能点时，也需要同时指定features模块名称和功能点的名称，并以<code>|</code>进行分隔。</p>
 <p>如下示例便是实现了在商城中购买商品的整个流程，包括切换国家、登录、选择商品、添加购物车、下单完成支付等功能点。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line">Buy Phantom <span class="number">4</span>:</div><div class="line"><span class="bullet">  -</span> SettingsFeatures | initialize first startup</div><div class="line"><span class="bullet">  -</span> SettingsFeatures | Change Country to China</div><div class="line"><span class="bullet">  -</span> AccountFeatures | login with valid account</div><div class="line"><span class="bullet">  -</span> AccountFeatures | Change Shipping Address to China</div><div class="line"><span class="bullet">  -</span> StoreFeatures | add phantom <span class="number">4</span> to cart</div><div class="line"><span class="bullet">  -</span> StoreFeatures | finish order</div><div class="line"><span class="bullet">  -</span> AccountFeatures | logout</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="string">Buy</span> <span class="string">Phantom</span> <span class="number">4</span><span class="string">:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">SettingsFeatures</span> <span class="string">| initialize first startup</span></span><br><span class="line"><span class="string">  - SettingsFeatures | Change Country to China</span></span><br><span class="line"><span class="string">  - AccountFeatures | login with valid account</span></span><br><span class="line"><span class="string">  - AccountFeatures | Change Shipping Address to China</span></span><br><span class="line"><span class="string">  - StoreFeatures | add phantom 4 to cart</span></span><br><span class="line"><span class="string">  - StoreFeatures | finish order</span></span><br><span class="line"><span class="string">  - AccountFeatures | logout</span></span><br></pre></td></tr></table></figure>
 <p>另外，在某些测试场景中可能需要重复进行某一个功能点的操作。虽然可以将需要重复的步骤多写几次，但会显得比较累赘，特别是重复次数较多时更是麻烦。</p>
 <p><code>AppiumBooster</code>的做法是，在测试用例的步骤中可指定执行次数，并以<code>|</code>进行分隔，如下例所示。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line">Send random text messages:</div><div class="line"><span class="bullet">  -</span> SettingsFeatures | initialize first startup</div><div class="line"><span class="bullet">  -</span> AccountFeatures | login with valid test account</div><div class="line"><span class="bullet">  -</span> MessageFeatures | enter follower user message page</div><div class="line"><span class="bullet">  -</span> MessageFeatures | send random text message | <span class="number">100</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="string">Send</span> <span class="string">random</span> <span class="string">text</span> <span class="attr">messages:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">SettingsFeatures</span> <span class="string">| initialize first startup</span></span><br><span class="line"><span class="string">  - AccountFeatures | login with valid test account</span></span><br><span class="line"><span class="string">  - MessageFeatures | enter follower user message page</span></span><br><span class="line"><span class="string">  - MessageFeatures | send random text message | 100</span></span><br></pre></td></tr></table></figure>
 <h2 id="测试用例引擎（CSV）"><a href="#测试用例引擎（CSV）" class="headerlink" title="测试用例引擎（CSV）"></a>测试用例引擎（CSV）</h2><p>基本上，<code>YAML</code>测试用例引擎已经可以很好地满足组织和管理自动化测试用例的需求。</p>
 <p>但考虑到部分用户会偏向于使用表格的形式，因为表格看上去更直观一些，<code>AppiumBooster</code>同时还支持<code>CSV</code>格式的测试用例引擎。</p>
 <h3 id="testcases（测试用例描述）-1"><a href="#testcases（测试用例描述）-1" class="headerlink" title="testcases（测试用例描述）"></a>testcases（测试用例描述）</h3><p>采用表格来编写测试用例时，只需要在任意表格工具，包括Microsoft Excel、iWork Numbers、WPS等，按照如下形式对测试用例进行描述。</p>
@@ -173,10 +173,10 @@
 <p>可以看出，<code>CSV</code>格式的测试用例和<code>YAML</code>格式的测试用例是等价的，两者包含的信息内容完全相同。</p>
 <p>在具体实现上，<code>AppiumBooster</code>在执行测试用例之前，也会将两个测试用例引擎的测试用例描述转换为相同的数据结构，然后再进行统一的操作。</p>
 <p>统一转换后的数据结构如下所示：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"testcase_name"</span>: <span class="string">"Login and Logout"</span>,</div><div class="line">  <span class="attr">"features_suite"</span>: [</div><div class="line">    &#123;</div><div class="line">      <span class="attr">"feature_name"</span>: <span class="string">"login with valid account"</span>,</div><div class="line">      <span class="attr">"feature_steps"</span>: [</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnMenuMyAccount"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"tablecellMyAccountSystemSettings"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter My Account page"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"tablecellMyAccountLogin"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"btnForgetPassword"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter Login page"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"txtfieldEmailAddress"</span>, <span class="attr">"control_action"</span>: <span class="string">"type"</span>, <span class="attr">"data"</span>: <span class="string">"leo.lee@debugtalk.com"</span>, <span class="attr">"expectation"</span>: <span class="string">"sectxtfieldPassword"</span>, <span class="attr">"step_desc"</span>: <span class="string">"input EmailAddress"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"sectxtfieldPassword"</span>, <span class="attr">"control_action"</span>: <span class="string">"type"</span>, <span class="attr">"data"</span>: <span class="number">12345678</span>, <span class="attr">"expectation"</span>: <span class="string">"btnLogin"</span>, <span class="attr">"step_desc"</span>: <span class="string">"input Password"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnLogin"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"tablecellMyMessage"</span>, <span class="attr">"step_desc"</span>: <span class="string">"login"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnClose"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: nil, <span class="attr">"optional"</span>: <span class="literal">true</span>, <span class="attr">"step_desc"</span>: <span class="string">"close coupon popup window(optional)"</span>&#125;</div><div class="line">      ]</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      <span class="attr">"feature_name"</span>: <span class="string">"logout"</span>,</div><div class="line">      <span class="attr">"feature_steps"</span>: [</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnMenuMyAccount"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"tablecellMyAccountSystemSettings"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter My Account page"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"tablecellMyAccountSystemSettings"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"txtCountryDistrict"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter Settings page"</span>&#125;,</div><div class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnLogout"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"uiviewMyAccount"</span>, <span class="attr">"step_desc"</span>: <span class="string">"logout"</span>&#125;</div><div class="line">      ]</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"testcase_name"</span>: <span class="string">"Login and Logout"</span>,</span><br><span class="line">  <span class="attr">"features_suite"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"feature_name"</span>: <span class="string">"login with valid account"</span>,</span><br><span class="line">      <span class="attr">"feature_steps"</span>: [</span><br><span class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnMenuMyAccount"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"tablecellMyAccountSystemSettings"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter My Account page"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"tablecellMyAccountLogin"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"btnForgetPassword"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter Login page"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"txtfieldEmailAddress"</span>, <span class="attr">"control_action"</span>: <span class="string">"type"</span>, <span class="attr">"data"</span>: <span class="string">"leo.lee@debugtalk.com"</span>, <span class="attr">"expectation"</span>: <span class="string">"sectxtfieldPassword"</span>, <span class="attr">"step_desc"</span>: <span class="string">"input EmailAddress"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"sectxtfieldPassword"</span>, <span class="attr">"control_action"</span>: <span class="string">"type"</span>, <span class="attr">"data"</span>: <span class="number">12345678</span>, <span class="attr">"expectation"</span>: <span class="string">"btnLogin"</span>, <span class="attr">"step_desc"</span>: <span class="string">"input Password"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnLogin"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"tablecellMyMessage"</span>, <span class="attr">"step_desc"</span>: <span class="string">"login"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnClose"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: nil, <span class="attr">"optional"</span>: <span class="literal">true</span>, <span class="attr">"step_desc"</span>: <span class="string">"close coupon popup window(optional)"</span>&#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"feature_name"</span>: <span class="string">"logout"</span>,</span><br><span class="line">      <span class="attr">"feature_steps"</span>: [</span><br><span class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnMenuMyAccount"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"tablecellMyAccountSystemSettings"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter My Account page"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"tablecellMyAccountSystemSettings"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"txtCountryDistrict"</span>, <span class="attr">"step_desc"</span>: <span class="string">"enter Settings page"</span>&#125;,</span><br><span class="line">        &#123;<span class="attr">"control_id"</span>: <span class="string">"btnLogout"</span>, <span class="attr">"control_action"</span>: <span class="string">"click"</span>, <span class="attr">"expectation"</span>: <span class="string">"uiviewMyAccount"</span>, <span class="attr">"step_desc"</span>: <span class="string">"logout"</span>&#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="测试用例转换器（yaml2csv）"><a href="#测试用例转换器（yaml2csv）" class="headerlink" title="测试用例转换器（yaml2csv）"></a>测试用例转换器（<code>yaml2csv</code>）</h3><p>既然<code>CSV</code>格式的测试用例和<code>YAML</code>格式的测试用例是等价的，那么两者之间的转换也就容易实现了。</p>
 <p>当前，<code>AppiumBooster</code>支持将<code>YAML</code>格式的测试用例转换为<code>CSV</code>格式的测试用例，只需要执行一条命令即可。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ruby start.rb -c <span class="string">"yaml2csv"</span> <span class="_">-f</span> ios/testcases/login_and_logout.yml</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ruby start.rb -c <span class="string">"yaml2csv"</span> -f ios/testcases/login_and_logout.yml</span><br></pre></td></tr></table></figure>
 <h2 id="过程记录及结果存储"><a href="#过程记录及结果存储" class="headerlink" title="过程记录及结果存储"></a>过程记录及结果存储</h2><p>在自动化测试执行过程中，应尽量对测试用例执行过程进行记录，方便后续对问题根据定位和追溯。</p>
 <h3 id="过程记录方式"><a href="#过程记录方式" class="headerlink" title="过程记录方式"></a>过程记录方式</h3><p>当前，<code>AppiumBooster</code>已实现的记录形式有如下三种：</p>
 <ul>
@@ -192,7 +192,7 @@
 </ul>
 <p>另外，当测试用例执行失败时，<code>AppiumBooster</code>会将执行失败的步骤截图和日志提取出来，单独保存到<code>errors</code>文件夹中，方便问题追溯。</p>
 <p>具体地，每次执行测试前，<code>AppiumBooster</code>会在指定的<code>results</code>目录下创建一个以当前时间（<code>%Y-%m-%d_%H:%M:%S</code>）命名的文件夹，存储结构如下所示。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">2016-08-28_16:28:48</div><div class="line">├── appium_server.log</div><div class="line">├── appium_booster.log</div><div class="line">├── client_server.log</div><div class="line">├── errors</div><div class="line">│   ├── 16_31_29_btnLogin.click.dom</div><div class="line">│   ├── 16_31_29_btnLogin.click.png</div><div class="line">│   ├── 16_32_03_btnMenuMyAccount.click.dom</div><div class="line">│   └── 16_32_03_btnMenuMyAccount.click.png</div><div class="line">├── screenshots</div><div class="line">│   ├── 16_30_34_tablecellMyAccountLogin.click.png</div><div class="line">│   ├── 16_30_41_txtfieldEmailAddress.type_leo.lee@debugtalk.com.png</div><div class="line">│   ├── 16_30_48_sectxtfieldPassword.type_123456.png</div><div class="line">│   ├── 16_31_29_btnLogin.click.png</div><div class="line">│   └── 16_32_03_btnMenuMyAccount.click.png</div><div class="line">└── xmls</div><div class="line">    ├── 16_30_34_tablecellMyAccountLogin.click.dom</div><div class="line">    ├── 16_30_41_txtfieldEmailAddress.type_leo.lee@debugtalk.com.dom</div><div class="line">    ├── 16_30_48_sectxtfieldPassword.type_123456.dom</div><div class="line">    ├── 16_31_29_btnLogin.click.dom</div><div class="line">    └── 16_32_03_btnMenuMyAccount.click.dom</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">2016-08-28_16:28:48</span><br><span class="line">├── appium_server.log</span><br><span class="line">├── appium_booster.log</span><br><span class="line">├── client_server.log</span><br><span class="line">├── errors</span><br><span class="line">│   ├── 16_31_29_btnLogin.click.dom</span><br><span class="line">│   ├── 16_31_29_btnLogin.click.png</span><br><span class="line">│   ├── 16_32_03_btnMenuMyAccount.click.dom</span><br><span class="line">│   └── 16_32_03_btnMenuMyAccount.click.png</span><br><span class="line">├── screenshots</span><br><span class="line">│   ├── 16_30_34_tablecellMyAccountLogin.click.png</span><br><span class="line">│   ├── 16_30_41_txtfieldEmailAddress.type_leo.lee@debugtalk.com.png</span><br><span class="line">│   ├── 16_30_48_sectxtfieldPassword.type_123456.png</span><br><span class="line">│   ├── 16_31_29_btnLogin.click.png</span><br><span class="line">│   └── 16_32_03_btnMenuMyAccount.click.png</span><br><span class="line">└── xmls</span><br><span class="line">    ├── 16_30_34_tablecellMyAccountLogin.click.dom</span><br><span class="line">    ├── 16_30_41_txtfieldEmailAddress.type_leo.lee@debugtalk.com.dom</span><br><span class="line">    ├── 16_30_48_sectxtfieldPassword.type_123456.dom</span><br><span class="line">    ├── 16_31_29_btnLogin.click.dom</span><br><span class="line">    └── 16_32_03_btnMenuMyAccount.click.dom</span><br></pre></td></tr></table></figure>
 <p>对于每一个测试步骤的截图和DOM，存储文件命名格式为<code>%H_%M_%S_ControlID.ControlAction</code>。采用这种命名方式有两个好处：</p>
 <ul>
 <li>文件通过时间排序，对应着测试用例执行的步骤顺序</li>
@@ -204,30 +204,30 @@
 <h3 id="iOS-Android模拟器"><a href="#iOS-Android模拟器" class="headerlink" title="iOS/Android模拟器"></a><code>iOS/Android</code>模拟器</h3><p>在模拟器中运行一段时间后，也会存在缓存数据和文件，可能会对下一次测试造成影响。</p>
 <p>为了避免这类情况，<code>AppiumBooster</code>在每次执行测试前，会先删除已存在的模拟器，然后再用指定的模拟器配置创建新的模拟器。</p>
 <p>对于iOS模拟器，<code>AppiumBooster</code>通过调用<code>xcrun simctl</code>命令的方式来对模拟器进行操作，基本原理如下所示。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># delete iOS simulator: xcrun simctl delete device_id</span></div><div class="line">$ xcrun simctl delete F2F53866-50A5-4E0F-B164-5AC1702AD1BD</div><div class="line"><span class="comment"># create iOS simulator: xcrun simctl create device_type device_type_id runtime_id</span></div><div class="line">$ xcrun simctl create <span class="string">'iPhone 5'</span> <span class="string">'com.apple.CoreSimulator.SimDeviceType.iPhone-5'</span> <span class="string">'com.apple.CoreSimulator.SimRuntime.iOS-9-3'</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># delete iOS simulator: xcrun simctl delete device_id</span></span><br><span class="line">$ xcrun simctl delete F2F53866-50A5-4E0F-B164-5AC1702AD1BD</span><br><span class="line"><span class="comment"># create iOS simulator: xcrun simctl create device_type device_type_id runtime_id</span></span><br><span class="line">$ xcrun simctl create <span class="string">'iPhone 5'</span> <span class="string">'com.apple.CoreSimulator.SimDeviceType.iPhone-5'</span> <span class="string">'com.apple.CoreSimulator.SimRuntime.iOS-9-3'</span></span><br></pre></td></tr></table></figure>
 <p>其中，<code>device_id</code>/<code>device_type_id</code>/<code>runtime_id</code>这些属性值可以通过执行<code>xcrun simctl list</code>命令获取得到。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ xcrun simctl list</div><div class="line">== Device Types ==</div><div class="line">iPhone 5s (com.apple.CoreSimulator.SimDeviceType.iPhone-5s)</div><div class="line">iPhone 6 (com.apple.CoreSimulator.SimDeviceType.iPhone-6)</div><div class="line">== Runtimes ==</div><div class="line">iOS 8.4 (8.4 - 12H141) (com.apple.CoreSimulator.SimRuntime.iOS-8-4)</div><div class="line">iOS 9.3 (9.3 - 13E230) (com.apple.CoreSimulator.SimRuntime.iOS-9-3)</div><div class="line">== Devices ==</div><div class="line">-- iOS 8.4 --</div><div class="line">    iPhone 5s (E1BD9CC5-8E95-408F-849C-B0C6A44D669A) (Shutdown)</div><div class="line">-- iOS 9.3 --</div><div class="line">    iPhone 5s (BAFEFBE1-3ADB-45C4-9C4E-E3791D260524) (Shutdown)</div><div class="line">    iPhone 6 (F23B3F85-7B65-4999-9F1C-80111783F5A5) (Shutdown)</div><div class="line">== Device Pairs ==</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ xcrun simctl list</span><br><span class="line">== Device Types ==</span><br><span class="line">iPhone 5s (com.apple.CoreSimulator.SimDeviceType.iPhone-5s)</span><br><span class="line">iPhone 6 (com.apple.CoreSimulator.SimDeviceType.iPhone-6)</span><br><span class="line">== Runtimes ==</span><br><span class="line">iOS 8.4 (8.4 - 12H141) (com.apple.CoreSimulator.SimRuntime.iOS-8-4)</span><br><span class="line">iOS 9.3 (9.3 - 13E230) (com.apple.CoreSimulator.SimRuntime.iOS-9-3)</span><br><span class="line">== Devices ==</span><br><span class="line">-- iOS 8.4 --</span><br><span class="line">    iPhone 5s (E1BD9CC5-8E95-408F-849C-B0C6A44D669A) (Shutdown)</span><br><span class="line">-- iOS 9.3 --</span><br><span class="line">    iPhone 5s (BAFEFBE1-3ADB-45C4-9C4E-E3791D260524) (Shutdown)</span><br><span class="line">    iPhone 6 (F23B3F85-7B65-4999-9F1C-80111783F5A5) (Shutdown)</span><br><span class="line">== Device Pairs ==</span><br></pre></td></tr></table></figure>
 <h2 id="增强特性"><a href="#增强特性" class="headerlink" title="增强特性"></a>增强特性</h2><p>除了以上基础特性，<code>AppiumBooster</code>还支持一些辅助特性，可以增强测试框架的使用体验。</p>
 <h3 id="Data参数化"><a href="#Data参数化" class="headerlink" title="Data参数化"></a>Data参数化</h3><p>在某些场景下，测试用例执行时需要动态获取数值。例如，注册账号的测试用例中，每次执行测试用例时需要保证用户名为未注册的，常见的做法就是在注册用户名中包含时间戳。</p>
 <p><code>AppiumBooster</code>的做法是，可以在测试步骤的<code>data</code>字段中，传入Ruby表达式，格式为<code>${ruby_expression}</code>。在执行测试用例时，会先对<code>ruby_expression</code>进行<code>eval</code>计算，然后用计算得到的值作为实际参数。</p>
 <p>回到刚才的注册账号测试用例，填写用户名的步骤就可以按照如下形式指定参数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">input test EmailAddress:</div><div class="line">  control_id: txtfieldEmailAddress</div><div class="line">  control_action: type</div><div class="line">  data: $&#123;Time.now.to_i&#125;@debugtalk.com</div><div class="line">  expectation: sectxtfieldPassword</div></pre></td></tr></table></figure>
-<p>实际执行测试用例时，<code>data</code>就会参数化为<code>1471318368@debugtalk.com</code>的形式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">input test EmailAddress:</span><br><span class="line">  control_id: txtfieldEmailAddress</span><br><span class="line">  control_action: type</span><br><span class="line">  data: $&#123;Time.now.to_i&#125;@debugtalk.com</span><br><span class="line">  expectation: sectxtfieldPassword</span><br></pre></td></tr></table></figure>
+<p>实际执行测试用例时，<code>data</code>就会参数化为<a href="mailto:`1471318368@debugtalk.com">`1471318368@debugtalk.com</a>`的形式。</p>
 <h3 id="全局参数配置"><a href="#全局参数配置" class="headerlink" title="全局参数配置"></a>全局参数配置</h3><p>对于某些配置参数，例如系统的登录账号密码等，虽然可以直接填写到测试用例的<code>steps</code>中，但是终究不够灵活。特别是当存在多个测试用例引用同一个参数时，涉及到参数改动时就需要同时修改多个地方。</p>
 <p>更好的做法是，将此类参数提取出来，在统一的地方进行配置。在<code>AppiumBooster</code>中，可以在<code>config.yml</code>文件中配置全局参数。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">TestEnvAccount:</span></div><div class="line"><span class="attr">  UserName:</span> test@debugtalk.com</div><div class="line"><span class="attr">  Password:</span> <span class="number">123456</span></div><div class="line"></div><div class="line"><span class="attr">ProductionEnvAccount:</span></div><div class="line"><span class="attr">  UserName:</span> production@debugtalk.com</div><div class="line"><span class="attr">  Password:</span> <span class="number">12345678</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">TestEnvAccount:</span></span><br><span class="line"><span class="attr">  UserName:</span> <span class="string">test@debugtalk.com</span></span><br><span class="line"><span class="attr">  Password:</span> <span class="number">123456</span></span><br><span class="line"></span><br><span class="line"><span class="attr">ProductionEnvAccount:</span></span><br><span class="line"><span class="attr">  UserName:</span> <span class="string">production@debugtalk.com</span></span><br><span class="line"><span class="attr">  Password:</span> <span class="number">12345678</span></span><br></pre></td></tr></table></figure>
 <p>然后，在测试用例的<code>steps</code>就可以采用如下形式对全局参数进行引用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">AccountSteps:</div><div class="line">  input test EmailAddress:</div><div class="line">    control_id: txtfieldEmailAddress</div><div class="line">    control_action: type</div><div class="line">    data: $&#123;config.TestEnvAccount.UserName&#125;</div><div class="line">    expectation: sectxtfieldPassword</div><div class="line"></div><div class="line">  input test Password:</div><div class="line">    control_id: sectxtfieldPassword</div><div class="line">    control_action: type</div><div class="line">    data: $&#123;config.TestEnvAccount.Password&#125;</div><div class="line">    expectation: btnLogin</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">AccountSteps:</span><br><span class="line">  input test EmailAddress:</span><br><span class="line">    control_id: txtfieldEmailAddress</span><br><span class="line">    control_action: type</span><br><span class="line">    data: $&#123;config.TestEnvAccount.UserName&#125;</span><br><span class="line">    expectation: sectxtfieldPassword</span><br><span class="line"></span><br><span class="line">  input test Password:</span><br><span class="line">    control_id: sectxtfieldPassword</span><br><span class="line">    control_action: type</span><br><span class="line">    data: $&#123;config.TestEnvAccount.Password&#125;</span><br><span class="line">    expectation: btnLogin</span><br></pre></td></tr></table></figure>
 <h3 id="optional选项"><a href="#optional选项" class="headerlink" title="optional选项"></a>optional选项</h3><p>在执行测试用例时，有时候可能会存在这样的场景：某个步骤作为非必要步骤，当其执行失败时，我们并不想将测试用例判定为不通过。</p>
 <p>基于该场景，在测试用例设计表格中增加了<code>optional</code>参数。该参数值默认不用填写。但如果在某个步骤对应的optional栏填写了true值后，那么该步骤就会作为非必要步骤，其执行结果不会影响整个用例的执行结果。</p>
 <p>例如，在电商类APP中，某些账号有优惠券，登录系统后，会弹出优惠券的提示框；而有的账号没有优惠券，登录后就不会有这样的弹框。那么关闭优惠券弹框的步骤就可以将其<code>optional</code>参数设置为true。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">AccountSteps:</span></div><div class="line">  close coupon popup window(optional):</div><div class="line"><span class="attr">    control_id:</span> btnClose</div><div class="line"><span class="attr">    control_action:</span> click</div><div class="line"><span class="attr">    expectation:</span> !btnViewMyCoupons</div><div class="line"><span class="attr">    optional:</span> <span class="literal">true</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">AccountSteps:</span></span><br><span class="line">  <span class="string">close</span> <span class="string">coupon</span> <span class="string">popup</span> <span class="string">window(optional):</span></span><br><span class="line"><span class="attr">    control_id:</span> <span class="string">btnClose</span></span><br><span class="line"><span class="attr">    control_action:</span> <span class="string">click</span></span><br><span class="line"><span class="attr">    expectation:</span> <span class="type">!btnViewMyCoupons</span></span><br><span class="line"><span class="attr">    optional:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 <h2 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h2><p><code>AppiumBooster</code>通过在命令行中进行调用。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ ruby start.rb -h</div><div class="line">Usage: start.rb [options]</div><div class="line">    -p, --app_path &lt;value&gt;           Specify app path</div><div class="line">    -t, --app_<span class="built_in">type</span> &lt;value&gt;           Specify app <span class="built_in">type</span>, ios or android</div><div class="line">    <span class="_">-f</span>, --testcase_file &lt;value&gt;      Specify testcase file(s)</div><div class="line">    <span class="_">-d</span>, --output_folder &lt;value&gt;      Specify output folder</div><div class="line">    -c, --convert_<span class="built_in">type</span> &lt;value&gt;       Specify testcase converter, yaml2csv or csv2yaml</div><div class="line">        --disable_output_color       Disable output color</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ ruby start.rb -h</span><br><span class="line">Usage: start.rb [options]</span><br><span class="line">    -p, --app_path &lt;value&gt;           Specify app path</span><br><span class="line">    -t, --app_type &lt;value&gt;           Specify app <span class="built_in">type</span>, ios or android</span><br><span class="line">    -f, --testcase_file &lt;value&gt;      Specify testcase file(s)</span><br><span class="line">    -d, --output_folder &lt;value&gt;      Specify output folder</span><br><span class="line">    -c, --convert_type &lt;value&gt;       Specify testcase converter, yaml2csv or csv2yaml</span><br><span class="line">        --disable_output_color       Disable output color</span><br></pre></td></tr></table></figure>
 <h3 id="执行测试用例"><a href="#执行测试用例" class="headerlink" title="执行测试用例"></a>执行测试用例</h3><p>指定执行测试用例时支持多种方式，常见的几种使用方式示例如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> <span class="variable">$&#123;AppiumBooster&#125;</span></div><div class="line"><span class="comment"># 执行指定的测试用例文件（绝对路径）</span></div><div class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> <span class="_">-f</span> <span class="string">"/Users/Leo/MyProjects/AppiumBooster/ios/testcases/login.yml"</span></div><div class="line"></div><div class="line"><span class="comment"># 执行指定的测试用例文件（相对路径）</span></div><div class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> <span class="_">-f</span> <span class="string">"ios/testcases/login.yml"</span></div><div class="line"></div><div class="line"><span class="comment"># 执行所有yaml格式的测试用例文件</span></div><div class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> <span class="_">-f</span> <span class="string">"ios/testcases/*.yml"</span></div><div class="line"></div><div class="line"><span class="comment"># 执行ios目录下所有csv格式的测试用例文件</span></div><div class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> -t <span class="string">"ios"</span> <span class="_">-f</span> <span class="string">"*.csv"</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> <span class="variable">$&#123;AppiumBooster&#125;</span></span><br><span class="line"><span class="comment"># 执行指定的测试用例文件（绝对路径）</span></span><br><span class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> -f <span class="string">"/Users/Leo/MyProjects/AppiumBooster/ios/testcases/login.yml"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行指定的测试用例文件（相对路径）</span></span><br><span class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> -f <span class="string">"ios/testcases/login.yml"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行所有yaml格式的测试用例文件</span></span><br><span class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> -f <span class="string">"ios/testcases/*.yml"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行ios目录下所有csv格式的测试用例文件</span></span><br><span class="line">$ ruby run.rb -p <span class="string">"ios/app/test.zip"</span> -t <span class="string">"ios"</span> -f <span class="string">"*.csv"</span></span><br></pre></td></tr></table></figure>
 <h3 id="测试用例转换"><a href="#测试用例转换" class="headerlink" title="测试用例转换"></a>测试用例转换</h3><p>将YAML格式的测试用例转换为CSV格式的测试用例：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ruby start.rb -c <span class="string">"yaml2csv"</span> <span class="_">-f</span> ios/testcases/login_and_logout.yml</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ruby start.rb -c <span class="string">"yaml2csv"</span> -f ios/testcases/login_and_logout.yml</span><br></pre></td></tr></table></figure>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>什么才算是心目中理想的自动化测试框架？我也没有确切的答案。</p>
 <blockquote>
 <p>为什么要登山？<br>因为山在那里。</p>
@@ -262,9 +262,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/locustplus-talk-about-performance-test/" title="【LocustPlus序】漫谈服务端性能测试">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   【LocustPlus序】漫谈服务端性能测试</span>
 </a>
@@ -272,8 +272,8 @@
 
 
 <div class="next">
-<a href="/post/make-Jenkins-Console-Output-Colorful/"  title="Jenkins的输出日志也可以变得色色的">
- <strong>下一篇：</strong><br/> 
+<a href="/post/make-Jenkins-Console-Output-Colorful/" title="Jenkins的输出日志也可以变得色色的">
+ <strong>下一篇：</strong><br> 
  <span>Jenkins的输出日志也可以变得色色的
 </span>
 </a>
@@ -304,16 +304,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -337,6 +327,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -349,15 +343,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -365,11 +351,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -377,7 +367,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -389,15 +379,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -442,10 +432,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -456,7 +446,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -689,7 +679,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

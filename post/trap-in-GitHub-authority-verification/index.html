@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>GitHub权限校验失败给我的启发 | DebugTalk</title>
@@ -38,14 +38,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -68,17 +68,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -110,17 +110,17 @@
 		</div>
 		
 		<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>众所周知，在GitHub中，每个仓库都有两个地址，分别基于<code>HTTPS</code>协议和<code>SSH</code>协议，两个协议对应的URL地址（repository_url）形式如下所示：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># HTTPS</span></div><div class="line">https://github.com/XY/MobileStore.git</div><div class="line"><span class="comment"># SSH</span></div><div class="line">git@github.com:XY/MobileStore.git</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># HTTPS</span></span><br><span class="line">https://github.com/XY/MobileStore.git</span><br><span class="line"><span class="comment"># SSH</span></span><br><span class="line">git@github.com:XY/MobileStore.git</span><br></pre></td></tr></table></figure>
 <p>正常情况下，只要在本地正确地配置好了<code>git</code>账号，采用这两个地址中的任意一个，都可以通过<code>git clone repository_url</code>获取代码。</p>
 <p>但最近我在Macbook Air中<code>clone</code>公司托管在GitHub私有库中的代码时，发现无法通过<code>HTTPS</code>协议的地址<code>clone</code>代码，始终提示<code>remote: Repository not found.</code>的错误。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜ git <span class="built_in">clone</span> https://github.com/XY/MobileStore.git</div><div class="line">Cloning into <span class="string">'MobileStore'</span>...</div><div class="line">remote: Repository not found.</div><div class="line">fatal: repository <span class="string">'https://github.com/XY/MobileStore.git/'</span> not found</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ git <span class="built_in">clone</span> https://github.com/XY/MobileStore.git</span><br><span class="line">Cloning into <span class="string">'MobileStore'</span>...</span><br><span class="line">remote: Repository not found.</span><br><span class="line">fatal: repository <span class="string">'https://github.com/XY/MobileStore.git/'</span> not found</span><br></pre></td></tr></table></figure>
 <p>首先，这个代码仓库是确实存在的，而且地址肯定也是没有问题的，通过URL地址也能在浏览器中访问到对应的GitHub仓库页面。</p>
 <p>其次，在本地对<code>git</code>的配置也是没有问题的，通过<code>SSH</code>协议的地址是可以正常<code>clone</code>代码的。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">➜ git <span class="built_in">clone</span> git@github.com:XY/MobileStore.git</div><div class="line">Cloning into <span class="string">'MobileStore'</span>...</div><div class="line">Warning: Permanently added the RSA host key <span class="keyword">for</span> IP address <span class="string">'192.30.252.131'</span> to the list of known hosts.</div><div class="line">remote: Counting objects: 355, done.</div><div class="line">remote: Compressing objects: 100% (3/3), done.</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ git <span class="built_in">clone</span> git@github.com:XY/MobileStore.git</span><br><span class="line">Cloning into <span class="string">'MobileStore'</span>...</span><br><span class="line">Warning: Permanently added the RSA host key <span class="keyword">for</span> IP address <span class="string">'192.30.252.131'</span> to the list of known hosts.</span><br><span class="line">remote: Counting objects: 355, <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (3/3), <span class="keyword">done</span>.</span><br></pre></td></tr></table></figure>
 <p>并且，如果在<code>HTTPS</code>协议的URL地址中加上GitHub账号，也是可以正常<code>clone</code>代码的。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜ git <span class="built_in">clone</span> https://leolee@github.com/XY/MobileStore.git</div><div class="line">Cloning into <span class="string">'MobileStore'</span>...</div><div class="line">remote: Counting objects: 355, done.</div><div class="line">remote: Compressing objects: 100% (3/3), done.</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ git <span class="built_in">clone</span> https://leolee@github.com/XY/MobileStore.git</span><br><span class="line">Cloning into <span class="string">'MobileStore'</span>...</span><br><span class="line">remote: Counting objects: 355, <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (3/3), <span class="keyword">done</span>.</span><br></pre></td></tr></table></figure>
 <p>更奇怪的是，在我的另一台Mac Mini中，采用同样的账号配置，两种协议的URL地址却都能正常<code>clone</code>代码，仔细地对比了两台电脑的<code>git</code>配置，都是一样的。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜ cat ~/.git-credentials</div><div class="line">https://leolee:340d247cxxxxxxxxf39556e38fe2b0baxxxxxxxx@github.com</div><div class="line">➜</div><div class="line">➜ cat ~/.gitconfig</div><div class="line">[credential]</div><div class="line">truehelper = store</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ cat ~/.git-credentials</span><br><span class="line">https://leolee:340d247cxxxxxxxxf39556e38fe2b0baxxxxxxxx@github.com</span><br><span class="line">➜</span><br><span class="line">➜ cat ~/.gitconfig</span><br><span class="line">[credential]</span><br><span class="line">truehelper = store</span><br></pre></td></tr></table></figure>
 <p>那问题出在哪儿呢？</p>
 <h2 id="定位分析"><a href="#定位分析" class="headerlink" title="定位分析"></a>定位分析</h2><p>通过Google得知，产生<code>remote: Repository not found.</code>报错的原因主要有两个，一是仓库地址错误，二是权限校验不通过。显然，第一个原因可以直接排除，在Macbook Air中出现该问题应该就是账号权限校验失败造成的。</p>
 <p>对背景描述中的现象进行整理，重点关注两个疑点：</p>
@@ -186,9 +186,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/head-first-git-authority-verification/" title="深入浅出Git权限校验">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   深入浅出Git权限校验</span>
 </a>
@@ -196,8 +196,8 @@
 
 
 <div class="next">
-<a href="/post/promotion-page-test/"  title="关于促销活动页面测试的那些事儿">
- <strong>下一篇：</strong><br/> 
+<a href="/post/promotion-page-test/" title="关于促销活动页面测试的那些事儿">
+ <strong>下一篇：</strong><br> 
  <span>关于促销活动页面测试的那些事儿
 </span>
 </a>
@@ -228,16 +228,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -261,6 +251,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -273,15 +267,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -289,11 +275,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -301,7 +291,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -313,15 +303,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -366,10 +356,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -380,7 +370,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -613,7 +603,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

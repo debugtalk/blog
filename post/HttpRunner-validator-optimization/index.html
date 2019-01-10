@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>HttpRunner 的结果校验器优化 | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -111,25 +111,25 @@
 <p>这部分功能对应的就是测试结果校验器（validator），基本上能称得上自动化测试工具或框架的都包含该功能特性。</p>
 <h2 id="设计之初"><a href="#设计之初" class="headerlink" title="设计之初"></a>设计之初</h2><p><code>HttpRunner</code>在设计之初，结果校验器（validator）的实现比较简单。</p>
 <p>对于每一个<code>test</code>，可以指定0个或多个校验项，放置在<code>validate</code>中。在自动化测试执行的时候，会在发起HTTP请求、解析结果响应之后，逐个检查各个校验项，若存在任意校验项不通过的情况，则该<code>test</code>将终止并被标记为失败。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    extract:</span></div><div class="line"><span class="attr">        - token:</span> content.token</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expect"</span>: <span class="number">200</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"content.token"</span>, <span class="string">"comparator"</span>: <span class="string">"len_eq"</span>, <span class="string">"expect"</span>: <span class="number">16</span>&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">get</span> <span class="string">token</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/get-token</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    extract:</span></span><br><span class="line"><span class="attr">        - token:</span> <span class="string">content.token</span></span><br><span class="line"><span class="attr">    validate:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"status_code"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expect"</span><span class="string">:</span> <span class="number">200</span><span class="string">&#125;</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"content.token"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"len_eq"</span><span class="string">,</span> <span class="string">"expect"</span><span class="string">:</span> <span class="number">16</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>如上例所示，每一个校验项均为一个<code>json</code>结构，里面包含<code>check</code>、<code>expect</code>、<code>comparator</code>三个属性字段。其中，<code>check</code>对应着要检查的字段，<code>expect</code>对应着检查字段预期的值，这两项是必须指定的；<code>comparator</code>字段对应着比较方法，若不指定，则默认采用<code>eq</code>，即检查字段与预期值相等。</p>
 <p>为了实现尽可能强大的检查功能，<code>check</code>属性值可通过链式操作精确指定具体的字段，<code>comparator</code>也内置实现了大量的检查功能。</p>
 <p>举个例子可能会更清晰些。假如某结构的响应结果如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">// status code: 200</div><div class="line"></div><div class="line">// response headers</div><div class="line">&#123;</div><div class="line">   "Content-Type": "application/json"</div><div class="line">&#125;</div><div class="line"></div><div class="line">// response body content</div><div class="line">&#123;</div><div class="line">   "success": False,</div><div class="line">   "person": &#123;</div><div class="line">       "name": &#123;</div><div class="line">           "first_name": "Leo",</div><div class="line">           "last_name": "Lee",</div><div class="line">       &#125;,</div><div class="line">       "age": 29,</div><div class="line">       "cities": ["Guangzhou", "Shenzhen"]</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// status code: 200</span><br><span class="line"></span><br><span class="line">// response headers</span><br><span class="line">&#123;</span><br><span class="line">   <span class="attr">"Content-Type"</span>: <span class="string">"application/json"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// response body content</span><br><span class="line">&#123;</span><br><span class="line">   <span class="attr">"success"</span>: False,</span><br><span class="line">   <span class="attr">"person"</span>: &#123;</span><br><span class="line">       <span class="attr">"name"</span>: &#123;</span><br><span class="line">           <span class="attr">"first_name"</span>: <span class="string">"Leo"</span>,</span><br><span class="line">           <span class="attr">"last_name"</span>: <span class="string">"Lee"</span>,</span><br><span class="line">       &#125;,</span><br><span class="line">       <span class="attr">"age"</span>: <span class="number">29</span>,</span><br><span class="line">       <span class="attr">"cities"</span>: [<span class="string">"Guangzhou"</span>, <span class="string">"Shenzhen"</span>]</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>那么假如我们要检查<code>status code</code>，<code>check</code>就可以指定为<code>status_code</code>；假如要检查<code>response headers</code>中的<code>Content-Type</code>，<code>check</code>就可以指定为<code>headers.content-type</code>；假如要检查<code>response body</code>中的<code>first_name</code>，<code>check</code>就可以指定为<code>content.person.name.first_name</code>。可以看出，假如下一层级为字典结构，那么就可以通过<code>.</code>运算符指定下一层级的<code>key</code>，依次类推。</p>
 <p>对于字段内容为列表<code>list</code>的情况略有不同，我们需要通过序号来指定具体检查哪一项内容。例如，<code>Guangzhou</code>对应的检查项为<code>content.person.cities.0</code>，<code>Shenzhen</code>对应的检查项为<code>content.person.cities.1</code>。</p>
-<p>在比较方式（<code>comparator</code>）方面，<code>HttpRunner</code>除了<code>eq</code>，还内置了大量的检查方法。例如，我们可以通过<code>gt</code>、<code>ge</code>、<code>lt</code>、<code>le</code>等比较数值大小，通过<code>len_eq</code>、<code>len_gt</code>、<code>len_lt</code>等比较长度是否相等（列表、字典、字符串均适用），通过<code>contains</code>、<code>contained_by</code>来判断包含关系，通过<code>startswith</code>、<code>endswith</code>判断字符串的开头结尾，甚至通过<code>regex_match</code>来判断是否满足正则匹配等。详细的比较方式还有许多，需要时可查看<a href="http://httprunner.readthedocs.io/en/latest/write-testcases.html#comparator" target="_blank" rel="external">comparator</a>表格。</p>
+<p>在比较方式（<code>comparator</code>）方面，<code>HttpRunner</code>除了<code>eq</code>，还内置了大量的检查方法。例如，我们可以通过<code>gt</code>、<code>ge</code>、<code>lt</code>、<code>le</code>等比较数值大小，通过<code>len_eq</code>、<code>len_gt</code>、<code>len_lt</code>等比较长度是否相等（列表、字典、字符串均适用），通过<code>contains</code>、<code>contained_by</code>来判断包含关系，通过<code>startswith</code>、<code>endswith</code>判断字符串的开头结尾，甚至通过<code>regex_match</code>来判断是否满足正则匹配等。详细的比较方式还有许多，需要时可查看<a href="http://httprunner.readthedocs.io/en/latest/write-testcases.html#comparator" target="_blank" rel="noopener">comparator</a>表格。</p>
 <h2 id="存在的局限性"><a href="#存在的局限性" class="headerlink" title="存在的局限性"></a>存在的局限性</h2><p>在大多数情况下，<code>HttpRunner</code>的结果校验器（validator）是够用的。不过问题在于，框架不可能为用户实现所有的检查方法，假如用户需要某些特殊的检查方法时，<code>HttpRunner</code>就没法实现了。</p>
-<p>这的确是一个问题，之前<code>Junho2010</code>提的issue <a href="https://github.com/HttpRunner/HttpRunner/issues/29" target="_blank" rel="external">#29</a>中举了一个例子，应该也算是比较有代表性。</p>
+<p>这的确是一个问题，之前<code>Junho2010</code>提的issue <a href="https://github.com/HttpRunner/HttpRunner/issues/29" target="_blank" rel="noopener">#29</a>中举了一个例子，应该也算是比较有代表性。</p>
 <blockquote>
 <p>发送请求时的数据使用了随机生成，然后需要比较结果中的数据是否是和这个相关（通过某个算法转换）。比如我输入的是321，我的结果是<code>(3+2+1) * avg(3+2+1)</code>这种转化，目前的comparator是比较难于实现的。</p>
 </blockquote>
 <p>要解决这个问题，最好的方式应该是在<code>HttpRunner</code>中实现自定义结果校验器的机制；用户在有需要的时候，可以自己编写校验函数，然后在<code>validate</code>中引用校验函数。之前也介绍过<code>HttpRunner</code>的热加载机制，<a href="http://debugtalk.com/post/apitestengine-hot-plugin/">《约定大于配置：ApiTestEngine实现热加载机制》</a>，自定义结果校验器应该也是可以采用这种方式来实现的。</p>
-<p>第二个需要优化的点，<code>HttpRunner</code>的结果校验器还不支持变量引用，会造成某些场景下的局限性。例如，<code>testwangchao</code>曾提过一个issue <a href="https://github.com/HttpRunner/HttpRunner/issues/52" target="_blank" rel="external">#52</a>：</p>
+<p>第二个需要优化的点，<code>HttpRunner</code>的结果校验器还不支持变量引用，会造成某些场景下的局限性。例如，<code>testwangchao</code>曾提过一个issue <a href="https://github.com/HttpRunner/HttpRunner/issues/52" target="_blank" rel="noopener">#52</a>：</p>
 <blockquote>
 <p>接口response内，会返回数据库内的自增ID。ID校验的时候，希望<code>expected</code>为参数化的值。</p>
 </blockquote>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">validate:</span></div><div class="line"><span class="bullet">    -</span> &#123;<span class="string">"check"</span>: <span class="string">"content.data.table_list.0.id"</span>, <span class="string">"expected"</span>: <span class="string">"$id"</span>&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">validate:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">&#123;"check":</span> <span class="string">"content.data.table_list.0.id"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="string">"$id"</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>另外，在<a href="http://debugtalk.com/post/apitestengine-not-only-about-json-api/">《ApiTestEngine，不再局限于API的测试》</a>一文中有介绍过，结果提取器（<code>extract</code>）新增实现了通过正则表达式对任意文本响应内容的字段提取。考虑到结果校验器（<code>validate</code>）也需要先从结果响应中提取出特定字段才能与预期值进行比较，在具体实现上完全可以复用同一部分代码，因此在<code>validate</code>的<code>check</code>部分也可以进行统一化处理。</p>
 <p>经过前面的局限性问题描述，我们的改造目标也明确了，主要有三个方面：</p>
 <ul>
@@ -137,7 +137,7 @@
 <li>结果校验器中实现变量引用</li>
 <li>结果校验内容新增支持正则表达式提取</li>
 </ul>
-<h2 id="改造结果"><a href="#改造结果" class="headerlink" title="改造结果"></a>改造结果</h2><p>具体的改造过程就不写了，有兴趣的同学可以直接阅读源码，重点查看<a href="https://github.com/HttpRunner/HttpRunner/blob/master/httprunner/context.py" target="_blank" rel="external"><code>httprunner/context.py</code></a>中的<code>parse_validator</code>、<code>do_validation</code>和<code>validate</code>三个函数。</p>
+<h2 id="改造结果"><a href="#改造结果" class="headerlink" title="改造结果"></a>改造结果</h2><p>具体的改造过程就不写了，有兴趣的同学可以直接阅读源码，重点查看<a href="https://github.com/HttpRunner/HttpRunner/blob/master/httprunner/context.py" target="_blank" rel="noopener"><code>httprunner/context.py</code></a>中的<code>parse_validator</code>、<code>do_validation</code>和<code>validate</code>三个函数。</p>
 <p>经过优化后，改造目标中的三项功能都实现了。为了更好地展现改造后的结果校验器，此处将结合实例进行演示。</p>
 <h3 id="新增支持自定义结果校验器"><a href="#新增支持自定义结果校验器" class="headerlink" title="新增支持自定义结果校验器"></a>新增支持自定义结果校验器</h3><p>先来看第一个优化项，新增支持自定义结果校验器。</p>
 <p>假设我们需要使用HTTP响应状态码各个数字的和来进行校验，例如，<code>201</code>状态码对应的数字和为3，<code>503</code>状态码对应的数字和为8。该实例只是为了演示用，实际上并不会用到这样的校验方式。</p>
@@ -149,12 +149,12 @@
 <li>在校验函数中通过<code>assert</code>将实际运算结果与预期结果值进行比较</li>
 </ul>
 <p>对于前面提到的演示案例，我们就可以在<code>debugtalk.py</code>中编写如下校验函数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum_status_code</span><span class="params">(status_code, expect_sum)</span>:</span></div><div class="line">    <span class="string">""" sum status code digits</span></div><div class="line">        e.g. 400 =&gt; 4, 201 =&gt; 3</div><div class="line">    """</div><div class="line">    sum_value = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> digit <span class="keyword">in</span> str(status_code):</div><div class="line">        sum_value += int(digit)</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> sum_value == expect_sum</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum_status_code</span><span class="params">(status_code, expect_sum)</span>:</span></span><br><span class="line">    <span class="string">""" sum status code digits</span></span><br><span class="line"><span class="string">        e.g. 400 =&gt; 4, 201 =&gt; 3</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    sum_value = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> digit <span class="keyword">in</span> str(status_code):</span><br><span class="line">        sum_value += int(digit)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assert</span> sum_value == expect_sum</span><br></pre></td></tr></table></figure>
 <p>然后，在<code>YAML/JSON</code>格式测试用例的<code>validate</code>中，我们就可以将校验函数名称<code>sum_status_code</code>作为<code>comparator</code>进行使用了。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expect"</span>: <span class="number">200</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"sum_status_code"</span>, <span class="string">"expect"</span>: <span class="number">2</span>&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">get</span> <span class="string">token</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/get-token</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    validate:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"status_code"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expect"</span><span class="string">:</span> <span class="number">200</span><span class="string">&#125;</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"status_code"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"sum_status_code"</span><span class="string">,</span> <span class="string">"expect"</span><span class="string">:</span> <span class="number">2</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>由此可见，自定义的校验函数<code>sum_status_code</code>与<code>HttpRunner</code>内置的校验方法<code>eq</code>在使用方式上完全相同，应该没有理解上的难度。</p>
 <h3 id="结果校验器中实现变量引用"><a href="#结果校验器中实现变量引用" class="headerlink" title="结果校验器中实现变量引用"></a>结果校验器中实现变量引用</h3><p>对于第二个优化项，结果校验器中实现变量引用。在使用方式上我们应该与<code>request</code>中的变量引用一致，即通过<code>$var</code>的方式来引用变量<code>var</code>。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    variables:</span></div><div class="line"><span class="attr">        - expect_status_code:</span> <span class="number">200</span></div><div class="line"><span class="attr">        - token_len:</span> <span class="number">16</span></div><div class="line"><span class="attr">    extract:</span></div><div class="line"><span class="attr">        - token:</span> content.token</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expect"</span>: <span class="string">"$expect_status_code"</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"content.token"</span>, <span class="string">"comparator"</span>: <span class="string">"len_eq"</span>, <span class="string">"expect"</span>: <span class="string">"$token_len"</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"$token"</span>, <span class="string">"comparator"</span>: <span class="string">"len_eq"</span>, <span class="string">"expect"</span>: <span class="string">"$token_len"</span>&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">get</span> <span class="string">token</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/get-token</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    variables:</span></span><br><span class="line"><span class="attr">        - expect_status_code:</span> <span class="number">200</span></span><br><span class="line"><span class="attr">        - token_len:</span> <span class="number">16</span></span><br><span class="line"><span class="attr">    extract:</span></span><br><span class="line"><span class="attr">        - token:</span> <span class="string">content.token</span></span><br><span class="line"><span class="attr">    validate:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"status_code"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expect"</span><span class="string">:</span> <span class="string">"$expect_status_code"</span><span class="string">&#125;</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"content.token"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"len_eq"</span><span class="string">,</span> <span class="string">"expect"</span><span class="string">:</span> <span class="string">"$token_len"</span><span class="string">&#125;</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"$token"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"len_eq"</span><span class="string">,</span> <span class="string">"expect"</span><span class="string">:</span> <span class="string">"$token_len"</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>通过以上示例可以看出，在结果校验器<code>validate</code>中，<code>check</code>和<code>expect</code>均可实现实现变量的引用；而引用的变量，可以来自四种类型：</p>
 <ul>
 <li>当前<code>test</code>中定义的<code>variables</code>，例如<code>expect_status_code</code></li>
@@ -164,13 +164,13 @@
 </ul>
 <p>而<code>check</code>字段除了可以引用变量，以及保留了之前的链式操作定位字段（例如上例中的<code>content.token</code>）外，还新增了采用正则表达式提取内容的方式，也就是第三个优化项。</p>
 <h3 id="结果校验内容新增支持正则表达式提取"><a href="#结果校验内容新增支持正则表达式提取" class="headerlink" title="结果校验内容新增支持正则表达式提取"></a>结果校验内容新增支持正则表达式提取</h3><p>假设如下接口的响应结果内容为<code>LB123abcRB789</code>，那么要提取出<code>abc</code>部分进行校验，就可以采用如下描述方式。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"LB123(.*)RB789"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expect"</span>: <span class="string">"abc"</span>&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">get</span> <span class="string">token</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/get-token</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    validate:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"LB123(.*)RB789"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expect"</span><span class="string">:</span> <span class="string">"abc"</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>可见在使用方式上与在结果提取器（<code>extract</code>）中完全相同。</p>
 <h3 id="结果校验器的进一步简化"><a href="#结果校验器的进一步简化" class="headerlink" title="结果校验器的进一步简化"></a>结果校验器的进一步简化</h3><p>最后，为了进一步简化结果校验的描述，我在<code>validate</code>中新增实现了一种描述方式。</p>
 <p>简化后的描述方式与原始方式对比如下：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">validate:</span></div><div class="line"><span class="attr">    - comparator_name:</span> [check_item, expect_value]</div><div class="line"><span class="bullet">    -</span> &#123;<span class="string">"check"</span>: check_item, <span class="string">"comparator"</span>: comparator_name, <span class="string">"expect"</span>: expect_value&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">validate:</span></span><br><span class="line"><span class="attr">    - comparator_name:</span> <span class="string">[check_item,</span> <span class="string">expect_value]</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">&#123;"check":</span> <span class="string">check_item,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">comparator_name,</span> <span class="string">"expect"</span><span class="string">:</span> <span class="string">expect_value&#125;</span></span><br></pre></td></tr></table></figure>
 <p>同样是前面的例子，采用新的描述方式后会更加简洁。而两种方式表达的含义是完全等价的。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> get token</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/get-token</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"status_code"</span>, $expect_status_code]</div><div class="line"><span class="attr">        - sum_status_code:</span> [<span class="string">"status_code"</span>, <span class="number">2</span>]</div><div class="line"><span class="attr">        - len_eq:</span> [<span class="string">"$token"</span>, $token_len]</div><div class="line"><span class="attr">        - len_eq:</span> [<span class="string">"content.token"</span>, <span class="number">16</span>]</div><div class="line"><span class="attr">        - eq:</span> [<span class="string">"LB123(.*)RB789"</span>, <span class="string">"abc"</span>]</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">get</span> <span class="string">token</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/get-token</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    validate:</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["status_code",</span> <span class="string">$expect_status_code]</span></span><br><span class="line"><span class="attr">        - sum_status_code:</span> <span class="string">["status_code",</span> <span class="number">2</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - len_eq:</span> <span class="string">["$token",</span> <span class="string">$token_len]</span></span><br><span class="line"><span class="attr">        - len_eq:</span> <span class="string">["content.token",</span> <span class="number">16</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["LB123(.*)RB789",</span> <span class="string">"abc"</span><span class="string">]</span></span><br></pre></td></tr></table></figure>
 <p>当然，此次优化保证了与历史版本的兼容，之前编写的测试用例脚本的运行是完全不会受到任何影响的。</p>
   
 	</div>
@@ -202,9 +202,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/HttpRunner-testcase-layer/" title="HttpRunner 的测试用例分层机制">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   HttpRunner 的测试用例分层机制</span>
 </a>
@@ -212,8 +212,8 @@
 
 
 <div class="next">
-<a href="/post/HttpRunner-supports-HAR/"  title="HttpRunner 支持 HAR 意味着什么？">
- <strong>下一篇：</strong><br/> 
+<a href="/post/HttpRunner-supports-HAR/" title="HttpRunner 支持 HAR 意味着什么？">
+ <strong>下一篇：</strong><br> 
  <span>HttpRunner 支持 HAR 意味着什么？
 </span>
 </a>
@@ -244,16 +244,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -277,6 +267,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -289,15 +283,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -305,11 +291,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -317,7 +307,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -329,15 +319,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -382,10 +372,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -396,7 +386,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -629,7 +619,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

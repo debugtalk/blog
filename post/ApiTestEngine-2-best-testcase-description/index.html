@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式 | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -107,14 +107,14 @@
 		
 		</div>
 		
-		<p>在<a href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a>一文中，我们完成了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>基础框架的搭建，并实现了简单接口的测试功能。</p>
+		<p>在<a href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a>一文中，我们完成了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>基础框架的搭建，并实现了简单接口的测试功能。</p>
 <p>接下来，我们就针对复杂类型的接口（例如包含签名校验等机制），通过对接口的业务参数和技术细节进行分离，实现简洁优雅的接口测试用例描述。</p>
 <h2 id="传统的测试用例编写方式"><a href="#传统的测试用例编写方式" class="headerlink" title="传统的测试用例编写方式"></a>传统的测试用例编写方式</h2><p>对于在自动化测试中将<code>测试数据</code>与<code>代码实现</code>进行分离的好处，我之前已经讲过多次，这里不再重复。</p>
 <p>测试数据与代码实现分离后，简单的接口还好，测试用例编写不会有什么问题；但是当面对复杂一点的接口（例如包含签名校验等机制）时，我们编写自动化测试用例还是会比较繁琐。</p>
 <p>我们从一个最常见的案例入手，看下编写自动化测试用例的过程，相信大家看完后就会对上面那段话有很深的感受。</p>
 <p>以API接口服务（<code>Mock Server</code>）的创建新用户功能为例，该接口描述如下：</p>
 <blockquote>
-<p>请求数据：<br>Url: <a href="http://127.0.0.1:5000/api/users/1000" target="_blank" rel="external">http://127.0.0.1:5000/api/users/1000</a><br>Method: POST<br>Headers: {“content-type”: “application/json”, “Random”: “A2dEx”, “Authorization”: “47f135c33e858f2e3f55156ae9f78ee1”}<br>Body: {“name”: “user1”, “password”: “123456”}</p>
+<p>请求数据：<br>Url: <a href="http://127.0.0.1:5000/api/users/1000" target="_blank" rel="noopener">http://127.0.0.1:5000/api/users/1000</a><br>Method: POST<br>Headers: {“content-type”: “application/json”, “Random”: “A2dEx”, “Authorization”: “47f135c33e858f2e3f55156ae9f78ee1”}<br>Body: {“name”: “user1”, “password”: “123456”}</p>
 <p>预期的正常响应数据：<br>Status_Code: 201<br>Headers: {‘Date’: ‘Fri, 23 Jun 2017 07:05:41 GMT’, ‘Content-Length’: ‘54’, ‘Content-Type’: ‘application/json’, ‘Server’: ‘Werkzeug/0.12.2 Python/2.7.13’}<br>Body: {“msg”: “user created successfully.”, “success”: true, “uuid”: “JsdfwerL”}</p>
 </blockquote>
 <p>其中，请求<code>Headers</code>中的<code>Random</code>字段是一个5位长的随机字符串，<code>Authorization</code>字段是一个签名值，签名方式为<code>TOKEN+RequestBody+Random</code>拼接字符串的<code>MD5</code>值。更具体的，<code>RequestBody</code>要求字典的<code>Key</code>值按照由小到大的排序方式。接口请求成功后，返回的是一个<code>JSON</code>结构，里面的<code>success</code>字段标识请求成功与否的状态，如果成功，<code>uuid</code>字段标识新创建用户的唯一ID。</p>
@@ -123,7 +123,7 @@
 <p>首先，请求的数据是要有的，我们会先准备一个可用的账号，例如<code>{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}</code>。</p>
 <p>然后，由于接口存在签名校验机制，因此我们除了要知道服务器端使用的TOKEN（假设为<code>debugtalk</code>）外，还要准备好<code>Random</code>字段和<code>Authorization</code>字段。<code>Random</code>字段好说，我们随便生成一个，例如<code>A2dEx</code>；<code>Authorization</code>字段就会复杂不少，需要我们按照规定先将<code>RequestBody</code>根据字典的<code>Key</code>值进行排序，得到<code>{&quot;name&quot;: &quot;user1&quot;, &quot;password&quot;: &quot;123456&quot;}</code>，然后与<code>TOKEN</code>和<code>Random</code>字段拼接字符串得到<code>debugtalk{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}A2dEx</code>，接着再找一个<code>MD5</code>工具，计算得到签名值<code>a83de0ff8d2e896dbd8efb81ba14e17d</code>。</p>
 <p>最后，我们才可以完成测试用例的编写。假如我们采用<code>YAML</code>编写测试用例，那么用例写好后应该就是如下样子。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="bullet">-</span></div><div class="line"><span class="attr">    name:</span> create user which does not exist</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/users/<span class="number">1000</span></div><div class="line"><span class="attr">        method:</span> POST</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Content-Type:</span> application/json</div><div class="line"><span class="attr">            authorization:</span> a83de0ff8d2e896dbd8efb81ba14e17d</div><div class="line"><span class="attr">            random:</span> A2dEx</div><div class="line"><span class="attr">    data:</span></div><div class="line"><span class="attr">        name:</span> user1</div><div class="line"><span class="attr">        password:</span> <span class="number">123456</span></div><div class="line"><span class="attr">    response:</span></div><div class="line"><span class="attr">        status_code:</span> <span class="number">201</span></div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Content-Type:</span> application/json</div><div class="line"><span class="attr">        body:</span></div><div class="line"><span class="attr">            success:</span> <span class="literal">true</span></div><div class="line"><span class="attr">            msg:</span> user created successfully.</div><div class="line"><span class="attr">            uuid:</span> JsdfwerL</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">create</span> <span class="string">user</span> <span class="string">which</span> <span class="string">does</span> <span class="string">not</span> <span class="string">exist</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/users/1000</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            authorization:</span> <span class="string">a83de0ff8d2e896dbd8efb81ba14e17d</span></span><br><span class="line"><span class="attr">            random:</span> <span class="string">A2dEx</span></span><br><span class="line"><span class="attr">    data:</span></span><br><span class="line"><span class="attr">        name:</span> <span class="string">user1</span></span><br><span class="line"><span class="attr">        password:</span> <span class="number">123456</span></span><br><span class="line"><span class="attr">    response:</span></span><br><span class="line"><span class="attr">        status_code:</span> <span class="number">201</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">        body:</span></span><br><span class="line"><span class="attr">            success:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">            msg:</span> <span class="string">user</span> <span class="string">created</span> <span class="string">successfully.</span></span><br><span class="line"><span class="attr">            uuid:</span> <span class="string">JsdfwerL</span></span><br></pre></td></tr></table></figure>
 <p>该测试用例可以在<code>ApiTestEngine</code>中正常运行，我们也可以采用同样的方式，对系统的所有接口编写测试用例，以此实现项目的接口自动化测试覆盖。</p>
 <p>但问题在于，每个接口通常会对应多条测试用例，差异只是在于请求的数据会略有不同，而测试用例量越大，我们人工去准备测试数据的工作量也就越大。更令人抓狂的是，我们的系统接口不是一直不变的，有时候会根据业务需求的变化进行一些调整，相应地，我们的测试数据也需要进行同步更新，这样一来，所有相关的测试用例数据就又得重新计算一遍（任意字段数据产生变化，签名值就会大不相同）。</p>
 <p>可以看出，如果是采用这种方式编写维护接口测试用例，人力和时间成本都会非常高，最终的结果必然是接口自动化测试难以在实际项目中得以开展。</p>
@@ -134,7 +134,7 @@
 <p>还是上面案例的接口测试用例，可以看出，最耗时的地方主要是计算签名校验值部分。按理说，签名校验算法我们是已知的，要是可以在测试用例中直接调用签名算法函数就好了。</p>
 <p>事实上，这也是各种模板语言普遍采用的方式，例如<code>Jinja2</code>模板语言，可以在<code>{% %}</code>中执行函数语句，在<code>{{ }}</code>中可以调用变量参数。之前我在设计[<code>AppiumBooster</code>][AppiumBooster]时也采用了类似的思想，可以通过<code>${config.TestEnvAccount.UserName}</code>的方式在测试用例中引用预定义的全局变量。</p>
 <p>基于该思路，假设我们已经实现了<code>gen_random_string</code>这样一个生成指定位数的随机字符串的函数，以及<code>gen_md5</code>这样一个计算签名校验值的函数，那么我们就可以尝试采用如下方式来描述我们的测试用例：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> create user which does not exist</div><div class="line"><span class="attr">    variables:</span></div><div class="line"><span class="attr">        - TOKEN:</span> debugtalk</div><div class="line"><span class="attr">        - random:</span> $&#123;gen_random_string(<span class="number">5</span>)&#125;</div><div class="line"><span class="attr">        - json:</span> &#123;<span class="string">"name"</span>: <span class="string">"user"</span>, <span class="string">"password"</span>: <span class="string">"123456"</span>&#125;</div><div class="line"><span class="attr">        - authorization:</span> $&#123;gen_md5($TOKEN, $json, $random)&#125;</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5000</span>/api/users/<span class="number">1000</span></div><div class="line"><span class="attr">        method:</span> POST</div><div class="line"><span class="attr">        headers:</span></div><div class="line"><span class="attr">            Content-Type:</span> application/json</div><div class="line"><span class="attr">            authorization:</span> $authorization</div><div class="line"><span class="attr">            random:</span> $random</div><div class="line"><span class="attr">        json:</span> $json</div><div class="line"><span class="attr">    extractors:</span></div><div class="line"><span class="attr">        user_uuid:</span> content.uuid</div><div class="line"><span class="attr">    validators:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expected"</span>: <span class="number">201</span>&#125;</div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"content.success"</span>, <span class="string">"comparator"</span>: <span class="string">"eq"</span>, <span class="string">"expected"</span>: <span class="literal">true</span>&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">create</span> <span class="string">user</span> <span class="string">which</span> <span class="string">does</span> <span class="string">not</span> <span class="string">exist</span></span><br><span class="line"><span class="attr">    variables:</span></span><br><span class="line"><span class="attr">        - TOKEN:</span> <span class="string">debugtalk</span></span><br><span class="line"><span class="attr">        - random:</span> <span class="string">$&#123;gen_random_string(5)&#125;</span></span><br><span class="line"><span class="attr">        - json:</span> <span class="string">&#123;"name":</span> <span class="string">"user"</span><span class="string">,</span> <span class="string">"password"</span><span class="string">:</span> <span class="string">"123456"</span><span class="string">&#125;</span></span><br><span class="line"><span class="attr">        - authorization:</span> <span class="string">$&#123;gen_md5($TOKEN,</span> <span class="string">$json,</span> <span class="string">$random)&#125;</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/users/1000</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            authorization:</span> <span class="string">$authorization</span></span><br><span class="line"><span class="attr">            random:</span> <span class="string">$random</span></span><br><span class="line"><span class="attr">        json:</span> <span class="string">$json</span></span><br><span class="line"><span class="attr">    extractors:</span></span><br><span class="line"><span class="attr">        user_uuid:</span> <span class="string">content.uuid</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"status_code"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="number">201</span><span class="string">&#125;</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"content.success"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="literal">true</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>在如上用例中，用到了两种转义符：</p>
 <ul>
 <li><code>$</code>作为变量转义符，<code>$var</code>将不再代表的是普遍的字符串，而是<code>var</code>变量的值；</li>
@@ -159,7 +159,7 @@
 <li><a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
 <li><a href="http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/">《ApiTestEngine 演化之路（0）开发未动，测试先行》</a></li>
 <li><a href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a></li>
-<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code> GitHub源码</a></li>
+<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code> GitHub源码</a></li>
 </ul>
   
 	</div>
@@ -191,9 +191,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/ApiTestEngine-3-define-functions-in-yaml-testcases/" title="ApiTestEngine 演进之路（3）测试用例中实现 Python 函数的定义">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   ApiTestEngine 演进之路（3）测试用例中实现 Python 函数的定义</span>
 </a>
@@ -201,8 +201,8 @@
 
 
 <div class="next">
-<a href="/post/300-lines-python-code-api-test-framework/"  title="300行Python代码打造实用接口测试框架">
- <strong>下一篇：</strong><br/> 
+<a href="/post/300-lines-python-code-api-test-framework/" title="300行Python代码打造实用接口测试框架">
+ <strong>下一篇：</strong><br> 
  <span>300行Python代码打造实用接口测试框架
 </span>
 </a>
@@ -233,16 +233,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -266,6 +256,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -278,15 +272,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -294,11 +280,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -306,7 +296,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -318,15 +308,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -371,10 +361,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -385,7 +375,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -618,7 +608,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

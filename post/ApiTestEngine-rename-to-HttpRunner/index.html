@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>ApiTestEngine 正式更名为 HttpRunner | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -116,7 +116,7 @@
 <li>该工具可同时实现性能测试（这是区别于其它工具的最大卖点）</li>
 </ul>
 <p>围绕着这两点，我开始踏上了纠结的取名之路。</p>
-<p>首先想到的，<code>ApiTestEngine</code>实现<code>HTTP</code>请求是依赖于<a href="http://python-requests.org" target="_blank" rel="external"><code>Python Requests</code></a>，实现性能测试是依赖于<a href="http://locust.io" target="_blank" rel="external"><code>Locust</code></a>，而<code>Locust</code>同样依赖于<code>Python Requests</code>。可以说，<code>ApiTestEngine</code>完全是构建在<code>Python Requests</code>之上的，后续无论怎么进化，这一层关系应该都不会变。</p>
+<p>首先想到的，<code>ApiTestEngine</code>实现<code>HTTP</code>请求是依赖于<a href="http://python-requests.org" target="_blank" rel="noopener"><code>Python Requests</code></a>，实现性能测试是依赖于<a href="http://locust.io" target="_blank" rel="noopener"><code>Locust</code></a>，而<code>Locust</code>同样依赖于<code>Python Requests</code>。可以说，<code>ApiTestEngine</code>完全是构建在<code>Python Requests</code>之上的，后续无论怎么进化，这一层关系应该都不会变。</p>
 <p>考虑到<code>Python Requests</code>的<code>slogan</code>是：</p>
 <blockquote>
 <p>Python HTTP Requests for Humans™</p>
@@ -130,17 +130,17 @@
 <h2 id="相关影响"><a href="#相关影响" class="headerlink" title="相关影响"></a>相关影响</h2><p><code>ApiTestEngine</code>更名为<code>HttpRunner</code>之后，会对用户产生哪些影响呢？</p>
 <p>先说结论，没有任何不好的影响！</p>
 <p>在链接访问方面，受益于GitHub仓库链接的自动重定向机制，仓库在改名或者过户（Transfer ownership）之后，访问原有链接会自动实现重定向，因此之前博客中的链接也都不会受到影响。</p>
-<p>新的仓库地址：<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" rel="external">https://github.com/HttpRunner/HttpRunner</a></p>
+<p>新的仓库地址：<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" rel="noopener">https://github.com/HttpRunner/HttpRunner</a></p>
 <p>在使用的命令方面，<code>HttpRunner</code>采用<code>httprunner</code>作为新的命令代替原有的<code>ate</code>命令；当然，为了考虑兼容性，<code>HttpRunner</code>对<code>ate</code>命令也进行了保留，因此<code>httprunner</code>和<code>ate</code>命令同时可用，并完全等价。在性能测试方面，<code>locusts</code>命令保持不变。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ httprunner -V</div><div class="line">HttpRunner version: 0.8.1b</div><div class="line">PyUnitReport version: 0.1.3b</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ httprunner -V</span><br><span class="line">HttpRunner version: 0.8.1b</span><br><span class="line">PyUnitReport version: 0.1.3b</span><br></pre></td></tr></table></figure>
 <p>既然是全新的名字，新的篇章必然也得有一些新的东西。</p>
-<p>为了方面用户安装，<code>HttpRunner</code>已托管至<a href="https://pypi.python.org/pypi/HttpRunner" target="_blank" rel="external"><code>PyPI</code></a>；后续大家可以方便的采用<code>pip</code>命令进行安装。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pip install HttpRunner</div></pre></td></tr></table></figure>
+<p>为了方面用户安装，<code>HttpRunner</code>已托管至<a href="https://pypi.python.org/pypi/HttpRunner" target="_blank" rel="noopener"><code>PyPI</code></a>；后续大家可以方便的采用<code>pip</code>命令进行安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install HttpRunner</span><br></pre></td></tr></table></figure>
 <p>同时，<code>HttpRunner</code>新增了大量使用说明文档（之前的博客主要都是开发过程记录），并托管到专业的<code>readthedocs</code>上面。在文档语言方面，英文优先，中文相对滞后。</p>
 <p>访问网址：</p>
 <ul>
-<li>英文：<a href="http://httprunner.readthedocs.io/" target="_blank" rel="external">http://httprunner.readthedocs.io/</a></li>
-<li>中文（滞后）：<a href="http://httprunner-cn.readthedocs.io/" target="_blank" rel="external">http://httprunner-cn.readthedocs.io/</a></li>
+<li>英文：<a href="http://httprunner.readthedocs.io/" target="_blank" rel="noopener">http://httprunner.readthedocs.io/</a></li>
+<li>中文（滞后）：<a href="http://httprunner-cn.readthedocs.io/" target="_blank" rel="noopener">http://httprunner-cn.readthedocs.io/</a></li>
 </ul>
 <p>另外，为了具有更高的逼格，同时购入域名<code>httprunner.top</code>，后续将作为项目的主页地址。当前还处于实名认证中，预计2~3个工作日后就可以访问了。</p>
 <p>关于项目改名这事儿，就说到这儿吧，希望你们也喜欢。</p>
@@ -177,9 +177,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/HttpRunner-supports-HAR/" title="HttpRunner 支持 HAR 意味着什么？">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   HttpRunner 支持 HAR 意味着什么？</span>
 </a>
@@ -187,8 +187,8 @@
 
 
 <div class="next">
-<a href="/post/apitestengine-not-only-about-json-api/"  title="ApiTestEngine，不再局限于API的测试">
- <strong>下一篇：</strong><br/> 
+<a href="/post/apitestengine-not-only-about-json-api/" title="ApiTestEngine，不再局限于API的测试">
+ <strong>下一篇：</strong><br> 
  <span>ApiTestEngine，不再局限于API的测试
 </span>
 </a>
@@ -219,16 +219,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -252,6 +242,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -264,15 +258,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -280,11 +266,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -292,7 +282,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -304,15 +294,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -357,10 +347,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -371,7 +361,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -604,7 +594,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

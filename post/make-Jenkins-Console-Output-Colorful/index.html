@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>Jenkins的输出日志也可以变得色色的 | DebugTalk</title>
@@ -40,14 +40,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -70,17 +70,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -127,7 +127,7 @@
 <h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><p>需要说明的是，在输出日志中显示颜色，依赖于输出的日志本身。也就是说，如果输出日志时并没有<code>ANSI escape sequences</code>，那么安装该插件后也没有任何作用，并不会凭空给日志加上颜色。</p>
 <p>例如，如果采用<code>xcodebuild</code>命令编译iOS应用，那么输出日志就不会显示颜色。</p>
 <p>说到这里，再简单介绍下<code>ANSI escape sequences</code>。</p>
-<h2 id="ANSI-escape-sequences"><a href="#ANSI-escape-sequences" class="headerlink" title="ANSI escape sequences"></a>ANSI escape sequences</h2><p><a href="https://en.wikipedia.org/wiki/ANSI_escape_code" target="_blank" rel="external"><code>ANSI escape sequences</code></a>，也叫<code>ANSI escape codes</code>，主要是用于对Terminal中的文本字符进行颜色的控制，包括字符背景颜色和字符颜色。</p>
+<h2 id="ANSI-escape-sequences"><a href="#ANSI-escape-sequences" class="headerlink" title="ANSI escape sequences"></a>ANSI escape sequences</h2><p><a href="https://en.wikipedia.org/wiki/ANSI_escape_code" target="_blank" rel="noopener"><code>ANSI escape sequences</code></a>，也叫<code>ANSI escape codes</code>，主要是用于对Terminal中的文本字符进行颜色的控制，包括字符背景颜色和字符颜色。</p>
 <p>使用方式如下：</p>
 <p><code>33[字符背景颜色;字符颜色m{String}33[0m</code></p>
 <p>其中，<code>33[字符背景颜色;字符颜色m</code>是开始标识，<code>33[0m</code>是结束标识，<code>{String}</code>是原始文本内容。通过这种形式，就可以对输出的文本颜色进行控制。</p>
@@ -157,9 +157,9 @@
 <p>需要说明的是，字符背景颜色和字符颜色并非必须同时设置，也可以只设置一项。</p>
 <h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>掌握了以上概念后，我们就可以通过对打印日志的代码进行一点调整，然后就可以让输出的日志更加美观了。</p>
 <p>以Ruby为例，在<code>Sting</code>基础类中添加一些展示颜色的方法。</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">String</span></span></div><div class="line">  <span class="comment"># colorization</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">colorize</span><span class="params">(color_code)</span></span></div><div class="line">    <span class="string">"\e[<span class="subst">#&#123;color_code&#125;</span>m<span class="subst">#&#123;<span class="keyword">self</span>&#125;</span>\e[0m"</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">red</span></span></div><div class="line">    colorize(<span class="number">31</span>)</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">green</span></span></div><div class="line">    colorize(<span class="number">32</span>)</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">yellow</span></span></div><div class="line">    colorize(<span class="number">33</span>)</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line">  <span class="comment"># colorization</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">colorize</span><span class="params">(color_code)</span></span></span><br><span class="line">    <span class="string">"\e[<span class="subst">#&#123;color_code&#125;</span>m<span class="subst">#&#123;<span class="keyword">self</span>&#125;</span>\e[0m"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">red</span></span></span><br><span class="line">    colorize(<span class="number">31</span>)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">green</span></span></span><br><span class="line">    colorize(<span class="number">32</span>)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">yellow</span></span></span><br><span class="line">    colorize(<span class="number">33</span>)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <p>然后，我们在打印日志时就可以通过如下方式来控制日志的颜色了。</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 步骤执行正常，输出为绿色</span></div><div class="line">step_action_desc += <span class="string">"    ...    ✓"</span></div><div class="line">puts step_action_desc.green</div><div class="line"></div><div class="line"><span class="comment"># 步骤执行异常，输出为红色</span></div><div class="line">step_action_desc += <span class="string">"    ...    ✖"</span></div><div class="line">puts step_action_desc.red</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 步骤执行正常，输出为绿色</span></span><br><span class="line">step_action_desc += <span class="string">"    ...    ✓"</span></span><br><span class="line">puts step_action_desc.green</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤执行异常，输出为红色</span></span><br><span class="line">step_action_desc += <span class="string">"    ...    ✖"</span></span><br><span class="line">puts step_action_desc.red</span><br></pre></td></tr></table></figure>
 <p>展示效果如下图所示。</p>
 <p><img src="/images/Terminal_Output_Colored.jpg" alt="Terminal Output Colored"></p>
 <p>是不是好看多了？</p>
@@ -193,9 +193,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/build-ideal-app-automation-test-framework/" title="打造心目中理想的自动化测试框架（AppiumBooster）">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   打造心目中理想的自动化测试框架（AppiumBooster）</span>
 </a>
@@ -203,8 +203,8 @@
 
 
 <div class="next">
-<a href="/post/Jenkins-CI-Automation-Test/"  title="使用Jenkins实现持续集成构建检查">
- <strong>下一篇：</strong><br/> 
+<a href="/post/Jenkins-CI-Automation-Test/" title="使用Jenkins实现持续集成构建检查">
+ <strong>下一篇：</strong><br> 
  <span>使用Jenkins实现持续集成构建检查
 </span>
 </a>
@@ -235,16 +235,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -268,6 +258,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -280,15 +274,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -296,11 +282,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -308,7 +298,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -320,15 +310,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -373,10 +363,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -387,7 +377,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -620,7 +610,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

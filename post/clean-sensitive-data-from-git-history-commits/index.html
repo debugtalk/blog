@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>【GIT技巧】清除历史提交记录中的敏感信息 | DebugTalk</title>
@@ -38,14 +38,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -68,17 +68,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -117,33 +117,33 @@
 <p>当然，也可以选择直接将整个仓库删除了。不过，看着昔日精心提交的代码记录，实在是难以下手。</p>
 <p>要是可以只删除敏感信息部分，而不影响到其它提交记录就好了。事实上，<code>GIT</code>的确支持这种操作。</p>
 <h2 id="处理方式"><a href="#处理方式" class="headerlink" title="处理方式"></a>处理方式</h2><p>实现的方式有两种，一是通过<code>git filter-branch</code>命令，另一种是采用一款开源的工具，<code>BFG Repo-Cleaner</code>。前者是<code>GIT</code>官方的实现方法，后者是一款采用<code>Scala</code>编写的工具，号称比<code>git filter-branch</code>更简单、更快捷。</p>
-<h3 id="git-filter-branch"><a href="#git-filter-branch" class="headerlink" title="git filter-branch"></a>git filter-branch</h3><p>先来看下<a href="https://help.github.com/articles/removing-sensitive-data-from-a-repository/" target="_blank" rel="external"><code>git filter-branch</code></a>这种方式。假设要在所有历史提交记录中删除文件<code>PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA</code>，那么就可以采用如下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ git filter-branch --force --index-filter \</div><div class="line"><span class="string">'git rm --cached --ignore-unmatch PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA'</span> \</div><div class="line">--prune-empty --tag-name-filter cat -- --all</div><div class="line"></div><div class="line">&gt; Rewrite 48dc599c80e20527ed902928085e7861e6b3cbe6 (266/266)</div><div class="line">&gt; Ref <span class="string">'refs/heads/master'</span> was rewritten</div></pre></td></tr></table></figure>
+<h3 id="git-filter-branch"><a href="#git-filter-branch" class="headerlink" title="git filter-branch"></a>git filter-branch</h3><p>先来看下<a href="https://help.github.com/articles/removing-sensitive-data-from-a-repository/" target="_blank" rel="noopener"><code>git filter-branch</code></a>这种方式。假设要在所有历史提交记录中删除文件<code>PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA</code>，那么就可以采用如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git filter-branch --force --index-filter \</span><br><span class="line"><span class="string">'git rm --cached --ignore-unmatch PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA'</span> \</span><br><span class="line">--prune-empty --tag-name-filter cat -- --all</span><br><span class="line"></span><br><span class="line">&gt; Rewrite 48dc599c80e20527ed902928085e7861e6b3cbe6 (266/266)</span><br><span class="line">&gt; Ref <span class="string">'refs/heads/master'</span> was rewritten</span><br></pre></td></tr></table></figure>
 <p>正常情况下，通过执行上面的命令，就可以在所有历史提交记录中彻底删除指定文件。如果要进一步确定的话，可以在<code>.git</code>目录中进行全局搜索，确保已彻底清理干净。</p>
 <p>然后，就可以通过如下命令将本地代码推送到<code>GitHub</code>上，并强制覆盖掉所有历史记录。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git push origin --force --all</div></pre></td></tr></table></figure>
-<p>可以看出，采用<code>git filter-branch</code>的操作命令十分复杂（复杂到我也不想理会每个参数的具体含义），这还只是选择粗暴地将整个文件进行删除的情况。如果不想删除文件，而是单独修改特定文件特定内容的话，操作会更加复杂，如有兴趣可查看<a href="https://git-scm.com/docs/git-filter-branch" target="_blank" rel="external"><code>git官方文档</code></a>。</p>
-<h3 id="BFG-Repo-Cleaner"><a href="#BFG-Repo-Cleaner" class="headerlink" title="BFG Repo-Cleaner"></a>BFG Repo-Cleaner</h3><p>估计也是因为官方的<code>git filter-branch</code>太过复杂，于是<code>Roberto Tyley</code>开发了<a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="external"><code>BFG Repo-Cleaner</code></a>这款工具。该工具是专门针对移除历史记录的需求而产生的，这可以从其简介中看出来。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin --force --all</span><br></pre></td></tr></table></figure>
+<p>可以看出，采用<code>git filter-branch</code>的操作命令十分复杂（复杂到我也不想理会每个参数的具体含义），这还只是选择粗暴地将整个文件进行删除的情况。如果不想删除文件，而是单独修改特定文件特定内容的话，操作会更加复杂，如有兴趣可查看<a href="https://git-scm.com/docs/git-filter-branch" target="_blank" rel="noopener"><code>git官方文档</code></a>。</p>
+<h3 id="BFG-Repo-Cleaner"><a href="#BFG-Repo-Cleaner" class="headerlink" title="BFG Repo-Cleaner"></a>BFG Repo-Cleaner</h3><p>估计也是因为官方的<code>git filter-branch</code>太过复杂，于是<code>Roberto Tyley</code>开发了<a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="noopener"><code>BFG Repo-Cleaner</code></a>这款工具。该工具是专门针对移除历史记录的需求而产生的，这可以从其简介中看出来。</p>
 <blockquote>
 <p>Removes large or troublesome blobs like git-filter-branch does, but faster. And written in Scala</p>
 </blockquote>
-<p>使用<code>BFG Repo-Cleaner</code>之前，需要先下载<a href="https://rtyley.github.io/bfg-repo-cleaner/#download" target="_blank" rel="external"><code>BFG&#39;s jar</code></a>(requires Java 7 or above)。</p>
+<p>使用<code>BFG Repo-Cleaner</code>之前，需要先下载<a href="https://rtyley.github.io/bfg-repo-cleaner/#download" target="_blank" rel="noopener"><code>BFG&#39;s jar</code></a>(requires Java 7 or above)。</p>
 <p>如果想实现前面例子中同样的功能，删除文件<code>PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA</code>，可以通过如下命令实现：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ java -jar bfg.jar --delete-files PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA my-repo.git</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar bfg.jar --delete-files PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA my-repo.git</span><br></pre></td></tr></table></figure>
 <p>如果不想删除文件，而是单独修改特定文件特定内容的话，就可以通过如下命令实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ java -jar bfg.jar --replace-text replacements.txt my-repo.git</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar bfg.jar --replace-text replacements.txt my-repo.git</span><br></pre></td></tr></table></figure>
 <p>在<code>replacements.txt</code>文件中，应包含所有需要替换的内容，格式如下（不包含注释内容）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PASSWORD1                       <span class="comment"># Replace with '***REMOVED***' (default)</span></div><div class="line">PASSWORD2==&gt;examplePass         <span class="comment"># replace with 'examplePass' instead</span></div><div class="line">PASSWORD3==&gt;                    <span class="comment"># replace with the empty string</span></div><div class="line">regex:password=\w+==&gt;password=  <span class="comment"># Replace, using a regex</span></div><div class="line">regex:\r(\n)==&gt;<span class="variable">$1</span>               <span class="comment"># Replace Windows newlines with Unix newlines</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PASSWORD1                       <span class="comment"># Replace with '***REMOVED***' (default)</span></span><br><span class="line">PASSWORD2==&gt;examplePass         <span class="comment"># replace with 'examplePass' instead</span></span><br><span class="line">PASSWORD3==&gt;                    <span class="comment"># replace with the empty string</span></span><br><span class="line">regex:password=\w+==&gt;password=  <span class="comment"># Replace, using a regex</span></span><br><span class="line">regex:\r(\n)==&gt;<span class="variable">$1</span>               <span class="comment"># Replace Windows newlines with Unix newlines</span></span><br></pre></td></tr></table></figure>
 <p>通过执行上述命令，<code>BFG Repo-Cleaner</code>就会扫描代码仓库的所有历史提交记录，并按照<code>replacements.txt</code>文件中的映射进行替换操作。</p>
 <p>通过对比可以看到，<code>BFG Repo-Cleaner</code>的确是更加简洁，这也是<code>GitHub</code>官方推荐的方式。不过，在<code>BFG Repo-Cleaner</code>的介绍文档中也说了，该工具的优势在于简单和快捷，从功能强大的角度来讲，它是比不上<code>git-filter-branch</code>的，有些操作也只能通过<code>git-filter-branch</code>完成。</p>
-<p>如需了解<code>BFG Repo-Cleaner</code>的更多用法，可详细阅读其<a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="external">文档</a>。</p>
+<p>如需了解<code>BFG Repo-Cleaner</code>的更多用法，可详细阅读其<a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="noopener">文档</a>。</p>
 <h2 id="写在末尾"><a href="#写在末尾" class="headerlink" title="写在末尾"></a>写在末尾</h2><p>不要问我为啥写了这么一篇博客，让我再哭一会儿。我也真心地希望大家永远不会用到这些工具。</p>
 <p>小心驶得万年船，共勉！</p>
 <h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
-<li><a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="external">https://rtyley.github.io/bfg-repo-cleaner/</a></li>
-<li><a href="https://git-scm.com/docs/git-filter-branch" target="_blank" rel="external">https://git-scm.com/docs/git-filter-branch</a></li>
-<li><a href="https://help.github.com/articles/removing-sensitive-data-from-a-repository/" target="_blank" rel="external">https://help.github.com/articles/removing-sensitive-data-from-a-repository/</a></li>
-<li><a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/ch05.html#_8230_and_then_some" target="_blank" rel="external">http://www-cs-students.stanford.edu/~blynn/gitmagic/ch05.html#_8230_and_then_some</a></li>
+<li><a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="noopener">https://rtyley.github.io/bfg-repo-cleaner/</a></li>
+<li><a href="https://git-scm.com/docs/git-filter-branch" target="_blank" rel="noopener">https://git-scm.com/docs/git-filter-branch</a></li>
+<li><a href="https://help.github.com/articles/removing-sensitive-data-from-a-repository/" target="_blank" rel="noopener">https://help.github.com/articles/removing-sensitive-data-from-a-repository/</a></li>
+<li><a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/ch05.html#_8230_and_then_some" target="_blank" rel="noopener">http://www-cs-students.stanford.edu/~blynn/gitmagic/ch05.html#_8230_and_then_some</a></li>
 </ul>
   
 	</div>
@@ -175,9 +175,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/use-pyenv-manage-multiple-python-virtualenvs/" title="使用pyenv管理多个Python版本依赖环境">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   使用pyenv管理多个Python版本依赖环境</span>
 </a>
@@ -185,8 +185,8 @@
 
 
 <div class="next">
-<a href="/post/head-first-locust-user-guide/"  title="深入浅出开源性能测试工具Locust（使用篇）">
- <strong>下一篇：</strong><br/> 
+<a href="/post/head-first-locust-user-guide/" title="深入浅出开源性能测试工具Locust（使用篇）">
+ <strong>下一篇：</strong><br> 
  <span>深入浅出开源性能测试工具Locust（使用篇）
 </span>
 </a>
@@ -217,16 +217,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -250,6 +240,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -262,15 +256,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -278,11 +264,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -290,7 +280,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -302,15 +292,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -355,10 +345,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -369,7 +359,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -602,7 +592,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

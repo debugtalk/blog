@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>Android App持续集成性能测试：启动流量（2） | DebugTalk</title>
@@ -42,14 +42,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -72,17 +72,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -119,7 +119,7 @@
 <h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><p><code>tcpdump</code>，是一个在Unix-like系统中通用的网络抓包工具，当然，这个工具在Android系统中也是可以使用的。</p>
 <p>对于工具本身，本文不做过多介绍。为了防止有读者之前完全没有<code>tcpdump</code>的使用经验，在这里我只简单地进行几点说明：</p>
 <ul>
-<li>大多Android系统默认未集成tcpdump工具，我们需要事先将专门针对Android系统编译好的的tcpdump导入到Android系统，例如<code>/data/local/tmp/tcpdump</code>；当然，我们也不用自己编译，在<a href="http://www.androidtcpdump.com" target="_blank" rel="external"><code>androidtcpdump</code></a>网站就可以下载到编译好的tcpdump二进制文件。</li>
+<li>大多Android系统默认未集成tcpdump工具，我们需要事先将专门针对Android系统编译好的的tcpdump导入到Android系统，例如<code>/data/local/tmp/tcpdump</code>；当然，我们也不用自己编译，在<a href="http://www.androidtcpdump.com" target="_blank" rel="noopener"><code>androidtcpdump</code></a>网站就可以下载到编译好的tcpdump二进制文件。</li>
 <li>运行<code>tcpdump</code>工具时需要root权限。</li>
 <li>tcpdump命令支持许多参数，常见的有：<ul>
 <li><code>-i</code>指定网卡（interface），<code>any</code>表示不限网卡；</li>
@@ -131,7 +131,7 @@
 </li>
 </ul>
 <p>基于以上对<code>tcpdump</code>的介绍，我们要测试浏览器在启动后与美国服务器的通讯流量，就只需要先启动浏览器，然后在<code>adb shell</code>中执行以下命令即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1|shell@hammerhead:/ $ su -c /data/local/tmp/tcpdump -v -i any -s 0 -c 2000 -w /sdcard/us.pcap</div><div class="line">tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes</div><div class="line">2000 packets captured</div><div class="line">2024 packets received by filter</div><div class="line">0 packets dropped by kernel</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1|shell@hammerhead:/ $ su -c /data/local/tmp/tcpdump -v -i any -s 0 -c 2000 -w /sdcard/us.pcap</span><br><span class="line">tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes</span><br><span class="line">2000 packets captured</span><br><span class="line">2024 packets received by filter</span><br><span class="line">0 packets dropped by kernel</span><br></pre></td></tr></table></figure>
 <p>在这里之所有指定接收packets数为2000，是因为浏览器启动后并不是立即与美国服务器进行通讯。所以在这里设置了一个比较大的值，确保浏览器与美国服务器的异步通讯数据能包含在这2000packets之中。当然，这个2000只是一个工程实践得到的经验值，具体取多少还是要依赖于具体场景。</p>
 <p>经过一段时间的抓包后，就生产了抓包结果，即<code>/sdcard/us.pcap</code>。</p>
 <h2 id="人工分析pcap文件"><a href="#人工分析pcap文件" class="headerlink" title="人工分析pcap文件"></a>人工分析pcap文件</h2><p>拿到pcap文件只是第一步，我们必须要对这个文件进行解析才能得到我们想要的结果。</p>
@@ -156,10 +156,10 @@
 <p>可以看出，这个的汇总数值与前面计算得到的数值完全相同。</p>
 <h2 id="自动化测试脚本"><a href="#自动化测试脚本" class="headerlink" title="自动化测试脚本"></a>自动化测试脚本</h2><p>通过前面的人工分析，我们已经掌握了分析特定流量的一般性方法。然而，要想将此种场景的流量测试加入持续集成自动化测试系统，采用以上方法显然是不行的。</p>
 <p>那么，要怎样才能在代码中完成对pcap文件的分析呢？</p>
-<p>好在已经有前辈做了相应的工作，在GitHub上就找到了一个开源项目<a href="https://github.com/andrewf/pcap2har" target="_blank" rel="external"><code>pcap2har</code></a>，可以实现对pcap文件的解析。</p>
+<p>好在已经有前辈做了相应的工作，在GitHub上就找到了一个开源项目<a href="https://github.com/andrewf/pcap2har" target="_blank" rel="noopener"><code>pcap2har</code></a>，可以实现对pcap文件的解析。</p>
 <p><code>pcap2har</code>项目的详细介绍请大家自行查看项目文档。</p>
 <p>针对本文中的测试场景，解析pcap文件的代码实现如下。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> dpkt</div><div class="line"><span class="keyword">from</span> pcap2har <span class="keyword">import</span> pcap</div><div class="line"><span class="keyword">from</span> pcap2har <span class="keyword">import</span> http</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parsePcapFile</span><span class="params">(pcap_file, target_host)</span>:</span></div><div class="line">    <span class="comment"># parse pcap file</span></div><div class="line">    dispatcher = pcap.EasyParsePcap(filename=pcap_file)</div><div class="line"></div><div class="line">    traffic_total = <span class="number">0</span></div><div class="line">    traffic_receive_total = <span class="number">0</span></div><div class="line">    traffic_send_total = <span class="number">0</span></div><div class="line">    url_list = []</div><div class="line"></div><div class="line">    <span class="comment"># stream为tcp数据流，当为长链接时一个tcp流里面可以有多个http请求</span></div><div class="line">    <span class="keyword">for</span> stream <span class="keyword">in</span> dispatcher.tcp.flows():</div><div class="line">        <span class="comment"># fwd为请求大小，如果小于200则肯定不是正常的HTTP请求，忽略</span></div><div class="line">        <span class="keyword">if</span> stream.fwd.caplen &lt; <span class="number">200</span>:</div><div class="line">            <span class="keyword">continue</span></div><div class="line"></div><div class="line">        pointer = <span class="number">0</span></div><div class="line">        <span class="keyword">while</span> pointer &lt; len(stream.fwd.data):</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                myrequest = http.Request(stream.fwd, pointer) <span class="comment">#解析请求头</span></div><div class="line">            <span class="keyword">except</span> dpkt.Error <span class="keyword">as</span> error:  <span class="comment"># if the message failed</span></div><div class="line">                <span class="keyword">break</span></div><div class="line">            <span class="keyword">except</span>:</div><div class="line">                <span class="keyword">raise</span></div><div class="line"></div><div class="line">            pointer += myrequest.data_consumed</div><div class="line">            myhead = myrequest.msg.headers</div><div class="line"></div><div class="line">            <span class="comment"># 请求头大小&lt;200时忽略</span></div><div class="line">            <span class="keyword">if</span> myrequest.data_consumed &lt; <span class="number">200</span>:</div><div class="line">                <span class="keyword">continue</span></div><div class="line"></div><div class="line">            <span class="keyword">if</span> myhead[<span class="string">"host"</span>] == target_host:</div><div class="line">                traffic_receive_total += stream.rev.caplen</div><div class="line">                traffic_send_total += stream.fwd.caplen</div><div class="line">                traffic_total += stream.streamlen</div><div class="line">                url_list.append(myrequest.fullurl)</div><div class="line"></div><div class="line">    traffic_data = &#123;</div><div class="line">        <span class="string">'total'</span>: traffic_total,</div><div class="line">        <span class="string">'tcp_snd'</span>: traffic_send_total,</div><div class="line">        <span class="string">'tcp_rcv'</span>: traffic_receive_total,</div><div class="line">        <span class="string">'url_list'</span>: url_list</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> traffic_data</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    pcap_file = <span class="string">""</span></div><div class="line">    target_host = <span class="string">"ucus.ucweb.com"</span></div><div class="line">    <span class="keyword">print</span> parsePcapFile(pcap_file, target_host)</div><div class="line">    <span class="comment"># output: &#123;'url_list': ['http://ucus.ucweb.com/usquery.php'], 'total': 10022, 'tcp_rcv': 6300, 'tcp_snd': 3722&#125;</span></div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> dpkt</span><br><span class="line"><span class="keyword">from</span> pcap2har <span class="keyword">import</span> pcap</span><br><span class="line"><span class="keyword">from</span> pcap2har <span class="keyword">import</span> http</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parsePcapFile</span><span class="params">(pcap_file, target_host)</span>:</span></span><br><span class="line">    <span class="comment"># parse pcap file</span></span><br><span class="line">    dispatcher = pcap.EasyParsePcap(filename=pcap_file)</span><br><span class="line"></span><br><span class="line">    traffic_total = <span class="number">0</span></span><br><span class="line">    traffic_receive_total = <span class="number">0</span></span><br><span class="line">    traffic_send_total = <span class="number">0</span></span><br><span class="line">    url_list = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># stream为tcp数据流，当为长链接时一个tcp流里面可以有多个http请求</span></span><br><span class="line">    <span class="keyword">for</span> stream <span class="keyword">in</span> dispatcher.tcp.flows():</span><br><span class="line">        <span class="comment"># fwd为请求大小，如果小于200则肯定不是正常的HTTP请求，忽略</span></span><br><span class="line">        <span class="keyword">if</span> stream.fwd.caplen &lt; <span class="number">200</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        pointer = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> pointer &lt; len(stream.fwd.data):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                myrequest = http.Request(stream.fwd, pointer) <span class="comment">#解析请求头</span></span><br><span class="line">            <span class="keyword">except</span> dpkt.Error <span class="keyword">as</span> error:  <span class="comment"># if the message failed</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line">            pointer += myrequest.data_consumed</span><br><span class="line">            myhead = myrequest.msg.headers</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 请求头大小&lt;200时忽略</span></span><br><span class="line">            <span class="keyword">if</span> myrequest.data_consumed &lt; <span class="number">200</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> myhead[<span class="string">"host"</span>] == target_host:</span><br><span class="line">                traffic_receive_total += stream.rev.caplen</span><br><span class="line">                traffic_send_total += stream.fwd.caplen</span><br><span class="line">                traffic_total += stream.streamlen</span><br><span class="line">                url_list.append(myrequest.fullurl)</span><br><span class="line"></span><br><span class="line">    traffic_data = &#123;</span><br><span class="line">        <span class="string">'total'</span>: traffic_total,</span><br><span class="line">        <span class="string">'tcp_snd'</span>: traffic_send_total,</span><br><span class="line">        <span class="string">'tcp_rcv'</span>: traffic_receive_total,</span><br><span class="line">        <span class="string">'url_list'</span>: url_list</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> traffic_data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    pcap_file = <span class="string">""</span></span><br><span class="line">    target_host = <span class="string">"ucus.ucweb.com"</span></span><br><span class="line">    <span class="keyword">print</span> parsePcapFile(pcap_file, target_host)</span><br><span class="line">    <span class="comment"># output: &#123;'url_list': ['http://ucus.ucweb.com/usquery.php'], 'total': 10022, 'tcp_rcv': 6300, 'tcp_snd': 3722&#125;</span></span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -190,9 +190,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/" title="从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划</span>
 </a>
@@ -200,8 +200,8 @@
 
 
 <div class="next">
-<a href="/post/Android-performance-test-start-traffic-uid-stat/"  title="Android App持续集成性能测试：启动流量（1）">
- <strong>下一篇：</strong><br/> 
+<a href="/post/Android-performance-test-start-traffic-uid-stat/" title="Android App持续集成性能测试：启动流量（1）">
+ <strong>下一篇：</strong><br> 
  <span>Android App持续集成性能测试：启动流量（1）
 </span>
 </a>
@@ -232,16 +232,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -265,6 +255,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -277,15 +271,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -293,11 +279,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -305,7 +295,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -317,15 +307,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -370,10 +360,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -384,7 +374,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -617,7 +607,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

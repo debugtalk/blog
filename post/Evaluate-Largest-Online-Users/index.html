@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>测试最大在线用户数 | DebugTalk</title>
@@ -38,14 +38,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -68,17 +68,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -122,7 +122,7 @@
 <li>持续新增登录用户的过程中，定期地在浏览器中手动刷新业务系统界面，查看业务系统是否出现不可访问的情况（如内部服务器错误、宕机等）</li>
 </ul>
 <p>相应地，测试脚本需符合如下形式：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">lr_start_transaction(<span class="string">"进入登录页面"</span>);</div><div class="line"><span class="comment">/*此处为进入系统登录界面的脚本*/</span></div><div class="line">lr_end_transaction(<span class="string">"进入登录页面"</span>, LR_AUTO);</div><div class="line"></div><div class="line">lr_start_transaction(<span class="string">"登录系统"</span>);</div><div class="line"></div><div class="line"><span class="comment">/*登录脚本--部分1*/</span></div><div class="line"></div><div class="line"><span class="comment">/*对系统登录进行校验</span></div><div class="line"> *若成功，即新页面中包含"重新登录"，reLogin_Count&gt;0</div><div class="line"> *若失败，reLogin_Count=0</div><div class="line"> */</div><div class="line">web_reg_find(<span class="string">"Text=重新登录"</span>,</div><div class="line">    <span class="string">"SaveCount=reLogin_Count"</span>,</div><div class="line">    LAST );</div><div class="line"></div><div class="line"><span class="comment">/*登录脚本--部分2（包含检查点内容部分）*/</span></div><div class="line"></div><div class="line"><span class="comment">//对系统登录结果进行检查</span></div><div class="line"><span class="keyword">if</span> (atoi(lr_eval_string(<span class="string">"&#123;reLogin_Count&#125;"</span>)) == <span class="number">0</span>)</div><div class="line">&#123;    <span class="comment">//登录失败</span></div><div class="line">    lr_error_message(<span class="string">"登录失败!!!--UserName：%s"</span>,lr_eval_string(<span class="string">"&#123;UserName&#125;"</span>));</div><div class="line">     <span class="comment">//勾选Fail Open Transations on lr_error_message</span></div><div class="line">     <span class="comment">//当执到该lr_error_message时，"登录系统"的Transaction失败</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">lr_end_transaction(<span class="string">"登录系统"</span>, LR_AUTO);</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">lr_start_transaction(<span class="string">"进入登录页面"</span>);</span><br><span class="line"><span class="comment">/*此处为进入系统登录界面的脚本*/</span></span><br><span class="line">lr_end_transaction(<span class="string">"进入登录页面"</span>, LR_AUTO);</span><br><span class="line"></span><br><span class="line">lr_start_transaction(<span class="string">"登录系统"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*登录脚本--部分1*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*对系统登录进行校验</span></span><br><span class="line"><span class="comment"> *若成功，即新页面中包含"重新登录"，reLogin_Count&gt;0</span></span><br><span class="line"><span class="comment"> *若失败，reLogin_Count=0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">web_reg_find(<span class="string">"Text=重新登录"</span>,</span><br><span class="line">    <span class="string">"SaveCount=reLogin_Count"</span>,</span><br><span class="line">    LAST );</span><br><span class="line"></span><br><span class="line"><span class="comment">/*登录脚本--部分2（包含检查点内容部分）*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对系统登录结果进行检查</span></span><br><span class="line"><span class="keyword">if</span> (atoi(lr_eval_string(<span class="string">"&#123;reLogin_Count&#125;"</span>)) == <span class="number">0</span>)</span><br><span class="line">&#123;    <span class="comment">//登录失败</span></span><br><span class="line">    lr_error_message(<span class="string">"登录失败!!!--UserName：%s"</span>,lr_eval_string(<span class="string">"&#123;UserName&#125;"</span>));</span><br><span class="line">     <span class="comment">//勾选Fail Open Transations on lr_error_message</span></span><br><span class="line">     <span class="comment">//当执到该lr_error_message时，"登录系统"的Transaction失败</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">lr_end_transaction(<span class="string">"登录系统"</span>, LR_AUTO);</span><br></pre></td></tr></table></figure>
 <p>以上脚本调试成功后，通过检查点函数及日志信息可以判断出系统登录操作已通过脚本回放成功完成。</p>
 <p>理论上，只要VuGen采用不同帐号迭代运行该脚本，由于只是进行系统登录操作而未进行系统注销或退出操作，业务系统中的在线用户数将持续增加。</p>
 <p>然而在该OA系统中采用此方法时发现，虽然脚本成功运行，但业务系统中的在线用户数并未增长。这说明LoadRunner与浏览器在访问系统的过程中存在差异性。</p>
@@ -130,7 +130,7 @@
 <p><img src="/images/20130822202622_Online-Users-Communication-between-Browser-and-Server.png" alt="Online-Users-Communication-between-Browser-and-Server"></p>
 <p>这就解释了为什么用户在浏览器中登录系统后可以长期地保持在线，而通过脚本成功地进行系统登录后却无法保持在线状态；因为VuGen不会像浏览器那样定期地与服务器进行通讯交互。</p>
 <p>找出其中的差异后，我们便可在VuGen中用脚本模拟浏览器的定期交互功能，简单的实现方法如下所示。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">    web_url(<span class="string">"userAction.struts"</span>,</div><div class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo"</span>,</div><div class="line">        <span class="string">"Resource=0"</span>,</div><div class="line">        <span class="string">"RecContentType=text/html"</span>,</div><div class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/sysShortMsgReflesh.jsp"</span>,</div><div class="line">        <span class="string">"Snapshot=t4.inf"</span>,</div><div class="line">        <span class="string">"Mode=HTML"</span>,</div><div class="line">        LAST);</div><div class="line"></div><div class="line">    web_url(<span class="string">"userAction.struts_2"</span>,</div><div class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo&amp;time=Mon%20Aug%2012%2015:42:04%20UTC+0800%202013"</span>,</div><div class="line">        <span class="string">"Resource=0"</span>,</div><div class="line">        <span class="string">"RecContentType=text/html"</span>,</div><div class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/reflesh.jsp"</span>,</div><div class="line">        <span class="string">"Snapshot=t5.inf"</span>,</div><div class="line">        <span class="string">"Mode=HTML"</span>,</div><div class="line">        LAST);</div><div class="line"></div><div class="line">    lr_think_time(<span class="number">30</span>);    <span class="comment">//模拟浏览器与服务器30秒间隔的通讯交互</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    web_url(<span class="string">"userAction.struts"</span>,</span><br><span class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo"</span>,</span><br><span class="line">        <span class="string">"Resource=0"</span>,</span><br><span class="line">        <span class="string">"RecContentType=text/html"</span>,</span><br><span class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/sysShortMsgReflesh.jsp"</span>,</span><br><span class="line">        <span class="string">"Snapshot=t4.inf"</span>,</span><br><span class="line">        <span class="string">"Mode=HTML"</span>,</span><br><span class="line">        LAST);</span><br><span class="line"></span><br><span class="line">    web_url(<span class="string">"userAction.struts_2"</span>,</span><br><span class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo&amp;time=Mon%20Aug%2012%2015:42:04%20UTC+0800%202013"</span>,</span><br><span class="line">        <span class="string">"Resource=0"</span>,</span><br><span class="line">        <span class="string">"RecContentType=text/html"</span>,</span><br><span class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/reflesh.jsp"</span>,</span><br><span class="line">        <span class="string">"Snapshot=t5.inf"</span>,</span><br><span class="line">        <span class="string">"Mode=HTML"</span>,</span><br><span class="line">        LAST);</span><br><span class="line"></span><br><span class="line">    lr_think_time(<span class="number">30</span>);    <span class="comment">//模拟浏览器与服务器30秒间隔的通讯交互</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>那么，将系统登录脚本和循环函数都放入Action中，在VuGen中采用迭代运行的方式可行吗？</p>
 <p>虽然新增登录用户可以逐个进行，即使用VuGen通过Action迭代的形式采用不同帐号逐个地进行登录操作。但由于用户登录后需要持续间隔地与服务器进行通讯交互才能保持在线，而单线程脚本运行至while(1)后便进入死循环，从而使得Action迭代无效。因此，采用VuGen进行Action迭代的方式是不可行的。</p>
 <p>正确的做法是，在Controller中采用逐步加载的方式，使各个虚拟用户独立地运行，从而保证了各虚拟用户登录成功后保持在线状态。</p>
@@ -160,8 +160,8 @@
 <li>在逐步增加在线用户数的时候，定期（比如间隔3秒）查看业务系统自身统计的在线用户数目，并以该数据为测试结果。</li>
 <li>利用之前的方法测试得到业务系统“初略的”最大在线用户数后，使系统长时间保持该数量的在线用户数目，观察系统在长时间运行期间是否会出现异常；若出现异常后，适当减少在线用户数目后重复地进行测试，直到系统可以保持长时间地稳定运行为止，此时对应的在线用户数目即为业务系统所能承受的最大在线用户数目。</li>
 </ul>
-<p>在本文提到的OA系统中，对链接[<a href="http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。" target="_blank" rel="external">http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。</a></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">Action()</div><div class="line">&#123;</div><div class="line"></div><div class="line">    web_add_cookie(<span class="string">"USERORGID=db93a2M11f6719ff92Mf528764d624db129b32c21fbca0cb8d6; DOMAIN=10.147.15.28"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line"></div><div class="line">        lr_start_transaction(<span class="string">"查看在线用户数目"</span>);</div><div class="line"></div><div class="line">        web_reg_save_param(<span class="string">"OnlineUsers"</span>,</div><div class="line">                <span class="string">"LB=[在线用户数/总用户数：&lt;font color=\"red\"&gt;"</span>,</div><div class="line">                <span class="string">"RB=&lt;/font&gt;]"</span>,</div><div class="line">                <span class="string">"ORD=2"</span>,</div><div class="line">                <span class="string">"Notfound=error"</span>,</div><div class="line">                <span class="string">"Search=Body"</span>,</div><div class="line">                LAST);</div><div class="line"></div><div class="line">        web_url(<span class="string">"countAction.struts"</span>,</div><div class="line">            <span class="string">"URL=http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser"</span>,</div><div class="line">            <span class="string">"Resource=0"</span>,</div><div class="line">            <span class="string">"RecContentType=text/html"</span>,</div><div class="line">            <span class="string">"Referer="</span>,</div><div class="line">            <span class="string">"Snapshot=t1.inf"</span>,</div><div class="line">            <span class="string">"Mode=HTML"</span>,</div><div class="line">            LAST);</div><div class="line"></div><div class="line">        lr_output_message(<span class="string">"当前在线用户数目：%s"</span>, lr_eval_string(<span class="string">"&#123;OnlineUsers&#125;"</span>));</div><div class="line"></div><div class="line">        lr_end_transaction(<span class="string">"查看在线用户数目"</span>, LR_AUTO);</div><div class="line"></div><div class="line">        lr_think_time(<span class="number">3</span>);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在本文提到的OA系统中，对链接[<a href="http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。" target="_blank" rel="noopener">http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Action()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    web_add_cookie(<span class="string">"USERORGID=db93a2M11f6719ff92Mf528764d624db129b32c21fbca0cb8d6; DOMAIN=10.147.15.28"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line"></span><br><span class="line">        lr_start_transaction(<span class="string">"查看在线用户数目"</span>);</span><br><span class="line"></span><br><span class="line">        web_reg_save_param(<span class="string">"OnlineUsers"</span>,</span><br><span class="line">                <span class="string">"LB=[在线用户数/总用户数：&lt;font color=\"red\"&gt;"</span>,</span><br><span class="line">                <span class="string">"RB=&lt;/font&gt;]"</span>,</span><br><span class="line">                <span class="string">"ORD=2"</span>,</span><br><span class="line">                <span class="string">"Notfound=error"</span>,</span><br><span class="line">                <span class="string">"Search=Body"</span>,</span><br><span class="line">                LAST);</span><br><span class="line"></span><br><span class="line">        web_url(<span class="string">"countAction.struts"</span>,</span><br><span class="line">            <span class="string">"URL=http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser"</span>,</span><br><span class="line">            <span class="string">"Resource=0"</span>,</span><br><span class="line">            <span class="string">"RecContentType=text/html"</span>,</span><br><span class="line">            <span class="string">"Referer="</span>,</span><br><span class="line">            <span class="string">"Snapshot=t1.inf"</span>,</span><br><span class="line">            <span class="string">"Mode=HTML"</span>,</span><br><span class="line">            LAST);</span><br><span class="line"></span><br><span class="line">        lr_output_message(<span class="string">"当前在线用户数目：%s"</span>, lr_eval_string(<span class="string">"&#123;OnlineUsers&#125;"</span>));</span><br><span class="line"></span><br><span class="line">        lr_end_transaction(<span class="string">"查看在线用户数目"</span>, LR_AUTO);</span><br><span class="line"></span><br><span class="line">        lr_think_time(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -192,9 +192,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/Create-Blog-with-Pelican-and-GitCafe-Pages/" title="使用 Pelican + GitCafe Pages 创建 Blog">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   使用 Pelican + GitCafe Pages 创建 Blog</span>
 </a>
@@ -202,8 +202,8 @@
 
 
 <div class="next">
-<a href="/post/loadrunner-parameter-variable/"  title="LoadRuner中的参数与变量">
- <strong>下一篇：</strong><br/> 
+<a href="/post/loadrunner-parameter-variable/" title="LoadRuner中的参数与变量">
+ <strong>下一篇：</strong><br> 
  <span>LoadRuner中的参数与变量
 </span>
 </a>
@@ -234,16 +234,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -267,6 +257,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -279,15 +273,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -295,11 +281,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -307,7 +297,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -319,15 +309,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -372,10 +362,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -386,7 +376,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -619,7 +609,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

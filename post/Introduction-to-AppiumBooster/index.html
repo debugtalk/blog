@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>Introduction to AppiumBooster | DebugTalk</title>
@@ -39,14 +39,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -69,17 +69,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -114,19 +114,19 @@
 <h2 id="write-testcases-in-yaml-recommended"><a href="#write-testcases-in-yaml-recommended" class="headerlink" title="write testcases in yaml (recommended)"></a>write testcases in yaml (recommended)</h2><p>Take DebugTalk+ Discover’s login and logout function as an example.</p>
 <p><img src="/images/preview_login_and_logout.png" alt="preview of login and logout"></p>
 <p>In order to test these functions above, you can write testcases in yaml format like this.</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ios/testcases/Account.yml</span></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">AccountTestcases:</span></div><div class="line">  login with valid account:</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter My Account page</div><div class="line"><span class="bullet">    -</span> AccountSteps | enter Login page</div><div class="line"><span class="bullet">    -</span> AccountSteps | input EmailAddress</div><div class="line"><span class="bullet">    -</span> AccountSteps | input Password</div><div class="line"><span class="bullet">    -</span> AccountSteps | login</div><div class="line"><span class="bullet">    -</span> AccountSteps | close coupon popup window(optional)</div><div class="line"></div><div class="line"><span class="attr">  logout:</span></div><div class="line"><span class="bullet">    -</span> AccountSteps | enter My Account page</div><div class="line"><span class="bullet">    -</span> SettingsSteps | enter Settings page</div><div class="line"><span class="bullet">    -</span> AccountSteps | logout</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ios/testcases/Account.yml</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">AccountTestcases:</span></span><br><span class="line">  <span class="string">login</span> <span class="string">with</span> <span class="string">valid</span> <span class="attr">account:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">AccountSteps</span> <span class="string">| enter My Account page</span></span><br><span class="line"><span class="string">    - AccountSteps | enter Login page</span></span><br><span class="line"><span class="string">    - AccountSteps | input EmailAddress</span></span><br><span class="line"><span class="string">    - AccountSteps | input Password</span></span><br><span class="line"><span class="string">    - AccountSteps | login</span></span><br><span class="line"><span class="string">    - AccountSteps | close coupon popup window(optional)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span><span class="attr">  logout:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">AccountSteps</span> <span class="string">| enter My Account page</span></span><br><span class="line"><span class="string">    - SettingsSteps | enter Settings page</span></span><br><span class="line"><span class="string">    - AccountSteps | logout</span></span><br></pre></td></tr></table></figure>
 <p>In the testcases, each step is combined with two parts, joined by a separator <code>|</code>. The former part indicates step file located in <code>ios/steps/</code> directory, and the latter part indicates testcase step name, which is defined in steps yaml files like below.</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ios/steps/AccountSteps.yml</span></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">AccountSteps:</span></div><div class="line">  enter My Account page:</div><div class="line"><span class="attr">    control_id:</span> btnMenuMyAccount</div><div class="line"><span class="attr">    control_action:</span> click</div><div class="line"><span class="attr">    expectation:</span> tablecellMyAccountSystemSettings</div><div class="line"></div><div class="line">  enter Login page:</div><div class="line"><span class="attr">    control_id:</span> tablecellMyAccountLogin</div><div class="line"><span class="attr">    control_action:</span> click</div><div class="line"><span class="attr">    expectation:</span> btnForgetPassword</div><div class="line"></div><div class="line">  input EmailAddress:</div><div class="line"><span class="attr">    control_id:</span> txtfieldEmailAddress</div><div class="line"><span class="attr">    control_action:</span> type</div><div class="line"><span class="attr">    data:</span> leo.lee@debugtalk.com</div><div class="line"><span class="attr">    expectation:</span> sectxtfieldPassword</div><div class="line"></div><div class="line">  input Password:</div><div class="line"><span class="attr">    control_id:</span> sectxtfieldPassword</div><div class="line"><span class="attr">    control_action:</span> type</div><div class="line"><span class="attr">    data:</span> <span class="number">123456</span></div><div class="line"><span class="attr">    expectation:</span> btnLogin</div><div class="line"></div><div class="line"><span class="attr">  login:</span></div><div class="line"><span class="attr">    control_id:</span> btnLogin</div><div class="line"><span class="attr">    control_action:</span> click</div><div class="line"><span class="attr">    expectation:</span> tablecellMyMessage</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ios/steps/AccountSteps.yml</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">AccountSteps:</span></span><br><span class="line">  <span class="string">enter</span> <span class="string">My</span> <span class="string">Account</span> <span class="attr">page:</span></span><br><span class="line"><span class="attr">    control_id:</span> <span class="string">btnMenuMyAccount</span></span><br><span class="line"><span class="attr">    control_action:</span> <span class="string">click</span></span><br><span class="line"><span class="attr">    expectation:</span> <span class="string">tablecellMyAccountSystemSettings</span></span><br><span class="line"></span><br><span class="line">  <span class="string">enter</span> <span class="string">Login</span> <span class="attr">page:</span></span><br><span class="line"><span class="attr">    control_id:</span> <span class="string">tablecellMyAccountLogin</span></span><br><span class="line"><span class="attr">    control_action:</span> <span class="string">click</span></span><br><span class="line"><span class="attr">    expectation:</span> <span class="string">btnForgetPassword</span></span><br><span class="line"></span><br><span class="line">  <span class="string">input</span> <span class="attr">EmailAddress:</span></span><br><span class="line"><span class="attr">    control_id:</span> <span class="string">txtfieldEmailAddress</span></span><br><span class="line"><span class="attr">    control_action:</span> <span class="string">type</span></span><br><span class="line"><span class="attr">    data:</span> <span class="string">leo.lee@debugtalk.com</span></span><br><span class="line"><span class="attr">    expectation:</span> <span class="string">sectxtfieldPassword</span></span><br><span class="line"></span><br><span class="line">  <span class="string">input</span> <span class="attr">Password:</span></span><br><span class="line"><span class="attr">    control_id:</span> <span class="string">sectxtfieldPassword</span></span><br><span class="line"><span class="attr">    control_action:</span> <span class="string">type</span></span><br><span class="line"><span class="attr">    data:</span> <span class="number">123456</span></span><br><span class="line"><span class="attr">    expectation:</span> <span class="string">btnLogin</span></span><br><span class="line"></span><br><span class="line"><span class="attr">  login:</span></span><br><span class="line"><span class="attr">    control_id:</span> <span class="string">btnLogin</span></span><br><span class="line"><span class="attr">    control_action:</span> <span class="string">click</span></span><br><span class="line"><span class="attr">    expectation:</span> <span class="string">tablecellMyMessage</span></span><br></pre></td></tr></table></figure>
 <h2 id="write-testcases-in-tables"><a href="#write-testcases-in-tables" class="headerlink" title="write testcases in tables"></a>write testcases in tables</h2><p>You can also write testcases in any table tools, including MS Excel and iWork Numbers, and even in plain CSV format.</p>
 <p>In order to test the same functions above, you can write testcases in tables like this.</p>
 <p><img src="/images/testcase_login_and_logout.png" alt="testcases of login and logout"></p>
 <p>After the testcases are finished, export to CSV format, and put the csv files under <code>ios/testcases/</code> directory.</p>
 <h2 id="run"><a href="#run" class="headerlink" title="run"></a>run</h2><p>Once the testcases are done, you are ready to run automation test on your app.</p>
 <p>Run the automation testcases is very easy. You can execute <code>ruby run.rb -h</code> in the project root directory to see the usage.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">➜  AppiumBooster git:(master) ✗ ruby run.rb -h</div><div class="line">Usage: run.rb [options]</div><div class="line">    -p, --app_path APP_PATH              Specify app path</div><div class="line">    -t, --app_type APP_TYPE              Specify app type, ios or android</div><div class="line">    -f, --testcase_file TESTCASE_FILE    Specify testcase file</div><div class="line">        --disable_output_color           Disable output color</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  AppiumBooster git:(master) ✗ ruby run.rb -h</span><br><span class="line">Usage: run.rb [options]</span><br><span class="line">    -p, --app_path APP_PATH              Specify app path</span><br><span class="line">    -t, --app_type APP_TYPE              Specify app type, ios or android</span><br><span class="line">    -f, --testcase_file TESTCASE_FILE    Specify testcase file</span><br><span class="line">        --disable_output_color           Disable output color</span><br></pre></td></tr></table></figure>
 <p>AppiumBooster will load all the csv test suites and then excute each suite sequentially.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">➜  AppiumBooster git:(master) ✗ ruby run.rb -p &quot;ios/app/test.zip&quot; -f &quot;ios/testcases/Account.yml&quot;</div><div class="line">initialize appium driver ...</div><div class="line">load testcase yaml file: /Users/Leo/MyProjects/AppiumBooster/ios/testcases/Account.yml</div><div class="line">load steps yaml file: /Users/Leo/MyProjects/AppiumBooster/ios/steps/AccountSteps.yml</div><div class="line">load steps yaml file: /Users/Leo/MyProjects/AppiumBooster/ios/steps/SettingsSteps.yml</div><div class="line">start appium driver ...</div><div class="line"></div><div class="line">======= start to run testcase suite: /Users/Leo/MyProjects/AppiumBooster/ios/testcases/Account.yml =======</div><div class="line">B------ Start to run testcase: login with valid account</div><div class="line">step_1: enter My Account page</div><div class="line">btnMenuMyAccount.click     ...    ✓</div><div class="line">step_2: enter Login page</div><div class="line">tablecellMyAccountLogin.click     ...    ✓</div><div class="line">step_3: input EmailAddress</div><div class="line">txtfieldEmailAddress.type leo.lee@debugtalk.com    ...    ✓</div><div class="line">step_4: input Password</div><div class="line">sectxtfieldPassword.type 123456    ...    ✓</div><div class="line">step_5: login</div><div class="line">btnLogin.click     ...    ✓</div><div class="line">step_6: close coupon popup window(optional)</div><div class="line">btnClose.click     ...    ✓</div><div class="line">E------ login with valid account</div><div class="line"></div><div class="line">B------ Start to run testcase: logout</div><div class="line">step_1: enter My Account page</div><div class="line">btnMenuMyAccount.click     ...    ✓</div><div class="line">step_2: enter Settings page</div><div class="line">tablecellMyAccountSystemSettings.click     ...    ✓</div><div class="line">step_3: logout</div><div class="line">btnLogout.click     ...    ✓</div><div class="line">E------ logout</div><div class="line"></div><div class="line">============ all testcases have been executed. ============</div><div class="line">quit appium driver.</div></pre></td></tr></table></figure>
-<h2 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h2><p>GitHub: <a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="external">https://github.com/debugtalk/AppiumBooster</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">➜  AppiumBooster git:(master) ✗ ruby run.rb -p &quot;ios/app/test.zip&quot; -f &quot;ios/testcases/Account.yml&quot;</span><br><span class="line">initialize appium driver ...</span><br><span class="line">load testcase yaml file: /Users/Leo/MyProjects/AppiumBooster/ios/testcases/Account.yml</span><br><span class="line">load steps yaml file: /Users/Leo/MyProjects/AppiumBooster/ios/steps/AccountSteps.yml</span><br><span class="line">load steps yaml file: /Users/Leo/MyProjects/AppiumBooster/ios/steps/SettingsSteps.yml</span><br><span class="line">start appium driver ...</span><br><span class="line"></span><br><span class="line">======= start to run testcase suite: /Users/Leo/MyProjects/AppiumBooster/ios/testcases/Account.yml =======</span><br><span class="line">B------ Start to run testcase: login with valid account</span><br><span class="line">step_1: enter My Account page</span><br><span class="line">btnMenuMyAccount.click     ...    ✓</span><br><span class="line">step_2: enter Login page</span><br><span class="line">tablecellMyAccountLogin.click     ...    ✓</span><br><span class="line">step_3: input EmailAddress</span><br><span class="line">txtfieldEmailAddress.type leo.lee@debugtalk.com    ...    ✓</span><br><span class="line">step_4: input Password</span><br><span class="line">sectxtfieldPassword.type 123456    ...    ✓</span><br><span class="line">step_5: login</span><br><span class="line">btnLogin.click     ...    ✓</span><br><span class="line">step_6: close coupon popup window(optional)</span><br><span class="line">btnClose.click     ...    ✓</span><br><span class="line">E------ login with valid account</span><br><span class="line"></span><br><span class="line">B------ Start to run testcase: logout</span><br><span class="line">step_1: enter My Account page</span><br><span class="line">btnMenuMyAccount.click     ...    ✓</span><br><span class="line">step_2: enter Settings page</span><br><span class="line">tablecellMyAccountSystemSettings.click     ...    ✓</span><br><span class="line">step_3: logout</span><br><span class="line">btnLogout.click     ...    ✓</span><br><span class="line">E------ logout</span><br><span class="line"></span><br><span class="line">============ all testcases have been executed. ============</span><br><span class="line">quit appium driver.</span><br></pre></td></tr></table></figure>
+<h2 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h2><p>GitHub: <a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="noopener">https://github.com/debugtalk/AppiumBooster</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -157,9 +157,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/iOS-Android-Packing-with-Jenkins-details/" title="关于持续集成打包平台的Jenkins配置和构建脚本实现细节">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   关于持续集成打包平台的Jenkins配置和构建脚本实现细节</span>
 </a>
@@ -167,8 +167,8 @@
 
 
 <div class="next">
-<a href="/post/iOS-Android-Packing-with-Jenkins/"  title="使用Jenkins搭建iOS/Android持续集成打包平台">
- <strong>下一篇：</strong><br/> 
+<a href="/post/iOS-Android-Packing-with-Jenkins/" title="使用Jenkins搭建iOS/Android持续集成打包平台">
+ <strong>下一篇：</strong><br> 
  <span>使用Jenkins搭建iOS/Android持续集成打包平台
 </span>
 </a>
@@ -199,16 +199,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -232,6 +222,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -244,15 +238,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -260,11 +246,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -272,7 +262,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -284,15 +274,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -337,10 +327,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -351,7 +341,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -584,7 +574,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

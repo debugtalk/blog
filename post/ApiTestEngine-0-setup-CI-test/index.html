@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>ApiTestEngine 演进之路（0）开发未动，测试先行 | DebugTalk</title>
@@ -43,14 +43,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -73,17 +73,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -114,46 +114,46 @@
 		
 		</div>
 		
-		<p>在<a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a>一文中，我详细介绍了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>诞生的背景，并对其核心特性进行了详尽的剖析。</p>
-<p>接下来，我将在《ApiTestEngine演进之路》系列文章中讲解<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>是如何从第一行代码开始，逐步实现接口自动化测试框架的核心功能特性的。</p>
+		<p>在<a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a>一文中，我详细介绍了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>诞生的背景，并对其核心特性进行了详尽的剖析。</p>
+<p>接下来，我将在《ApiTestEngine演进之路》系列文章中讲解<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>是如何从第一行代码开始，逐步实现接口自动化测试框架的核心功能特性的。</p>
 <p>相信大家都有听说过<code>TDD</code>（<code>测试驱动开发</code>）这种开发模式，虽然网络上对该种开发模式存在异议，但我个人是非常推荐使用该种开发方式的。关于<code>TDD</code>的优势，我就不在此赘述了，我就只说下自己受益最深的两个方面。</p>
 <ul>
 <li>测试驱动，其实也是需求驱动。在开发正式代码之前，可以先将需求转换为单元测试用例，然后再逐步实现正式代码，直至将所有单元测试用例跑通。这可以帮助我们总是聚焦在要实现的功能特性上，避免跑偏。特别是像我们做测试开发的，通常没有需求文档和设计文档，如果没有清晰的思路，很可能做着做着就不知道自己做到哪儿了。</li>
 <li>高覆盖率的单元测试代码，对项目质量有充足的信心。因为是先写测试再写实现，所以正常情况下，所有的功能特性都应该能被单元测试覆盖到。再结合持续集成的手段，我们可以轻松保证每个版本都是高质量并且可用的。</li>
 </ul>
-<p>所以，<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>项目也将采用<code>TDD</code>的开发模式。本篇文章就重点介绍下采用<code>TDD</code>之前需要做的一些准备工作。</p>
+<p>所以，<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>项目也将采用<code>TDD</code>的开发模式。本篇文章就重点介绍下采用<code>TDD</code>之前需要做的一些准备工作。</p>
 <h2 id="搭建API接口服务（Mock-Server）"><a href="#搭建API接口服务（Mock-Server）" class="headerlink" title="搭建API接口服务（Mock Server）"></a>搭建API接口服务（Mock Server）</h2><p>接口测试框架要运行起来，必然需要有可用的API接口服务。因此，在开始构建我们的接口测试框架之前，最好先搭建一套简单的API接口服务，也就是<code>Mock Server</code>，然后我们在采用<code>TDD</code>开发模式的时候，就可以随时随地将框架代码跑起来，开发效率也会大幅提升。</p>
 <p>为什么不直接采用已有的业务系统API接口服务呢？</p>
 <p>这是因为通常业务系统的接口比较复杂，并且耦合了许多业务逻辑，甚至还可能涉及到和其它业务系统的交互，搭建或维护一套测试环境的成本可能会非常高。另一方面，接口测试框架需要具有一定的通用性，其功能特性很难在一个特定的业务系统中找到所有合适的接口。就拿最简单的接口请求方法来说，测试框架需要支持<code>GET/POST/HEAD/PUT/DELETE</code>方法，但是可能在我们已有的业务系统中只有<code>GET/POST</code>接口。</p>
 <p>自行搭建API接口服务的另一个好处在于，我们可以随时调整接口的实现方式，来满足接口测试框架特定的功能特性，从而使我们总是能将注意力集中在测试框架本身。比较好的做法是，先搭建最简单的接口服务，在此基础上将接口测试框架搭建起来，实现最基本的功能；后面在实现框架的高级功能特性时，我们再对该接口服务进行拓展升级，例如增加签名校验机制等，来适配测试框架的高级功能特性。</p>
-<p>幸运的是，使用<code>Python</code>搭建API接口服务十分简单，特别是在结合使用<a href="http://flask.pocoo.org/" target="_blank" rel="external"><code>Flask</code></a>框架的情况下。</p>
+<p>幸运的是，使用<code>Python</code>搭建API接口服务十分简单，特别是在结合使用<a href="http://flask.pocoo.org/" target="_blank" rel="noopener"><code>Flask</code></a>框架的情况下。</p>
 <p>例如，我们想实现一套可以对用户账号进行增删改查（<code>CRUD</code>）功能的接口服务，用户账号的存储结构大致如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">users_dict = &#123;</div><div class="line">   'uid1': &#123;</div><div class="line">       'name': 'name1',</div><div class="line">       'password': 'pwd1'</div><div class="line">   &#125;,</div><div class="line">   'uid2': &#123;</div><div class="line">       'name': 'name2',</div><div class="line">       'password': 'pwd2'</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">users_dict = &#123;</span><br><span class="line">   'uid1': &#123;</span><br><span class="line">       'name': 'name1',</span><br><span class="line">       'password': 'pwd1'</span><br><span class="line">   &#125;,</span><br><span class="line">   'uid2': &#123;</span><br><span class="line">       'name': 'name2',</span><br><span class="line">       'password': 'pwd2'</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>那么，新增（Create）和更新（Update）功能的接口就可以通过如下方式实现。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</div><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request, make_response</div><div class="line"></div><div class="line">app = Flask(__name__)</div><div class="line">users_dict = &#123;&#125;</div><div class="line"></div><div class="line"><span class="meta">@app.route('/api/users/&lt;int:uid&gt;', methods=['POST'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_user</span><span class="params">(uid)</span>:</span></div><div class="line">    user = request.get_json()</div><div class="line">    <span class="keyword">if</span> uid <span class="keyword">not</span> <span class="keyword">in</span> users_dict:</div><div class="line">        result = &#123;</div><div class="line">            <span class="string">'success'</span>: <span class="keyword">True</span>,</div><div class="line">            <span class="string">'msg'</span>: <span class="string">"user created successfully."</span></div><div class="line">        &#125;</div><div class="line">        status_code = <span class="number">201</span></div><div class="line">        users_dict[uid] = user</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        result = &#123;</div><div class="line">            <span class="string">'success'</span>: <span class="keyword">False</span>,</div><div class="line">            <span class="string">'msg'</span>: <span class="string">"user already existed."</span></div><div class="line">        &#125;</div><div class="line">        status_code = <span class="number">500</span></div><div class="line"></div><div class="line">    response = make_response(json.dumps(result), status_code)</div><div class="line">    response.headers[<span class="string">"Content-Type"</span>] = <span class="string">"application/json"</span></div><div class="line">    <span class="keyword">return</span> response</div><div class="line"></div><div class="line"><span class="meta">@app.route('/api/users/&lt;int:uid&gt;', methods=['PUT'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_user</span><span class="params">(uid)</span>:</span></div><div class="line">    user = users_dict.get(uid, &#123;&#125;)</div><div class="line">    <span class="keyword">if</span> user:</div><div class="line">        user = request.get_json()</div><div class="line">        success = <span class="keyword">True</span></div><div class="line">        status_code = <span class="number">200</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        success = <span class="keyword">False</span></div><div class="line">        status_code = <span class="number">404</span></div><div class="line"></div><div class="line">    result = &#123;</div><div class="line">        <span class="string">'success'</span>: success,</div><div class="line">        <span class="string">'data'</span>: user</div><div class="line">    &#125;</div><div class="line">    response = make_response(json.dumps(result), status_code)</div><div class="line">    response.headers[<span class="string">"Content-Type"</span>] = <span class="string">"application/json"</span></div><div class="line">    <span class="keyword">return</span> response</div></pre></td></tr></table></figure>
-<p>限于篇幅，其它类型的接口实现就不在此赘述，完整的接口实现可以参考<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/tests/api_server.py" target="_blank" rel="external">项目源码</a>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request, make_response</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">users_dict = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/api/users/&lt;int:uid&gt;', methods=['POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_user</span><span class="params">(uid)</span>:</span></span><br><span class="line">    user = request.get_json()</span><br><span class="line">    <span class="keyword">if</span> uid <span class="keyword">not</span> <span class="keyword">in</span> users_dict:</span><br><span class="line">        result = &#123;</span><br><span class="line">            <span class="string">'success'</span>: <span class="keyword">True</span>,</span><br><span class="line">            <span class="string">'msg'</span>: <span class="string">"user created successfully."</span></span><br><span class="line">        &#125;</span><br><span class="line">        status_code = <span class="number">201</span></span><br><span class="line">        users_dict[uid] = user</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        result = &#123;</span><br><span class="line">            <span class="string">'success'</span>: <span class="keyword">False</span>,</span><br><span class="line">            <span class="string">'msg'</span>: <span class="string">"user already existed."</span></span><br><span class="line">        &#125;</span><br><span class="line">        status_code = <span class="number">500</span></span><br><span class="line"></span><br><span class="line">    response = make_response(json.dumps(result), status_code)</span><br><span class="line">    response.headers[<span class="string">"Content-Type"</span>] = <span class="string">"application/json"</span></span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/api/users/&lt;int:uid&gt;', methods=['PUT'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_user</span><span class="params">(uid)</span>:</span></span><br><span class="line">    user = users_dict.get(uid, &#123;&#125;)</span><br><span class="line">    <span class="keyword">if</span> user:</span><br><span class="line">        user = request.get_json()</span><br><span class="line">        success = <span class="keyword">True</span></span><br><span class="line">        status_code = <span class="number">200</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        success = <span class="keyword">False</span></span><br><span class="line">        status_code = <span class="number">404</span></span><br><span class="line"></span><br><span class="line">    result = &#123;</span><br><span class="line">        <span class="string">'success'</span>: success,</span><br><span class="line">        <span class="string">'data'</span>: user</span><br><span class="line">    &#125;</span><br><span class="line">    response = make_response(json.dumps(result), status_code)</span><br><span class="line">    response.headers[<span class="string">"Content-Type"</span>] = <span class="string">"application/json"</span></span><br><span class="line">    <span class="keyword">return</span> response</span><br></pre></td></tr></table></figure>
+<p>限于篇幅，其它类型的接口实现就不在此赘述，完整的接口实现可以参考<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/tests/api_server.py" target="_blank" rel="noopener">项目源码</a>。</p>
 <p>接口服务就绪后，按照<code>Flask</code>官方文档，可以通过如下方式进行启动：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ export FLASK_APP=tests/api_server.py</div><div class="line">$ flask run</div><div class="line"> * Serving Flask app &quot;tests.api_server&quot;</div><div class="line"> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ export FLASK_APP=tests/api_server.py</span><br><span class="line">$ flask run</span><br><span class="line"> * Serving Flask app &quot;tests.api_server&quot;</span><br><span class="line"> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
 <p>启动后，我们就可以通过请求接口来调用已经实现的接口功能了。例如，先创建一个用户，然后查看所有用户的信息，在<code>Python</code>终端中的调用方式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ python</div><div class="line">Python 3.6.0 (default, Mar 24 2017, 16:58:25)</div><div class="line">&gt;&gt;&gt; import requests</div><div class="line">&gt;&gt;&gt; requests.post(&apos;http://127.0.0.1:5000/api/users/1000&apos;, json=&#123;&apos;name&apos;: &apos;user1&apos;, &apos;password&apos;: &apos;123456&apos;&#125;)</div><div class="line">&lt;Response [201]&gt;</div><div class="line">&gt;&gt;&gt; resp = requests.get(&apos;http://127.0.0.1:5000/api/users&apos;)</div><div class="line">&gt;&gt;&gt; resp.content</div><div class="line">b&apos;&#123;&quot;success&quot;: true, &quot;count&quot;: 1, &quot;items&quot;: [&#123;&quot;name&quot;: &quot;user1&quot;, &quot;password&quot;: &quot;123456&quot;&#125;]&#125;&apos;</div><div class="line">&gt;&gt;&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ python</span><br><span class="line">Python 3.6.0 (default, Mar 24 2017, 16:58:25)</span><br><span class="line">&gt;&gt;&gt; import requests</span><br><span class="line">&gt;&gt;&gt; requests.post(&apos;http://127.0.0.1:5000/api/users/1000&apos;, json=&#123;&apos;name&apos;: &apos;user1&apos;, &apos;password&apos;: &apos;123456&apos;&#125;)</span><br><span class="line">&lt;Response [201]&gt;</span><br><span class="line">&gt;&gt;&gt; resp = requests.get(&apos;http://127.0.0.1:5000/api/users&apos;)</span><br><span class="line">&gt;&gt;&gt; resp.content</span><br><span class="line">b&apos;&#123;&quot;success&quot;: true, &quot;count&quot;: 1, &quot;items&quot;: [&#123;&quot;name&quot;: &quot;user1&quot;, &quot;password&quot;: &quot;123456&quot;&#125;]&#125;&apos;</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
 <p>通过接口请求结果可见，接口服务运行正常。</p>
 <h2 id="在单元测试用例中使用-Mock-Server"><a href="#在单元测试用例中使用-Mock-Server" class="headerlink" title="在单元测试用例中使用 Mock Server"></a>在单元测试用例中使用 Mock Server</h2><p>API接口服务（<code>Mock Server</code>）已经有了，但是如果每次运行单元测试时都要先在外部手工启动API接口服务的话，做法实在是不够优雅。</p>
 <p>推荐的做法是，制作一个<code>ApiServerUnittest</code>基类，在其中添加<code>setUpClass</code>类方法，用于启动API接口服务（<code>Mock Server</code>）；添加<code>tearDownClass</code>类方法，用于停止API接口服务。由于<code>setUpClass</code>会在单元测试用例集初始化的时候执行一次，所以可以保证单元测试用例在运行的时候API服务处于可用状态；而<code>tearDownClass</code>会在单元测试用例集执行完毕后运行一次，停止API接口服务，从而避免对下一次启动产生影响。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># tests/base.py</span></div><div class="line"><span class="keyword">import</span> multiprocessing</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> unittest</div><div class="line"><span class="keyword">from</span> . <span class="keyword">import</span> api_server</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiServerUnittest</span><span class="params">(unittest.TestCase)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">    Test case class that sets up an HTTP server which can be used within the tests</div><div class="line">    """</div><div class="line"><span class="meta">    @classmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setUpClass</span><span class="params">(cls)</span>:</span></div><div class="line">        cls.api_server_process = multiprocessing.Process(</div><div class="line">            target=api_server.app.run</div><div class="line">        )</div><div class="line">        cls.api_server_process.start()</div><div class="line">        time.sleep(<span class="number">0.1</span>)</div><div class="line"></div><div class="line"><span class="meta">    @classmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tearDownClass</span><span class="params">(cls)</span>:</span></div><div class="line">        cls.api_server_process.terminate()</div></pre></td></tr></table></figure>
-<p>这里采用的是多进程的方式（<code>multiprocessing</code>），所以我们的单元测试用例可以和API接口服务（<code>Mock Server</code>）同时运行。除了多进程的方式，我看到<code>locust</code>项目采用的是<a href="https://github.com/locustio/locust/blob/master/locust/test/test_web.py" target="_blank" rel="external"><code>gevent.pywsgi.WSGIServer</code></a>的方式，不过由于在<code>gevent</code>中要实现异步需要先<code>monkey.patch_all()</code>，感觉比较麻烦，而且还需要引入<code>gevent</code>这么一个第三方依赖库，所以还是决定采用<code>multiprocessing</code>的方式了。至于为什么没有选择多线程模型（<code>threading</code>），是因为线程至不支持显式终止的（<code>terminate</code>），要实现终止服务会比使用<code>multiprocessing</code>更为复杂。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tests/base.py</span></span><br><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> api_server</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiServerUnittest</span><span class="params">(unittest.TestCase)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Test case class that sets up an HTTP server which can be used within the tests</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setUpClass</span><span class="params">(cls)</span>:</span></span><br><span class="line">        cls.api_server_process = multiprocessing.Process(</span><br><span class="line">            target=api_server.app.run</span><br><span class="line">        )</span><br><span class="line">        cls.api_server_process.start()</span><br><span class="line">        time.sleep(<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tearDownClass</span><span class="params">(cls)</span>:</span></span><br><span class="line">        cls.api_server_process.terminate()</span><br></pre></td></tr></table></figure>
+<p>这里采用的是多进程的方式（<code>multiprocessing</code>），所以我们的单元测试用例可以和API接口服务（<code>Mock Server</code>）同时运行。除了多进程的方式，我看到<code>locust</code>项目采用的是<a href="https://github.com/locustio/locust/blob/master/locust/test/test_web.py" target="_blank" rel="noopener"><code>gevent.pywsgi.WSGIServer</code></a>的方式，不过由于在<code>gevent</code>中要实现异步需要先<code>monkey.patch_all()</code>，感觉比较麻烦，而且还需要引入<code>gevent</code>这么一个第三方依赖库，所以还是决定采用<code>multiprocessing</code>的方式了。至于为什么没有选择多线程模型（<code>threading</code>），是因为线程至不支持显式终止的（<code>terminate</code>），要实现终止服务会比使用<code>multiprocessing</code>更为复杂。</p>
 <p>不过需要注意的是，由于启动<code>Server</code>存在一定的耗时，因此在启动完毕后必须要等待一段时间（本例中<code>0.1秒</code>就足够了），否则在执行单元测试用例时，调用的API接口可能还处于不可用状态。</p>
 <p><code>ApiServerUnittest</code>基类就绪后，对于需要用到<code>Mock Server</code>的单元测试用例集，只需要继承<code>ApiServerUnittest</code>即可；其它的写法跟普通的单元测试完全一致。</p>
 <p>例如，下例包含一个单元测试用例，测试“创建一个用户，该用户之前不存在”的场景。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># tests/test_apiserver.py</span></div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">from</span> .base <span class="keyword">import</span> ApiServerUnittest</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestApiServer</span><span class="params">(ApiServerUnittest)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setUp</span><span class="params">(self)</span>:</span></div><div class="line">        super(TestApiServer, self).setUp()</div><div class="line">        self.host = <span class="string">"http://127.0.0.1:5000"</span></div><div class="line">        self.api_client = requests.Session()</div><div class="line">        self.clear_users()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tearDown</span><span class="params">(self)</span>:</span></div><div class="line">        super(TestApiServer, self).tearDown()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_create_user_not_existed</span><span class="params">(self)</span>:</span></div><div class="line">        self.clear_users()</div><div class="line"></div><div class="line">        url = <span class="string">"%s/api/users/%d"</span> % (self.host, <span class="number">1000</span>)</div><div class="line">        data = &#123;</div><div class="line">            <span class="string">"name"</span>: <span class="string">"user1"</span>,</div><div class="line">            <span class="string">"password"</span>: <span class="string">"123456"</span></div><div class="line">        &#125;</div><div class="line">        resp = self.api_client.post(url, json=data)</div><div class="line"></div><div class="line">        self.assertEqual(<span class="number">201</span>, resp.status_code)</div><div class="line">        self.assertEqual(<span class="keyword">True</span>, resp.json()[<span class="string">"success"</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tests/test_apiserver.py</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> .base <span class="keyword">import</span> ApiServerUnittest</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestApiServer</span><span class="params">(ApiServerUnittest)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setUp</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(TestApiServer, self).setUp()</span><br><span class="line">        self.host = <span class="string">"http://127.0.0.1:5000"</span></span><br><span class="line">        self.api_client = requests.Session()</span><br><span class="line">        self.clear_users()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tearDown</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(TestApiServer, self).tearDown()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_create_user_not_existed</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.clear_users()</span><br><span class="line"></span><br><span class="line">        url = <span class="string">"%s/api/users/%d"</span> % (self.host, <span class="number">1000</span>)</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"name"</span>: <span class="string">"user1"</span>,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"123456"</span></span><br><span class="line">        &#125;</span><br><span class="line">        resp = self.api_client.post(url, json=data)</span><br><span class="line"></span><br><span class="line">        self.assertEqual(<span class="number">201</span>, resp.status_code)</span><br><span class="line">        self.assertEqual(<span class="keyword">True</span>, resp.json()[<span class="string">"success"</span>])</span><br></pre></td></tr></table></figure>
 <h2 id="为项目添加持续集成构建检查（Travis-CI）"><a href="#为项目添加持续集成构建检查（Travis-CI）" class="headerlink" title="为项目添加持续集成构建检查（Travis CI）"></a>为项目添加持续集成构建检查（Travis CI）</h2><p>当我们的项目具有单元测试之后，我们就可以为项目添加持续集成构建检查，从而在每次提交代码至<code>GitHub</code>时都运行测试，确保我们每次提交的代码都是可正常部署及运行的。</p>
-<p>要实现这个功能，推荐使用<a href="https://travis-ci.org/" target="_blank" rel="external"><code>Travis CI</code></a>提供的服务，该服务对于GitHub公有仓库是免费的。要完成配置，操作也很简单，基本上只有三步：</p>
+<p>要实现这个功能，推荐使用<a href="https://travis-ci.org/" target="_blank" rel="noopener"><code>Travis CI</code></a>提供的服务，该服务对于GitHub公有仓库是免费的。要完成配置，操作也很简单，基本上只有三步：</p>
 <ul>
-<li>在<a href="https://travis-ci.org/" target="_blank" rel="external"><code>Travis CI</code></a>使用GitHub账号授权登录；</li>
-<li>在<a href="https://travis-ci.org/" target="_blank" rel="external"><code>Travis CI</code></a>的个人<code>profile</code>页面开启需要持续集成的项目；</li>
+<li>在<a href="https://travis-ci.org/" target="_blank" rel="noopener"><code>Travis CI</code></a>使用GitHub账号授权登录；</li>
+<li>在<a href="https://travis-ci.org/" target="_blank" rel="noopener"><code>Travis CI</code></a>的个人<code>profile</code>页面开启需要持续集成的项目；</li>
 <li>在<code>Github</code>项目的根目录下添加<code>.travis.yml</code>配置文件。</li>
 </ul>
-<p>大多数情况下，<code>.travis.yml</code>配置文件可以很简单，例如<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的配置就只有如下几行：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="attr">sudo:</span> <span class="literal">false</span></div><div class="line"><span class="attr">language:</span> python</div><div class="line"><span class="attr">python:</span></div><div class="line"><span class="bullet">  -</span> <span class="number">2.7</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.3</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.4</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.5</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.6</span></div><div class="line"><span class="attr">install:</span></div><div class="line"><span class="bullet">  -</span> pip install -r requirements.txt</div><div class="line"><span class="attr">script:</span></div><div class="line"><span class="bullet">  -</span> python -m unittest discover</div></pre></td></tr></table></figure>
+<p>大多数情况下，<code>.travis.yml</code>配置文件可以很简单，例如<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>的配置就只有如下几行：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sudo:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">python</span></span><br><span class="line"><span class="attr">python:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">2.7</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">3.3</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">3.4</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">3.5</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">3.6</span></span><br><span class="line"><span class="attr">install:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">pip</span> <span class="string">install</span> <span class="bullet">-r</span> <span class="string">requirements.txt</span></span><br><span class="line"><span class="attr">script:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">python</span> <span class="bullet">-m</span> <span class="string">unittest</span> <span class="string">discover</span></span><br></pre></td></tr></table></figure>
 <p>具体含义不用解释也可以很容易看懂，其中<code>install</code>中包含我们项目的依赖库安装命令，<code>script</code>中包含执行构建测试的命令。</p>
 <p>配置完毕后，后续每次提交代码时，<code>GitHub</code>就会调用<code>Travis CI</code>实现构建检查；并且更赞的在于，构建检查可以同时在多个指定的<code>Python</code>版本环境中进行。</p>
 <p>下图是某次提交代码时的构建结果。</p>
@@ -166,35 +166,35 @@
 <p>答案是并不能。试想，假如我们整个项目中就只有一条单元测试用例，甚至这一条单元测试用例还是个假用例，即没有调用任何代码，那么可想而知，我们的持续集成构建检查总是成功的，并没有起到检查的作用。</p>
 <p>因此，这里还涉及到一个单元测试覆盖率的问题。</p>
 <p>怎么理解单元测试覆盖率呢？简单地说，就是我们在执行单元测试时运行代码的行数，与项目总代码数的比值。</p>
-<p>对于主流的编程语言，都存在大量的覆盖率检查工具，可以帮助我们快速统计单元测试覆盖率。在Python中，用的最多的覆盖率检查工具是<a href="https://coverage.readthedocs.io" target="_blank" rel="external"><code>coverage</code></a>。</p>
-<p>要使用<a href="https://coverage.readthedocs.io" target="_blank" rel="external"><code>coverage</code></a>，需要先进行安装，采用<code>pip</code>的安装方式如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pip install coverage</div></pre></td></tr></table></figure>
+<p>对于主流的编程语言，都存在大量的覆盖率检查工具，可以帮助我们快速统计单元测试覆盖率。在Python中，用的最多的覆盖率检查工具是<a href="https://coverage.readthedocs.io" target="_blank" rel="noopener"><code>coverage</code></a>。</p>
+<p>要使用<a href="https://coverage.readthedocs.io" target="_blank" rel="noopener"><code>coverage</code></a>，需要先进行安装，采用<code>pip</code>的安装方式如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install coverage</span><br></pre></td></tr></table></figure>
 <p>然后，我们就可以采用如下命令执行单元测试。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ coverage run --source=ate -m unittest discover</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ coverage run --<span class="built_in">source</span>=ate -m unittest discover</span><br></pre></td></tr></table></figure>
 <p>这里需要说明的是，<code>--source</code>参数的作用是指定统计的目录，如果不指定该参数，则会将所有依赖库也计算进去，但由于很多依赖库在安装时是没有包含测试代码的，因此会造成统计得到的单元测试覆盖率远低于实际的情况。在上面的命令中，就只统计了<code>ate</code>目录下的单元测试覆盖率；如果要统计当前项目的覆盖率，那么可以指定<code>--source=.</code>（即当前目录下的所有子文夹）。</p>
 <p>采用上述命令执行完单元测试后，会在当前目录下生成一个统计结果文件，<code>.coverage</code>，里面包含了详细的统计结果。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">cat .coverage</div><div class="line">!coverage.py: This is a private format, don&apos;t read it directly!&#123;&quot;lines&quot;:&#123;&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/__init__.py&quot;:[1],&quot;/Users/Leo/MyProjects/</div><div class="line">ApiTestEngine/ate/testcase.py&quot;:[1,2,4,6,9,15,42,7,12,40,46,64,67,68,69,70,48,49,62,72,74,13,65,51,52,53,56,60,58,54,55],&quot;/Users/Leo/MyProjects/ApiTestEngi</div><div class="line">ne/ate/exception.py&quot;:[2,4,5,9,12,15,16,6,7],&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/utils.py&quot;:[1,2,3,4,5,7,9,11,12,14,15,18,22,25,47,51,55,65,77,90,129,1</div><div class="line">41,27,31,32,19,20,23,34,41,43,45,56,57,59,60,48,49,154,163,166,170,172,173,174,176,177,181,182,183,186,187,189,91,92,66,67,72,73,74,94,95,97,98,101,102,78</div><div class="line">,80,81,82,84,85,88,103,104,106,108,110,115,121,122,124,125,127,58,52,53,184,185,109,116,118,119,112,113,132,134,135,136,137,139,63,164,155,157,158,159,161</div><div class="line">,167,168,192,68,69],&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/context.py&quot;:[1,3,5,6,10,16,30,45,7,8,25,26,28,41,42,43,49,55,58,59,63,64,56,74,65,68,69,72,66</div><div class="line">,27,13,14,50,53,52,70],&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/main.py&quot;:[1,2,4,7,9,10,15,21,38,51,25,27,28,29,30,32,33,11,12,13,34,36,42,43,45,46,47,49],</div><div class="line">&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/runner.py&quot;:[1,3,4,5,8,10,15,46,68,97,135,11,12,13,35,36,38,39,41,42,44,82,63,65,66,84,86,87,88,92,93,94,95,124,12</div><div class="line">6,127,128,129,130,131,133,154]&#125;&#125;%</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cat .coverage</span><br><span class="line">!coverage.py: This is a private format, don&apos;t read it directly!&#123;&quot;lines&quot;:&#123;&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/__init__.py&quot;:[1],&quot;/Users/Leo/MyProjects/</span><br><span class="line">ApiTestEngine/ate/testcase.py&quot;:[1,2,4,6,9,15,42,7,12,40,46,64,67,68,69,70,48,49,62,72,74,13,65,51,52,53,56,60,58,54,55],&quot;/Users/Leo/MyProjects/ApiTestEngi</span><br><span class="line">ne/ate/exception.py&quot;:[2,4,5,9,12,15,16,6,7],&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/utils.py&quot;:[1,2,3,4,5,7,9,11,12,14,15,18,22,25,47,51,55,65,77,90,129,1</span><br><span class="line">41,27,31,32,19,20,23,34,41,43,45,56,57,59,60,48,49,154,163,166,170,172,173,174,176,177,181,182,183,186,187,189,91,92,66,67,72,73,74,94,95,97,98,101,102,78</span><br><span class="line">,80,81,82,84,85,88,103,104,106,108,110,115,121,122,124,125,127,58,52,53,184,185,109,116,118,119,112,113,132,134,135,136,137,139,63,164,155,157,158,159,161</span><br><span class="line">,167,168,192,68,69],&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/context.py&quot;:[1,3,5,6,10,16,30,45,7,8,25,26,28,41,42,43,49,55,58,59,63,64,56,74,65,68,69,72,66</span><br><span class="line">,27,13,14,50,53,52,70],&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/main.py&quot;:[1,2,4,7,9,10,15,21,38,51,25,27,28,29,30,32,33,11,12,13,34,36,42,43,45,46,47,49],</span><br><span class="line">&quot;/Users/Leo/MyProjects/ApiTestEngine/ate/runner.py&quot;:[1,3,4,5,8,10,15,46,68,97,135,11,12,13,35,36,38,39,41,42,44,82,63,65,66,84,86,87,88,92,93,94,95,124,12</span><br><span class="line">6,127,128,129,130,131,133,154]&#125;&#125;%</span><br></pre></td></tr></table></figure>
 <p>但是，这个结果就不是给人看的。要想直观地看到统计报告，需要再执行命令<code>coverage report -m</code>，执行完后，就可以看到详细的统计数据了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">➜  ApiTestEngine git:(master) ✗ coverage report -m</div><div class="line">Name               Stmts   Miss  Cover   Missing</div><div class="line">------------------------------------------------</div><div class="line">ate/__init__.py        0      0   100%</div><div class="line">ate/context.py        35      0   100%</div><div class="line">ate/exception.py      11      2    82%   10, 13</div><div class="line">ate/main.py           34      7    79%   18-19, 54-62</div><div class="line">ate/runner.py         44      2    95%   89-90</div><div class="line">ate/testcase.py       30      0   100%</div><div class="line">ate/utils.py         112      8    93%   13, 29, 36-39, 178-179</div><div class="line">------------------------------------------------</div><div class="line">TOTAL                266     19    93%</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  ApiTestEngine git:(master) ✗ coverage report -m</span><br><span class="line">Name               Stmts   Miss  Cover   Missing</span><br><span class="line">------------------------------------------------</span><br><span class="line">ate/__init__.py        0      0   100%</span><br><span class="line">ate/context.py        35      0   100%</span><br><span class="line">ate/exception.py      11      2    82%   10, 13</span><br><span class="line">ate/main.py           34      7    79%   18-19, 54-62</span><br><span class="line">ate/runner.py         44      2    95%   89-90</span><br><span class="line">ate/testcase.py       30      0   100%</span><br><span class="line">ate/utils.py         112      8    93%   13, 29, 36-39, 178-179</span><br><span class="line">------------------------------------------------</span><br><span class="line">TOTAL                266     19    93%</span><br></pre></td></tr></table></figure>
 <p>通过这个报告，可以看到项目整体的单元测试覆盖率为<code>93%</code>，并清晰地展示了每个源代码文件的具体覆盖率数据，以及没有覆盖到的代码行数。</p>
 <p>那要怎么将覆盖率检查添加到我们的持续集成（Travis CI）中呢？</p>
-<p>事实上，当前存在多个可选服务，可以与<code>Travis CI</code>配合使用。当前，使用得比较广泛的是<a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>，针对Public类型的GitHub仓库，这也是一个免费服务。</p>
-<p><a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>的使用方式与<a href="https://travis-ci.org/" target="_blank" rel="external"><code>Travis CI</code></a>类似，也需要先在<a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>网站上采用GitHub账号授权登录，然后开启需要进行检查的GitHub仓库。而要执行的命令，也可以在<code>.travis.yml</code>配置文件中指定。</p>
+<p>事实上，当前存在多个可选服务，可以与<code>Travis CI</code>配合使用。当前，使用得比较广泛的是<a href="https://coveralls.io" target="_blank" rel="noopener"><code>coveralls</code></a>，针对Public类型的GitHub仓库，这也是一个免费服务。</p>
+<p><a href="https://coveralls.io" target="_blank" rel="noopener"><code>coveralls</code></a>的使用方式与<a href="https://travis-ci.org/" target="_blank" rel="noopener"><code>Travis CI</code></a>类似，也需要先在<a href="https://coveralls.io" target="_blank" rel="noopener"><code>coveralls</code></a>网站上采用GitHub账号授权登录，然后开启需要进行检查的GitHub仓库。而要执行的命令，也可以在<code>.travis.yml</code>配置文件中指定。</p>
 <p>增加覆盖率检查后的<code>.travis.yml</code>配置文件内容如下。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="attr">sudo:</span> <span class="literal">false</span></div><div class="line"><span class="attr">language:</span> python</div><div class="line"><span class="attr">python:</span></div><div class="line"><span class="bullet">  -</span> <span class="number">2.7</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.3</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.4</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.5</span></div><div class="line"><span class="bullet">  -</span> <span class="number">3.6</span></div><div class="line"><span class="attr">install:</span></div><div class="line"><span class="bullet">  -</span> pip install -r requirements.txt</div><div class="line"><span class="bullet">  -</span> pip install coverage</div><div class="line"><span class="bullet">  -</span> pip install coveralls</div><div class="line"><span class="attr">script:</span></div><div class="line"><span class="bullet">  -</span> coverage run --source=. -m unittest discover</div><div class="line"><span class="attr">after_success:</span></div><div class="line"><span class="bullet">  -</span> coveralls</div></pre></td></tr></table></figure>
-<p>如上配置应该也很好理解，要使用<code>coveralls</code>的服务，需要先安装<code>coveralls</code>。在采用<code>coverage</code>执行完单元测试后，要将结果上报到<a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>网站，需要再执行<code>coveralls</code>命令。由于<code>coveralls</code>命令只有在测试覆盖率检查成功以后运行才有意义，因此可将其放在<code>after_success</code>部分。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sudo:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">python</span></span><br><span class="line"><span class="attr">python:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">2.7</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">3.3</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">3.4</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">3.5</span></span><br><span class="line"><span class="bullet">  -</span> <span class="number">3.6</span></span><br><span class="line"><span class="attr">install:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">pip</span> <span class="string">install</span> <span class="bullet">-r</span> <span class="string">requirements.txt</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">pip</span> <span class="string">install</span> <span class="string">coverage</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">pip</span> <span class="string">install</span> <span class="string">coveralls</span></span><br><span class="line"><span class="attr">script:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">coverage</span> <span class="string">run</span> <span class="bullet">--source=.</span> <span class="bullet">-m</span> <span class="string">unittest</span> <span class="string">discover</span></span><br><span class="line"><span class="attr">after_success:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">coveralls</span></span><br></pre></td></tr></table></figure>
+<p>如上配置应该也很好理解，要使用<code>coveralls</code>的服务，需要先安装<code>coveralls</code>。在采用<code>coverage</code>执行完单元测试后，要将结果上报到<a href="https://coveralls.io" target="_blank" rel="noopener"><code>coveralls</code></a>网站，需要再执行<code>coveralls</code>命令。由于<code>coveralls</code>命令只有在测试覆盖率检查成功以后运行才有意义，因此可将其放在<code>after_success</code>部分。</p>
 <p>配置完毕后，后续每次提交代码时，<code>GitHub</code>就会调用<code>Travis CI</code>实现构建检查，并同时统计得到单元测试覆盖率。</p>
 <p>下图是某次提交代码时的覆盖率检查。</p>
 <p><img src="/images/coveralls-result.jpg" alt=""></p>
 <p>另外，我们在<code>GitHub</code>项目的<code>README.md</code>中也同样可以添加一个<code>Status Image</code>，实时显示项目的单元测试覆盖率。</p>
 <p><img src="/images/github-coveralls-badge.jpg" alt=""></p>
-<p>配置方式也跟之前类似，在<a href="https://coveralls.io" target="_blank" rel="external"><code>coveralls</code></a>中获取到项目<code>Status Image</code>的URL地址，然后添加到<code>README.md</code>即可。</p>
+<p>配置方式也跟之前类似，在<a href="https://coveralls.io" target="_blank" rel="noopener"><code>coveralls</code></a>中获取到项目<code>Status Image</code>的URL地址，然后添加到<code>README.md</code>即可。</p>
 <p><img src="/images/coveralls-image-url.jpg" alt=""></p>
 <p>最后需要说明的是，项目的单元测试覆盖率只能起到参考作用，没有被单元测试覆盖到的代码我们不能说它肯定有问题，100%覆盖率的代码也并不能保证它肯定没有问题。归根结底，这还是要依赖于单元测试的策略实现，因此我们在写单元测试的时候也要尽可能多地覆盖到各种逻辑路径，以及兼顾到各种异常情况。</p>
 <h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>通过本文中的工作，我们就对项目搭建好了测试框架，并实现了持续集成构建检查机制。从下一篇开始，我们就将开始逐步实现接口自动化测试框架的核心功能特性了。</p>
 <h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
 <li><a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
-<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code> GitHub源码</a></li>
+<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code> GitHub源码</a></li>
 </ul>
   
 	</div>
@@ -226,9 +226,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/ApiTestEngine-1-setup-basic-framework/" title="ApiTestEngine 演进之路（1）搭建基础框架">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   ApiTestEngine 演进之路（1）搭建基础框架</span>
 </a>
@@ -236,8 +236,8 @@
 
 
 <div class="next">
-<a href="/post/ApiTestEngine-api-test-best-practice/"  title="接口自动化测试的最佳工程实践（ApiTestEngine）">
- <strong>下一篇：</strong><br/> 
+<a href="/post/ApiTestEngine-api-test-best-practice/" title="接口自动化测试的最佳工程实践（ApiTestEngine）">
+ <strong>下一篇：</strong><br> 
  <span>接口自动化测试的最佳工程实践（ApiTestEngine）
 </span>
 </a>
@@ -268,16 +268,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -301,6 +291,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -313,15 +307,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -329,11 +315,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -341,7 +331,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -353,15 +343,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -406,10 +396,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -420,7 +410,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -653,7 +643,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

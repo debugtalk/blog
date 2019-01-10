@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>Android App持续集成性能测试：启动流量（1） | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -113,15 +113,15 @@
 <h2 id="get-app-UID"><a href="#get-app-UID" class="headerlink" title="get app UID"></a>get app UID</h2><p>与流量相关的状态数据存储在<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下，其中，<code>&lt;UID&gt;</code>表示apk对应的UID。</p>
 <p>关于UID，简单地进行下说明。在Linux系统中，UID表示的是User Identifier，主要用于表示是哪位用户运行了该程序。但在Android系统中，由于Android系统本身就为单用户系统，这时UID就被赋予了新的使命，主要用于实现数据共享。具体地，Android系统为每个应用都分配了一个UID，不同apk的UID几乎都是互不相同的，而对于不同UID的apk，不能共享数据资源。之所以用“几乎”，是因为有时候同一厂家会存在多个产品，并且希望能在多个apk之间实现数据共享，这个时候，便可通过在menifest配置文件中指定相同的sharedUserId，然后在Android系统中安装应用时便会分配相同的UID。</p>
 <p>获取app UID的方式有多种，最简单的方式应该还是从<code>/data/system/packages.list</code>中读取，并通过apk的<code>&lt;PKGNAME&gt;</code>找到对应的UID。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root@hammerhead:/ # cat /data/system/packages.list | grep com.UCMobile.trunk</div><div class="line">com.UCMobile.trunk 10084 0 /data/data/com.UCMobile.trunk default 3003,1028,1015</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/ # cat /data/system/packages.list | grep com.UCMobile.trunk</span><br><span class="line">com.UCMobile.trunk 10084 0 /data/data/com.UCMobile.trunk default 3003,1028,1015</span><br></pre></td></tr></table></figure>
 <p>在这里，10084即是<code>com.UCMobile.trunk</code>的UID。</p>
 <h2 id="获取流量数据"><a href="#获取流量数据" class="headerlink" title="获取流量数据"></a>获取流量数据</h2><p>流量数据分为接收流量（tcp_rcv）和发送流量（tcp_snd）两部分，这两个状态数值我们可以通过读取<code>/proc/uid_stat/&lt;UID&gt;</code>目录下的两个文件得到。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_rcv</div><div class="line">3446837</div><div class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_snd</div><div class="line">134366</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_rcv</span><br><span class="line">3446837</span><br><span class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_snd</span><br><span class="line">134366</span><br></pre></td></tr></table></figure>
 <p>通过这种方式，我们就可以读取得到指定apk在当前时刻的累计流量数值。</p>
 <h2 id="获得启动流量数据"><a href="#获得启动流量数据" class="headerlink" title="获得启动流量数据"></a>获得启动流量数据</h2><p>有了前面的基础，我们要测试启动流量就很好实现了。只需要在启动前采集下累计流量数值，然后启动应用，完成启动后再采集一次累计流量数值，前后两次累计数值的差值便是当次启动耗费的流量数。需要注意的是，由于很多时候apk在启动后，会在系统后台异步加载一些数据资源，因此为了保证我们采集到当次启动耗费的全部流量数值，我们在启动应用后最好能等待一段时间。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_snd</div><div class="line">15068</div><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_rcv</div><div class="line">98021</div><div class="line"></div><div class="line"># start app activity, sleep 10s</div><div class="line"></div><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_snd</div><div class="line">23268</div><div class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_rcv</div><div class="line">965651</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_snd</span><br><span class="line">15068</span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_rcv</span><br><span class="line">98021</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> start app activity, sleep 10s</span></span><br><span class="line"></span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_snd</span><br><span class="line">23268</span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_rcv</span><br><span class="line">965651</span><br></pre></td></tr></table></figure>
 <p>采集到前后两次流量数值后，即可计算得到当次启动耗费的总流量。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">当次启动总流量 = (23268 + 965651) - (15068 + 98021) = 875830 bytes</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当次启动总流量 = (23268 + 965651) - (15068 + 98021) = 875830 bytes</span><br></pre></td></tr></table></figure>
 <p>当然，这里的启动还分为好几种，包括首次安装启动、非首次安装启动、覆盖安装启动等。具体的启动方式可根据实际场景来定，但在统计流量的方法方面都是相同的。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文讲解了Android App启动流量测试的一种方法。然而，本次介绍的方法也存在一定局限性，因为<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下的<code>tcp_rcv</code>和<code>tcp_snd</code>文件中都只记录了总值，如果我们只关注总体的流量数值还好，但要是我们希望能测试得到更细化的数据，该方法就没法满足我们的测试需求了。</p>
 <p>举个例子，UC浏览器国际版在启动后，会和美国的服务器进行通讯交互。现在，我们想测试UC浏览器国际版在启动后与美国服务器的通讯流量。</p>
@@ -156,9 +156,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/Android-performance-test-start-traffic-tcpdump-wireshark/" title="Android App持续集成性能测试：启动流量（2）">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   Android App持续集成性能测试：启动流量（2）</span>
 </a>
@@ -166,8 +166,8 @@
 
 
 <div class="next">
-<a href="/post/manage-Jenkins-via-remote-api/"  title="通过API远程管理Jenkins">
- <strong>下一篇：</strong><br/> 
+<a href="/post/manage-Jenkins-via-remote-api/" title="通过API远程管理Jenkins">
+ <strong>下一篇：</strong><br> 
  <span>通过API远程管理Jenkins
 </span>
 </a>
@@ -198,16 +198,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -231,6 +221,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -243,15 +237,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -259,11 +245,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -271,7 +261,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -283,15 +273,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -336,10 +326,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -350,7 +340,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -583,7 +573,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

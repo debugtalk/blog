@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>通过API远程管理Jenkins | DebugTalk</title>
@@ -39,14 +39,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -69,17 +69,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -139,12 +139,12 @@
 <h2 id="Jenkins-Remote-API-的调用"><a href="#Jenkins-Remote-API-的调用" class="headerlink" title="Jenkins Remote API 的调用"></a>Jenkins Remote API 的调用</h2><p>现在我们来看下如何调用Jenkins的Remote API。</p>
 <p>Jenkins的Remote API以<code>REST-like</code>的形式进行提供，通过对特定的API执行POST请求即可实现对Jenkins的操作。</p>
 <p>例如，我们搭建的Jenkins站点为<code>http://jenkins.debugtalk.com:8080</code>，那么，访问<code>http://jenkins.debugtalk.com:8080/api</code>即可查看到该站点所有可用的API；若想若某个具体的Job进行操作，如job名称<code>android_core_dashboard_trunk</code>，它的管理页面为<code>http://jenkins.debugtalk.com:8080/job/android_core_dashboard_trunk</code>，那么我们访问<code>http://jenkins.debugtalk.com:8080/job/android_core_dashboard_trunk/api/</code>即可查看到该job可用的API。</p>
-<p>更详细的POST调用方式的介绍可以参考Jenkins的官方<a href="https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API" target="_blank" rel="external">wiki</a>，在此就不过多进行介绍。</p>
+<p>更详细的POST调用方式的介绍可以参考Jenkins的官方<a href="https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API" target="_blank" rel="noopener">wiki</a>，在此就不过多进行介绍。</p>
 <p>可以看出，通过对特定API执行POST请求操作较为原始，因为我们需要关注过多底层细节。事实上，当前已经有前辈针对这一痛点，对底层的POST操作细节进行了封装，形成了一些<code>wrapper</code>方便我们从上层进行更便捷的操作。</p>
 <p>这类<code>wrapper</code>实现的功能类似，都可以方便我们在代码中通过更简洁的方式调用Jenkins API，实现对Jenkins的远程管理，我们只需要根据我们采用的具体编程语言来选择对应的<code>wrapper</code>即可。当然，如果没有找到合适的，我们也可以参照已有的开源<code>wrapper</code>，自己再造一个轮子，原理都是相同的。</p>
-<p>在Jenkins的官方wiki中，推荐了两个较为成熟的<code>API wrapper</code>，一个是基于Python实现的<a href="https://github.com/salimfadhley/jenkinsapi" target="_blank" rel="external"><code>salimfadhley/jenkinsapi</code></a>，另一个是基于Ruby实现的<a href="https://github.com/arangamani/jenkins_api_client" target="_blank" rel="external"><code>arangamani/jenkins_api_client</code></a>。</p>
+<p>在Jenkins的官方wiki中，推荐了两个较为成熟的<code>API wrapper</code>，一个是基于Python实现的<a href="https://github.com/salimfadhley/jenkinsapi" target="_blank" rel="noopener"><code>salimfadhley/jenkinsapi</code></a>，另一个是基于Ruby实现的<a href="https://github.com/arangamani/jenkins_api_client" target="_blank" rel="noopener"><code>arangamani/jenkins_api_client</code></a>。</p>
 <p>以<code>salimfadhley/jenkinsapi</code>为例，通过使用<code>jenkinsapi</code>，我们在Python中就可以很方便地管理Jenkins。常见的操作方式示例如下。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> jenkinsapi</div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> jenkinsapi.jenkins <span class="keyword">import</span> Jenkins</div><div class="line"></div><div class="line"><span class="comment"># 指定Jenkins实例</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>J = Jenkins(<span class="string">'http://jenkins.debugtalk.com:8080'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 查看Jenkins版本</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>J.version</div><div class="line"><span class="number">1.542</span></div><div class="line"></div><div class="line"><span class="comment"># 查看Jenkins的所有jobs</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>J.keys()</div><div class="line">[<span class="string">'foo'</span>, <span class="string">'test_jenkinsapi'</span>]</div><div class="line"></div><div class="line"><span class="comment"># 查看指定job的配置信息</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>J[<span class="string">'test_jenkinsapi'</span>].get_config()</div><div class="line"></div><div class="line"><span class="comment"># 创建Jenkins job</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>jobName = <span class="string">'test_job'</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>EMPTY_JOB_CONFIG = <span class="string">'''</span></div><div class="line">&lt;?xml version='1.0' encoding='UTF-8'?&gt;</div><div class="line">&lt;project&gt;</div><div class="line">  &lt;actions&gt;jkkjjk&lt;/actions&gt;</div><div class="line">  &lt;description&gt;&lt;/description&gt;</div><div class="line">  &lt;keepDependencies&gt;false&lt;/keepDependencies&gt;</div><div class="line">  &lt;properties/&gt;</div><div class="line">  &lt;scm class="hudson.scm.NullSCM"/&gt;</div><div class="line">  &lt;canRoam&gt;true&lt;/canRoam&gt;</div><div class="line">  &lt;disabled&gt;false&lt;/disabled&gt;</div><div class="line">  &lt;blockBuildWhenDownstreamBuilding&gt;false&lt;/blockBuildWhenDownstreamBuilding&gt;</div><div class="line">  &lt;blockBuildWhenUpstreamBuilding&gt;false&lt;/blockBuildWhenUpstreamBuilding&gt;</div><div class="line">  &lt;triggers class="vector"/&gt;</div><div class="line">  &lt;concurrentBuild&gt;false&lt;/concurrentBuild&gt;</div><div class="line">  &lt;builders/&gt;</div><div class="line">  &lt;publishers/&gt;</div><div class="line">  &lt;buildWrappers/&gt;</div><div class="line">&lt;/project&gt;</div><div class="line">'''</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>new_job = J.create_job(jobName, EMPTY_JOB_CONFIG)</div><div class="line"></div><div class="line"><span class="comment"># 更新Jenkins job的配置</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> et</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>new_conf = new_job.get_config()</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>root = et.fromstring(new_conf.strip())</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>builders = root.find(<span class="string">'builders'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>shell = et.SubElement(builders, <span class="string">'hudson.tasks.Shell'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>command = et.SubElement(shell, <span class="string">'command'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>command.text = <span class="string">"ls"</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>J[jobName].update_config(et.tostring(root))</div><div class="line"></div><div class="line"><span class="comment"># 删除Jenkins job</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>J.delete_job(jobName)</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> jenkinsapi</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> jenkinsapi.jenkins <span class="keyword">import</span> Jenkins</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定Jenkins实例</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J = Jenkins(<span class="string">'http://jenkins.debugtalk.com:8080'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Jenkins版本</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J.version</span><br><span class="line"><span class="number">1.542</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Jenkins的所有jobs</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J.keys()</span><br><span class="line">[<span class="string">'foo'</span>, <span class="string">'test_jenkinsapi'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看指定job的配置信息</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J[<span class="string">'test_jenkinsapi'</span>].get_config()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Jenkins job</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>jobName = <span class="string">'test_job'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>EMPTY_JOB_CONFIG = <span class="string">'''</span></span><br><span class="line"><span class="string">&lt;?xml version='1.0' encoding='UTF-8'?&gt;</span></span><br><span class="line"><span class="string">&lt;project&gt;</span></span><br><span class="line"><span class="string">  &lt;actions&gt;jkkjjk&lt;/actions&gt;</span></span><br><span class="line"><span class="string">  &lt;description&gt;&lt;/description&gt;</span></span><br><span class="line"><span class="string">  &lt;keepDependencies&gt;false&lt;/keepDependencies&gt;</span></span><br><span class="line"><span class="string">  &lt;properties/&gt;</span></span><br><span class="line"><span class="string">  &lt;scm class="hudson.scm.NullSCM"/&gt;</span></span><br><span class="line"><span class="string">  &lt;canRoam&gt;true&lt;/canRoam&gt;</span></span><br><span class="line"><span class="string">  &lt;disabled&gt;false&lt;/disabled&gt;</span></span><br><span class="line"><span class="string">  &lt;blockBuildWhenDownstreamBuilding&gt;false&lt;/blockBuildWhenDownstreamBuilding&gt;</span></span><br><span class="line"><span class="string">  &lt;blockBuildWhenUpstreamBuilding&gt;false&lt;/blockBuildWhenUpstreamBuilding&gt;</span></span><br><span class="line"><span class="string">  &lt;triggers class="vector"/&gt;</span></span><br><span class="line"><span class="string">  &lt;concurrentBuild&gt;false&lt;/concurrentBuild&gt;</span></span><br><span class="line"><span class="string">  &lt;builders/&gt;</span></span><br><span class="line"><span class="string">  &lt;publishers/&gt;</span></span><br><span class="line"><span class="string">  &lt;buildWrappers/&gt;</span></span><br><span class="line"><span class="string">&lt;/project&gt;</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>new_job = J.create_job(jobName, EMPTY_JOB_CONFIG)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新Jenkins job的配置</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> et</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>new_conf = new_job.get_config()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root = et.fromstring(new_conf.strip())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>builders = root.find(<span class="string">'builders'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>shell = et.SubElement(builders, <span class="string">'hudson.tasks.Shell'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>command = et.SubElement(shell, <span class="string">'command'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>command.text = <span class="string">"ls"</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J[jobName].update_config(et.tostring(root))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除Jenkins job</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J.delete_job(jobName)</span><br></pre></td></tr></table></figure>
 <p>更多的使用方法可参考项目文档。</p>
 <p>有些同学在认真研究了这些开源库后也许会说，官方文档已经翻遍了，但是文档中对用法的描述太少了，也没给出API调用的示例，还是不知道怎么使用啊。这个问题在开源库中的确也是普遍存在的。</p>
 <p>介绍个技巧，通常优秀的开源库都会很重视测试，作者可能在文档中没有针对每一个API接口的调用方式进行说明，但通常会针对各个接口编写较为完整的测试代码。我们通过阅读测试代码，就可以充分了解API接口的使用方法了，这也比直接阅读文档有效率得多。</p>
@@ -184,9 +184,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/Android-performance-test-start-traffic-uid-stat/" title="Android App持续集成性能测试：启动流量（1）">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   Android App持续集成性能测试：启动流量（1）</span>
 </a>
@@ -194,8 +194,8 @@
 
 
 <div class="next">
-<a href="/post/traps-in-sql-null/"  title="SQL语句中关于NULL的那些坑">
- <strong>下一篇：</strong><br/> 
+<a href="/post/traps-in-sql-null/" title="SQL语句中关于NULL的那些坑">
+ <strong>下一篇：</strong><br> 
  <span>SQL语句中关于NULL的那些坑
 </span>
 </a>
@@ -226,16 +226,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -259,6 +249,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -271,15 +265,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -287,11 +273,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -299,7 +289,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -311,15 +301,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -364,10 +354,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -378,7 +368,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -611,7 +601,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

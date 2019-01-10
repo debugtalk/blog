@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>使用爬虫技术实现 Web 页面资源可用性检测 | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -129,7 +129,7 @@
 <p>在实现 Javascript 执行方面，<a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a> 也并没有自己造轮子，而是借助了 <a href="https://github.com/miyakogi/pyppeteer" target="_blank" rel="noopener">pyppeteer</a> 这个开源项目。还记得前面提到的 <a href="https://github.com/GoogleChrome/puppeteer" target="_blank" rel="noopener">puppeteer</a> 项目么，这是 GoogleChrome 官方实现的 <code>Node API</code>；而 <a href="https://github.com/miyakogi/pyppeteer" target="_blank" rel="noopener">pyppeteer</a> 这个项目，则相当于是使用 Python 语言对 puppeteer 的非官方实现，基本具有 <a href="https://github.com/GoogleChrome/puppeteer" target="_blank" rel="noopener">puppeteer</a> 的所有功能。</p>
 <p>理清了以上关系后，相信大家对 <a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a> 也就有了更好的理解。</p>
 <p>在使用方面，<a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a> 也十分简单，用法与 <a href="https://github.com/requests/requests" target="_blank" rel="noopener">requests</a> 基本相同，只是多了 <code>render</code> 功能。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> requests_html <span class="keyword">import</span> HTMLSession</div><div class="line"></div><div class="line">session = HTMLSession()</div><div class="line">r = session.get(<span class="string">'http://python-requests.org'</span>)</div><div class="line">r.html.render()</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> requests_html <span class="keyword">import</span> HTMLSession</span><br><span class="line"></span><br><span class="line">session = HTMLSession()</span><br><span class="line">r = session.get(<span class="string">'http://python-requests.org'</span>)</span><br><span class="line">r.html.render()</span><br></pre></td></tr></table></figure>
 <p>在执行 <code>render()</code> 之后，返回的就是经过渲染后的页面内容。</p>
 <h2 id="爬虫实现访问频率控制"><a href="#爬虫实现访问频率控制" class="headerlink" title="爬虫实现访问频率控制"></a>爬虫实现访问频率控制</h2><p>为了防止流量攻击，很多网站都有访问频率限制，即限制单个 IP 在一定时间段内的访问次数。若超过这个设定的限制，服务器端就会拒绝访问请求，即响应状态码为 403（Forbidden）。</p>
 <p>这用来应对外部的流量攻击或者爬虫是可以的，但在这个限定策略下，公司内部的爬虫测试工具同样也无法正常使用了。针对这个问题，常用的做法就是在应用系统中开设白名单，将公司内部的爬虫测试服务器 IP 加到白名单中，然后针对白名单中的 IP 不做限制，或者提升限额。但这同样可能会出现问题。因为应用服务器的性能不是无限的，假如爬虫的访问频率超过了应用服务器的处理极限，那么就会造成应用服务器不可用的情况，即响应状态码为 503（Service Unavailable Error）。</p>
@@ -160,7 +160,7 @@
 <li>在主进程中，不断地从 fetched_urls_queue 取数据，将未访问过的链接添加到 unvisited_urls_queue，在添加之前进行访问频率控制。</li>
 </ul>
 <p>具体的控制方法也很简单，假设我们是要实现 RPS 的控制，那么就可以使用如下方式（只截取关键片段）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">start_timer = time.time()</div><div class="line">requests_queued = <span class="number">0</span></div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        url = self.fetched_urls_queue.get(timeout=<span class="number">5</span>)</div><div class="line">    <span class="keyword">except</span> queue.Empty:</div><div class="line">        <span class="keyword">break</span></div><div class="line"></div><div class="line">    <span class="comment"># visited url will not be crawled twice</span></div><div class="line">    <span class="keyword">if</span> url <span class="keyword">in</span> self.visited_urls_set:</div><div class="line">        <span class="keyword">continue</span></div><div class="line"></div><div class="line">    <span class="comment"># limit rps or rpm</span></div><div class="line">    <span class="keyword">if</span> requests_queued &gt;= self.requests_limit:</div><div class="line">        runtime_secs = time.time() - start_timer</div><div class="line">        <span class="keyword">if</span> runtime_secs &lt; self.interval_limit:</div><div class="line">            sleep_secs = self.interval_limit - runtime_secs</div><div class="line">            <span class="comment"># exceed rps limit, sleep</span></div><div class="line">            time.sleep(sleep_secs)</div><div class="line"></div><div class="line">        start_timer = time.time()</div><div class="line">        requests_queued = <span class="number">0</span></div><div class="line"></div><div class="line">    self.unvisited_urls_queue.put(url)</div><div class="line">    self.visited_urls_set.add(url)</div><div class="line">    requests_queued += <span class="number">1</span></div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">start_timer = time.time()</span><br><span class="line">requests_queued = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        url = self.fetched_urls_queue.get(timeout=<span class="number">5</span>)</span><br><span class="line">    <span class="keyword">except</span> queue.Empty:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># visited url will not be crawled twice</span></span><br><span class="line">    <span class="keyword">if</span> url <span class="keyword">in</span> self.visited_urls_set:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># limit rps or rpm</span></span><br><span class="line">    <span class="keyword">if</span> requests_queued &gt;= self.requests_limit:</span><br><span class="line">        runtime_secs = time.time() - start_timer</span><br><span class="line">        <span class="keyword">if</span> runtime_secs &lt; self.interval_limit:</span><br><span class="line">            sleep_secs = self.interval_limit - runtime_secs</span><br><span class="line">            <span class="comment"># exceed rps limit, sleep</span></span><br><span class="line">            time.sleep(sleep_secs)</span><br><span class="line"></span><br><span class="line">        start_timer = time.time()</span><br><span class="line">        requests_queued = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    self.unvisited_urls_queue.put(url)</span><br><span class="line">    self.visited_urls_set.add(url)</span><br><span class="line">    requests_queued += <span class="number">1</span></span><br></pre></td></tr></table></figure>
 <h2 id="提升爬虫效率"><a href="#提升爬虫效率" class="headerlink" title="提升爬虫效率"></a>提升爬虫效率</h2><p>对于提升爬虫效率这部分，当前已经有大量的讨论了，重点都是集中在不同的并发机制上面，包括多进程、多线程、asyncio等。</p>
 <p>不过，他们的并发测试结果对于本文中讨论的爬虫场景并不适用。因为在本文的爬虫场景中，实现前端页面渲染是最核心的一项功能特性，而要实现前端页面渲染，底层都是需要使用浏览器内核的，相当于每个 worker 在运行时都会跑一个 Chromium 实例。</p>
 <p>众所周知，Chromium 对于 CPU 和内存的开销都是比较大的，因此为了避免机器资源出现瓶颈，使用多进程机制（multiprocessing）充分调用多处理器的硬件资源无疑是最佳的选择。</p>
@@ -205,9 +205,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/dji-hire-test-leader/" title="【大疆招聘】招聘核心项目测试负责人，诚意十足（附文末福利）">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   【大疆招聘】招聘核心项目测试负责人，诚意十足（附文末福利）</span>
 </a>
@@ -215,8 +215,8 @@
 
 
 <div class="next">
-<a href="/post/httprunner-hook/"  title="HttpRunner 实现 hook 机制">
- <strong>下一篇：</strong><br/> 
+<a href="/post/httprunner-hook/" title="HttpRunner 实现 hook 机制">
+ <strong>下一篇：</strong><br> 
  <span>HttpRunner 实现 hook 机制
 </span>
 </a>
@@ -247,16 +247,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -280,6 +270,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -292,15 +286,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -308,11 +294,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -320,7 +310,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -332,15 +322,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -385,10 +375,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -399,7 +389,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -632,7 +622,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

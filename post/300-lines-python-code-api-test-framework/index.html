@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>300行Python代码打造实用接口测试框架 | DebugTalk</title>
@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="在刚开始实现ApiTestEngine的时候，卡斯（kasi）提议做一个Java版的。对于这样的建议，我当然是拒绝的，瞬即回复了他，“人生苦短，回头是岸啊”。 当然，我没好意思跟他说的是，我不会Java啊。不过最主要的原因嘛，还是因为Python的语法简洁，可以采用很少的代码量实现丰富的功能。 有多简洁呢？ 刚在coveralls上看了下ApiTestEngine框架的代码统计行数，总行数只有26">
-<meta name="keywords" content="Python,接口测试,测试框架,HttpRunner">
+<meta name="keywords" content="Python,测试框架,HttpRunner,接口测试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="300行Python代码打造实用接口测试框架">
 <meta property="og:url" content="http://debugtalk.com/post/300-lines-python-code-api-test-framework/index.html">
@@ -39,14 +39,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -69,17 +69,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -110,14 +110,14 @@
 		
 		</div>
 		
-		<p>在刚开始实现<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的时候，<a href="https://testerhome.com/kasi" target="_blank" rel="external"><code>卡斯（kasi）</code></a>提议做一个Java版的。对于这样的建议，我当然是拒绝的，瞬即回复了他，“人生苦短，回头是岸啊”。</p>
+		<p>在刚开始实现<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>的时候，<a href="https://testerhome.com/kasi" target="_blank" rel="noopener"><code>卡斯（kasi）</code></a>提议做一个Java版的。对于这样的建议，我当然是拒绝的，瞬即回复了他，“人生苦短，回头是岸啊”。</p>
 <p>当然，我没好意思跟他说的是，我不会Java啊。不过最主要的原因嘛，还是因为Python的语法简洁，可以采用很少的代码量实现丰富的功能。</p>
 <p>有多简洁呢？</p>
-<p>刚在<code>coveralls</code>上看了下<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>框架的<a href="https://coveralls.io/github/debugtalk/ApiTestEngine?branch=master" target="_blank" rel="external">代码统计行数</a>，总行数只有268行，还不足300行。</p>
+<p>刚在<code>coveralls</code>上看了下<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>框架的<a href="https://coveralls.io/github/debugtalk/ApiTestEngine?branch=master" target="_blank" rel="noopener">代码统计行数</a>，总行数只有268行，还不足300行。</p>
 <p><img src="/images/ApiTestEngine-stat-ate.jpg" alt=""></p>
 <p>当然，这个行数指的是框架本身的<code>Python</code>代码行数，不包括示例注释的行数。从上图可以看出来，<code>LINES</code>列是文件总行数，<code>RELEVANT</code>列是实际的<code>Python</code>代码行数。例如<code>ate/runner.py</code>文件，注释的行数是远多于实际代码行数的。</p>
-<p>最极端的一个例子是，<code>ate/testcase.py</code>文件中的<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/ate/testcase.py" target="_blank" rel="external"><code>parse</code>函数</a>，示例注释行数35行，<code>Python</code>代码只有2行。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, testcase_template)</span>:</span></div><div class="line">   <span class="string">""" parse testcase_template, replace all variables with bind value.</span></div><div class="line">   variables marker: $&#123;variable&#125;.</div><div class="line">   @param (dict) testcase_template</div><div class="line">       &#123;</div><div class="line">           "request": &#123;</div><div class="line">               "url": "http://127.0.0.1:5000/api/users/$&#123;uid&#125;",</div><div class="line">               "method": "POST",</div><div class="line">               "headers": &#123;</div><div class="line">                   "Content-Type": "application/json",</div><div class="line">                   "authorization": "$&#123;authorization&#125;",</div><div class="line">                   "random": "$&#123;random&#125;"</div><div class="line">               &#125;,</div><div class="line">               "body": "$&#123;data&#125;"</div><div class="line">           &#125;,</div><div class="line">           "response": &#123;</div><div class="line">               "status_code": "$&#123;expected_status&#125;"</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   @return (dict) parsed testcase with bind values</div><div class="line">       &#123;</div><div class="line">           "request": &#123;</div><div class="line">               "url": "http://127.0.0.1:5000/api/users/1000",</div><div class="line">               "method": "POST",</div><div class="line">               "headers": &#123;</div><div class="line">                   "Content-Type": "application/json",</div><div class="line">                   "authorization": "a83de0ff8d2e896dbd8efb81ba14e17d",</div><div class="line">                   "random": "A2dEx"</div><div class="line">               &#125;,</div><div class="line">               "body": '&#123;"name": "user", "password": "123456"&#125;'</div><div class="line">           &#125;,</div><div class="line">           "response": &#123;</div><div class="line">               "status_code": 201</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   """</div><div class="line">   <span class="keyword">return</span> self.substitute(testcase_template)</div></pre></td></tr></table></figure>
+<p>最极端的一个例子是，<code>ate/testcase.py</code>文件中的<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/ate/testcase.py" target="_blank" rel="noopener"><code>parse</code>函数</a>，示例注释行数35行，<code>Python</code>代码只有2行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, testcase_template)</span>:</span></span><br><span class="line">   <span class="string">""" parse testcase_template, replace all variables with bind value.</span></span><br><span class="line"><span class="string">   variables marker: $&#123;variable&#125;.</span></span><br><span class="line"><span class="string">   @param (dict) testcase_template</span></span><br><span class="line"><span class="string">       &#123;</span></span><br><span class="line"><span class="string">           "request": &#123;</span></span><br><span class="line"><span class="string">               "url": "http://127.0.0.1:5000/api/users/$&#123;uid&#125;",</span></span><br><span class="line"><span class="string">               "method": "POST",</span></span><br><span class="line"><span class="string">               "headers": &#123;</span></span><br><span class="line"><span class="string">                   "Content-Type": "application/json",</span></span><br><span class="line"><span class="string">                   "authorization": "$&#123;authorization&#125;",</span></span><br><span class="line"><span class="string">                   "random": "$&#123;random&#125;"</span></span><br><span class="line"><span class="string">               &#125;,</span></span><br><span class="line"><span class="string">               "body": "$&#123;data&#125;"</span></span><br><span class="line"><span class="string">           &#125;,</span></span><br><span class="line"><span class="string">           "response": &#123;</span></span><br><span class="line"><span class="string">               "status_code": "$&#123;expected_status&#125;"</span></span><br><span class="line"><span class="string">           &#125;</span></span><br><span class="line"><span class="string">       &#125;</span></span><br><span class="line"><span class="string">   @return (dict) parsed testcase with bind values</span></span><br><span class="line"><span class="string">       &#123;</span></span><br><span class="line"><span class="string">           "request": &#123;</span></span><br><span class="line"><span class="string">               "url": "http://127.0.0.1:5000/api/users/1000",</span></span><br><span class="line"><span class="string">               "method": "POST",</span></span><br><span class="line"><span class="string">               "headers": &#123;</span></span><br><span class="line"><span class="string">                   "Content-Type": "application/json",</span></span><br><span class="line"><span class="string">                   "authorization": "a83de0ff8d2e896dbd8efb81ba14e17d",</span></span><br><span class="line"><span class="string">                   "random": "A2dEx"</span></span><br><span class="line"><span class="string">               &#125;,</span></span><br><span class="line"><span class="string">               "body": '&#123;"name": "user", "password": "123456"&#125;'</span></span><br><span class="line"><span class="string">           &#125;,</span></span><br><span class="line"><span class="string">           "response": &#123;</span></span><br><span class="line"><span class="string">               "status_code": 201</span></span><br><span class="line"><span class="string">           &#125;</span></span><br><span class="line"><span class="string">       &#125;</span></span><br><span class="line"><span class="string">   """</span></span><br><span class="line">   <span class="keyword">return</span> self.substitute(testcase_template)</span><br></pre></td></tr></table></figure>
 <p>另外，如果算上单元测试用例的行数（731行），总的<code>Python</code>代码行数能达到1000行的样子。嗯，代码可以精简，但是单元测试覆盖率还是要保证的，不达到90%以上的单元测试覆盖率，真不好意思说自己做了开源项目啊。</p>
 <p><img src="/images/ApiTestEngine-stat-all.jpg" alt=""></p>
 <p>那这不足300行的Python代码，实际实现了哪些功能呢？</p>
@@ -142,7 +142,7 @@
 <li><a href="http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
 <li><a href="http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/">《ApiTestEngine 演化之路（0）开发未动，测试先行》</a></li>
 <li><a href="http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a></li>
-<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code> GitHub源码</a></li>
+<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code> GitHub源码</a></li>
 </ul>
 <h2 id="最后的最后"><a href="#最后的最后" class="headerlink" title="最后的最后"></a>最后的最后</h2><p><a href="http://debugtalk.com/tags/ApiTestEngine">《ApiTestEngine 演进之路》</a>系列文章还在继续写，只是前几天主要精力在编码实现上，博客方面没有同步更新，接下来我会整理好思路，继续完成余下的部分。</p>
 <p>另外，如果大家对Python编程感兴趣，给大家推荐一个专注Python原创技术分享的公众号，⎡Python之禅⎦（VTtalk），里面关于Python的干货非常多，讲解也很通俗易懂，现在我如果有理解得不够透彻的概念，基本都会先到这个公众号里面去搜索下。</p>
@@ -154,7 +154,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Python/">Python</a><a href="/tags/接口测试/">接口测试</a><a href="/tags/测试框架/">测试框架</a><a href="/tags/HttpRunner/">HttpRunner</a>
+  <span></span> <a href="/tags/Python/">Python</a><a href="/tags/测试框架/">测试框架</a><a href="/tags/HttpRunner/">HttpRunner</a><a href="/tags/接口测试/">接口测试</a>
   </div>
 
 </div>
@@ -176,9 +176,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/ApiTestEngine-2-best-testcase-description/" title="ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</span>
 </a>
@@ -186,8 +186,8 @@
 
 
 <div class="next">
-<a href="/post/ApiTestEngine-1-setup-basic-framework/"  title="ApiTestEngine 演进之路（1）搭建基础框架">
- <strong>下一篇：</strong><br/> 
+<a href="/post/ApiTestEngine-1-setup-basic-framework/" title="ApiTestEngine 演进之路（1）搭建基础框架">
+ <strong>下一篇：</strong><br> 
  <span>ApiTestEngine 演进之路（1）搭建基础框架
 </span>
 </a>
@@ -218,16 +218,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -251,6 +241,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -263,15 +257,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -279,11 +265,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -291,7 +281,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -303,15 +293,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -356,10 +346,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -370,7 +360,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -603,7 +593,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

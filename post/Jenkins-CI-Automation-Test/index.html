@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>使用Jenkins实现持续集成构建检查 | DebugTalk</title>
@@ -40,14 +40,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -70,17 +70,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -116,7 +116,7 @@
 <p>为了及时发现该类问题，我们还需要对每次构建生成的安装包进行检查。本文便是对构建检查涉及到的方法进行介绍。</p>
 <h2 id="构建生成-app"><a href="#构建生成-app" class="headerlink" title="构建生成.app"></a>构建生成<code>.app</code></h2><p>为了降低问题的复杂度，我们可以选择在模拟器中运行构建生成的安装包。之前在<a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/">《从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用》</a>也讲解过，要在模拟器中运行iOS应用，需要在Xcode中编译时选择模拟器类型，并且编译生成的文件后缀为<code>.app</code>。</p>
 <p>对应的，构建生成<code>.app</code>的命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># build .app file from source code</span></div><div class="line">xcodebuild \    <span class="comment"># xctool</span></div><div class="line">  -workspace <span class="variable">$&#123;WORKSPACE_PATH&#125;</span> \</div><div class="line">  -scheme <span class="variable">$&#123;SCHEME&#125;</span> \</div><div class="line">  -configuration <span class="variable">$&#123;CONFIGURATION&#125;</span> \</div><div class="line">  -sdk <span class="variable">$&#123;SDK&#125;</span> \</div><div class="line">  -derivedDataPath <span class="variable">$&#123;OUTPUT_FOLDER&#125;</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build .app file from source code</span></span><br><span class="line">xcodebuild \    <span class="comment"># xctool</span></span><br><span class="line">  -workspace <span class="variable">$&#123;WORKSPACE_PATH&#125;</span> \</span><br><span class="line">  -scheme <span class="variable">$&#123;SCHEME&#125;</span> \</span><br><span class="line">  -configuration <span class="variable">$&#123;CONFIGURATION&#125;</span> \</span><br><span class="line">  -sdk <span class="variable">$&#123;SDK&#125;</span> \</span><br><span class="line">  -derivedDataPath <span class="variable">$&#123;OUTPUT_FOLDER&#125;</span></span><br></pre></td></tr></table></figure>
 <p><strong>xcodebuild/xctool参数说明</strong>：</p>
 <ul>
 <li><code>-workspace</code>：需要打包的workspace，后面接的文件一定要是<code>.xcworkspace</code>结尾的；</li>
@@ -128,12 +128,12 @@
 <p>同样地，这里也可以使用<code>xctool</code>代替<code>xcodebuild</code>。</p>
 <p>这里使用到的命令和参数基本上和<a href="/post/iOS-Android-Packing-with-Jenkins-details/">《关于持续集成打包平台的Jenkins配置和构建脚本实现细节》</a>一文中的大致相同，唯一需要特别注意的是<code>-sdk</code>参数。因为是要在模拟器中运行，因此<code>-sdk</code>参数要设置为<code>iphonesimulator</code>，而非<code>iphoneos</code>。</p>
 <p>命令成功执行后，就会在指定的<code>${OUTPUT_FOLDER}</code>目录中生成<code>${SCHEME}.app</code>文件，这也就是我们构建生成的产物。另外，熟悉<code>iOS</code>的同学都知道，<code>.app</code>文件其实是一个文件夹，为了实现更好的存储，我们也可以额外地再做一步操作，将<code>.app</code>文件夹压缩转换为<code>.zip</code>格式，而且Appium也是支持读取<code>.zip</code>格式的安装包的。</p>
-<p>至此，适用于iOS模拟器运行的构建产物已准备就绪。这里涉及到的脚本实现已更新至<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" rel="external">【debugtalk/JenkinsTemplateForApp】</a>。</p>
+<p>至此，适用于iOS模拟器运行的构建产物已准备就绪。这里涉及到的脚本实现已更新至<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" rel="noopener">【debugtalk/JenkinsTemplateForApp】</a>。</p>
 <h2 id="实现构建检查"><a href="#实现构建检查" class="headerlink" title="实现构建检查"></a>实现构建检查</h2><p>那要怎样对构建生成的产物进行检查呢？</p>
 <p>最简单的方式，就是在iOS模拟器中运行构建生成的<code>.app</code>，并执行一组基本的自动化测试用例。在执行过程中，如果出现无法成功安装，或者安装成功后启动出现闪退，或者自动化测试用例执行失败等异常情况，则说明我们最新提交的代码存在问题，需要通知研发同学及时进行修复。</p>
-<p>而这些实现方式，其实我在<a href="/tags/F0T1/">《从0到1搭建移动App功能自动化测试平台》</a>系列文章中都已经进行了详细讲解，并形成了一套较为成熟的自动化测试框架，【<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="external">debugtalk/AppiumBooster</a>】。</p>
+<p>而这些实现方式，其实我在<a href="/tags/F0T1/">《从0到1搭建移动App功能自动化测试平台》</a>系列文章中都已经进行了详细讲解，并形成了一套较为成熟的自动化测试框架，【<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="noopener">debugtalk/AppiumBooster</a>】。</p>
 <p>在此基础上，我们无需再做其它工作，只需要按照<code>debugtalk/AppiumBooster</code>的要求在表格中编写一组基本的自动化测试用例，即可采用如下方式执行构建检查。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> <span class="variable">$&#123;AppiumBooster_Folder&#125;</span></div><div class="line">$ ruby run.rb -p <span class="string">"<span class="variable">$&#123;OUTPUT_FOLDER&#125;</span>/<span class="variable">$&#123;SCHEME&#125;</span>.app.zip"</span> --disable_output_color &gt; <span class="built_in">test</span>_result.log</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> <span class="variable">$&#123;AppiumBooster_Folder&#125;</span></span><br><span class="line">$ ruby run.rb -p <span class="string">"<span class="variable">$&#123;OUTPUT_FOLDER&#125;</span>/<span class="variable">$&#123;SCHEME&#125;</span>.app.zip"</span> --disable_output_color &gt; test_result.log</span><br></pre></td></tr></table></figure>
 <p>在如上命令中，通过<code>-p</code>参数指定构建生成的安装包，然后就可以在iOS模拟器中运行事先编写好的自动化测试用例，从而实现构建检查。</p>
 <p>在这里，我们还可以通过<code>--disable_output_color</code>开关将输出日志的颜色关闭。<del>之所以实现这么一个功能，是因为在Jenkins中本来也无法显示颜色，但是如果还将Terminal中有颜色的日志内容输出到Jenkins中，就会出现一些额外的字符，比较影响日志的美观。</del></p>
 <p>现在，我们已经分别实现了代码构建和构建检查这两个核心的操作环节，而要执行最终的持续集成，我们还需要做最后一项工作，即在Jenkins中将这两个环节串联起来。</p>
@@ -146,7 +146,7 @@
 <p>在这里我们用到了<code>${AppiumBooster_Folder}</code>参数，该参数也需要通过<code>String Parameter</code>来进行定义，用于指定<code>AppiumBooster</code>项目的路径。</p>
 <p><img src="/images/Jenkins_String_Parameter.jpg" alt="Jenkins String Parameter"></p>
 <p>最后，为了便于将执行自动化测试用例的日志和执行构建的日志分开，我们将执行自动化测试用例的日志写入到了<code>test_result.log</code>文件中。然后，在<code>Archives build artifacts</code>中就可以通过<code>${AppiumBooster_Folder}/test_result.log</code>将执行构建检查的日志收集起来，并展示到每次构建的页面中。</p>
-<p>延续一贯的<code>开箱即用</code>原则，我将使用Jenkins实现持续集成构建检查涉及到的Jenkins配置也做成了一套模板，并更新到【<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" rel="external">debugtalk/JenkinsTemplateForApp</a>】中了，供大家参考。</p>
+<p>延续一贯的<code>开箱即用</code>原则，我将使用Jenkins实现持续集成构建检查涉及到的Jenkins配置也做成了一套模板，并更新到【<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" rel="noopener">debugtalk/JenkinsTemplateForApp</a>】中了，供大家参考。</p>
 <h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>至此，通过<a href="/tags/Jenkins/">本系列的几篇文章</a>，关于如何使用Jenkins实现移动APP持续集成的相关内容应该都已经覆盖得差不多了。</p>
 <p>不过，由于我个人的近期工作主要集中在iOS部分，因此在讲解的过程中都是以iOS为主。后续在将工作重心移到Android部分后，我会再在<code>DebugTalk</code>的这几篇文章中更新Android部分的内容。</p>
   
@@ -179,9 +179,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/make-Jenkins-Console-Output-Colorful/" title="Jenkins的输出日志也可以变得色色的">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   Jenkins的输出日志也可以变得色色的</span>
 </a>
@@ -189,8 +189,8 @@
 
 
 <div class="next">
-<a href="/post/build-app-automated-test-platform-from-0-to-1-refactor-testcase-scripts/"  title="从0到1搭建移动App功能自动化测试平台 (4)：自动化测试代码⎡工程化⎦">
- <strong>下一篇：</strong><br/> 
+<a href="/post/build-app-automated-test-platform-from-0-to-1-refactor-testcase-scripts/" title="从0到1搭建移动App功能自动化测试平台 (4)：自动化测试代码⎡工程化⎦">
+ <strong>下一篇：</strong><br> 
  <span>从0到1搭建移动App功能自动化测试平台 (4)：自动化测试代码⎡工程化⎦
 </span>
 </a>
@@ -221,16 +221,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -254,6 +244,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -266,15 +260,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -282,11 +268,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -294,7 +284,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -306,15 +296,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -359,10 +349,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -373,7 +363,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -606,7 +596,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划 | DebugTalk</title>
@@ -38,14 +38,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -68,17 +68,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -133,7 +133,7 @@
 <li>用户量大，文档丰富。</li>
 </ul>
 <p>经过筛选，Appium无疑是最佳的选择。</p>
-<h2 id="Appium简介"><a href="#Appium简介" class="headerlink" title="Appium简介"></a>Appium简介</h2><p>对于Appium的详细介绍，大家可参考<a href="http://appium.io/" target="_blank" rel="external">Appium</a>官方文档，我就不再重复引用。</p>
+<h2 id="Appium简介"><a href="#Appium简介" class="headerlink" title="Appium简介"></a>Appium简介</h2><p>对于Appium的详细介绍，大家可参考<a href="http://appium.io/" target="_blank" rel="noopener">Appium</a>官方文档，我就不再重复引用。</p>
 <p>不过对于Appium，仍然有几点很赞的理念值得强调。</p>
 <ul>
 <li>采用Appium时，无需对被测应用做任何修改，也无需嵌入任何东西；</li>
@@ -148,21 +148,21 @@
 </ul>
 <p>如上几个环境安装比较简单，直接在Apple Store中安装即可。</p>
 <p>在安装Appium之前，为了确保Appium的相关依赖已经准备就绪，可以使用<code>appium-doctor</code>来进行验证。</p>
-<p><a href="https://github.com/appium/appium-doctor" target="_blank" rel="external"><code>appium-doctor</code></a>是一个用于验证appium安装环境的工具，可以诊断出<code>Node/iOS/Android</code>环境配置方面的常见问题。</p>
+<p><a href="https://github.com/appium/appium-doctor" target="_blank" rel="noopener"><code>appium-doctor</code></a>是一个用于验证appium安装环境的工具，可以诊断出<code>Node/iOS/Android</code>环境配置方面的常见问题。</p>
 <p><code>appium-doctor</code>采用<code>node.js</code>编写，采用<code>npm</code>即可在Terminal中进行安装：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install appium-doctor -g</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install appium-doctor -g</span><br></pre></td></tr></table></figure>
 <p>安装完毕后，执行<code>appium-doctor</code>命令即可对<code>Appium</code>的环境依赖情况进行检测；指定<code>--ios</code>时只针对iOS环境配置进行检测，指定<code>--android</code>参数时只针对Android环境配置进行检测，若不指定则同时对iOS和Android环境进行检测。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ appium-doctor --ios</div><div class="line">info AppiumDoctor <span class="comment">### Diagnostic starting ###</span></div><div class="line">info AppiumDoctor  ✔ Xcode is installed at: /Applications/Xcode.app/Contents/Developer</div><div class="line">info AppiumDoctor  ✔ Xcode Command Line Tools are installed.</div><div class="line">info AppiumDoctor  ✔ DevToolsSecurity is enabled.</div><div class="line">info AppiumDoctor  ✔ The Authorization DB is <span class="built_in">set</span> up properly.</div><div class="line">info AppiumDoctor  ✔ The Node.js binary was found at: /usr/<span class="built_in">local</span>/bin/node</div><div class="line">info AppiumDoctor  ✔ HOME is <span class="built_in">set</span> to: /Users/Leo</div><div class="line">info AppiumDoctor <span class="comment">### Diagnostic completed, no fix needed. ###</span></div><div class="line">info AppiumDoctor</div><div class="line">info AppiumDoctor Everything looks good, <span class="built_in">bye</span>!</div><div class="line">info AppiumDoctor</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ appium-doctor --ios</span><br><span class="line">info AppiumDoctor <span class="comment">### Diagnostic starting ###</span></span><br><span class="line">info AppiumDoctor  ✔ Xcode is installed at: /Applications/Xcode.app/Contents/Developer</span><br><span class="line">info AppiumDoctor  ✔ Xcode Command Line Tools are installed.</span><br><span class="line">info AppiumDoctor  ✔ DevToolsSecurity is enabled.</span><br><span class="line">info AppiumDoctor  ✔ The Authorization DB is <span class="built_in">set</span> up properly.</span><br><span class="line">info AppiumDoctor  ✔ The Node.js binary was found at: /usr/<span class="built_in">local</span>/bin/node</span><br><span class="line">info AppiumDoctor  ✔ HOME is <span class="built_in">set</span> to: /Users/Leo</span><br><span class="line">info AppiumDoctor <span class="comment">### Diagnostic completed, no fix needed. ###</span></span><br><span class="line">info AppiumDoctor</span><br><span class="line">info AppiumDoctor Everything looks good, <span class="built_in">bye</span>!</span><br><span class="line">info AppiumDoctor</span><br></pre></td></tr></table></figure>
 <p>若检测结果全部通过，则说明Appium的相关依赖已经准备就绪，接下来可以继续安装Appium。</p>
 <h2 id="安装Appium"><a href="#安装Appium" class="headerlink" title="安装Appium"></a>安装Appium</h2><p>根据前面的介绍，Appium采用Client-Server的架构设计，因此安装Appium时需要分别安装Server部分和Client部分。</p>
-<p>通常情况下，我们说的Appium都是指代的Server部分。Appium的安装有多种方式：可以通过源码编译安装，也可以在Terminal中通过<code>npm</code>命令安装，另一种是直接下载<a href="https://github.com/appium/appium/releases" target="_blank" rel="external"><code>appium.dmg</code></a>后安装应用程序。</p>
+<p>通常情况下，我们说的Appium都是指代的Server部分。Appium的安装有多种方式：可以通过源码编译安装，也可以在Terminal中通过<code>npm</code>命令安装，另一种是直接下载<a href="https://github.com/appium/appium/releases" target="_blank" rel="noopener"><code>appium.dmg</code></a>后安装应用程序。</p>
 <p>在这里推荐运行<code>Appium app</code>的方式，除了GUI界面操作更直观以外，更重要的一个原因是，相比于命令行运行方式，<code>Appium app</code>多了一个<code>Inspector</code>模块，可以调用模拟器运行被测应用程序，并且可以很方便地在预览页面中查看UI元素的层级结构和详细控件属性，极大地提高编写测试脚本的效率。</p>
 <p>至于Client部分，其实我们原本可以不安装任何东西，只需要任意选择一门开发语言，然后直接基于WebDriver的C/S协议（JSON Wire Protocol）即可编写自动化测试代码。但是这样做的话工作量会比较大，因为要去处理一些跟协议相关的工作。所幸Appium项目已经针对众多主流的编程语言，将底层协议处理相关的工作封装为Library，通过调用这些Library，可以极大地简化我们编写测试用例的工作量。</p>
 <p>而说的需要安装的Client部分，其实也就是安装这些Library。选定编写测试用例的语言后，我们就可以针对性地进行安装。</p>
 <p>例如，如果选择Ruby语言，那么需要安装的Library就是<code>appium_lib</code>，安装方式如下：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gem install appium_lib</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gem install appium_lib</span><br></pre></td></tr></table></figure>
 <p>如果选择Python语言，那么需要安装的Library就是<code>Appium-Python-Client</code>，安装方式如下：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pip install Appium-Python-Client</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install Appium-Python-Client</span><br></pre></td></tr></table></figure>
 <p>对于其它编程语言，请自行参考官方文档。</p>
 <h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>iOS的自动化测试环境已基本准备就绪了，接下来我们想做的第一件事，就是在模拟器中运行iOS应用。</p>
 <p>在下一篇文章中，我们将从clone项目源码为起点，编译生成iOS app，在Appium中调用模拟器中运行iOS app，并分享实践过程中遇到的一些坑。</p>
@@ -196,9 +196,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/" title="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用</span>
 </a>
@@ -206,8 +206,8 @@
 
 
 <div class="next">
-<a href="/post/Android-performance-test-start-traffic-tcpdump-wireshark/"  title="Android App持续集成性能测试：启动流量（2）">
- <strong>下一篇：</strong><br/> 
+<a href="/post/Android-performance-test-start-traffic-tcpdump-wireshark/" title="Android App持续集成性能测试：启动流量（2）">
+ <strong>下一篇：</strong><br> 
  <span>Android App持续集成性能测试：启动流量（2）
 </span>
 </a>
@@ -238,16 +238,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -271,6 +261,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -283,15 +277,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -299,11 +285,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -311,7 +301,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -323,15 +313,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -376,10 +366,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -390,7 +380,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -623,7 +613,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

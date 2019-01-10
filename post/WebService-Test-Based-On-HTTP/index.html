@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>基于HTTP的WebService测试方法 | DebugTalk</title>
@@ -42,14 +42,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -72,17 +72,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -117,7 +117,7 @@
 <blockquote>
 <p>从通讯协议层面上来看，SOAP报文只是对传输的内容进行了格式封装，具体传输实现还是依赖于其它应用层协议（如HTTP）。因此我们在测试WebService时，完全可以抛开WSDL和SOAP，直接从HTTP协议层面获取请求和响应的内容，然后采用测试工具构造HTTP请求，实现对WebService的调用。</p>
 </blockquote>
-<p>在本篇文章中，<code>52test.org</code>仍将在测试案例<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx" target="_blank" rel="external">天气预报WebService服务</a>的基础上，详细介绍如何通过HTTP协议测试WebService。</p>
+<p>在本篇文章中，<code>52test.org</code>仍将在测试案例<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx" target="_blank" rel="noopener">天气预报WebService服务</a>的基础上，详细介绍如何通过HTTP协议测试WebService。</p>
 <h2 id="获取HTTP请求"><a href="#获取HTTP请求" class="headerlink" title="获取HTTP请求"></a>获取HTTP请求</h2><p>在<code>天气预报WebService服务</code>的各个接口介绍页面中，均包含一个测试工具，可对接口进行调用测试。</p>
 <p>例如，接口getWeatherbyCityName的测试工具如下图所示。在theCityName参数框内输入城市的名称，点击【调用】按钮，即可实现对getWeatherbyCityName接口的调用，并获得返回结果。</p>
 <p><img src="/images/150213_01.png" alt=""></p>
@@ -127,7 +127,7 @@
 <p>从该HTTP请求可以获得如下关键信息：</p>
 <ul>
 <li>HTTP请求类型为POST，HTTP版本为1.1</li>
-<li>请求的URL为：<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx/getWeatherbyCityName" target="_blank" rel="external">http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx/getWeatherbyCityName</a></li>
+<li>请求的URL为：<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx/getWeatherbyCityName" target="_blank" rel="noopener">http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx/getWeatherbyCityName</a></li>
 <li>POST的数据包为：theCityName=%E5%B9%BF%E5%B7%9E；POST数据包中对中文进行了URL转码</li>
 </ul>
 <p>使用获取到的HTTP信息，可构造HTTP请求，从HTTP协议层面对WebService进行调用。</p>
@@ -179,9 +179,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/blackbox-testing-method-equivalence-partitioning/" title="黑盒测试用例设计技术--等价类划分法">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   黑盒测试用例设计技术--等价类划分法</span>
 </a>
@@ -189,8 +189,8 @@
 
 
 <div class="next">
-<a href="/post/Introspection-on-WebService-Test/"  title="基于WSDL或SOAP的WebService测试方法--对原理的思考">
- <strong>下一篇：</strong><br/> 
+<a href="/post/Introspection-on-WebService-Test/" title="基于WSDL或SOAP的WebService测试方法--对原理的思考">
+ <strong>下一篇：</strong><br> 
  <span>基于WSDL或SOAP的WebService测试方法--对原理的思考
 </span>
 </a>
@@ -221,16 +221,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -254,6 +244,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -266,15 +260,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -282,11 +268,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -294,7 +284,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -306,15 +296,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -359,10 +349,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -373,7 +363,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -606,7 +596,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

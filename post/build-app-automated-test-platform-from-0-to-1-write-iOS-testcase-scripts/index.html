@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>从0到1搭建移动App功能自动化测试平台（3）：编写iOS自动化测试脚本 | DebugTalk</title>
@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="通过前面三篇文章，我们已经将iOS自动化功能测试的开发环境全部准备就绪，也学习了iOS UI控件交互操作的一般性方法，接下来，就可以开始编写自动化测试脚本了。 在本文中，我将在M项目中挑选一个功能点，对其编写自动化测试脚本，演示编写自动化测试用例的整个流程。 语言的选择：Python or Ruby？之前介绍Appium的时候也提到，Appium采用Client-Server的架构设计，并采用标准">
-<meta name="keywords" content="Python,AutomationTest,Appium,F0T1,iOS,Ruby">
+<meta name="keywords" content="Python,AutomationTest,Appium,iOS,F0T1,Ruby">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从0到1搭建移动App功能自动化测试平台（3）：编写iOS自动化测试脚本">
 <meta property="og:url" content="http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-write-iOS-testcase-scripts/index.html">
@@ -38,14 +38,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -68,17 +68,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -119,8 +119,8 @@
 <p>那为什么还是选择了Ruby呢？</p>
 <p>我主要是基于如下几点考虑的：</p>
 <ul>
-<li>从Appium的官方文档来看，Appium对Ruby的支持力度，或者说是偏爱程度，貌似会更大些；在<a href="http://appium.io/downloads.html" target="_blank" rel="external">Appium Client Libraries</a>列表中将Ruby排在第一位就不说了，在<a href="http://appium.io/tutorial.html?lang=en" target="_blank" rel="external">Appium Tutorials</a>中示例语言就只采用了Ruby和Java进行描述。</li>
-<li><a href="https://github.com/appium/ruby_lib" target="_blank" rel="external">Appium_Console</a>是采用Ruby编写的，在Console中执行的命令基本上可直接用在Ruby脚本中。</li>
+<li>从Appium的官方文档来看，Appium对Ruby的支持力度，或者说是偏爱程度，貌似会更大些；在<a href="http://appium.io/downloads.html" target="_blank" rel="noopener">Appium Client Libraries</a>列表中将Ruby排在第一位就不说了，在<a href="http://appium.io/tutorial.html?lang=en" target="_blank" rel="noopener">Appium Tutorials</a>中示例语言就只采用了Ruby和Java进行描述。</li>
+<li><a href="https://github.com/appium/ruby_lib" target="_blank" rel="noopener">Appium_Console</a>是采用Ruby编写的，在Console中执行的命令基本上可直接用在Ruby脚本中。</li>
 <li>后续打算引入BDD（行为驱动开发）的测试模式，而不管是cucumber还是RSpec，都是采用Ruby开发的。</li>
 </ul>
 <p>当然，还有最最重要的一点，身处于珠江三角洲最大的Ruby阵营，周围Ruby大牛云集，公司的好多业务系统也都是采用Rails作为后台语言，完全没理由不选择Ruby啊。</p>
@@ -130,38 +130,38 @@
 <p><img src="/images/DebugTalk_Plus_Login.jpg" alt="Preview of DebugTalk Plus login"></p>
 <p>确定了操作路径以后，就可以在<code>Appium Ruby Console</code>中依次操作一遍，目的是确保代码能正确地对控件进行操作。</p>
 <p>第一步要点击【My Account】按钮，因此先查看下Button控件属性。要是不确定目标控件的类型，可以直接执行<code>page</code>命令，然后在返回结果中根据控件名称进行查找。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[1] pry(main)&gt; page :button</div><div class="line">...（略）</div><div class="line">UIAButton</div><div class="line">   name, label: My Account</div><div class="line">   id: My Account =&gt; My Account</div><div class="line">nil</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1] pry(main)&gt; page :button</span><br><span class="line">...（略）</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: My Account</span><br><span class="line">   id: My Account =&gt; My Account</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
 <p>通过返回结果，可以看到【My Account】按钮的name、label属性就是“My Account”，因此可以通过<code>button_exact(&#39;My Account&#39;)</code>方式来定位控件，并进行点击操作。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[2] pry(main)&gt; button_exact(&apos;My Account&apos;).click</div><div class="line">nil</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[2] pry(main)&gt; button_exact('My Account').click</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
 <p>执行命令后，观察iOS模拟器中APP的响应情况，看是否成功进入“My Account”页面。</p>
 <p>第二步也是类似的，操作代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[3] pry(main)&gt; button_exact(&apos;Login&apos;).click</div><div class="line">nil</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[3] pry(main)&gt; button_exact('Login').click</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
 <p>进入到登录页面后，再次查看页面中的控件信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[4] pry(main)&gt; page</div><div class="line">...（略）</div><div class="line">UIATextField</div><div class="line">   value: Email Address</div><div class="line">   id: Email Address =&gt; Email Address</div><div class="line">UIASecureTextField</div><div class="line">   value: Password (6-16 characters)</div><div class="line">   id: Password (6-16 characters) =&gt; Password (6-16 characters)</div><div class="line">UIAButton</div><div class="line">   name, label: Login</div><div class="line">   id: Log In =&gt; Login</div><div class="line">       登录     =&gt; Login</div><div class="line">...（略）</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[4] pry(main)&gt; page</span><br><span class="line">...（略）</span><br><span class="line">UIATextField</span><br><span class="line">   value: Email Address</span><br><span class="line">   id: Email Address =&gt; Email Address</span><br><span class="line">UIASecureTextField</span><br><span class="line">   value: Password (6-16 characters)</span><br><span class="line">   id: Password (6-16 characters) =&gt; Password (6-16 characters)</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: Login</span><br><span class="line">   id: Log In =&gt; Login</span><br><span class="line">       登录     =&gt; Login</span><br><span class="line">...（略）</span><br></pre></td></tr></table></figure>
 <p>第三步需要填写账号密码，账号密码的控件属性分别是<code>UIATextField</code>和<code>UIASecureTextField</code>。由于这两个控件的类型在登录页面都是唯一的，因此可以采用控件的类型来进行定位，然后进行输入操作，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[5] pry(main)&gt; tag(&apos;UIATextField&apos;).type &apos;leo.lee@debugtalk.com&apos;</div><div class="line">&quot;&quot;</div><div class="line">[6] pry(main)&gt; tag(&apos;UIASecureTextField&apos;).type &apos;123456&apos;</div><div class="line">&quot;&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[5] pry(main)&gt; tag('UIATextField').type 'leo.lee@debugtalk.com'</span><br><span class="line">""</span><br><span class="line">[6] pry(main)&gt; tag('UIASecureTextField').type '123456'</span><br><span class="line">""</span><br></pre></td></tr></table></figure>
 <p>执行完输入命令后，在iOS模拟器中可以看到账号密码输入框都成功输入了内容。</p>
 <p>最后第四步点击【Login】按钮，操作上和第二步完全一致。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[7] pry(main)&gt; button_exact(&apos;Login&apos;).click</div><div class="line">nil</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[7] pry(main)&gt; button_exact('Login').click</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
 <p>执行完以上四个步骤后，在iOS模拟器中看到成功完成账号登录操作，这说明我们的执行命令没有问题，可以用于编写自动化测试代码。整合起来，测试脚本就是下面这样。</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">button_exact(<span class="string">'My Account'</span>).click</div><div class="line">button_exact(<span class="string">'Login'</span>).click</div><div class="line">tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span></div><div class="line">tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'12345678'</span></div><div class="line">button_exact(<span class="string">'Login'</span>).click</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">button_exact(<span class="string">'My Account'</span>).click</span><br><span class="line">button_exact(<span class="string">'Login'</span>).click</span><br><span class="line">tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span></span><br><span class="line">tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'12345678'</span></span><br><span class="line">button_exact(<span class="string">'Login'</span>).click</span><br></pre></td></tr></table></figure>
 <p>将以上脚本保存为<code>login.rb</code>文件。</p>
 <p>但当我们直接运行<code>login.rb</code>文件时，并不能运行成功。原因很简单，脚本中的<code>button_exact</code>、<code>tag</code>这些方法并没有定义，我们在文件中也没有引入相关库文件。</p>
 <p>在上一篇文章中有介绍过，通过<code>arc</code>启动虚拟机时，会从<code>appium.txt</code>中读取虚拟机的配置信息。类似的，我们在脚本中执行自动化测试时，也会加载虚拟机，因此同样需要在脚本中指定虚拟机的配置信息，并初始化<code>Appium Driver</code>的实例。</p>
 <p>初始化代码可以通过<code>Appium Inspector</code>生成，基本上为固定模式，我们暂时不用深究。</p>
 <p>添加初始化部分的代码后，测试脚本如下所示。</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">'rubygems'</span></div><div class="line"><span class="keyword">require</span> <span class="string">'appium_lib'</span></div><div class="line"></div><div class="line">capabilities = &#123;</div><div class="line">  <span class="string">'appium-version'</span> =&gt; <span class="string">'1.0'</span>,</div><div class="line">  <span class="string">'platformName'</span> =&gt; <span class="string">'iOS'</span>,</div><div class="line">  <span class="string">'platformVersion'</span> =&gt; <span class="string">'9.3'</span>,</div><div class="line">&#125;</div><div class="line">Appium::Driver.new(<span class="symbol">caps:</span> capabilities).start_driver</div><div class="line">Appium.promote_appium_methods Object</div><div class="line"></div><div class="line"><span class="comment"># testcase: login</span></div><div class="line">button_exact(<span class="string">'My Account'</span>).click</div><div class="line">button_exact(<span class="string">'Login'</span>).click</div><div class="line">tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span></div><div class="line">tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'123456'</span></div><div class="line">button_exact(<span class="string">'Login'</span>).click</div><div class="line"></div><div class="line">driver_quit</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">'rubygems'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'appium_lib'</span></span><br><span class="line"></span><br><span class="line">capabilities = &#123;</span><br><span class="line">  <span class="string">'appium-version'</span> =&gt; <span class="string">'1.0'</span>,</span><br><span class="line">  <span class="string">'platformName'</span> =&gt; <span class="string">'iOS'</span>,</span><br><span class="line">  <span class="string">'platformVersion'</span> =&gt; <span class="string">'9.3'</span>,</span><br><span class="line">&#125;</span><br><span class="line">Appium::Driver.new(<span class="symbol">caps:</span> capabilities).start_driver</span><br><span class="line">Appium.promote_appium_methods Object</span><br><span class="line"></span><br><span class="line"><span class="comment"># testcase: login</span></span><br><span class="line">button_exact(<span class="string">'My Account'</span>).click</span><br><span class="line">button_exact(<span class="string">'Login'</span>).click</span><br><span class="line">tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span></span><br><span class="line">tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'123456'</span></span><br><span class="line">button_exact(<span class="string">'Login'</span>).click</span><br><span class="line"></span><br><span class="line">driver_quit</span><br></pre></td></tr></table></figure>
 <h2 id="优化测试脚本：加入等待机制"><a href="#优化测试脚本：加入等待机制" class="headerlink" title="优化测试脚本：加入等待机制"></a>优化测试脚本：加入等待机制</h2><p>如上测试脚本编写好后，在Terminal中运行<code>ruby login.rb</code>，就可以执行脚本了。</p>
 <p>运行命令后，会看到iOS虚拟机成功启动，接着App成功进行加载，然后自动按照前面设计的路径，执行系统登录流程。</p>
 <p>但是，在实际操作过程中，发现有时候运行脚本时会出现找不到控件的异常，异常信息如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">➜ ruby login.rb</div><div class="line">/Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/common/helper.rb:218:in `_no_such_element&apos;: An element could not be located on the page using the given search parameters. (Selenium::WebDriver::Error::NoSuchElementError)</div><div class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/ios/helper.rb:578:in `ele_by_json&apos;</div><div class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/ios/helper.rb:367:in `ele_by_json_visible_exact&apos;</div><div class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/ios/element/button.rb:41:in `button_exact&apos;</div><div class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/driver.rb:226:in `rescue in block (4 levels) in promote_appium_methods&apos;</div><div class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/driver.rb:217:in `block (4 levels) in promote_appium_methods&apos;</div><div class="line">truefrom login.rb:28:in `&lt;main&gt;&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜ ruby login.rb</span><br><span class="line">/Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/common/helper.rb:218:in `_no_such_element': An element could not be located on the page using the given search parameters. (Selenium::WebDriver::Error::NoSuchElementError)</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/ios/helper.rb:578:in `ele_by_json'</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/ios/helper.rb:367:in `ele_by_json_visible_exact'</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/ios/element/button.rb:41:in `button_exact'</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/driver.rb:226:in `rescue in block (4 levels) in promote_appium_methods'</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/driver.rb:217:in `block (4 levels) in promote_appium_methods'</span><br><span class="line">truefrom login.rb:28:in `&lt;main&gt;'</span><br></pre></td></tr></table></figure>
 <p>更奇怪的是，这个异常并不是稳定出现的，有时候能正常运行整个用例，但有时在某个步骤就会抛出找不到控件的异常。这是什么原因呢？为什么在<code>Appium Ruby Console</code>中单步操作时就不会出现这个问题，但是在执行脚本的时候就会偶尔出现异常呢？</p>
 <p>原来，在我们之前的脚本中，两条命令之间并没有间隔时间，有可能前一条命令执行完后，模拟器中的应用还没有完成下一个页面的加载，下一条命令就又开始查找控件，然后由于找不到控件就抛出异常了。</p>
 <p>这也是为什么我们在<code>Appium Ruby Console</code>中没有出现这样的问题。因为手工输入命令多少会有一些耗时，输入两条命令的间隔时间足够虚拟机中的APP完成下一页面的加载了。</p>
 <p>那针对这种情况，我们要怎么修改测试脚本呢？难道要在每一行代码之间都添加休眠（sleep）函数么？</p>
 <p>也不用这么麻烦，针对这类情况，<code>ruby_lib</code>实现了<code>wait</code>机制。将执行命令放入到<code>wait{}</code>中后，执行脚本时就会等待该命令执行完成后再去执行下一条命令。当然，等待也不是无休止的，如果等待30秒后还是没有执行完，仍然会抛出异常。</p>
 <p>登录流程的测试脚本修改后如下所示（已省略初始化部分的代码）：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wait &#123; button_exact(<span class="string">'My Account'</span>).click &#125;</div><div class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</div><div class="line">wait &#123; tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span> &#125;</div><div class="line">wait &#123; tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'123456'</span> &#125;</div><div class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wait &#123; button_exact(<span class="string">'My Account'</span>).click &#125;</span><br><span class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</span><br><span class="line">wait &#123; tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span> &#125;</span><br><span class="line">wait &#123; tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'123456'</span> &#125;</span><br><span class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</span><br></pre></td></tr></table></figure>
 <p>对脚本添加<code>wait</code>机制后，之前出现的找不到控件的异常就不再出现了。</p>
 <h2 id="优化测试脚本：加入结果检测机制"><a href="#优化测试脚本：加入结果检测机制" class="headerlink" title="优化测试脚本：加入结果检测机制"></a>优化测试脚本：加入结果检测机制</h2><p>然而，现在脚本仍然不够完善。</p>
 <p>我们在<code>Appium Ruby Console</code>中手工执行命令后，都是由人工肉眼确认虚拟机中APP是否成功进入下一个页面，或者返回结果是否正确。</p>
@@ -171,7 +171,7 @@
 <p>例如，由A页面跳转至B页面，在B页面中会存在“Welcome”的文本控件，但是在A页面中是没有这个“Welcome”文本控件的；那么，我们就可以在脚本中的跳转页面语句之后，加入一条检测“Welcome”文本控件的语句；后续在执行测试脚本的时候，如果页面跳转失败，就会因为找不到控件而抛出异常，我们也能通过这个异常知道测试执行失败了。</p>
 <p>当然，对下一页面中的控件进行检测时同样需要加入等待机制的。</p>
 <p>登录流程的测试脚本修改后如下所示（已省略初始化部分的代码）：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">wait &#123; button_exact(<span class="string">'My Account'</span>).click &#125;</div><div class="line">wait &#123; text_exact <span class="string">'System Settings'</span> &#125;</div><div class="line"></div><div class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</div><div class="line">wait &#123; button_exact <span class="string">'Forget password?'</span> &#125;</div><div class="line"></div><div class="line">wait &#123; tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span> &#125;</div><div class="line">wait &#123; tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'12345678'</span> &#125;</div><div class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</div><div class="line">wait &#123; text_exact <span class="string">'My Message'</span> &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">wait &#123; button_exact(<span class="string">'My Account'</span>).click &#125;</span><br><span class="line">wait &#123; text_exact <span class="string">'System Settings'</span> &#125;</span><br><span class="line"></span><br><span class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</span><br><span class="line">wait &#123; button_exact <span class="string">'Forget password?'</span> &#125;</span><br><span class="line"></span><br><span class="line">wait &#123; tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span> &#125;</span><br><span class="line">wait &#123; tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'12345678'</span> &#125;</span><br><span class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</span><br><span class="line">wait &#123; text_exact <span class="string">'My Message'</span> &#125;</span><br></pre></td></tr></table></figure>
 <p>至此，系统登录流程的自动化测试脚本我们就编写完成了。</p>
 <h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>在本文中，我们通过系统登录这一典型功能点，演示了编写自动化测试用例的整个流程。</p>
 <p>在下一篇文章中，我们还会对自动化测试脚本的结构进行进一步优化，并实现测试代码工程化。</p>
@@ -183,7 +183,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Python/">Python</a><a href="/tags/AutomationTest/">AutomationTest</a><a href="/tags/Appium/">Appium</a><a href="/tags/F0T1/">F0T1</a><a href="/tags/iOS/">iOS</a><a href="/tags/Ruby/">Ruby</a>
+  <span></span> <a href="/tags/Python/">Python</a><a href="/tags/AutomationTest/">AutomationTest</a><a href="/tags/Appium/">Appium</a><a href="/tags/iOS/">iOS</a><a href="/tags/F0T1/">F0T1</a><a href="/tags/Ruby/">Ruby</a>
   </div>
 
 </div>
@@ -205,9 +205,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/confluence-simple-tutorial/" title="敏捷团队协作：Confluence简易教程">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   敏捷团队协作：Confluence简易教程</span>
 </a>
@@ -215,8 +215,8 @@
 
 
 <div class="next">
-<a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/"  title="从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件">
- <strong>下一篇：</strong><br/> 
+<a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/" title="从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件">
+ <strong>下一篇：</strong><br> 
  <span>从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件
 </span>
 </a>
@@ -247,16 +247,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -280,6 +270,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -292,15 +286,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -308,11 +294,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -320,7 +310,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -332,15 +322,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -385,10 +375,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -399,7 +389,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -632,7 +622,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

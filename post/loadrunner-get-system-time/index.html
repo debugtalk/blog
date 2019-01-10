@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>LoadRunner中获取当前系统时间 | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -118,17 +118,17 @@
 <h2 id="方法一：使用LR的参数化功能"><a href="#方法一：使用LR的参数化功能" class="headerlink" title="方法一：使用LR的参数化功能"></a>方法一：使用LR的参数化功能</h2><p>操作步骤：</p>
 <p>1、在Parameter List窗口中新建一个参数localtime_now，Parameter type选择为【Date/Time】<br>2、设置Date/Time format，具体格式可参照帮助手册，例如%Y-%m-%d %H:%M:%S对应的是2013-10-28 16:43:06<br>3、在脚本中，利用函数lr_eval_string将参数localtime_now转换为变量tt_1<br>4、在脚本中引用变量tt_1</p>
 <p>对应的脚本如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> *tt_1;</div><div class="line">tt_1 = lr_eval_string(<span class="string">"&#123;localtime_now&#125;"</span>);</div><div class="line">lr_message(<span class="string">"系统当前的时间为：%s"</span>, tt_1);</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *tt_1;</span><br><span class="line">tt_1 = lr_eval_string(<span class="string">"&#123;localtime_now&#125;"</span>);</span><br><span class="line">lr_message(<span class="string">"系统当前的时间为：%s"</span>, tt_1);</span><br></pre></td></tr></table></figure>
 <p>运行结果：<br>系统当前的时间为：2013-10-28 16:43:06</p>
 <h2 id="方法二：使用LR函数lr-save-datetime"><a href="#方法二：使用LR函数lr-save-datetime" class="headerlink" title="方法二：使用LR函数lr_save_datetime()"></a>方法二：使用LR函数lr_save_datetime()</h2><p>在LoadRunner中，函数lr_save_datetime可以将当前时间赋值给指定参数，并可在赋值时选择时间样式。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> *tt_2;</div><div class="line"><span class="comment">//获得当前系统时间，并根据设置的格式将当前时间赋值给 times</span></div><div class="line">lr_save_datetime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>, DATE_NOW+TIME_NOW, <span class="string">"localtime_2"</span>);</div><div class="line">tt_2 = lr_eval_string(<span class="string">"&#123;localtime_2&#125;"</span>);</div><div class="line">lr_message(<span class="string">"系统当前的时间为：%s"</span>, tt_2);</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *tt_2;</span><br><span class="line"><span class="comment">//获得当前系统时间，并根据设置的格式将当前时间赋值给 times</span></span><br><span class="line">lr_save_datetime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>, DATE_NOW+TIME_NOW, <span class="string">"localtime_2"</span>);</span><br><span class="line">tt_2 = lr_eval_string(<span class="string">"&#123;localtime_2&#125;"</span>);</span><br><span class="line">lr_message(<span class="string">"系统当前的时间为：%s"</span>, tt_2);</span><br></pre></td></tr></table></figure>
 <p>运行结果：<br>系统当前的时间为：2013-10-28 17:43:16</p>
 <h2 id="方法三：使用C语言标准函数库中的time-和ctime"><a href="#方法三：使用C语言标准函数库中的time-和ctime" class="headerlink" title="方法三：使用C语言标准函数库中的time()和ctime()"></a>方法三：使用C语言标准函数库中的time()和ctime()</h2><p>对应的脚本如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">long</span> tt_3;</div><div class="line">time(&amp;tt_3);</div><div class="line">lr_message(<span class="string">"系统当前的时间为：%s"</span>, ctime(&amp;tt_3));</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> tt_3;</span><br><span class="line">time(&amp;tt_3);</span><br><span class="line">lr_message(<span class="string">"系统当前的时间为：%s"</span>, ctime(&amp;tt_3));</span><br></pre></td></tr></table></figure>
 <p>运行结果：<br>系统当前的时间为：Mon Oct 28 17:43:16 2013</p>
 <h2 id="方法四：tm结构分解"><a href="#方法四：tm结构分解" class="headerlink" title="方法四：tm结构分解"></a>方法四：tm结构分解</h2><p>说明：tm结构即是一个结构体，将时间分解为9个部分，将时间的各个部分赋值给不同的变量，然后根据实际需求，将各个部分进行重组后使用。</p>
 <p>对应的脚本如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">Action()</div><div class="line">&#123;</div><div class="line">    <span class="keyword">struct</span> tm &#123;</div><div class="line">        <span class="keyword">int</span> second;   <span class="comment">//取得当前秒数(在分钟后)；取值区间为[0,59]</span></div><div class="line">        <span class="keyword">int</span> minute;   <span class="comment">//取得当前分钟数(在小时后)；取值区间为[0,59]</span></div><div class="line">        <span class="keyword">int</span> hour;     <span class="comment">//取得当前小时数(从凌晨0点开始)；取值区间为[0,23]</span></div><div class="line">        <span class="keyword">int</span> day;      <span class="comment">//取得当前天数(从上月结束开始)；取值区间为[1,31]</span></div><div class="line">        <span class="keyword">int</span> month;    <span class="comment">//取得当前月份数(从1月开始)；取值区间为[0,11]</span></div><div class="line">        <span class="keyword">int</span> year;     <span class="comment">//取得当前年份数(从1900年开始)</span></div><div class="line">        <span class="keyword">int</span> weekday;  <span class="comment">//取得当前日期数(为了获取星期几，从上个星期日开始)；取值区间为[0,6]</span></div><div class="line">        <span class="keyword">int</span> yearday;  <span class="comment">//取得当前年份天数(从1月1日开始)；取值区间为[0,365]</span></div><div class="line">        <span class="keyword">int</span> daylight; <span class="comment">//取得当前夏令时标识符，实行夏令时的时候，daylight取得一个正数</span></div><div class="line">        <span class="comment">//不实行夏令时的进候，daylight为0；</span></div><div class="line">        <span class="comment">//不了解情况时，daylight为负数</span></div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="keyword">long</span> timenow;    <span class="comment">//定义保存时间的变量</span></div><div class="line">    <span class="keyword">struct</span> tm *now;  <span class="comment">//定义结构指针</span></div><div class="line">    <span class="keyword">int</span> year, month, day, weekday, hour, minute, second;</div><div class="line">    <span class="keyword">char</span> *week;</div><div class="line">    time(&amp;timenow);  <span class="comment">//获取当前时间</span></div><div class="line">    now = (<span class="keyword">struct</span> tm *)localtime(&amp;timenow);  <span class="comment">//把当前时间的结构指针赋值给now</span></div><div class="line">    year = now-&gt;year;</div><div class="line">    month = now-&gt;month;</div><div class="line">    day = now-&gt;day;</div><div class="line">    hour = now-&gt;hour;   <span class="comment">//获取hour值</span></div><div class="line">    minute = now-&gt;minute; <span class="comment">//获取minute值</span></div><div class="line">    second = now-&gt;second; <span class="comment">//获取second值</span></div><div class="line">    weekday = now-&gt;weekday;<span class="comment">//获取week值</span></div><div class="line"></div><div class="line">    <span class="keyword">switch</span>(weekday)<span class="comment">//判断得到中文的星期</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">case</span> <span class="number">1</span>:week =<span class="string">"星期一"</span>;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> <span class="number">2</span>:week =<span class="string">"星期二"</span>;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> <span class="number">3</span>:week =<span class="string">"星期三"</span>;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> <span class="number">4</span>:week =<span class="string">"星期四"</span>;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> <span class="number">5</span>:week =<span class="string">"星期五"</span>;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> <span class="number">6</span>:week =<span class="string">"星期六"</span>;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> <span class="number">0</span>:week =<span class="string">"星期日"</span>;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    lr_message(<span class="string">"使用tm结构获取的当前时间为：%d-%d-%d %s %d:%d:%d"</span>,year,month,day,week,hour,minute,second);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">Action()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tm</span> &#123;</span></span><br><span class="line">        <span class="keyword">int</span> second;   <span class="comment">//取得当前秒数(在分钟后)；取值区间为[0,59]</span></span><br><span class="line">        <span class="keyword">int</span> minute;   <span class="comment">//取得当前分钟数(在小时后)；取值区间为[0,59]</span></span><br><span class="line">        <span class="keyword">int</span> hour;     <span class="comment">//取得当前小时数(从凌晨0点开始)；取值区间为[0,23]</span></span><br><span class="line">        <span class="keyword">int</span> day;      <span class="comment">//取得当前天数(从上月结束开始)；取值区间为[1,31]</span></span><br><span class="line">        <span class="keyword">int</span> month;    <span class="comment">//取得当前月份数(从1月开始)；取值区间为[0,11]</span></span><br><span class="line">        <span class="keyword">int</span> year;     <span class="comment">//取得当前年份数(从1900年开始)</span></span><br><span class="line">        <span class="keyword">int</span> weekday;  <span class="comment">//取得当前日期数(为了获取星期几，从上个星期日开始)；取值区间为[0,6]</span></span><br><span class="line">        <span class="keyword">int</span> yearday;  <span class="comment">//取得当前年份天数(从1月1日开始)；取值区间为[0,365]</span></span><br><span class="line">        <span class="keyword">int</span> daylight; <span class="comment">//取得当前夏令时标识符，实行夏令时的时候，daylight取得一个正数</span></span><br><span class="line">        <span class="comment">//不实行夏令时的进候，daylight为0；</span></span><br><span class="line">        <span class="comment">//不了解情况时，daylight为负数</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> timenow;    <span class="comment">//定义保存时间的变量</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tm</span> *<span class="title">now</span>;</span>  <span class="comment">//定义结构指针</span></span><br><span class="line">    <span class="keyword">int</span> year, month, day, weekday, hour, minute, second;</span><br><span class="line">    <span class="keyword">char</span> *week;</span><br><span class="line">    time(&amp;timenow);  <span class="comment">//获取当前时间</span></span><br><span class="line">    now = (struct tm *)localtime(&amp;timenow);  <span class="comment">//把当前时间的结构指针赋值给now</span></span><br><span class="line">    year = now-&gt;year;</span><br><span class="line">    month = now-&gt;month;</span><br><span class="line">    day = now-&gt;day;</span><br><span class="line">    hour = now-&gt;hour;   <span class="comment">//获取hour值</span></span><br><span class="line">    minute = now-&gt;minute; <span class="comment">//获取minute值</span></span><br><span class="line">    second = now-&gt;second; <span class="comment">//获取second值</span></span><br><span class="line">    weekday = now-&gt;weekday;<span class="comment">//获取week值</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span>(weekday)<span class="comment">//判断得到中文的星期</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>:week =<span class="string">"星期一"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:week =<span class="string">"星期二"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">3</span>:week =<span class="string">"星期三"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">4</span>:week =<span class="string">"星期四"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">5</span>:week =<span class="string">"星期五"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">6</span>:week =<span class="string">"星期六"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span>:week =<span class="string">"星期日"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    lr_message(<span class="string">"使用tm结构获取的当前时间为：%d-%d-%d %s %d:%d:%d"</span>,year,month,day,week,hour,minute,second);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>运行结果：<br>使用tm结构获取的当前时间为：113-9-28 星期一 17:43:16</p>
   
 	</div>
@@ -160,9 +160,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/SIPp-IP-Telephone-Server-Performance-Testing/" title="使用SIPp对基于SIP协议的IP电话通信服务器进行性能测试">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   使用SIPp对基于SIP协议的IP电话通信服务器进行性能测试</span>
 </a>
@@ -170,8 +170,8 @@
 
 
 <div class="next">
-<a href="/post/Using-DuoShuo-in-Pelican/"  title="在Pelican中使用多说评论系统">
- <strong>下一篇：</strong><br/> 
+<a href="/post/Using-DuoShuo-in-Pelican/" title="在Pelican中使用多说评论系统">
+ <strong>下一篇：</strong><br> 
  <span>在Pelican中使用多说评论系统
 </span>
 </a>
@@ -202,16 +202,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -235,6 +225,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -247,15 +241,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -263,11 +249,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -275,7 +265,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -287,15 +277,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -340,10 +330,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -354,7 +344,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -587,7 +577,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

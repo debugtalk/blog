@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>ApiTestEngine，不再局限于API的测试 | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -130,11 +130,11 @@
 <p>基于这一背景，<code>ApiTestEngine</code>在实现<code>JSON</code>的字段提取器（<code>extractor</code>）时，就采用了点（<code>.</code>）的运算符。</p>
 <p>例如，假如<code>HTTP</code>接口响应的<code>headers</code>和<code>body</code>为如下内容：</p>
 <p>response headers:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"Content-Type"</span>: <span class="string">"application/json"</span>,</div><div class="line">    <span class="attr">"Content-Length"</span>: <span class="number">69</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"Content-Type"</span>: <span class="string">"application/json"</span>,</span><br><span class="line">    <span class="attr">"Content-Length"</span>: <span class="number">69</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>response body:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"success"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"person"</span>: &#123;</div><div class="line">        <span class="attr">"name"</span>: &#123;</div><div class="line">            <span class="attr">"first_name"</span>: <span class="string">"Leo"</span>,</div><div class="line">            <span class="attr">"last_name"</span>: <span class="string">"Lee"</span>,</div><div class="line">        &#125;,</div><div class="line">        <span class="attr">"age"</span>: <span class="number">29</span>,</div><div class="line">        <span class="attr">"cities"</span>: [<span class="string">"Guangzhou"</span>, <span class="string">"Shenzhen"</span>]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"success"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"person"</span>: &#123;</span><br><span class="line">        <span class="attr">"name"</span>: &#123;</span><br><span class="line">            <span class="attr">"first_name"</span>: <span class="string">"Leo"</span>,</span><br><span class="line">            <span class="attr">"last_name"</span>: <span class="string">"Lee"</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"age"</span>: <span class="number">29</span>,</span><br><span class="line">        <span class="attr">"cities"</span>: [<span class="string">"Guangzhou"</span>, <span class="string">"Shenzhen"</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>那么对应的字段提取方式就为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&quot;headers.content-type&quot; =&gt; &quot;application/json&quot;</div><div class="line">&quot;headers.content-length&quot; =&gt; 69</div><div class="line">&quot;body.success&quot;/&quot;content.success&quot;/&quot;text.success&quot; =&gt; false</div><div class="line"></div><div class="line">&quot;content.person.name.first_name&quot; =&gt; &quot;Leo&quot;</div><div class="line">&quot;content.person.age&quot; =&gt; 29</div><div class="line">&quot;content.person.cities&quot; =&gt; [&quot;Guangzhou&quot;, &quot;Shenzhen&quot;]</div><div class="line">&quot;content.person.cities.0&quot; =&gt; &quot;Guangzhou&quot;</div><div class="line">&quot;content.person.cities.1&quot; =&gt; &quot;Shenzhen&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&quot;headers.content-type&quot; =&gt; &quot;application/json&quot;</span><br><span class="line">&quot;headers.content-length&quot; =&gt; 69</span><br><span class="line">&quot;body.success&quot;/&quot;content.success&quot;/&quot;text.success&quot; =&gt; false</span><br><span class="line"></span><br><span class="line">&quot;content.person.name.first_name&quot; =&gt; &quot;Leo&quot;</span><br><span class="line">&quot;content.person.age&quot; =&gt; 29</span><br><span class="line">&quot;content.person.cities&quot; =&gt; [&quot;Guangzhou&quot;, &quot;Shenzhen&quot;]</span><br><span class="line">&quot;content.person.cities.0&quot; =&gt; &quot;Guangzhou&quot;</span><br><span class="line">&quot;content.person.cities.1&quot; =&gt; &quot;Shenzhen&quot;</span><br></pre></td></tr></table></figure>
 <p>可以看出，通过点（<code>.</code>）运算符，我们可以从上往下逐级定位到具体的字段：</p>
 <ul>
 <li>当下一级为字典时，通过<code>.key</code>来指定下一级的节点，例如<code>.person</code>，指定了<code>content</code>下的<code>person</code>节点；</li>
@@ -143,21 +143,21 @@
 <p>定位到具体字段后，我们也就可以方便地提取字段值供后续使用了，作为参数或者进行结果校验均可。</p>
 <h2 id="实现XML-HTML的解析器"><a href="#实现XML-HTML的解析器" class="headerlink" title="实现XML/HTML的解析器"></a>实现XML/HTML的解析器</h2><p>从点（<code>.</code>）运算符的描述形式上来看，它和<code>XML/HTML</code>的<code>xpath</code>十分类似。既然如此，那我们针对<code>XML/HTML</code>类型的接口，是否可以基于<code>xpath</code>来实现解析器呢？</p>
 <p>在大多数情况下的确可以。例如，针对如下HTML页面，当我们要获取标题信息时，我们就可以通过<code>xpath</code>来指定提取字段：<code>body/h1</code></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>订单页面<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>订单号：SA89193<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>订单页面<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>订单号：SA89193<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>然而，如果我们想获取订单号（SA89193）时，使用<code>xpath</code>就没有办法了（通过<code>body/div/p</code>获取到的是<code>订单号：SA89193</code>，还需进一步地进行处理）。</p>
 <p>那除了<code>xpath</code>，我们还能使用什么其它方法从<code>XML/HTML</code>中提取特定字段呢？</p>
 <p>由于早些年对<code>LoadRunner</code>比较熟悉，因此我首先想到了<code>LoadRunner</code>的<code>web_reg_save_param</code>函数；在该函数中，我们可以通过指定左右边界（LB &amp; RB）来查找字段，将其提取出来并保存到变量中供后续使用。借鉴这种方式虽然可行，但在描述方式上还是比较复杂，特别是在<code>YAML</code>测试用例的<code>extract</code>中描述的时候。</p>
 <p>再一想，这种方式的底层实现不就是正则表达式么。而且我们通过Python脚本解析网页时，采用正则表达式来对目标字段进行匹配和提取，的确也是通用性非常强的方式。</p>
 <p>例如，假设我们现在想从<code>http://debugtalk.com</code>首页中提取出座右铭，通过查看网页源代码，我们可以看到座右铭对应的位置。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">h2</span> <span class="attr">class</span>=<span class="string">"blog-motto"</span>&gt;</span>探索一个软件工程师的无限可能<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span> <span class="attr">class</span>=<span class="string">"blog-motto"</span>&gt;</span>探索一个软件工程师的无限可能<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>那么，要提取“探索一个软件工程师的无限可能”字符串时，我们就可以使用正则表达式<code>r&quot;blog-motto\&quot;&gt;(.*)&lt;/h2&gt;&quot;</code>进行匹配，然后使用<code>regex</code>的<code>group</code>将匹配内容提取出来。</p>
 <p>对应的Python脚本实现如下所示。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; import re, requests</div><div class="line">&gt;&gt;&gt; resp = requests.get(<span class="string">"http://debugtalk.com"</span>)</div><div class="line">&gt;&gt;&gt; content = resp.text</div><div class="line">&gt;&gt;&gt; matched = re.search(r<span class="string">"blog-motto\"&gt;(.*)&lt;/h2&gt;"</span>, content)</div><div class="line">&gt;&gt;&gt; matched.group(1)</div><div class="line"><span class="string">'探索一个软件工程师的无限可能'</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import re, requests</span><br><span class="line">&gt;&gt;&gt; resp = requests.get(<span class="string">"http://debugtalk.com"</span>)</span><br><span class="line">&gt;&gt;&gt; content = resp.text</span><br><span class="line">&gt;&gt;&gt; matched = re.search(r<span class="string">"blog-motto\"&gt;(.*)&lt;/h2&gt;"</span>, content)</span><br><span class="line">&gt;&gt;&gt; matched.group(1)</span><br><span class="line"><span class="string">'探索一个软件工程师的无限可能'</span></span><br></pre></td></tr></table></figure>
 <p>思路确定后，实现起来就很快了。</p>
 <p>此处省略256字。。。</p>
 <p>最终，我在<code>ApiTestEngine</code>中新增实现了一个基于正则表达式的提取器。使用形式与JSON解析保持一致，只需要将之前的点（<code>.</code>）运算符更改为正则表达式即可。</p>
 <p>还是前面提取座右铭的例子，我们就可以通过<code>YAML</code>格式来编写测试用例。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- test:</span></div><div class="line"><span class="attr">    name:</span> demo</div><div class="line"><span class="attr">    request:</span></div><div class="line"><span class="attr">        url:</span> http://debugtalk.com/</div><div class="line"><span class="attr">        method:</span> GET</div><div class="line"><span class="attr">    extract:</span></div><div class="line"><span class="attr">        - motto:</span> <span class="string">'blog-motto\"&gt;(.*)&lt;/h2&gt;'</span></div><div class="line"><span class="attr">    validate:</span></div><div class="line"><span class="bullet">        -</span> &#123;<span class="string">"check"</span>: <span class="string">"status_code"</span>, <span class="string">"expected"</span>: <span class="number">200</span>&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">demo</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://debugtalk.com/</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    extract:</span></span><br><span class="line"><span class="attr">        - motto:</span> <span class="string">'blog-motto\"&gt;(.*)&lt;/h2&gt;'</span></span><br><span class="line"><span class="attr">    validate:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"status_code"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="number">200</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>需要说明的是，指定的正则表达式必须满足<code>r&quot;.*\(.*\).*&quot;</code>的格式要求，必须并且只能有一个分组（即一对括号）。如果在同一段内容中需要提取多个字段，那就分多次匹配即可。</p>
 <h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>实现了基于正则表达式的提取器后，我们就彻底实现了对任意格式<code>HTTP</code>响应内容的解析，不仅限于<code>XML/HTML</code>类型，对于任意基于<code>HTTP</code>协议的的接口，<code>ApiTestEngine</code>都可以适用了。当然，如果接口响应是<code>JSON</code>类型，我们虽然可以也使用正则表达式提取，但更建议采用原有的点（<code>.</code>）运算符形式，因为描述更清晰。</p>
 <p>至此，<code>ApiTestEngine</code>可以说是真正意义上实现了，面向任意类型的<code>HTTP</code>协议接口，只需要编写维护一份<code>YAML</code>用例，即可同时实现接口自动化测试、性能测试、持续集成、线上监控的全测试类型覆盖！</p>
@@ -192,9 +192,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/ApiTestEngine-rename-to-HttpRunner/" title="ApiTestEngine 正式更名为 HttpRunner">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   ApiTestEngine 正式更名为 HttpRunner</span>
 </a>
@@ -202,8 +202,8 @@
 
 
 <div class="next">
-<a href="/post/apitestengine-hot-plugin/"  title="约定大于配置：ApiTestEngine实现热加载机制">
- <strong>下一篇：</strong><br/> 
+<a href="/post/apitestengine-hot-plugin/" title="约定大于配置：ApiTestEngine实现热加载机制">
+ <strong>下一篇：</strong><br> 
  <span>约定大于配置：ApiTestEngine实现热加载机制
 </span>
 </a>
@@ -234,16 +234,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -267,6 +257,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -279,15 +273,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -295,11 +281,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -307,7 +297,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -319,15 +309,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -372,10 +362,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -386,7 +376,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -619,7 +609,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

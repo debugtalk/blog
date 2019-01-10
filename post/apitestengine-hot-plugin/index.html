@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>约定大于配置：ApiTestEngine实现热加载机制 | DebugTalk</title>
@@ -38,14 +38,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -68,17 +68,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -109,16 +109,16 @@
 		
 		</div>
 		
-		<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>中编写测试用例时，我们有时需要定义全局的变量，或者引用外部函数实现一些动态的计算逻辑。当前采用的方式是：</p>
+		<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>中编写测试用例时，我们有时需要定义全局的变量，或者引用外部函数实现一些动态的计算逻辑。当前采用的方式是：</p>
 <ul>
 <li>若需定义全局的参数变量，则要在<code>YAML/JSON</code>的<code>config</code>中，使用<code>variables</code>定义变量；</li>
 <li>若需引用外部函数，则要在<code>YAML/JSON</code>的<code>config</code>中，使用<code>import_module_items</code>导入指定的<code>Python</code>模块。</li>
 </ul>
 <p>虽然这种方式提供了极大的灵活性，但是对于用户来说可能会显得比较复杂。另外一方面，这种方式也会造成大量重复的情况。</p>
 <p>例如，对于变量来说，假如我们的项目中存在100个测试场景，而每个场景中都需要将用户账号（<code>test@ijd</code>）作为全局变量来使用，那么在现有模式下，我们只能在这100个<code>YAML/JSON</code>文件的<code>config</code>中都采用如下方式定义一遍：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"smoketest for scenario A."</span></div><div class="line"><span class="attr">    variables:</span></div><div class="line"><span class="attr">        - username:</span> test@ijd</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- config:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">"smoketest for scenario A."</span></span><br><span class="line"><span class="attr">    variables:</span></span><br><span class="line"><span class="attr">        - username:</span> <span class="string">test@ijd</span></span><br></pre></td></tr></table></figure>
 <p>同样的，对于外部函数来说，假如我们项目的100个测试场景都需要用到生成随机字符串的函数（<code>gen_random_string</code>），那么我们也不得不在这100个<code>YAML/JSON</code>文件的<code>config</code>中都导入一次该函数所在的<code>Python</code>模块（假设相对于工作目录的路径为<code>extra/utils.py</code>）。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="attr">- config:</span></div><div class="line"><span class="attr">    name:</span> <span class="string">"smoketest for scenario A."</span></div><div class="line"><span class="attr">    import_module_items:</span></div><div class="line"><span class="bullet">        -</span> extra.utils</div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- config:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">"smoketest for scenario A."</span></span><br><span class="line"><span class="attr">    import_module_items:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">extra.utils</span></span><br></pre></td></tr></table></figure>
 <p>由此可见，当测试场景越来越多以后，要维护好全局变量和外部函数，必定会是一个很大的工作量。</p>
 <p>那么，如果既要能引用公共的变量和函数，又要减少重复的定义和导入，那要怎么做呢？</p>
 <h2 id="pytest-的-conftest-py"><a href="#pytest-的-conftest-py" class="headerlink" title="pytest 的 conftest.py"></a>pytest 的 conftest.py</h2><p>前段时间在接触<code>pytest</code>时，看到<code>pytest</code>支持<code>conftest.py</code>的插件机制，这是一种在测试文件中可以实现模块自动发现和热加载的机制。具体地，只要是在文件目录存在命名为<code>conftest.py</code>的文件，里面定义的<code>hook</code>函数都会在<code>pytest</code>运行过程中被导入，并可被测试用例进行调用。同时，<code>conftest.py</code>存在优先级策略，从测试用例所在目录到系统根目录的整个路径中，越靠近测试用例的<code>conftest.py</code>优先级越高。</p>
@@ -151,9 +151,9 @@
 <p>2、在<code>ApiTestEngine</code>框架中，存在测试用例（<code>testcase</code>）和测试用例集（<code>testset</code>）两个层面的作用域，两者的界限十分明确。这样设计的目的在于，我们既可以实现用例集层面的变量和函数的定义和导入，也可以保障各个用例之间的独立性，不至于出现作用域相互污染的情况。具体地，作用域在用例集初始化时定义或导入的变量和函数，会存储在用例集层面的作用域；而在运行每条测试用例时，会先继承（<code>deepcopy</code>）用例集层面的作用域，如果存在同名的变量或函数定义，则会对用例集层面的变量和函数进行覆盖，同时用例集层面的变量和函数也并不会被修改。</p>
 <p>3、从热加载的顺序可以看出，查找变量或函数的顺序是从测试用例所在目录开始，沿着父路径逐层往上，直到系统的根目录。因此，我们可以利用这个优先级原则来组织我们的用例和依赖的<code>Python</code>函数模块。例如，我们可以将不同模块的测试用例集文件放在不同的文件夹下：针对各个模块独有的依赖函数和变量，可以放置在对应文件夹的<code>debugtalk.py</code>文件中；而整个项目公共的函数和变量，就可以放置到项目文件夹的<code>debugtalk.py</code>中。</p>
 <p>文件组织结构如下所示：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">➜  project ✗ tree .</div><div class="line">.</div><div class="line">├── debugtalk.py</div><div class="line">├── module_A</div><div class="line">│   ├── __init__.py</div><div class="line">│   ├── debugtalk.py</div><div class="line">│   ├── testsetA1.yml</div><div class="line">│   └── testsetA2.yml</div><div class="line">└── module_B</div><div class="line">    ├── __init__.py</div><div class="line">    ├── debugtalk.py</div><div class="line">    ├── testsetB1.yml</div><div class="line">    └── testsetB2.yml</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  project ✗ tree .</span><br><span class="line">.</span><br><span class="line">├── debugtalk.py</span><br><span class="line">├── module_A</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── debugtalk.py</span><br><span class="line">│   ├── testsetA1.yml</span><br><span class="line">│   └── testsetA2.yml</span><br><span class="line">└── module_B</span><br><span class="line">    ├── __init__.py</span><br><span class="line">    ├── debugtalk.py</span><br><span class="line">    ├── testsetB1.yml</span><br><span class="line">    └── testsetB2.yml</span><br></pre></td></tr></table></figure>
 <p>这其中还有一点需要格外注意。因为我们在框架运行过程中需要将<code>debugtalk.py</code>作为函数模块进行导入，因此我们首先要保障<code>debugtalk.py</code>满足<code>Python</code>模块的要求，也就是在对应的文件夹中要包含<code>__init__.py</code>文件。</p>
-<p>如果对热加载机制的实现感兴趣，可直接阅读框架源码，重点只需查看<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/ate/utils.py" target="_blank" rel="external"><code>ate/utils.py</code></a>中的三个函数：</p>
+<p>如果对热加载机制的实现感兴趣，可直接阅读框架源码，重点只需查看<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/ate/utils.py" target="_blank" rel="noopener"><code>ate/utils.py</code></a>中的三个函数：</p>
 <ul>
 <li>search_conf_item(start_path, item_type, item_name)</li>
 <li>get_imported_module_from_file(file_path)</li>
@@ -166,7 +166,7 @@
 <li><code>Python</code>模块中的变量也会被导入，公共变量可放置在<code>Python</code>模块中，而不再必须通过<code>variables</code>定义。</li>
 </ul>
 <p>考虑到兼容性问题，框架升级的同时也保留了对原有测试用例编写方式的支持，因此框架升级对已有测试用例的正常运行也不会造成影响。不过，我还是强烈建议大家采用最新的用例编写方式，充分利用热加载机制带来的便利。</p>
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>现在回过头来看<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>的演进历程，以及之前写的关于<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="external"><code>ApiTestEngine</code></a>设计方面的文章，会发现当初的确是有一些考虑不周全的地方。也许这也是编程的乐趣所在吧，在前行的道路中，总会有新的感悟和新的收获，迭代优化的过程，就仿佛是在打磨一件艺术品。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>现在回过头来看<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>的演进历程，以及之前写的关于<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>设计方面的文章，会发现当初的确是有一些考虑不周全的地方。也许这也是编程的乐趣所在吧，在前行的道路中，总会有新的感悟和新的收获，迭代优化的过程，就仿佛是在打磨一件艺术品。</p>
 <p>这种感觉，甚好！</p>
   
 	</div>
@@ -198,9 +198,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/apitestengine-not-only-about-json-api/" title="ApiTestEngine，不再局限于API的测试">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   ApiTestEngine，不再局限于API的测试</span>
 </a>
@@ -208,8 +208,8 @@
 
 
 <div class="next">
-<a href="/post/apitestengine-supersede-locust/"  title="ApiTestEngine 集成 Locust 实现更好的性能测试体验">
- <strong>下一篇：</strong><br/> 
+<a href="/post/apitestengine-supersede-locust/" title="ApiTestEngine 集成 Locust 实现更好的性能测试体验">
+ <strong>下一篇：</strong><br> 
  <span>ApiTestEngine 集成 Locust 实现更好的性能测试体验
 </span>
 </a>
@@ -240,16 +240,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -273,6 +263,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -285,15 +279,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -301,11 +287,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -313,7 +303,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -325,15 +315,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -378,10 +368,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -392,7 +382,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -625,7 +615,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

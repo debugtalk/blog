@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件 | DebugTalk</title>
@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="写在前面前两天微信突然发来一条系统消息，提示DebugTalk可以开通原创标识了（同时也有了评论功能），虽然一直在期待，但没想到来得这么快，着实是个不小的惊喜。 另外，最近在公众号后台也收到好几个朋友的信息，有的是询问某某部分什么时候能发布，有的是希望能加快更新速度。说实话，收到这样的信息虽然会有压力，但真的挺开心的，因为这说明DebugTalk至少能给一部分人带去价值，这说明这件事本身还是值得坚">
-<meta name="keywords" content="AutomationTest,Appium,F0T1,iOS,Simulator,Ruby">
+<meta name="keywords" content="AutomationTest,Appium,iOS,Simulator,F0T1,Ruby">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件">
 <meta property="og:url" content="http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/index.html">
@@ -38,14 +38,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -68,17 +68,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -134,7 +134,7 @@
 </ul>
 <p>在实践操作中，Inspector最大的用途就是在可以可视化地查看UI元素信息，并且可以将操作转换为脚本代码，这对初学者尤为有用。</p>
 <p>例如，在预览区点击选中按钮“BUY NOW”，然后在UI信息展示区的Details窗口就可以看到该按钮的所有属性信息。在交互操作区点击【Tap】按钮后，就会模拟用户点击“BUY NOW”按钮，并且在脚本区域生成当次按钮点击的脚本（选择Ruby语言）：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">find_element(<span class="symbol">:name</span>, <span class="string">"BUY NOW &gt;"</span>).click</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find_element(<span class="symbol">:name</span>, <span class="string">"BUY NOW &gt;"</span>).click</span><br></pre></td></tr></table></figure>
 <p>如上就是使用<code>Appium Inspector</code>的一般性流程。</p>
 <h3 id="Appium-Ruby-Console"><a href="#Appium-Ruby-Console" class="headerlink" title="Appium Ruby Console"></a>Appium Ruby Console</h3><p>有了<code>Appium Inspector</code>，为什么还需要<code>Appium Ruby Console</code>呢？</p>
 <p>其实，<code>Appium Ruby Console</code>也并不是必须的。经过与多个熟悉<code>Appium</code>的前辈交流，他们也从未用过<code>Appium Ruby Console</code>，这说明<code>Appium Ruby Console</code>并不是必须的，没有它也不会影响我们对<code>Appium</code>的使用。</p>
@@ -146,49 +146,49 @@
 <p><code>Appium Ruby Console</code>是采用Ruby语言开发的，在使用方式上面和Ruby的<code>irb</code>很类似。</p>
 <p>在使用<code>Appium Ruby Console</code>时，虚拟机的配置信息并不会从GUI中读取，而是要通过配置文件进行指定。</p>
 <p>配置文件的名称统一要求为<code>appium.txt</code>，内容形式如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[caps]</div><div class="line">platformName = &quot;ios&quot;</div><div class="line">platformVersion = &apos;9.3&apos;,</div><div class="line">app = &quot;/path/to/UICatalog.app.zip&quot;</div><div class="line">deviceName = &quot;iPhone Simulator&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[caps]</span><br><span class="line">platformName = &quot;ios&quot;</span><br><span class="line">platformVersion = &apos;9.3&apos;,</span><br><span class="line">app = &quot;/path/to/UICatalog.app.zip&quot;</span><br><span class="line">deviceName = &quot;iPhone Simulator&quot;</span><br></pre></td></tr></table></figure>
 <p>其中，<code>platformName</code>指定虚拟机操作系统类型，“ios”或者”android”；<code>platformVersion</code>指定操作系统的版本，例如iOS的’9.3’，或者Android的’5.1’；<code>app</code>指定被测应用安装包的路径。这三个参数是必须的，与Inspector中的配置也能对应上。</p>
 <p>在使用<code>Appium Ruby Console</code>时，首先需要启动<code>Appium Server</code>，通过<code>GUI</code>或者<code>Terminal</code>均可。</p>
 <p>然后，在Terminal中，进入到<code>appium.txt</code>文件所在的目录，执行<code>arc</code>命令即可启动<code>Appium Ruby Console</code>。<code>arc</code>，即是appium ruby console首字母的组合。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">➜ ls</div><div class="line">appium.txt</div><div class="line">➜ arc</div><div class="line">[1] pry(main)&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ ls</span><br><span class="line">appium.txt</span><br><span class="line">➜ arc</span><br><span class="line">[1] pry(main)&gt;</span><br></pre></td></tr></table></figure>
 <p>接下来，就可以通过执行命令查询当前设备屏幕中的控件信息。</p>
 <p>使用频率最高的一个命令是<code>page</code>，通过这个命令可以查看到当前屏幕中所有控件的基本信息。</p>
 <p>例如，当屏幕停留在前面截图中的页面时，执行<code>page</code>命令可以得到如下内容。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">[1] pry(main)&gt; page</div><div class="line">UIANavigationBar</div><div class="line">   name: HomeView</div><div class="line">   id: Home =&gt; Home</div><div class="line">       米    =&gt; m</div><div class="line">       去看看  =&gt; View</div><div class="line">UIAButton</div><div class="line">   name, label: tabbar category gray</div><div class="line">UIAImage</div><div class="line">   name: debugtalk_logo.png</div><div class="line">UIAButton</div><div class="line">   name, label: tabbar cart gray</div><div class="line">UIATableView</div><div class="line">   value: rows 1 to 4 of 15</div><div class="line">UIAPageIndicator</div><div class="line">   value: page 2 of 2</div><div class="line">UIATableCell</div><div class="line">   name: For the first time ever in a hand held camera, the Osmo brings professional, realtime cinema-quality stabilization.</div><div class="line">   id: 米 =&gt; m</div><div class="line">UIAStaticText</div><div class="line">   name, label, value: For the first time ever in a hand held camera, the Osmo brings professional, realtime cinema-quality stabilization.</div><div class="line">   id: 米 =&gt; m</div><div class="line">UIAStaticText</div><div class="line">   name, label, value: OSMO</div><div class="line">UIAButton</div><div class="line">   name, label: SHOP NOW &gt;</div><div class="line">UIATableCell</div><div class="line">   name: Ronin</div><div class="line">UIAStaticText</div><div class="line">   name, label, value: Ronin</div><div class="line">UIAStaticText</div><div class="line">   name, label, value: Phantom</div><div class="line">   id: 米 =&gt; m</div><div class="line">... (略)</div><div class="line">UIAButton</div><div class="line">   name, label: Store</div><div class="line">   value: 1</div><div class="line">   id: 门店 =&gt; Store</div><div class="line">... (略)</div><div class="line">UIAButton</div><div class="line">   name, label: My Account</div><div class="line">   id: My Account =&gt; My Account</div><div class="line">nil</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">[1] pry(main)&gt; page</span><br><span class="line">UIANavigationBar</span><br><span class="line">   name: HomeView</span><br><span class="line">   id: Home =&gt; Home</span><br><span class="line">       米    =&gt; m</span><br><span class="line">       去看看  =&gt; View</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: tabbar category gray</span><br><span class="line">UIAImage</span><br><span class="line">   name: debugtalk_logo.png</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: tabbar cart gray</span><br><span class="line">UIATableView</span><br><span class="line">   value: rows 1 to 4 of 15</span><br><span class="line">UIAPageIndicator</span><br><span class="line">   value: page 2 of 2</span><br><span class="line">UIATableCell</span><br><span class="line">   name: For the first time ever in a hand held camera, the Osmo brings professional, realtime cinema-quality stabilization.</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: For the first time ever in a hand held camera, the Osmo brings professional, realtime cinema-quality stabilization.</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: OSMO</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: SHOP NOW &gt;</span><br><span class="line">UIATableCell</span><br><span class="line">   name: Ronin</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: Ronin</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: Phantom</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">... (略)</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: Store</span><br><span class="line">   value: 1</span><br><span class="line">   id: 门店 =&gt; Store</span><br><span class="line">... (略)</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: My Account</span><br><span class="line">   id: My Account =&gt; My Account</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
 <p>通过返回信息，我们就可以看到所有控件的type、name、label、value属性值。如果在某个控件下没有显示label或value，这是因为这个值为空，我们可以不予理会。</p>
 <p>由于<code>page</code>返回的信息太多，可能不便于查看，因此在使用<code>page</code>命令时，也可以指定控件的类型，相当于对当前屏幕的控件进行筛选，只返回指定类型的控件信息。</p>
 <p>指定控件类型时，可以通过string类型进行指定（如 page “Image”），也可通过symbol类型进行指定（如 page :cell）。指定的类型可只填写部分内容，并且不分区大小写。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[2] pry(main)&gt; page &quot;Image&quot;</div><div class="line">UIAImage</div><div class="line">   name: debugtalk_logo.png</div><div class="line">nil</div><div class="line">[3] pry(main)&gt; page :cell</div><div class="line">UIATableCell</div><div class="line">   name: DebugTalk’s smartest flying camera ever.</div><div class="line">   id: 米 =&gt; m</div><div class="line">UIATableCell</div><div class="line">   name: Ronin</div><div class="line">UIATableCell</div><div class="line">   name: Phantom</div><div class="line">   id: 米 =&gt; m</div><div class="line">nil</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[2] pry(main)&gt; page "Image"</span><br><span class="line">UIAImage</span><br><span class="line">   name: debugtalk_logo.png</span><br><span class="line">nil</span><br><span class="line">[3] pry(main)&gt; page :cell</span><br><span class="line">UIATableCell</span><br><span class="line">   name: DebugTalk’s smartest flying camera ever.</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">UIATableCell</span><br><span class="line">   name: Ronin</span><br><span class="line">UIATableCell</span><br><span class="line">   name: Phantom</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
 <p>如果需要查看当前屏幕的所有控件类型，可以执行<code>page_class</code>命令进行查看。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[4] pry(main)&gt; page_class</div><div class="line">14x UIAButton</div><div class="line">8x UIAStaticText</div><div class="line">4x UIAElement</div><div class="line">4x UIATableCell</div><div class="line">2x UIAImage</div><div class="line">2x UIAWindow</div><div class="line">1x UIAPageIndicator</div><div class="line">1x UIATableView</div><div class="line">1x UIAStatusBar</div><div class="line">1x UIANavigationBar</div><div class="line">1x UIATabBar</div><div class="line">1x UIAApplication</div><div class="line">nil</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[4] pry(main)&gt; page_class</span><br><span class="line">14x UIAButton</span><br><span class="line">8x UIAStaticText</span><br><span class="line">4x UIAElement</span><br><span class="line">4x UIATableCell</span><br><span class="line">2x UIAImage</span><br><span class="line">2x UIAWindow</span><br><span class="line">1x UIAPageIndicator</span><br><span class="line">1x UIATableView</span><br><span class="line">1x UIAStatusBar</span><br><span class="line">1x UIANavigationBar</span><br><span class="line">1x UIATabBar</span><br><span class="line">1x UIAApplication</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
 <p>基本上，<code>page</code>返回的控件信息已经足够满足绝大多数场景需求，但有时候情况比较特殊，需要<code>enabled</code>、<code>xpath</code>、<code>visible</code>、坐标等属性信息，这时就可以通过执行<code>source</code>命令。执行<code>source</code>命令后，就可以返回当前屏幕中所有控件的所有信息，以xml格式进行展现。</p>
 <h2 id="定位UI控件"><a href="#定位UI控件" class="headerlink" title="定位UI控件"></a>定位UI控件</h2><p>获取到UI控件的属性信息后，就可以对控件进行定位了。</p>
 <p>首先介绍下最通用的定位方式，<code>find</code>。通过<code>find</code>命令，可以实现在控件的诸多属性值（<code>name</code>、<code>label</code>、<code>value</code>、<code>hint</code>）中查找目标值。查询时不区分大小写，如果匹配结果有多个，则只返回第一个结果。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[5] pry(main)&gt; find(&apos;osmo&apos;)</div><div class="line">#&lt;Selenium::WebDriver::Element:0x..febd52a30dcdfea32 id=&quot;2&quot;&gt;</div><div class="line">[6] pry(main)&gt; find(&apos;osmo&apos;).label</div><div class="line">&quot;Osmo&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[5] pry(main)&gt; find('osmo')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x..febd52a30dcdfea32 id=<span class="string">"2"</span>&gt;</span></span><br><span class="line">[6] pry(main)&gt; find('osmo').label</span><br><span class="line">"Osmo"</span><br></pre></td></tr></table></figure>
 <p>另一个通用的定位方式是<code>find_element</code>，它也可以实现对所有控件进行查找，但是相对于<code>find</code>，可以对属性类型进行指定。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[7] pry(main)&gt; find_element(:class_name, &apos;UIATextField&apos;)</div><div class="line">#&lt;Selenium::WebDriver::Element:0x31d87e3848df8804 id=&quot;3&quot;&gt;</div><div class="line">[8] pry(main)&gt; find_element(:class_name, &apos;UIATextField&apos;).value</div><div class="line">&quot;Email Address&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[7] pry(main)&gt; find_element(:class_name, 'UIATextField')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x31d87e3848df8804 id=<span class="string">"3"</span>&gt;</span></span><br><span class="line">[8] pry(main)&gt; find_element(:class_name, 'UIATextField').value</span><br><span class="line">"Email Address"</span><br></pre></td></tr></table></figure>
 <p>不过在实践中发现，采用<code>find</code>、<code>find_element</code>这类通用的定位方式并不好用，因为定位结果经常不是我们期望的。</p>
 <p>经过反复摸索，我推荐根据目标控件的类型，选择对应的定位方式。总结起来，主要有以下三种方式。</p>
 <p>针对Button类型的控件（UIAButton），采用<code>button_exact</code>进行定位：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[9] pry(main)&gt; button_exact(&apos;Login&apos;)</div><div class="line">#&lt;Selenium::WebDriver::Element:0x..feaebd8302b6d77cc id=&quot;4&quot;&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[9] pry(main)&gt; button_exact('Login')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x..feaebd8302b6d77cc id=<span class="string">"4"</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>针对Text类型的控件（UIAStaticText），采用<code>text_exact</code>进行定位：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[10] pry(main)&gt; text_exact(&apos;Phantom&apos;)</div><div class="line">#&lt;Selenium::WebDriver::Element:0x1347e89100fdcee2 id=&quot;5&quot;&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[10] pry(main)&gt; text_exact('Phantom')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x1347e89100fdcee2 id=<span class="string">"5"</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>针对控件类型进行定位时，采用<code>tag</code>；如下方式等价于<code>find_element(:class_name, &#39;UIASecureTextField&#39;)</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[11] pry(main)&gt; tag(&apos;UIASecureTextField&apos;)</div><div class="line">#&lt;Selenium::WebDriver::Element:0x..fc6f5efd05a82cdca id=&quot;6&quot;&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[11] pry(main)&gt; tag('UIASecureTextField')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x..fc6f5efd05a82cdca id=<span class="string">"6"</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>基本上，这三种方式就已经足够应付绝大多数测试场景了。当然，这三种方式只是我个人经过实践后选择的定位方式，除了这三种，<code>Appium</code>还支持很多种其它定位方式，大家可自行查看<code>Appium</code>官方文档进行选择。</p>
 <p>另外，除了对控件进行定位，有时候我们还想判断当前屏幕中是否存在某个控件（通常用于结果检测判断），这要怎么做呢？</p>
 <p>一种方式是借助于<code>Appium</code>的控件查找机制，即找不到控件时会抛出异常（<code>Selenium::WebDriver::Error::NoSuchElementError</code>）；反过来，当查找某个控件抛出异常时，则说明当前屏幕中不存在该控件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[12] pry(main)&gt; button_exact(&apos;Login_invalid&apos;)</div><div class="line">Selenium::WebDriver::Error::NoSuchElementError: An element could not be located on the page using the given search parameters.</div><div class="line">from /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/common/helper.rb:218:in `_no_such_element&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[12] pry(main)&gt; button_exact('Login_invalid')</span><br><span class="line">Selenium::WebDriver::Error::NoSuchElementError: An element could not be located on the page using the given search parameters.</span><br><span class="line">from /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/common/helper.rb:218:in `_no_such_element'</span><br></pre></td></tr></table></figure>
 <p>该种方式可行，但比较暴力，基本上不会采用这种方式。</p>
 <p>另一种更好的方式是，查找当前屏幕中指定控件的个数，若个数不为零，则说明控件存在。具体操作上，将<code>button_exact</code>替换为<code>buttons_exact</code>，将<code>text_exact</code>替换为<code>texts_exact</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[12] pry(main)&gt; buttons_exact(&apos;Login&apos;).count</div><div class="line">1</div><div class="line">[13] pry(main)&gt; buttons_exact(&apos;Login_invalid&apos;).count</div><div class="line">0</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[12] pry(main)&gt; buttons_exact('Login').count</span><br><span class="line">1</span><br><span class="line">[13] pry(main)&gt; buttons_exact('Login_invalid').count</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
 <p>除此之外，基于Ruby实现的<code>appium_lib</code>还支持<code>exists</code>方法，可直接返回Boolean值。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[14] pry(main)&gt; exists &#123; button_exact(&apos;Login&apos;) &#125;</div><div class="line">true</div><div class="line">[15] pry(main)&gt; exists &#123; button_exact(&apos;Login_invalid&apos;) &#125;</div><div class="line">false</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[14] pry(main)&gt; exists &#123; button_exact('Login') &#125;</span><br><span class="line">true</span><br><span class="line">[15] pry(main)&gt; exists &#123; button_exact('Login_invalid') &#125;</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
 <h2 id="对控件执行操作"><a href="#对控件执行操作" class="headerlink" title="对控件执行操作"></a>对控件执行操作</h2><p>定位到具体的控件后，操作就比较容易了。</p>
 <p>操作类型不多，最常用就是点击（click）和输入（type），这两个操作能覆盖80%以上的场景。</p>
 <p>对于点击操作，才定位到的控件后面添加<code>.click</code>方法；对于输入操作，在定位到的输入框控件后面添加<code>.type</code>方法，并传入输入值。</p>
 <p>例如，账号登录操作就包含输入和点击两种操作类型。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[16] pry(main)&gt; find_element(:class_name, &apos;UIATextField&apos;).type &apos;leo.lee@debugtalk.com&apos;</div><div class="line">&quot;&quot;</div><div class="line">[17] pry(main)&gt; find_element(:class_name, &apos;UIASecureTextField&apos;).type &apos;123456&apos;</div><div class="line">&quot;&quot;</div><div class="line">[18] pry(main)&gt; button_exact(&apos;Login&apos;).click</div><div class="line">nil</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[16] pry(main)&gt; find_element(:class_name, 'UIATextField').type 'leo.lee@debugtalk.com'</span><br><span class="line">""</span><br><span class="line">[17] pry(main)&gt; find_element(:class_name, 'UIASecureTextField').type '123456'</span><br><span class="line">""</span><br><span class="line">[18] pry(main)&gt; button_exact('Login').click</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
 <h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>在本文中，我们学习了对iOS UI控件进行交互操作的一般性方法，为编写自动化测试脚本打好了基础。</p>
 <p>在下一篇文章中，我们就要正式开始针对iOS应用编写自动化测试脚本了。</p>
   
@@ -199,7 +199,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/AutomationTest/">AutomationTest</a><a href="/tags/Appium/">Appium</a><a href="/tags/F0T1/">F0T1</a><a href="/tags/iOS/">iOS</a><a href="/tags/Simulator/">Simulator</a><a href="/tags/Ruby/">Ruby</a>
+  <span></span> <a href="/tags/AutomationTest/">AutomationTest</a><a href="/tags/Appium/">Appium</a><a href="/tags/iOS/">iOS</a><a href="/tags/Simulator/">Simulator</a><a href="/tags/F0T1/">F0T1</a><a href="/tags/Ruby/">Ruby</a>
   </div>
 
 </div>
@@ -221,9 +221,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/build-app-automated-test-platform-from-0-to-1-write-iOS-testcase-scripts/" title="从0到1搭建移动App功能自动化测试平台（3）：编写iOS自动化测试脚本">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   从0到1搭建移动App功能自动化测试平台（3）：编写iOS自动化测试脚本</span>
 </a>
@@ -231,8 +231,8 @@
 
 
 <div class="next">
-<a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/"  title="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">
- <strong>下一篇：</strong><br/> 
+<a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/" title="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">
+ <strong>下一篇：</strong><br> 
  <span>从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用
 </span>
 </a>
@@ -263,16 +263,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -296,6 +286,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -308,15 +302,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -324,11 +310,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -336,7 +326,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -348,15 +338,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -401,10 +391,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -415,7 +405,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -648,7 +638,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>SQL语句中关于NULL的那些坑 | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -147,15 +147,15 @@
 </tbody>
 </table>
 <p>在系统的某个页面中，需要展示出所有<code>dashboard</code>类型以外的分支，于是就采用如下方式进行查询（Rails）。</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">branches = Qms::Branch.where(<span class="string">"types!='dashboard'"</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">branches = Qms::Branch.where(<span class="string">"types!='dashboard'"</span>)</span><br></pre></td></tr></table></figure>
 <p>这个方式有问题么？</p>
 <p>之前我是觉得没什么问题。但是在代码上线后，实际使用时发现部分分支没有加载出来，这就包括了<code>performance_trunk</code>分支。</p>
 <p>然后就是问题定位，到MySQL的控制台采用SQL语句进行查询：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> qms_branch <span class="keyword">WHERE</span> types != <span class="string">'dashboard'</span></div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> qms_branch <span class="keyword">WHERE</span> types != <span class="string">'dashboard'</span></span><br></pre></td></tr></table></figure>
 <p>发现在查询结果中的确没有包含<code>performance_trunk</code>分支。</p>
 <p>这是什么原因呢？为什么在第4条数据中，<code>types</code>属性的值明明就不是<code>dashboard</code>，但是采用<code>types!=&#39;dashboard&#39;</code>就无法查询得到结果呢？</p>
 <h2 id="原因追溯"><a href="#原因追溯" class="headerlink" title="原因追溯"></a>原因追溯</h2><p>查看数据表<code>qms_branch</code>的结构，看到<code>types</code>字段的属性为：<code>DEFAULT NULL</code>。</p>
-<p>经过查询资料，在<a href="http://www.w3schools.com/sql/sql_null_values.asp" target="_blank" rel="external">w3schools</a>上找到了答案。</p>
+<p>经过查询资料，在<a href="http://www.w3schools.com/sql/sql_null_values.asp" target="_blank" rel="noopener">w3schools</a>上找到了答案。</p>
 <blockquote>
 <ul>
 <li>NULL is used as a placeholder for unknown or inapplicable values, it is treated differently from other values.</li>
@@ -164,21 +164,21 @@
 </blockquote>
 <p>也就是说，在SQL中，<code>NULL</code>并不能采用<code>!=</code>与数值进行比较，若要进行比较，我们只能采用<code>IS NULL</code>或<code>IS NOT NULL</code>。</p>
 <p>于是，我们将SQL语句改为如下形式：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> qms_branch <span class="keyword">WHERE</span> types <span class="keyword">IS</span> <span class="literal">NULL</span> <span class="keyword">or</span> types != <span class="string">'dashboard'</span></div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> qms_branch <span class="keyword">WHERE</span> types <span class="keyword">IS</span> <span class="literal">NULL</span> <span class="keyword">or</span> types != <span class="string">'dashboard'</span></span><br></pre></td></tr></table></figure>
 <p>再次查询时，结果集就包含<code>performance_trunk</code>分支了。</p>
 <h2 id="问题延伸"><a href="#问题延伸" class="headerlink" title="问题延伸"></a>问题延伸</h2><p>通过上面例子，我们知道在对NULL进行判断处理时，只能采用<code>IS NULL</code>或<code>IS NOT NULL</code>，而不能采用<code>=, &lt;, &lt;&gt;, !=</code>这些操作符。</p>
 <p>那除此之外，还有别的可能存在的坑么？</p>
 <p>再看一个例子：</p>
 <p>有一张数据表<code>table_foo</code>，其中有一个字段<code>value_field</code>，我们想从这张表中筛选出所有<code>value_field</code>为’value1’，’value2’或NULL的记录。</p>
 <p>那么，我们采用<code>IN</code>操作符，通过如下SQL语句进行查询。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field <span class="keyword">IN</span> (<span class="string">'value1'</span>, <span class="string">'value2'</span>, <span class="literal">NULL</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field <span class="keyword">IN</span> (<span class="string">'value1'</span>, <span class="string">'value2'</span>, <span class="literal">NULL</span>)</span><br></pre></td></tr></table></figure>
 <p>这会存在问题么？我们并没有采用<code>=, &lt;, &lt;&gt;, !=</code>对NULL进行比较哦。</p>
 <p>答案是同样存在问题！</p>
 <p>因为在SQL中，<code>IN</code>语句会被转换为多个<code>=</code>语句。例如，上面例子中的SQL在执行时就会被转换为如下SQL语句：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field = <span class="string">'value1'</span> <span class="keyword">OR</span> value_field = <span class="string">'value2'</span> <span class="keyword">OR</span> value_field = <span class="literal">NULL</span></div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field = <span class="string">'value1'</span> <span class="keyword">OR</span> value_field = <span class="string">'value2'</span> <span class="keyword">OR</span> value_field = <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
 <p>而这个时候，执行<code>value_field = NULL</code>时就会出现问题了。</p>
 <p>正确的做法应该是将<code>NULL</code>相关的判断独立出来，如下SQL才是正确的写法。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field <span class="keyword">IN</span> (<span class="string">'value1'</span>, <span class="string">'value2'</span>) <span class="keyword">OR</span> value_field <span class="keyword">IS</span> <span class="literal">NULL</span></div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field <span class="keyword">IN</span> (<span class="string">'value1'</span>, <span class="string">'value2'</span>) <span class="keyword">OR</span> value_field <span class="keyword">IS</span> <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -209,9 +209,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/manage-Jenkins-via-remote-api/" title="通过API远程管理Jenkins">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   通过API远程管理Jenkins</span>
 </a>
@@ -219,8 +219,8 @@
 
 
 <div class="next">
-<a href="/post/Android-CPU-lock-frequency/"  title="对Android设备CPU进行锁频">
- <strong>下一篇：</strong><br/> 
+<a href="/post/Android-CPU-lock-frequency/" title="对Android设备CPU进行锁频">
+ <strong>下一篇：</strong><br> 
  <span>对Android设备CPU进行锁频
 </span>
 </a>
@@ -251,16 +251,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -284,6 +274,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -296,15 +290,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -312,11 +298,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -324,7 +314,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -336,15 +326,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -389,10 +379,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -403,7 +393,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -636,7 +626,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

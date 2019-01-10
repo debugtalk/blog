@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
 <html lang="en-us">
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
     <title>利用PyCharm进行Python远程调试 | DebugTalk</title>
@@ -36,14 +36,14 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"/></a>
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
 			</div>
 			
 			<div id="textlogo">
@@ -66,17 +66,17 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
 						<input type="hidden" name="q" value="site:debugtalk.com">
 					</form>
 					
 					</li>
 				</ul>
-			</nav>			
+			</ul></nav>			
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
@@ -129,15 +129,15 @@
 <li>【Apply】and【OK】</li>
 </ul>
 <h3 id="3、在本地开发环境的PyCharm中配置Mapping映射"><a href="#3、在本地开发环境的PyCharm中配置Mapping映射" class="headerlink" title="3、在本地开发环境的PyCharm中配置Mapping映射"></a>3、在本地开发环境的PyCharm中配置Mapping映射</h3><h3 id="4、在远程计算机的应用程序中插入代码"><a href="#4、在远程计算机的应用程序中插入代码" class="headerlink" title="4、在远程计算机的应用程序中插入代码"></a>4、在远程计算机的应用程序中插入代码</h3><p>将如下代码插入至远程计算机的应用程序中。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pydevd</div><div class="line">pydevd.settrace(<span class="string">'100.84.48.156'</span>, port=<span class="number">31235</span>, stdoutToServer=<span class="keyword">True</span>, stderrToServer=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pydevd</span><br><span class="line">pydevd.settrace(<span class="string">'100.84.48.156'</span>, port=<span class="number">31235</span>, stdoutToServer=<span class="keyword">True</span>, stderrToServer=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
 <p>其中，IP地址和端口号要与PyCharm中的监听配置保持一致。</p>
 <h3 id="5、在PyCharm中启动Debug-Server"><a href="#5、在PyCharm中启动Debug-Server" class="headerlink" title="5、在PyCharm中启动Debug Server"></a>5、在PyCharm中启动<code>Debug Server</code></h3><p>【Run】-&gt;【Debug…】，选择刚创建的远程调试配置项，在<code>Debug Console</code>中会显示如下信息：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Starting debug server at port 31235</div><div class="line">Waiting <span class="keyword">for</span> process connection...</div><div class="line">Use the following code to connect to the debugger:</div><div class="line">import pydevd</div><div class="line">pydevd.settrace(<span class="string">'100.84.48.156'</span>, port=31235, stdoutToServer=True, stderrToServer=True)</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Starting debug server at port 31235</span><br><span class="line">Waiting <span class="keyword">for</span> process connection...</span><br><span class="line">Use the following code to connect to the debugger:</span><br><span class="line">import pydevd</span><br><span class="line">pydevd.settrace(<span class="string">'100.84.48.156'</span>, port=31235, stdoutToServer=True, stderrToServer=True)</span><br></pre></td></tr></table></figure>
 <p>这说明<code>Debug Server</code>已经启动并处于监听状态。</p>
 <h3 id="6、在远程计算机中启动应用程序"><a href="#6、在远程计算机中启动应用程序" class="headerlink" title="6、在远程计算机中启动应用程序"></a>6、在远程计算机中启动应用程序</h3><p>在远程计算机中启动应用程序，当执行到<code>pydevd.settrace</code>语句时，便会与本地开发环境中的PyCharm建立通讯连接，接下来便可以在本地IDE中进行单步调试了。</p>
 <p>需要注意的是，本地开发环境必须保证IP地址和端口号可从远程计算机访问得到，否则会无法建立连接。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ telnet 100.84.48.156 31235</div><div class="line">Trying 100.84.48.156...</div><div class="line">telnet: Unable to connect to remote host: Connection refused</div><div class="line"></div><div class="line">$ python devicedectector.py</div><div class="line">Could not connect to 100.84.48.156: 31236</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"/usr/local/lib/python2.7/dist-packages/pycharm-debug.egg/pydevd_comm.py"</span>, line 478, <span class="keyword">in</span> StartClient</div><div class="line">    s.connect((host, port))</div><div class="line">  File <span class="string">"/usr/lib/python2.7/socket.py"</span>, line 224, <span class="keyword">in</span> meth</div><div class="line">    <span class="built_in">return</span> getattr(self._sock,name)(*args)</div><div class="line">error: [Errno 111] Connection refused</div></pre></td></tr></table></figure>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://stackoverflow.com/questions/6989965/how-do-i-start-up-remote-debugging-with-pycharm" target="_blank" rel="external">http://stackoverflow.com/questions/6989965/how-do-i-start-up-remote-debugging-with-pycharm</a><br><a href="https://www.jetbrains.com/pycharm/help/remote-debugging.html" target="_blank" rel="external">https://www.jetbrains.com/pycharm/help/remote-debugging.html</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ telnet 100.84.48.156 31235</span><br><span class="line">Trying 100.84.48.156...</span><br><span class="line">telnet: Unable to connect to remote host: Connection refused</span><br><span class="line"></span><br><span class="line">$ python devicedectector.py</span><br><span class="line">Could not connect to 100.84.48.156: 31236</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"/usr/local/lib/python2.7/dist-packages/pycharm-debug.egg/pydevd_comm.py"</span>, line 478, <span class="keyword">in</span> StartClient</span><br><span class="line">    s.connect((host, port))</span><br><span class="line">  File <span class="string">"/usr/lib/python2.7/socket.py"</span>, line 224, <span class="keyword">in</span> meth</span><br><span class="line">    <span class="built_in">return</span> getattr(self._sock,name)(*args)</span><br><span class="line">error: [Errno 111] Connection refused</span><br></pre></td></tr></table></figure>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://stackoverflow.com/questions/6989965/how-do-i-start-up-remote-debugging-with-pycharm" target="_blank" rel="noopener">http://stackoverflow.com/questions/6989965/how-do-i-start-up-remote-debugging-with-pycharm</a><br><a href="https://www.jetbrains.com/pycharm/help/remote-debugging.html" target="_blank" rel="noopener">https://www.jetbrains.com/pycharm/help/remote-debugging.html</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -168,9 +168,9 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
+ <div class="prev">
  <a href="/post/developing-idea-production-data-picker/" title="【灵感】线上数据采摘工具（ProductionDataPicker）">
-  <strong>上一篇：</strong><br/>
+  <strong>上一篇：</strong><br>
   <span>
   【灵感】线上数据采摘工具（ProductionDataPicker）</span>
 </a>
@@ -178,8 +178,8 @@
 
 
 <div class="next">
-<a href="/post/android-development-environment-device-configuration/"  title="Android开发环境配置4：配置Android设备">
- <strong>下一篇：</strong><br/> 
+<a href="/post/android-development-environment-device-configuration/" title="Android开发环境配置4：配置Android设备">
+ <strong>下一篇：</strong><br> 
  <span>Android开发环境配置4：配置Android设备
 </span>
 </a>
@@ -210,16 +210,6 @@
 <aside class="clearfix">
 
   
-<div class="github-card">
-<p class="asidetitle">Github Card</p>
-<div class="github-card" data-github="debugtalk" data-width="220" data-height="119" data-theme="medium">
-<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
-</div>
-  </div>
-
-
-
-  
 
   
 <div class="tagslist">
@@ -243,6 +233,10 @@
 			
 		
 			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
@@ -255,15 +249,7 @@
 			
 		
 			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
@@ -271,11 +257,15 @@
 			
 		
 			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
 			
 		
 			
@@ -283,7 +273,7 @@
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
 			
 		
 			
@@ -295,15 +285,15 @@
 			
 		
 			
-				<li><a href="/tags/SOAP/" title="SOAP">SOAP<sup>3</sup></a></li>
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
 			
 		
 		</ul>
@@ -348,10 +338,10 @@
 </div>
 
   <div class="weixin">
-  <br />
+  <br>
   <p class="asidetitle">微信公众号</p>
   <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px" />
+  <img src="/images/wechat_qrcode.png" width="230px">
 </div>
 
 
@@ -362,7 +352,7 @@
 </aside>
 </div>
     </div>
-    <footer><div id="footer" >
+    <footer><div id="footer">
 	
 	
 
@@ -595,7 +585,7 @@ var disqus_shortname = 'debugtalk';
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
