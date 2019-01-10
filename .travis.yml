@@ -24,7 +24,7 @@ before_install:
 
 install:
 - npm install hexo-cli -g
-- npm install
+- npm install hexo --save
 
 script:
-- npm run deploy
+- hexo deploy -g
