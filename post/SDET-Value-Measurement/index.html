@@ -1,0 +1,608 @@
+
+ <!DOCTYPE HTML>
+<html lang="en-us">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  
+    <title>如何度量测试开发的价值产出？ | DebugTalk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="debugtalk">
+    
+
+    
+    <meta name="description" content="每到年底的时候，不管是个人还是团队，总是避免不了要对这一年的工作成果进行总结和汇报。而对于测试开发岗位来说，通常会面临一个共性的问题：做了这么多事情，究竟产出了多大的业务价值？ 在很长一段时间内，我对这个问题也是非常困惑。困惑的原因倒不是觉得工作内容没有价值，而是对于测试开发类的工作，通常没有明确的业务需求方，对于工作成果度量也没有统一的方式。 为什么测试开发岗位会面临这个问题呢？ 这应该和测试岗">
+<meta name="keywords" content="个人成长">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何度量测试开发的价值产出？">
+<meta property="og:url" content="http://debugtalk.com/post/SDET-Value-Measurement/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="每到年底的时候，不管是个人还是团队，总是避免不了要对这一年的工作成果进行总结和汇报。而对于测试开发岗位来说，通常会面临一个共性的问题：做了这么多事情，究竟产出了多大的业务价值？ 在很长一段时间内，我对这个问题也是非常困惑。困惑的原因倒不是觉得工作内容没有价值，而是对于测试开发类的工作，通常没有明确的业务需求方，对于工作成果度量也没有统一的方式。 为什么测试开发岗位会面临这个问题呢？ 这应该和测试岗">
+<meta property="og:locale" content="en-us">
+<meta property="og:updated_time" content="2019-02-16T13:41:10.607Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何度量测试开发的价值产出？">
+<meta name="twitter:description" content="每到年底的时候，不管是个人还是团队，总是避免不了要对这一年的工作成果进行总结和汇报。而对于测试开发岗位来说，通常会面临一个共性的问题：做了这么多事情，究竟产出了多大的业务价值？ 在很长一段时间内，我对这个问题也是非常困惑。困惑的原因倒不是觉得工作内容没有价值，而是对于测试开发类的工作，通常没有明确的业务需求方，对于工作成果度量也没有统一的方式。 为什么测试开发岗位会面临这个问题呢？ 这应该和测试岗">
+
+    
+    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
+				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
+						<input type="hidden" name="q" value="site:debugtalk.com">
+					</form>
+					
+					</li>
+				</ul>
+			</ul></nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope="" itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/post/SDET-Value-Measurement/" title="如何度量测试开发的价值产出？" itemprop="url">如何度量测试开发的价值产出？</a>
+  </h1>
+  <!-- <p class="article-author">By
+       
+		<a href="/about" title="debugtalk" target="_blank" itemprop="author">debugtalk</a>
+		 -->
+  <p class="article-time">
+    <time datetime="2019-01-12T16:00:00.000Z" itemprop="datePublished"> Published 2019/01/13</time>
+    
+    <span id="busuanzi_container_page_pv">
+      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+    
+  </p>
+</header>
+
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#何为业务价值？"><span class="toc-number">1.</span> <span class="toc-text">何为业务价值？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#节省人天数？"><span class="toc-number">2.</span> <span class="toc-text">节省人天数？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#建议的方案"><span class="toc-number">3.</span> <span class="toc-text">建议的方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">4.</span> <span class="toc-text">写在最后</span></a></li></ol>
+		
+		</div>
+		
+		<p>每到年底的时候，不管是个人还是团队，总是避免不了要对这一年的工作成果进行总结和汇报。而对于测试开发岗位来说，通常会面临一个共性的问题：做了这么多事情，究竟产出了多大的业务价值？</p>
+<p>在很长一段时间内，我对这个问题也是非常困惑。困惑的原因倒不是觉得工作内容没有价值，而是对于测试开发类的工作，通常没有明确的业务需求方，对于工作成果度量也没有统一的方式。</p>
+<p>为什么测试开发岗位会面临这个问题呢？</p>
+<p>这应该和测试岗位的职责和工作内容有很大的关系。关于测试开发工程师的定义，在《Google测试之道》一书中已经有了很全面的解释，我也很是认同。测试开发工程师（SDET，Software Development Engineer in Testing）首先应该是开发角色，只是相比于业务开发工程师，他们的目标用户更多的是公司内部的测试人员（也包括其他岗位的项目组成员），而核心工作内容就是提供通用测试技术解决方案，开发实现测试工具或平台，协助测试人员更好地完成测试工作和项目交付，而效率和质量也是他们最为关注的方面。</p>
+<p>从岗位职责和工作内容可以看出，测试开发通常不会直接参与业务交付，并且他们通常也不会隶属于具体的项目组，因此对于他们的工作到底产出了多少实际的价值收益，在上面的领导或老板看来就不是那么明确，最终他们面临价值产出度量的问题也就在所难免了。</p>
+<p>本文就围绕测试开发价值产出度量的问题，谈下我的一些思考和建议。</p>
+<h2 id="何为业务价值？"><a href="#何为业务价值？" class="headerlink" title="何为业务价值？"></a>何为业务价值？</h2><p>我们总是在说业务价值，那业务价值究竟指的是什么？为什么同样是写代码开发系统平台，大家通常会觉得开发电商、售后平台是产出业务价值，而开发测试工具平台就不产生业务价值呢？这种想法是否正确？</p>
+<p>其实当我们回归商业的本质，就会得知问题的答案了。对于商业公司来说，通常是以盈利为目标的，而为了达成这个目标，就需要通过业务手段，对用户提供价值，最终获得用户的买单。从这个角度来讲，决定是否对公司产生业务价值与岗位类型无关，也与开发实现了什么系统或平台无关。例如，对于提供测试类服务的公司或项目组来说，例如听云、WeTest，开发出的测试工具平台就直接面向客户，并以此获得盈利，那么参与该类项目的测试开发工程师就直接产出了业务价值。而在绝大多数非测试服务类商业公司中，测试工具平台更多是提供一种辅助手段，帮助项目组更好更快地完成业务需求交付，而并不直接创造业务价值。当然，这个问题不仅在测试开发岗位上存在，对于某些开发岗位也是同样存在的，例如开发公司内部即时通讯工具、流程审批工具、消息网关、中间件等等。</p>
+<p>因此，对于测试开发岗位来说，不必揪着“业务价值”不放，我们完全可以从其它角度来对工作成果产出进行度量和展现。</p>
+<h2 id="节省人天数？"><a href="#节省人天数？" class="headerlink" title="节省人天数？"></a>节省人天数？</h2><p>那要使用什么度量指标呢？</p>
+<p>在很多时候，大家可能会想到使用“<strong>节省人天数</strong>”这样一个指标。因为测试开发的主要职责之一就是提升测试效率，那如果能度量出在使用测试工具平台后减少了多少人力投入，那么就能很好地体现该工具平台的价值。</p>
+<p>那么要怎么计算“节省人天数”呢？之前我们使用过的方式如下：</p>
+<ul>
+<li>统计出项目的回归测试场景，以及在固定周期内的发版次数（假设为N次）；</li>
+<li>估算出通过人工去执行这些测试场景的耗时（假设为M人天）；</li>
+<li>统计出工具平台执行测试的耗时（通常该耗时可忽略不计）；</li>
+<li>那么节省的人天数就为：N * M</li>
+</ul>
+<p>乍一看，这个思路没啥问题，也能计算出具体的节省人天数。但在实际项目中尝试运作之后，我们发现该计算方式存在比较大的漏洞。</p>
+<p>例如，某测试工具平台在 A 项目组投入使用后，通过计算，每月节省了人力10人天。可是，A 项目组的发版频率并没有改变，项目组人员编制也没有缩减，甚至根据招聘需求，人员编制还出现了增长的情况。那在这种情况下，通过计算得出节省的人力去哪儿了？</p>
+<p>对此我们并不能给出很好的回答。事实上，测试人员借助测试工具平台从之前的重复手工工作解放出来后，他们可能花了更多的时间在需求分析上，也可能花了更多的时间在测试策略设计上。这都是我们所期望的结果，但问题在于，这些内容我们并不能很好地去统计和量化。这也就导致我们统计出的“节省人天数”缺乏说服力。</p>
+<p>而且从更宏观的层面来看，度量项目组的质量情况时，更多是会关注交付效率和线上质量（漏测率）两个维度。交付效率，可以通过“交付需求数/投入人天数”进行计算，而线上质量（漏测率），可以通过“线上bug数/测试发现总bug数”得出。可以看出，线上质量（漏测率）与“节省人天数”基本没有关系，而交付效率方面，除非项目投入人天数真的减少了（通常不大可能），那么交付效率也很难通过“节省人天数”提升。</p>
+<p>因此，“节省人天数”并不是一个可行的度量指标。</p>
+<h2 id="建议的方案"><a href="#建议的方案" class="headerlink" title="建议的方案"></a>建议的方案</h2><p>那有没有其它更合适的度量指标呢？其实我也没法给出绝对正确的答案。</p>
+<p>针对这个问题，我也请教了多位测试行业大佬，收获了诸多不错的建议。</p>
+<p>其中，茹炳晟给出的一个观点给了我比较大的启发。我们可以反过来看，现在有了这些测试工具平台各个项目组可能都在用，那假如没有了这些测试工具平台会怎么样？是毫无影响？是变得有点不大方便？还是无法正常开展工作？问题越严重，说明工具平台本身的价值就更大。这也可以作为我们不断自我衡量工作成果产出价值大小的一种思路。</p>
+<p>但要更好地进行量化，<strong>用户使用率</strong>会是一个比较不错的度量方式。</p>
+<p>回归工具的属性，假如一个工具真的能帮助项目组带来价值，不管是效率优化还是质量提升方面，那么项目组成员肯定会更多地使用该工具；否则，项目组成员完全没有理由在这些测试工具平台上投入时间，因为使用也是有人力时间成本的。特别是在没有强制要求项目组使用的前提下，最终工具的覆盖用户范围和使用频率更能充分说明问题。这和当前各商业工具平台追求的用户数和日活数也是同样的思路。</p>
+<p>因此，在 2019 年，我们也打算改变下思路：</p>
+<p>1、在质量部总体层面，不再对各项目组制定自动化测试覆盖率的目标要求，对于项目组测试人员的考核方式也不再关注测试工具平台使用的情况，最终只重点关注交付效率和线上质量两大维度（统计方式同上）。</p>
+<p>2、对于测试开发团队，测试工具平台的价值展现将更多地通过覆盖用户范围和使用频率进行展现；若要更多的提升用户范围，那么就需要更主动地去挖掘业务项目组的痛点，让开发出的工具平台能帮助更多的人（目标也不再局限于测试人员）解决实际工作中遇到的问题；而要达到比较高的使用频率（日活数），那么就势必要提升平台的可靠性，对问题反馈进行更快地响应，以及进行更多的宣传和推广。</p>
+<p>当然，除了用户使用率（覆盖使用人数、日活数）这一类最核心的指标，我们也会关注其它的一些指标，包括：故障响应效率、平台可靠性、发现问题数、口碑评价反馈、响应需求数等。总之，这些指标都是可以明确度量和展现的，并且所有指标最终都将指向用户的实际使用情况（Adoption Rate）。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>有时候我不禁在想，做测试开发这个岗位也真挺不容易的。我们不仅需要负责需求规划和交互设计（<strong>想清楚要做什么</strong>），然后是开发和测试（<strong>将想法实现落地</strong>），并且要花费较多的时间和精力去进行推广（<strong>获取反馈及时调整</strong>），最后还要对工作成果进行度量和展现（<strong>收获价值认可，获得更多资源</strong>），只有我们开发出的工具平台最终在各业务项目中得到了很好的应用，才能说明我们的工作成果产出了价值。</p>
+<p>这个过程跟创业真的挺像的，我也一直都是希望我所在的测试开发团队能更多地用创业的心态来对待我们的工作，而整个经历的过程，也许就是最大的乐趣所在吧。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/个人成长/">个人成长</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://debugtalk.com/post/SDET-Value-Measurement/" data-title="如何度量测试开发的价值产出？ | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev">
+ <a href="/post/my-2018-summary/" title="我的 2018 年终总结">
+  <strong>上一篇：</strong><br>
+  <span>
+  我的 2018 年终总结</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/post/httprunner-2.0-release/" title="HttpRunner 2.0 正式发布">
+ <strong>下一篇：</strong><br> 
+ <span>HttpRunner 2.0 正式发布
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#何为业务价值？"><span class="toc-number">1.</span> <span class="toc-text">何为业务价值？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#节省人天数？"><span class="toc-number">2.</span> <span class="toc-text">节省人天数？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#建议的方案"><span class="toc-number">3.</span> <span class="toc-text">建议的方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">4.</span> <span class="toc-text">写在最后</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/招聘/" title="招聘">招聘<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Recent GitHub Projects</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="weixin">
+  <br>
+  <p class="asidetitle">微信公众号</p>
+  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
+  <img src="/images/wechat_qrcode.png" width="230px">
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer">
+	
+	
+
+  
+			
+		
+
+		<p class="copyright" style="margin-top: 8px;">
+		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019
+		
+		<a href="/about" target="_blank" title="debugtalk">debugtalk</a>
+		
+
+    <!-- Analytics Begin -->
+    
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-81639610-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+    <!-- Analytics End -->
+
+    
+    <span id="busuanzi_container_site_pv">
+      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+    
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'debugtalk';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -4,24 +4,24 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
   
-    <title>深入浅出Git权限校验 | DebugTalk</title>
+    <title>深入浅出 Git 权限校验 | DebugTalk</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
-    <meta name="author" content="九毫">
+    <meta name="author" content="debugtalk">
     
 
     
     <meta name="description" content="借助上次“掉坑”的经历，我对Git权限校验的两种方式重头进行了梳理，形成了这篇总结记录。 在本地计算机与GitHub（或GitLab）进行通信时，传输主要基于两种协议，HTTPS和SSH，对应的仓库地址就是HTTPS URLs和SSH URLs。 首先需要强调的是，HTTPS URLs和SSH URLs对应的是两套完全独立的权限校验方式，主要的区别就是HTTPS URLs采用账号密码进行校验，SS">
 <meta name="keywords" content="Git,SSH,HTTPS,权限校验">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入浅出Git权限校验">
+<meta property="og:title" content="深入浅出 Git 权限校验">
 <meta property="og:url" content="http://debugtalk.com/post/head-first-git-authority-verification/index.html">
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="借助上次“掉坑”的经历，我对Git权限校验的两种方式重头进行了梳理，形成了这篇总结记录。 在本地计算机与GitHub（或GitLab）进行通信时，传输主要基于两种协议，HTTPS和SSH，对应的仓库地址就是HTTPS URLs和SSH URLs。 首先需要强调的是，HTTPS URLs和SSH URLs对应的是两套完全独立的权限校验方式，主要的区别就是HTTPS URLs采用账号密码进行校验，SS">
 <meta property="og:locale" content="en-us">
-<meta property="og:updated_time" content="2017-09-04T05:28:54.000Z">
+<meta property="og:updated_time" content="2019-02-16T13:05:18.288Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深入浅出Git权限校验">
+<meta name="twitter:title" content="深入浅出 Git 权限校验">
 <meta name="twitter:description" content="借助上次“掉坑”的经历，我对Git权限校验的两种方式重头进行了梳理，形成了这篇总结记录。 在本地计算机与GitHub（或GitLab）进行通信时，传输主要基于两种协议，HTTPS和SSH，对应的仓库地址就是HTTPS URLs和SSH URLs。 首先需要强调的是，HTTPS URLs和SSH URLs对应的是两套完全独立的权限校验方式，主要的区别就是HTTPS URLs采用账号密码进行校验，SS">
 
     
@@ -82,14 +82,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/post/head-first-git-authority-verification/" title="深入浅出Git权限校验" itemprop="url">深入浅出Git权限校验</a>
+      <a href="/post/head-first-git-authority-verification/" title="深入浅出 Git 权限校验" itemprop="url">深入浅出 Git 权限校验</a>
   </h1>
   <!-- <p class="article-author">By
        
-		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		<a href="/about" title="debugtalk" target="_blank" itemprop="author">debugtalk</a>
 		 -->
   <p class="article-time">
-    <time datetime="2016-06-14T16:00:00.000Z" itemprop="datePublished"> Published 2016-06-15</time>
+    <time datetime="2016-06-14T16:00:00.000Z" itemprop="datePublished"> Published 2016/06/15</time>
     
     <span id="busuanzi_container_page_pv">
       | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
@@ -217,7 +217,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://debugtalk.com/post/head-first-git-authority-verification/" data-title="深入浅出Git权限校验 | DebugTalk" data-tsina="undefined" class="share clearfix">
+	  <div data-url="http://debugtalk.com/post/head-first-git-authority-verification/" data-title="深入浅出 Git 权限校验 | DebugTalk" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -240,9 +240,9 @@
 
 
 <div class="next">
-<a href="/post/trap-in-GitHub-authority-verification/" title="GitHub权限校验失败给我的启发">
+<a href="/post/trap-in-GitHub-authority-verification/" title="GitHub 权限校验失败给我的启发">
  <strong>下一篇：</strong><br> 
- <span>GitHub权限校验失败给我的启发
+ <span>GitHub 权限校验失败给我的启发
 </span>
 </a>
 </div>
@@ -279,7 +279,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>21</sup></a></li>
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>20</sup></a></li>
 			
 		
 			
@@ -295,15 +295,19 @@
 			
 		
 			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
 			
@@ -315,15 +319,11 @@
 			
 		
 			
-				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
 			
 		
 			
@@ -331,7 +331,7 @@
 			
 		
 			
-				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>5</sup></a></li>
 			
 		
 			
@@ -425,7 +425,7 @@
 		<p class="copyright" style="margin-top: 8px;">
 		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019
 		
-		<a href="/about" target="_blank" title="九毫">九毫</a>
+		<a href="/about" target="_blank" title="debugtalk">debugtalk</a>
 		
 
     <!-- Analytics Begin -->

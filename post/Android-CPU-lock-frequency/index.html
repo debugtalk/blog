@@ -7,7 +7,7 @@
     <title>对Android设备CPU进行锁频 | DebugTalk</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
-    <meta name="author" content="九毫">
+    <meta name="author" content="debugtalk">
     
 
     
@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。 CPU频率首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。 基于此需求，当前电子设备的CPU都会">
 <meta property="og:locale" content="en-us">
-<meta property="og:updated_time" content="2017-03-11T04:11:02.000Z">
+<meta property="og:updated_time" content="2019-02-16T13:11:45.820Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="对Android设备CPU进行锁频">
 <meta name="twitter:description" content="本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。 CPU频率首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。 基于此需求，当前电子设备的CPU都会">
@@ -86,10 +86,10 @@
   </h1>
   <!-- <p class="article-author">By
        
-		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		<a href="/about" title="debugtalk" target="_blank" itemprop="author">debugtalk</a>
 		 -->
   <p class="article-time">
-    <time datetime="2016-04-17T16:00:00.000Z" itemprop="datePublished"> Published 2016-04-18</time>
+    <time datetime="2016-04-17T16:00:00.000Z" itemprop="datePublished"> Published 2016/04/18</time>
     
     <span id="busuanzi_container_page_pv">
       | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
@@ -134,7 +134,7 @@
 <p>在<code>/sys/devices/system/cpu/cpu0</code>目录中，文件结构如下所示。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll cpu0</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 01:37 cpufreq</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpuidle</span><br><span class="line">-r-------- root     root         4096 1970-01-17 10:27 crash_notes</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:36 online</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 power</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 rq-stats</span><br><span class="line">lrwxrwxrwx root     root              1970-01-17 10:27 subsystem</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 topology</span><br><span class="line">-rw-r--r-- root     root         4096 1970-01-17 10:27 uevent</span><br></pre></td></tr></table></figure>
 <p>其中，<code>online</code>文件的内容表示当前CPU是否处于运行状态，若处于运行状态，则内容为1，否则为0；这个和上面讲到的<code>/sys/devices/system/cpu/online</code>能进行对应。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/online                     </span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/online</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
 <p>在<code>cpu0/cpufreq/</code>目录下，存储的就是与CPU0的频率相关的信息，文件结构如下所示。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll cpu0/cpufreq/</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:57 UV_mV_table</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 affected_cpus</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 cpu_utilization</span><br><span class="line">-r-------- root     root         4096 2016-01-20 01:57 cpuinfo_cur_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 02:00 cpuinfo_max_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:39 cpuinfo_min_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 cpuinfo_transition_latency</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 related_cpus</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:39 scaling_available_frequencies</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 scaling_available_governors</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:50 scaling_cur_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 scaling_driver</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:50 scaling_governor</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 08:29 scaling_max_freq</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 08:29 scaling_min_freq</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 02:52 scaling_setspeed</span><br></pre></td></tr></table></figure>
 <p>在这个目录中，我们需要关注的文件比较多。</p>
@@ -160,7 +160,7 @@
 <p>操作起来也很简单，在Android shell里面执行如下命令即可。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop mpdecision</span><br></pre></td></tr></table></figure>
 <p>第二点需要注意的是，如果我们想要实现对特定CPU的工作状态进行设置，就必须将<code>scaling_governor</code>设置为<code>userspace</code>，只有这样，我们才能对<code>scaling_setspeed</code>进行设置。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed</span><br><span class="line">&lt;unsupported&gt;</span><br><span class="line"></span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # echo userspace &gt; scaling_governor</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed    </span><br><span class="line">1574400</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed</span><br><span class="line">&lt;unsupported&gt;</span><br><span class="line"></span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # echo userspace &gt; scaling_governor</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed</span><br><span class="line">1574400</span><br></pre></td></tr></table></figure>
 <h3 id="1、set-overall-cpu-info"><a href="#1、set-overall-cpu-info" class="headerlink" title="1、set overall cpu info"></a>1、set overall cpu info</h3><p>从宏观层面，我们可以对CPU运行的核数进行设置，即可实现对特定CPU的开启和关闭。当然，我们在前面已经说过，CPU0始终会处于运行状态，因此我们无法将CPU0进行关闭。</p>
 <p>设置的方式很简单，就是往<code>/sys/devices/system/cpu/cpu[i]/online</code>文件中写值即可，写1时开启指定CPU，写0时关闭指定CPU。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> turn off cpu1</span></span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu1 # echo 0 &gt; online</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu1 # cat online</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
@@ -251,7 +251,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>21</sup></a></li>
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>20</sup></a></li>
 			
 		
 			
@@ -267,15 +267,19 @@
 			
 		
 			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
 			
@@ -287,15 +291,11 @@
 			
 		
 			
-				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
 			
 		
 			
@@ -303,7 +303,7 @@
 			
 		
 			
-				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>5</sup></a></li>
 			
 		
 			
@@ -397,7 +397,7 @@
 		<p class="copyright" style="margin-top: 8px;">
 		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019
 		
-		<a href="/about" target="_blank" title="九毫">九毫</a>
+		<a href="/about" target="_blank" title="debugtalk">debugtalk</a>
 		
 
     <!-- Analytics Begin -->

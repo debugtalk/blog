@@ -2,602 +2,616 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://debugtalk.com/post/httprunner-2.0-release/</loc>
-    
-    <lastmod>2019-01-03T13:34:47.690Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/pycon-china-2018/</loc>
-    
-    <lastmod>2018-10-15T13:13:08.359Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
-    
-    <lastmod>2018-07-25T06:20:24.422Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/dji-hire-test-leader/</loc>
-    
-    <lastmod>2018-07-01T04:38:28.159Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://debugtalk.com/about/index.html</loc>
     
-    <lastmod>2018-05-31T10:35:04.535Z</lastmod>
+    <lastmod>2019-02-16T14:13:01.264Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/requests-crawler/</loc>
+    <loc>http://debugtalk.com/post/my-2018-summary/</loc>
     
-    <lastmod>2018-05-27T17:02:21.927Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/httprunner-hook/</loc>
-    
-    <lastmod>2018-05-12T13:13:19.584Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/httprunner-data-driven-refactor/</loc>
-    
-    <lastmod>2018-03-25T08:31:55.061Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/test-dev-in-dji/</loc>
-    
-    <lastmod>2018-03-25T08:31:55.060Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/httprunner-data-driven/</loc>
-    
-    <lastmod>2018-03-25T08:31:55.059Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/HttpRunner-skip-feature/</loc>
-    
-    <lastmod>2018-03-25T08:31:55.058Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
-    
-    <lastmod>2018-03-25T08:31:55.057Z</lastmod>
+    <lastmod>2019-02-16T13:57:38.561Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://debugtalk.com/post/my-2017-summary/</loc>
     
-    <lastmod>2018-03-25T08:31:55.057Z</lastmod>
+    <lastmod>2019-02-16T13:57:21.012Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
+    <loc>http://debugtalk.com/post/SDET-Value-Measurement/</loc>
     
-    <lastmod>2018-03-25T08:31:55.056Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/my-2016-summary/</loc>
-    
-    <lastmod>2018-03-25T08:31:55.055Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/apitestengine-quickstart/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/apitestengine-supersede-locust/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
-    
-    <lastmod>2017-12-24T01:55:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/HttpRunner-supports-HAR/</loc>
-    
-    <lastmod>2017-12-13T15:08:06.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/</loc>
-    
-    <lastmod>2017-11-14T16:24:33.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/clean-sensitive-data-from-git-history-commits/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/head-first-locust-advanced-script/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/scenario-design-scripts-percent-controll/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/iOS-Android-Packing-with-Jenkins-details/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-refactor-testcase-scripts/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/head-first-git-authority-verification/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/trap-in-GitHub-authority-verification/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/concept-about-webservice/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-write-iOS-testcase-scripts/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/head-first-locust-user-guide/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/html-character-entity/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Create-Blog-with-Pelican-and-GitCafe-Pages/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Evaluate-Largest-Online-Users/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/LoadRunner-SOAP-WebService/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/performance-index-concurrent-users/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/loadrunner-parameter-variable/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
-    
-    <lastmod>2017-09-04T05:28:54.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Android-CPU-lock-frequency/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/manage-Jenkins-via-remote-api/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/Android-performance-test-start-traffic-tcpdump-wireshark/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/search/index.html</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/blackbox-testing-method-equivalence-partitioning/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/blackbox-testing-method-boundary-value-analysis/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/confluence-simple-tutorial/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/promotion-page-test/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/android-development-environment-adb-and-fastboot/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/android-development-environment-recovery/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/android-development-environment-bootloader/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/iOS-Android-Packing-with-Jenkins/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/android-development-environment-device-configuration/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/android-development-environment-root/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/remote-debugging-with-pycharm/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/switch-macOS-web-proxy-in-elegant-way/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/build-ideal-app-automation-test-framework/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/render-multi-level-table-in-webpage/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://debugtalk.com/post/locustplus-talk-about-performance-test/</loc>
-    
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2019-02-16T13:41:10.607Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://debugtalk.com/post/my-impression-on-italy-and-france/</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2019-02-16T13:41:01.148Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
+    <loc>http://debugtalk.com/post/pycon-china-2018/</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2019-02-16T13:40:51.357Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/traps-in-sql-null/</loc>
+    
+    <lastmod>2019-02-16T13:39:41.798Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/switch-macOS-web-proxy-in-elegant-way/</loc>
+    
+    <lastmod>2019-02-16T13:38:56.081Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/Using-DuoShuo-in-Pelican/</loc>
+    
+    <lastmod>2019-02-16T13:38:40.374Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/confluence-simple-tutorial/</loc>
+    
+    <lastmod>2019-02-16T13:38:23.276Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/Create-Blog-with-Pelican-and-GitCafe-Pages/</loc>
+    
+    <lastmod>2019-02-16T13:38:05.859Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/render-multi-level-table-in-webpage/</loc>
+    
+    <lastmod>2019-02-16T13:37:47.753Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2019-02-16T13:35:59.159Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/python-functional-programming-getting-started/</loc>
+    <loc>http://debugtalk.com/post/html-character-entity/</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2019-02-16T13:35:20.454Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/</loc>
+    <loc>http://debugtalk.com/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2019-02-16T13:34:09.300Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/requests-crawler/</loc>
+    
+    <lastmod>2019-02-16T13:32:39.725Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</loc>
+    
+    <lastmod>2019-02-16T13:32:15.166Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/solve-Jenkins-can-not-show-html-css/</loc>
+    
+    <lastmod>2019-02-16T13:31:12.516Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/dji-hire-test-leader/</loc>
+    
+    <lastmod>2019-02-16T13:30:38.162Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/test-dev-in-dji/</loc>
+    
+    <lastmod>2019-02-16T13:30:22.387Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/d-test-hire-info/</loc>
+    
+    <lastmod>2019-02-16T13:30:02.695Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/introduction-to-testing-engineer-daily-work/</loc>
+    
+    <lastmod>2019-02-16T13:29:43.491Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/</loc>
+    
+    <lastmod>2019-02-16T13:28:18.339Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/clean-sensitive-data-from-git-history-commits/</loc>
+    
+    <lastmod>2019-02-16T13:27:39.800Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/promotion-page-test/</loc>
+    
+    <lastmod>2019-02-16T13:26:50.305Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/developing-idea-production-data-picker/</loc>
+    
+    <lastmod>2019-02-16T13:25:32.525Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/blackbox-testing-method-boundary-value-analysis/</loc>
+    
+    <lastmod>2019-02-16T13:24:42.895Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/blackbox-testing-method-equivalence-partitioning/</loc>
+    
+    <lastmod>2019-02-16T13:24:22.843Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/concept-about-webservice/</loc>
+    
+    <lastmod>2019-02-16T13:23:30.303Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/performance-index-concurrent-users/</loc>
+    
+    <lastmod>2019-02-16T13:22:40.107Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/scenario-design-scripts-percent-controll/</loc>
+    
+    <lastmod>2019-02-16T13:21:54.381Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/WebService-Test-Based-On-HTTP/</loc>
+    
+    <lastmod>2019-02-16T13:21:30.622Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/Introspection-on-WebService-Test/</loc>
+    
+    <lastmod>2019-02-16T13:21:17.071Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/loadrunner-get-system-time/</loc>
+    
+    <lastmod>2019-02-16T13:21:03.346Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/Evaluate-Largest-Online-Users/</loc>
+    
+    <lastmod>2019-02-16T13:20:48.074Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/loadrunner-parameter-variable/</loc>
+    
+    <lastmod>2019-02-16T13:20:32.692Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/LoadRunner-SOAP-WebService/</loc>
+    
+    <lastmod>2019-02-16T13:20:17.569Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/LoadRunner-WSDL-WebService/</loc>
+    
+    <lastmod>2019-02-16T13:20:03.768Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/manage-Jenkins-via-remote-api/</loc>
+    
+    <lastmod>2019-02-16T13:19:28.587Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/Introduction-to-AppiumBooster/</loc>
+    
+    <lastmod>2019-02-16T13:18:53.728Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/build-ideal-app-automation-test-framework/</loc>
+    
+    <lastmod>2019-02-16T13:18:24.713Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-refactor-testcase-scripts/</loc>
+    
+    <lastmod>2019-02-16T13:18:07.606Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-write-iOS-testcase-scripts/</loc>
+    
+    <lastmod>2019-02-16T13:17:44.632Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/</loc>
+    
+    <lastmod>2019-02-16T13:17:27.600Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/</loc>
+    
+    <lastmod>2019-02-16T13:17:01.511Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/</loc>
+    
+    <lastmod>2019-02-16T13:16:37.878Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/head-first-locust-advanced-script/</loc>
+    
+    <lastmod>2019-02-16T13:14:51.983Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/head-first-locust-user-guide/</loc>
+    
+    <lastmod>2019-02-16T13:14:34.825Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/locustplus-talk-about-performance-test/</loc>
+    
+    <lastmod>2019-02-16T13:14:17.050Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/make-Jenkins-Console-Output-Colorful/</loc>
+    
+    <lastmod>2019-02-16T13:13:40.215Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/Jenkins-CI-Automation-Test/</loc>
+    
+    <lastmod>2019-02-16T13:13:22.067Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/iOS-Android-Packing-with-Jenkins-details/</loc>
+    
+    <lastmod>2019-02-16T13:13:02.559Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/iOS-Android-Packing-with-Jenkins/</loc>
+    
+    <lastmod>2019-02-16T13:12:46.309Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/Android-performance-test-start-traffic-tcpdump-wireshark/</loc>
+    
+    <lastmod>2019-02-16T13:12:22.246Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://debugtalk.com/post/Android-performance-test-start-traffic-uid-stat/</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2019-02-16T13:12:04.730Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/baidu_verify_WfVJyFbNZp.html</loc>
+    <loc>http://debugtalk.com/post/Android-CPU-lock-frequency/</loc>
     
-    <lastmod>2017-03-11T04:11:02.000Z</lastmod>
+    <lastmod>2019-02-16T13:11:45.820Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://debugtalk.com/baidu_verify_YWTbeHDFZJ.html</loc>
+    <loc>http://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/</loc>
+    
+    <lastmod>2019-02-16T13:11:29.944Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/android-development-environment-device-configuration/</loc>
+    
+    <lastmod>2019-02-16T13:11:08.849Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/android-development-environment-root/</loc>
+    
+    <lastmod>2019-02-16T13:10:52.558Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/android-development-environment-recovery/</loc>
+    
+    <lastmod>2019-02-16T13:10:30.123Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/android-development-environment-bootloader/</loc>
+    
+    <lastmod>2019-02-16T13:10:12.530Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/android-development-environment-adb-and-fastboot/</loc>
+    
+    <lastmod>2019-02-16T13:09:50.631Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/head-first-git-authority-verification/</loc>
+    
+    <lastmod>2019-02-16T13:05:18.288Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/trap-in-GitHub-authority-verification/</loc>
+    
+    <lastmod>2019-02-16T13:04:50.160Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/python-functional-programming-getting-started/</loc>
+    
+    <lastmod>2019-02-16T13:03:33.794Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/remote-debugging-with-pycharm/</loc>
+    
+    <lastmod>2019-02-16T13:02:59.875Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/httprunner-hook/</loc>
+    
+    <lastmod>2019-02-16T12:59:19.750Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/httprunner-data-driven-refactor/</loc>
+    
+    <lastmod>2019-02-16T12:59:03.634Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/httprunner-data-driven/</loc>
+    
+    <lastmod>2019-02-16T12:58:44.067Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/HttpRunner-skip-feature/</loc>
+    
+    <lastmod>2019-02-16T12:58:27.465Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/HttpRunner-testcase-layer/</loc>
+    
+    <lastmod>2019-02-16T12:58:07.884Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/HttpRunner-validator-optimization/</loc>
+    
+    <lastmod>2019-02-16T12:57:50.195Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/HttpRunner-supports-HAR/</loc>
+    
+    <lastmod>2019-02-16T12:57:30.660Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</loc>
+    
+    <lastmod>2019-02-16T12:57:09.027Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/apitestengine-not-only-about-json-api/</loc>
+    
+    <lastmod>2019-02-16T12:56:50.314Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/apitestengine-hot-plugin/</loc>
+    
+    <lastmod>2019-02-16T12:56:31.132Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/apitestengine-supersede-locust/</loc>
+    
+    <lastmod>2019-02-16T12:56:08.279Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/apitestengine-quickstart/</loc>
+    
+    <lastmod>2019-02-16T12:55:41.214Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-4-call-functions-in-yaml-testcases/</loc>
+    
+    <lastmod>2019-02-16T12:55:20.873Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/</loc>
+    
+    <lastmod>2019-02-16T12:55:04.050Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</loc>
+    
+    <lastmod>2019-02-16T12:54:46.512Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/300-lines-python-code-api-test-framework/</loc>
+    
+    <lastmod>2019-02-16T12:54:25.708Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/</loc>
+    
+    <lastmod>2019-02-16T12:54:08.730Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/</loc>
+    
+    <lastmod>2019-02-16T12:53:45.126Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/</loc>
+    
+    <lastmod>2019-02-16T12:53:23.671Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/my-2016-summary/</loc>
+    
+    <lastmod>2019-02-16T12:47:19.935Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/post/httprunner-2.0-release/</loc>
+    
+    <lastmod>2019-02-16T12:47:06.712Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://debugtalk.com/search/index.html</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
@@ -611,7 +625,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/traps-in-sql-null/</loc>
+    <loc>http://debugtalk.com/baidu_verify_WfVJyFbNZp.html</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     
@@ -632,7 +646,7 @@
   </url>
   
   <url>
-    <loc>http://debugtalk.com/post/Jenkins-CI-Automation-Test/</loc>
+    <loc>http://debugtalk.com/baidu_verify_YWTbeHDFZJ.html</loc>
     
     <lastmod>2017-03-11T04:11:02.000Z</lastmod>
     

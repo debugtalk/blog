@@ -7,7 +7,7 @@
     <title>使用 Pelican + GitCafe Pages 创建 Blog | DebugTalk</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
-    <meta name="author" content="九毫">
+    <meta name="author" content="debugtalk">
     
 
     
@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="博客系统的技术实现博客系统采用 Pelican + GitCafe Pages 的技术架构。 其中，Pelican是一个由Python开发的用于生成静态页面的程序，可以将markdown等格式的文本生成模版格式化的html静态页面；而GitCafe提供的Pages服务可以通过项目的形式对Pelican生成的html文件进行托管，并可通过域名绑定的形式实现独立域名。 这种实现方式与 Jekyll +">
 <meta property="og:locale" content="en-us">
-<meta property="og:updated_time" content="2017-09-04T05:28:54.000Z">
+<meta property="og:updated_time" content="2019-02-16T13:38:05.859Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 Pelican + GitCafe Pages 创建 Blog">
 <meta name="twitter:description" content="博客系统的技术实现博客系统采用 Pelican + GitCafe Pages 的技术架构。 其中，Pelican是一个由Python开发的用于生成静态页面的程序，可以将markdown等格式的文本生成模版格式化的html静态页面；而GitCafe提供的Pages服务可以通过项目的形式对Pelican生成的html文件进行托管，并可通过域名绑定的形式实现独立域名。 这种实现方式与 Jekyll +">
@@ -86,10 +86,10 @@
   </h1>
   <!-- <p class="article-author">By
        
-		<a href="/about" title="九毫" target="_blank" itemprop="author">九毫</a>
+		<a href="/about" title="debugtalk" target="_blank" itemprop="author">debugtalk</a>
 		 -->
   <p class="article-time">
-    <time datetime="2013-10-02T16:00:00.000Z" itemprop="datePublished"> Published 2013-10-03</time>
+    <time datetime="2013-10-02T16:00:00.000Z" itemprop="datePublished"> Published 2013/10/03</time>
     
     <span id="busuanzi_container_page_pv">
       | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
@@ -118,7 +118,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh</span><br></pre></td></tr></table></figure>
 <p>如果还没有 ~/.ssh 目录的话，请先手工创建一个 <code>mkdir ~/.ssh</code></p>
 <p><strong>生成新的SSH秘钥</strong></p>
-<p>输入下面的代码，将命令中的 <a href="mailto:YOUR_EMAIL@YOUREMAIL.COM" target="_blank" rel="noopener">YOUR_EMAIL@YOUREMAIL.COM</a> 改为你的Email地址，就可以生成新的key文件。当需要输入文件名的时候，点击回车键，即采用默认设置。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ssh-keygen -t rsa -C "YOUR_EMAIL@YOUREMAIL.COM"</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/Users/your_user_directory/.ssh/id_rsa):&lt;回车就好&gt;</span><br></pre></td></tr></table></figure></p>
+<p>输入下面的代码，将命令中的 <a href="mailto:YOUR_EMAIL@YOUREMAIL.COM" target="_blank" rel="noopener">YOUR_EMAIL@YOUREMAIL.COM</a> 改为你的Email地址，就可以生成新的key文件。当需要输入文件名的时候，点击回车键，即采用默认设置。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ssh-keygen -t rsa -C <span class="string">"YOUR_EMAIL@YOUREMAIL.COM"</span></span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/Users/your_user_directory/.ssh/id_rsa):&lt;回车就好&gt;</span><br></pre></td></tr></table></figure></p>
 <p>然后系统会要输入加密串（Passphrase）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Enter passphrase (empty for no passphrase):&lt;输入加密串&gt;</span><br><span class="line">Enter same passphrase again:&lt;再次输入加密串&gt;</span><br></pre></td></tr></table></figure></p>
 <p>最后看到如下的界面，即表示ssh key成功完成设置。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Your identification has been saved in /c/Users/your_user_directory/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved in /c/Users/your_user_directory/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">15:81:d2:7a:c6:6c:0f:ec:b0:b6:d4:18:b8:d1:41:48 YOUR_EMAIL@YOUREMAIL.COM</span><br></pre></td></tr></table></figure></p>
 <p>SSH 秘钥生成结束后，可以在用户目录 (~/.ssh/) 下看到私钥 id_rsa 和公钥 id_rsa.pub 这两个文件，请妥善保管这两个文件。</p>
@@ -126,7 +126,7 @@
 <p>用文本工具打开公钥文件 ~/.ssh/id_rsa.pub ，复制里面的所有内容到剪贴板。<br>进入 GitCafe-&gt;【账户设置】-&gt;【SSH 公钥管理】设置项，点击【添加新公钥】按钮，在Title文本框中输入标题，在Key文本框粘贴刚才复制的公钥字符串，输入GitCafe账户密码后按【保存】按钮完成操作。</p>
 <p><strong>测试连接</strong></p>
 <p>以上步骤完成后，就可以通过以下命令来测试是否可以连接 GitCafe 服务器了。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@gitcafe.com</span><br></pre></td></tr></table></figure></p>
-<p>如果是第一次连接的话，会出现以下警告，<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The authenticity of host 'gitcafe.com (50.116.2.223)' can't be established.</span><br><span class="line"><span class="meta">#</span>RSA key fingerprint is 84:9e:c9:8e:7f:36:28:08:7e:13:bf:43:12:74:11:4e.</span><br><span class="line"><span class="meta">#</span>Are you sure you want to continue connecting (yes/no)?</span><br></pre></td></tr></table></figure></p>
+<p>如果是第一次连接的话，会出现以下警告，<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The authenticity of host 'gitcafe.com (50.116.2.223)' can't be established.</span><br><span class="line"><span class="meta">#</span><span class="bash">RSA key fingerprint is 84:9e:c9:8e:7f:36:28:08:7e:13:bf:43:12:74:11:4e.</span></span><br><span class="line"><span class="meta">#</span><span class="bash">Are you sure you want to <span class="built_in">continue</span> connecting (yes/no)?</span></span><br></pre></td></tr></table></figure></p>
 <p>正常情况下，显示的RSA key fingerprint应该与GitCafe提供的公钥一致，即84:9e:c9:8e:7f:36:28:08:7e:13:bf:43:12:74:11:4e。</p>
 <p>如果没有问题，输入yes按回车就可以了，中间会提示输入 passphrase 口令。</p>
 <p>最后，如果连接成功的话，会出现以下信息。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hi USERNAME! You've successfully authenticated, but GitCafe does not provide shell access.</span><br></pre></td></tr></table></figure></p>
@@ -145,10 +145,10 @@
 <p>完成<br>push 完成以后就可以在访问 GitCafe Pages 地址了。 <a href="http://leolee.gitcafe.com" target="_blank" rel="noopener">http://leolee.gitcafe.com</a></p>
 <p>注：不要用 make html 来构建 Blog ，它会删除输出目录后重新生成 Blog ，这意味着会删除 .git 库。</p>
 <h2 id="更新博客"><a href="#更新博客" class="headerlink" title="更新博客"></a>更新博客</h2><p>为了方便更新博客，可以创建了一个shell脚本，放置在Blog根目录下。在此创建的脚本名称为publish.sh，其内容如下所示。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pelican -s pelicanconf.py content -o leolee</span><br><span class="line">cd leolee</span><br><span class="line">git add .</span><br><span class="line">git commit -m "Update"</span><br><span class="line">git push</span><br><span class="line">cd ../</span><br></pre></td></tr></table></figure></p>
-<p>更新博客时，只需要将新增博客的markdown文件放入content目录中，然后运行如下命令。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ./publish.sh</span><br></pre></td></tr></table></figure></p>
+<p>更新博客时，只需要将新增博客的markdown文件放入content目录中，然后运行如下命令。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./publish.sh</span></span><br></pre></td></tr></table></figure></p>
 <p>当然，在正式发布前通常会先利用本地服务器进行预览，确定没问题后再进行正式发布。</p>
 <p>Makefile的内容如下所示：<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">PY=python</span><br><span class="line">PELICAN=pelican</span><br><span class="line">BASEDIR=<span class="variable">$(CURDIR)</span></span><br><span class="line">INPUTDIR=<span class="variable">$(BASEDIR)</span>/content</span><br><span class="line">OUTPUTDIR=<span class="variable">$(BASEDIR)</span>/output</span><br><span class="line">CONFFILE=<span class="variable">$(BASEDIR)</span>/pelicanconf.py</span><br><span class="line">PELICANOPTS=</span><br><span class="line"></span><br><span class="line"><span class="section">help:</span></span><br><span class="line">    @echo 'Makefile for a pelican Web site                                      '</span><br><span class="line">    @echo '                                                                     '</span><br><span class="line">    @echo 'Usage:                                                               '</span><br><span class="line">    @echo '   make clean                Empty the OUTPUTDIR                     '</span><br><span class="line">    @echo '   make generate             Generate static files for the web site  '</span><br><span class="line">    @echo '   make serve                Serve site at http://localhost:8000     '</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    @echo -n 'Cleaning Output folder..............'</span><br><span class="line">    @rm -rf <span class="variable">$(OUTPUTDIR)</span>/*</span><br><span class="line">    @echo ''</span><br><span class="line">    @echo 'Done'</span><br><span class="line"></span><br><span class="line"><span class="section">generate: clean</span></span><br><span class="line">    <span class="variable">$(PELICAN)</span> <span class="variable">$(INPUTDIR)</span> -o <span class="variable">$(OUTPUTDIR)</span> -s <span class="variable">$(CONFFILE)</span> <span class="variable">$(PELICANOPTS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">serve: generate</span></span><br><span class="line">    cd <span class="variable">$(OUTPUTDIR)</span> &amp;&amp; <span class="variable">$(PY)</span> -m pelican.server</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>: help clean generate serve</span></span><br></pre></td></tr></table></figure></p>
-<p>要预览时，只需要输入如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> make serve</span><br></pre></td></tr></table></figure></p>
+<p>要预览时，只需要输入如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> make serve</span></span><br></pre></td></tr></table></figure></p>
 <p>然后在浏览器中访问 <a href="http://localhost:8000" target="_blank" rel="noopener">http://localhost:8000</a> 即可进行本地预览。</p>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1]: http://riku.gitcafe.com/pelican-gitcafe.html</span><br><span class="line">[2]: https://gitcafe.com/GitCafe/Help/wiki/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%92%8C%E8%AE%BE%E7%BD%AE-Git#wiki</span><br></pre></td></tr></table></figure>
   
@@ -182,10 +182,10 @@
 <nav class="article-nav clearfix">
  
  <div class="prev">
- <a href="/post/html-character-entity/" title="HTML字符实体(Character Entity)">
+ <a href="/post/html-character-entity/" title="HTML 字符实体(Character Entity)">
   <strong>上一篇：</strong><br>
   <span>
-  HTML字符实体(Character Entity)</span>
+  HTML 字符实体(Character Entity)</span>
 </a>
 </div>
 
@@ -230,7 +230,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>21</sup></a></li>
+				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>20</sup></a></li>
 			
 		
 			
@@ -246,15 +246,19 @@
 			
 		
 			
+				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>7</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
+				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
+				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
 			
 		
 			
@@ -266,15 +270,11 @@
 			
 		
 			
-				<li><a href="/tags/Locust/" title="Locust">Locust<sup>6</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>5</sup></a></li>
+				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
 			
 		
 			
@@ -282,7 +282,7 @@
 			
 		
 			
-				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
+				<li><a href="/tags/Locust/" title="Locust">Locust<sup>5</sup></a></li>
 			
 		
 			
@@ -376,7 +376,7 @@
 		<p class="copyright" style="margin-top: 8px;">
 		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019
 		
-		<a href="/about" target="_blank" title="九毫">九毫</a>
+		<a href="/about" target="_blank" title="debugtalk">debugtalk</a>
 		
 
     <!-- Analytics Begin -->
