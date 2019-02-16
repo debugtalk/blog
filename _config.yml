@@ -6,7 +6,7 @@
 title: DebugTalk
 subtitle: 探索一个软件工程师的无限可能
 description:
-author: 九毫
+author: debugtalk
 language: en-us
 timezone: Asia/Shanghai
 
@@ -29,7 +29,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :year-:month-:day-:title.md # File name of new posts
+new_post_name: :title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
@@ -53,7 +53,7 @@ tag_map:
 ## Hexo uses Moment.js to parse and display date
 ## You can customize the date format as defined in
 ## http://momentjs.com/docs/#/displaying/format/
-date_format: YYYY-MM-DD
+date_format: YYYY/MM/DD
 time_format: HH:mm:ss
 
 # Pagination
@@ -72,5 +72,5 @@ stylus:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: git@github.com:debugtalk/blog.git
+  repository: https://github.com/debugtalk/blog
   branch: gh-pages
