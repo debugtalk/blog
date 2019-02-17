@@ -446,9 +446,9 @@ variables:
 - [《ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式》][ApiTestEngine-2]
 - [`ApiTestEngine` GitHub源码][ApiTestEngine]
 
-[ApiTestEngine-Intro]: http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
-[ApiTestEngine-2]: http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/
-[python-functional-programming]: http://debugtalk.com/post/python-functional-programming-getting-started/
+[ApiTestEngine-Intro]: https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
+[ApiTestEngine-2]: https://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/
+[python-functional-programming]: https://debugtalk.com/post/python-functional-programming-getting-started/
 [ApiTestEngine]: https://github.com/debugtalk/ApiTestEngine
 [python-functions-import]: https://docs.python.org/3/library/functions.html#__import__
 [python-functions-vars]: https://docs.python.org/3/library/functions.html#vars

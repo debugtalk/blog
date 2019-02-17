@@ -150,7 +150,7 @@ tags:
 - [《ApiTestEngine 演进之路（1）搭建基础框架》][ApiTestEngine-1]
 - [`ApiTestEngine` GitHub源码][ApiTestEngine]
 
-[ApiTestEngine-1]: http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/
-[ApiTestEngine-Intro]: http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
+[ApiTestEngine-1]: https://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/
+[ApiTestEngine-Intro]: https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
 [ApiTestEngine]: https://github.com/debugtalk/ApiTestEngine
-[ApiTestEngine-dev-0]: http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/
+[ApiTestEngine-dev-0]: https://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/

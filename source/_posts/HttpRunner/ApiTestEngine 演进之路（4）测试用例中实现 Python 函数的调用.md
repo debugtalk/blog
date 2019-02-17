@@ -268,5 +268,5 @@ def get_eval_value(self, data):
 
 
 [ApiTestEngine]: https://github.com/debugtalk/ApiTestEngine
-[ApiTestEngine-2]: http://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/
-[ApiTestEngine-3]: http://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/
+[ApiTestEngine-2]: https://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/
+[ApiTestEngine-3]: https://debugtalk.com/post/ApiTestEngine-3-define-functions-in-yaml-testcases/

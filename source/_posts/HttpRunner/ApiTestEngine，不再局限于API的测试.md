@@ -115,7 +115,7 @@ response body:
 
 再一想，这种方式的底层实现不就是正则表达式么。而且我们通过Python脚本解析网页时，采用正则表达式来对目标字段进行匹配和提取，的确也是通用性非常强的方式。
 
-例如，假设我们现在想从`http://debugtalk.com`首页中提取出座右铭，通过查看网页源代码，我们可以看到座右铭对应的位置。
+例如，假设我们现在想从`https://debugtalk.com`首页中提取出座右铭，通过查看网页源代码，我们可以看到座右铭对应的位置。
 
 ```html
 <h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
@@ -127,7 +127,7 @@ response body:
 
 ```bash
 >>> import re, requests
->>> resp = requests.get("http://debugtalk.com")
+>>> resp = requests.get("https://debugtalk.com")
 >>> content = resp.text
 >>> matched = re.search(r"blog-motto\">(.*)</h2>", content)
 >>> matched.group(1)
@@ -146,7 +146,7 @@ response body:
 - test:
     name: demo
     request:
-        url: http://debugtalk.com/
+        url: https://debugtalk.com/
         method: GET
     extract:
         - motto: 'blog-motto\">(.*)</h2>'
@@ -165,4 +165,4 @@ response body:
 现在看来，`ApiTestEngine`的名字与其实际功能有些不大匹配了，是该考虑改名了。
 
 
-[ApiTestEngine]: http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
+[ApiTestEngine]: https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/

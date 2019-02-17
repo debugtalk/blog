@@ -349,7 +349,7 @@ after_success:
 - [《接口自动化测试的最佳工程实践（ApiTestEngine）》][ApiTestEngine-Intro]
 - [`ApiTestEngine` GitHub源码][ApiTestEngine]
 
-[ApiTestEngine-Intro]: http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
+[ApiTestEngine-Intro]: https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
 [ApiTestEngine]: https://github.com/debugtalk/ApiTestEngine
 [Flask]: http://flask.pocoo.org/
 [api_server]: https://github.com/debugtalk/ApiTestEngine/blob/master/tests/api_server.py

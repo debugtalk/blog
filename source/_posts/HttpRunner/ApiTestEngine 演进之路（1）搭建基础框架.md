@@ -246,9 +246,9 @@ def diff_json(current_json, expected_json):
 - [`ApiTestEngine` GitHub源码][ApiTestEngine]
 
 
-[ApiTestEngine-Intro]: http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
+[ApiTestEngine-Intro]: https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
 [ApiTestEngine]: https://github.com/debugtalk/ApiTestEngine
-[ApiTestEngine-dev-0]: http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/
+[ApiTestEngine-dev-0]: https://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/
 [travis-ci]: https://travis-ci.org/
 [Requests]: http://docs.python-requests.org/en/master/
 [Requests-api]: http://docs.python-requests.org/en/master/api/

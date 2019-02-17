@@ -39,7 +39,7 @@ class UserBehavior(TaskSet):
         self.client.post('/login', data=payload)
 
 class WebsiteUser(HttpLocust):
-    host = 'http://debugtalk.com'
+    host = 'https://debugtalk.com'
     task_set = UserBehavior
     min_wait = 1000
     max_wait = 3000
@@ -74,7 +74,7 @@ class UserBehavior(TaskSet):
         self.client.get(url)
 
 class WebsiteUser(HttpLocust):
-    host = 'http://debugtalk.com'
+    host = 'https://debugtalk.com'
     task_set = UserBehavior
     share_data = ['url1', 'url2', 'url3', 'url4', 'url5']
     min_wait = 1000
@@ -116,7 +116,7 @@ class UserBehavior(TaskSet):
         self.client.post('/register', data=payload)
 
 class WebsiteUser(HttpLocust):
-    host = 'http://debugtalk.com'
+    host = 'https://debugtalk.com'
     task_set = UserBehavior
 
     user_data_queue = queue.Queue()
@@ -173,7 +173,7 @@ class UserBehavior(TaskSet):
         self.locust.user_data_queue.put_nowait(data)
 
 class WebsiteUser(HttpLocust):
-    host = 'http://debugtalk.com'
+    host = 'https://debugtalk.com'
     task_set = UserBehavior
 
     user_data_queue = queue.Queue()

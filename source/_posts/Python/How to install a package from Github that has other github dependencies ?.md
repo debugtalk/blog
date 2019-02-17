@@ -180,7 +180,7 @@ $ pip install --process-dependency-links git+https://github.com/debugtalk/ApiTes
 [pip]: https://pip.pypa.io/en/stable/
 [locust]: http://locust.io/
 [locust-github]: https://github.com/locustio/locust
-[locust-user-guide]: http://debugtalk.com/post/head-first-locust-user-guide/
+[locust-user-guide]: https://debugtalk.com/post/head-first-locust-user-guide/
 [PyUnitReport]: https://github.com/debugtalk/PyUnitReport
 [pip-3610]: https://github.com/pypa/pip/issues/3610
 [dneise]: https://github.com/pypa/pip/issues/3610#issue-147115114

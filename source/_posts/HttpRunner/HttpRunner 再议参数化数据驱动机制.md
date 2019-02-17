@@ -138,7 +138,7 @@ http://cn.httprunner.org/advanced/data-driven/
 针对该场景，我还没有想到很好的解决方案，暂且将其作为一个遗留问题吧。若你有比较好的实现方案，欢迎反馈给我，或者直接提交 [PR][PR]。
 
 
-[httprunner-data-driven]: http://debugtalk.com/post/httprunner-data-driven/
+[httprunner-data-driven]: https://debugtalk.com/post/httprunner-data-driven/
 [QuickStart]: http://cn.httprunner.org/quickstart/#_12
 [demo-quickstart-6]: http://cn.httprunner.org/data/demo-quickstart-6.json
 [PR]: https://github.com/HttpRunner/HttpRunner

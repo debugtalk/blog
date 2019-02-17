@@ -165,11 +165,11 @@ request_meta["response_content"] = response.content
 以下两种用法是等价的。
 
 ```python
-resp = requests.get('http://debugtalk.com')
+resp = requests.get('https://debugtalk.com')
 
 # 等价于
 client = requests.Session()
-resp = client.get('http://debugtalk.com')
+resp = client.get('https://debugtalk.com')
 ```
 
 有了这一层关系以后，要在接口自动化测试和性能测试之间切换就很容易了。在接口测试框架内，可以通过如下方式初始化`HTTP`客户端。
@@ -197,7 +197,7 @@ GitHub项目地址：https://github.com/debugtalk/ApiTestEngine
 
 ## 参考
 
-- [《打造心目中理想的自动化测试框架（AppiumBooster）》](http://debugtalk.com/post/build-ideal-app-automation-test-framework/)
+- [《打造心目中理想的自动化测试框架（AppiumBooster）》](https://debugtalk.com/post/build-ideal-app-automation-test-framework/)
 - [《告别robotframework》](http://myzhan.github.io/2016/03/04/giving-up-robotframework/)
 - [《Advanced Guide For PyRestTest》](https://github.com/svanoort/pyresttest/blob/master/advanced_guide.md)
 

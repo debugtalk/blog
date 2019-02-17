@@ -81,7 +81,7 @@ $ pip install HttpRunner
 
 
 
-[1]: http://debugtalk.com/post/apitestengine-not-only-about-json-api/
+[1]: https://debugtalk.com/post/apitestengine-not-only-about-json-api/
 [Requests]: http://python-requests.org
 [Locust]: http://locust.io
 [PyPI]: https://pypi.python.org/pypi/HttpRunner

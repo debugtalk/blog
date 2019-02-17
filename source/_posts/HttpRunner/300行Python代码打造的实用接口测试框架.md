@@ -105,8 +105,8 @@ def parse(self, testcase_template):
 [kasi]: https://testerhome.com/kasi
 [ApiTestEngine]: https://github.com/debugtalk/ApiTestEngine
 [testcase-parse]: https://github.com/debugtalk/ApiTestEngine/blob/master/ate/testcase.py
-[ApiTestEngine-Intro]: http://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
-[ApiTestEngine-dev-0]: http://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/
-[ApiTestEngine-dev-1]: http://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/
+[ApiTestEngine-Intro]: https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/
+[ApiTestEngine-dev-0]: https://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/
+[ApiTestEngine-dev-1]: https://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/
 [ApiTestEngine-coveralls]: https://coveralls.io/github/debugtalk/ApiTestEngine?branch=master
-[ApiTestEngine-series]: http://debugtalk.com/tags/ApiTestEngine
+[ApiTestEngine-series]: https://debugtalk.com/tags/ApiTestEngine

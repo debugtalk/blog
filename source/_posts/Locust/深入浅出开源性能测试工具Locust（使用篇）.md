@@ -56,12 +56,12 @@ class WebsiteTasks(TaskSet):
 
 class WebsiteUser(HttpLocust):
     task_set = WebsiteTasks
-    host = "http://debugtalk.com"
+    host = "https://debugtalk.com"
     min_wait = 1000
     max_wait = 5000
 ```
 
-在这个示例中，定义了针对`http://debugtalk.com`网站的测试场景：先模拟用户登录系统，然后随机地访问首页（`/`）和关于页面（`/about/`），请求比例为`2:1`；并且，在测试过程中，两次请求的间隔时间为`1~5`秒间的随机值。
+在这个示例中，定义了针对`https://debugtalk.com`网站的测试场景：先模拟用户登录系统，然后随机地访问首页（`/`）和关于页面（`/about/`），请求比例为`2:1`；并且，在测试过程中，两次请求的间隔时间为`1~5`秒间的随机值。
 
 那么，如上Python脚本是如何表达出以上测试场景的呢？
 
@@ -256,7 +256,7 @@ $ locust -f locustfile.py --no_web -c 1 -n 1
 - `-r, --hatch-rate`：指定并发加压速率，默认值位1。
 
 ```bash
-$ locust -H http://debugtalk.com -f demo.py --no-web -c1 -n2
+$ locust -H https://debugtalk.com -f demo.py --no-web -c1 -n2
 [2017-02-21 21:27:26,522] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2
 [2017-02-21 21:27:26,523] Leos-MacBook-Air.local/INFO/locust.runners: Hatching and swarming 1 clients at the rate 1 clients/s...
  Name                                                          # reqs      # fails     Avg     Min     Max  |  Median   req/s
@@ -304,7 +304,7 @@ Percentage of the requests completed within given times
 - `-P, --port`：指定web端口，默认为`8089`.
 
 ```bash
-$ locust -H http://debugtalk.com -f demo.py
+$ locust -H https://debugtalk.com -f demo.py
 [2017-02-21 21:31:26,334] Leos-MacBook-Air.local/INFO/locust.main: Starting web monitor at *:8089
 [2017-02-21 21:31:26,334] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2
 ```
@@ -327,7 +327,7 @@ $ locust -H http://debugtalk.com -f demo.py
 启动`master`时，需要使用`--master`参数；同样的，如果要使用`8089`以外的端口，还需要使用`-P, --port`参数。
 
 ```bash
-$ locust -H http://debugtalk.com -f demo.py --master --port=8088
+$ locust -H https://debugtalk.com -f demo.py --master --port=8088
 [2017-02-21 22:59:57,308] Leos-MacBook-Air.local/INFO/locust.main: Starting web monitor at *:8088
 [2017-02-21 22:59:57,310] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2
 ```
@@ -337,7 +337,7 @@ $ locust -H http://debugtalk.com -f demo.py --master --port=8088
 启动`slave`时需要使用`--slave`参数；在`slave`中，就不需要再指定端口了。
 
 ```bash
-$ locust -H http://debugtalk.com -f demo.py --slave
+$ locust -H https://debugtalk.com -f demo.py --slave
 [2017-02-21 23:07:58,696] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2
 [2017-02-21 23:07:58,696] Leos-MacBook-Air.local/INFO/locust.runners: Client 'Leos-MacBook-Air.local_980ab0eec2bca517d03feb60c31d6a3a' reported as
  ready. Currently 2 clients ready to swarm.
@@ -346,7 +346,7 @@ $ locust -H http://debugtalk.com -f demo.py --slave
 如果`slave`与`master`不在同一台机器上，还需要通过`--master-host`参数再指定`master`的IP地址。
 
 ```bash
-$ locust -H http://debugtalk.com -f demo.py --slave --master-host=<locust_machine_ip>
+$ locust -H https://debugtalk.com -f demo.py --slave --master-host=<locust_machine_ip>
 [2017-02-21 23:07:58,696] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2
 [2017-02-21 23:07:58,696] Leos-MacBook-Air.local/INFO/locust.runners: Client 'Leos-MacBook-Air.local_980ab0eec2bca517d03feb60c31d6a3a' reported as
  ready. Currently 2 clients ready to swarm.

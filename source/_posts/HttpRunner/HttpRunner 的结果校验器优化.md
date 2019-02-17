@@ -219,7 +219,7 @@ validate:
 
 [comparator]: http://httprunner.readthedocs.io/en/latest/write-testcases.html#comparator
 [#29]: https://github.com/HttpRunner/HttpRunner/issues/29
-[hot-plugin]: http://debugtalk.com/post/apitestengine-hot-plugin/
+[hot-plugin]: https://debugtalk.com/post/apitestengine-hot-plugin/
 [#52]: https://github.com/HttpRunner/HttpRunner/issues/52
-[not-only-about-json-api]: http://debugtalk.com/post/apitestengine-not-only-about-json-api/
+[not-only-about-json-api]: https://debugtalk.com/post/apitestengine-not-only-about-json-api/
 [context.py]: https://github.com/HttpRunner/HttpRunner/blob/master/httprunner/context.py

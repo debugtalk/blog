@@ -325,7 +325,7 @@ Enjoy!
 
 [`ApiTestEngine`]: https://github.com/debugtalk/ApiTestEngine
 [`Locust`]: http://locust.io/
-[debugtalk-locust]: http://debugtalk.com/tags/Locust/
+[debugtalk-locust]: https://debugtalk.com/tags/Locust/
 [`Python-Requests`]: http://docs.python-requests.org/en/master/
 [`@keithmork`]: https://testerhome.com/keithmork
 [keithmork-reply]: https://testerhome.com/topics/9277#reply-84542
