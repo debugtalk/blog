@@ -10,9 +10,10 @@ branches:
   only:
   - master
 
-# cache:
-#   directories:
-#     - node_modules
+# 缓存 node modules，节省部署时间
+cache:
+  directories:
+    - node_modules
 
 # 构建前的准备工作：配置 SSH 信息
 before_install:
