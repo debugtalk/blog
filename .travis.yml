@@ -1,10 +1,11 @@
-language: node_js
-
 sudo: false
 
+# 配置语言及相应版本
+language: node_js
 node_js:
   - '8'
 
+# 仅在触发 master 分支时进行构建
 branches:
   only:
   - master
@@ -13,18 +14,28 @@ branches:
 #   directories:
 #     - node_modules
 
+# 构建前的准备工作：配置 SSH 信息
 before_install:
-- openssl aes-256-cbc -K $encrypted_e00f8b3a99e3_key -iv $encrypted_e00f8b3a99e3_iv -in .travis/id_rsa_travis.enc -out ~/.ssh/id_rsa -d
-- chmod 600 ~/.ssh/id_rsa
+- openssl aes-256-cbc -K $encrypted_e00f8b3a99e3_key -iv $encrypted_e00f8b3a99e3_iv
+  -in .travis/id_rsa_travis.enc -out ~/.ssh/travis_ci_id_rsa -d
+- chmod 600 ~/.ssh/travis_ci_id_rsa
 - eval $(ssh-agent)
-- ssh-add ~/.ssh/id_rsa
+- ssh-add ~/.ssh/travis_ci_id_rsa
 - cp .travis/ssh_config ~/.ssh/config
 - git config --global user.name 'debugtalk'
 - git config --global user.email 'mail@debugtalk.com'
+- git clone https://github.com/debugtalk/notes.git
+- mv notes/about/ source/
+- mv notes/images/ source/
+- mkdir -p source/_posts
+- ls notes
+- mv notes/* source/_posts/
 
+# 安装 hexo 依赖环境
 install:
 - npm install hexo-cli -g
 - npm install
 
+# 使用 hexo 构建生成 html 文件，并部署到 GitHub Pages
 script:
-- hexo deploy -g
+- hexo clean && hexo deploy -g
