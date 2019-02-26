@@ -72,5 +72,5 @@ stylus:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: git@github.com:debugtalk/blog.git
+  repository: git@github.com:debugtalk/hexo-configs.git
   branch: gh-pages
