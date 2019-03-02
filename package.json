@@ -8,9 +8,6 @@
   "dependencies": {
     "hexo": "^3.8.0",
     "hexo-deployer-git": "^1.0.0",
-    "hexo-deployer-heroku": "^0.1.2",
-    "hexo-deployer-openshift": "^0.1.2",
-    "hexo-deployer-rsync": "^0.1.2",
     "hexo-generator-archive": "^0.1.4",
     "hexo-generator-baidu-sitemap": "^0.1.6",
     "hexo-generator-category": "^0.1.3",
