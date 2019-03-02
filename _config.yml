@@ -11,7 +11,7 @@ language: zh-CN
 timezone: Asia/Shanghai
 
 # URL
-## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+## If your website is in a subdirectory (such as http://example.org/blog), set url to http://example.org/blog and set root to /blog/.
 url: https://debugtalk.com
 root: /
 permalink: :title/
@@ -31,13 +31,13 @@ skip_render:
 # Writing
 new_post_name: :title.md # File name of new posts
 default_layout: post
-titlecase: false # Transform title into titlecase
-external_link: true # Open external links in new tab
-filename_case: 0
-render_drafts: false
-post_asset_folder: false
-relative_link: false
-future: true
+titlecase: false          # Transform title into titlecase
+external_link: true       # Open external links in new tab
+filename_case: 0          # Transform filenames to 1 lower case; 2 upper case
+render_drafts: false      # Display drafts?
+post_asset_folder: false  # separate assets on a post-per-post basis?
+relative_link: false      # make links relative to the root folder?
+future: true              # Display future posts?
 highlight:
   enable: true
   line_number: true
@@ -63,51 +63,17 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
-stylus:
-  compress: true
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
+  repo: https://github.com/debugtalk/hexo-configs
   repository: git@github.com:debugtalk/hexo-configs.git
   branch: gh-pages
 
 
-## Themes: https://hexo.io/themes/
+# Themes
+## themes market: https://hexo.io/themes/
 theme: jacman
-
-## ================== settings for replica start ================== ##
-# theme: replica
-
-# per_page: 0
-
-# Google Analytics
-ga: UA-81639610-1
-
-#marked setting for markdown
-marked:
-  gfm: true
-  pedantic: false
-  sanitize: false
-  tables: true
-  breaks: true
-  smartLists: true
-  smartypants: true
-
-gcs: # GOOGLE CUSTOM SEARCH
-baidutongji: 96dc81023a24bbe64c8bfd8aff39582d
-disqus: debugtalk
-
-location: Shenzhen
-email: mail@debugtalk.com
-
-avatar: https://avatars2.githubusercontent.com/u/3657070?v=4&s=460
-social:
-  github: https://github.com/debugtalk
-  weibo:
-  linkedin:
-
-flagcounter_href: https://info.flagcounter.com/7tKq
-flagcounter_img_src: https://s01.flagcounter.com/count2/7tKq/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_9/viewers_0/labels_0/pageviews_1/flags_0/percent_0/
-## ================== settings for replica end ================== ##
+# theme_config:
