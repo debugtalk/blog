@@ -17,7 +17,7 @@ tags:
 
 刚在`coveralls`上看了下[`ApiTestEngine`][ApiTestEngine]框架的[代码统计行数][ApiTestEngine-coveralls]，总行数只有268行，还不足300行。
 
-![](/images/ApiTestEngine-stat-ate.jpg)
+![](../images/ApiTestEngine-stat-ate.jpg)
 
 当然，这个行数指的是框架本身的`Python`代码行数，不包括示例注释的行数。从上图可以看出来，`LINES`列是文件总行数，`RELEVANT`列是实际的`Python`代码行数。例如`ate/runner.py`文件，注释的行数是远多于实际代码行数的。
 
@@ -65,7 +65,7 @@ def parse(self, testcase_template):
 
 另外，如果算上单元测试用例的行数（731行），总的`Python`代码行数能达到1000行的样子。嗯，代码可以精简，但是单元测试覆盖率还是要保证的，不达到90%以上的单元测试覆盖率，真不好意思说自己做了开源项目啊。
 
-![](/images/ApiTestEngine-stat-all.jpg)
+![](../images/ApiTestEngine-stat-all.jpg)
 
 那这不足300行的Python代码，实际实现了哪些功能呢？
 

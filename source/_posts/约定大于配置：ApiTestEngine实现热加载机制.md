@@ -84,7 +84,7 @@ tags:
 
 将这两点与测试用例引擎的实现机制结合起来，`ApiTestEngine`在运行过程中的热加载机制应该就如下图所示。
 
-![](/images/ate-hot-plugin.png)
+![](../images/ate-hot-plugin.png)
 
 这个流程图对热加载机制描述得已经足够清晰了，我再针对其中的几个点进行说明：
 

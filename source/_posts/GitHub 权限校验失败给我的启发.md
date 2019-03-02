@@ -97,7 +97,7 @@ https://leolee:340d247cxxxxxxxxf39556e38fe2b0baxxxxxxxx@github.com
 
 在Macbook Air中打开`Keychain Access`应用软件，搜索`github`，果然发现存在记录。
 
-![Mac Keychain of GitHub](/images/Mac_Keychain_GitHub.jpg)
+![Mac Keychain of GitHub](../images/Mac_Keychain_GitHub.jpg)
 
 而且，`github.com`这一项还存在两条记录。一条是我的个人账号`debugtalk`，另一条是公司的工作账号`leolee`。
 

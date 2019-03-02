@@ -42,7 +42,7 @@ tags:
 
 在 LoadRunner 中，可以在脚本中创建一个参数，然后参数会保存到一个`.dat`的文件中，例如下图中的`psd.dat`。
 
-![](/images/loadrunner-parameterize.jpg)
+![](../images/loadrunner-parameterize.jpg)
 
 在`.dat`文件中，是采用表格的形式来存储参数值，结构与`CSV`基本一致。
 
@@ -283,7 +283,7 @@ x & y:
 
 听上去很高大上，但实际却异常简单，直接对照着[代码][parameter-data-driven]来说吧。
 
-![](/images/httprunner-parameterize.jpg)
+![](../images/httprunner-parameterize.jpg)
 
 对于每一组参数组合情况来说，我们完全可以将其视为当前用例集运行时定义的变量值。而在 HttpRunner 中每一次运行测试用例集的时候都需要对`runner.Runner`做一次初始化，里面会用到定义的变量（即`config_dict["variables"]`），那么，我们完全可以在每次初始化的时候将组合好的参数作为变量传进去，假如存在同名的变量，就进行覆盖。
 

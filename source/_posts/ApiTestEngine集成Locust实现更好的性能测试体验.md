@@ -119,7 +119,7 @@ class WebPageUser(HttpLocust):
 
 后面的操作就完全是[`Locust`]的内容了，使用方式完全一样。
 
-![](/images/locust-start.jpg)
+![](../images/locust-start.jpg)
 
 ## 优化1：自动生成locustfile
 
@@ -320,7 +320,7 @@ $ locusts -f examples/first-testcase.yml --full-speed -P 8088
 [2017-08-26 23:51:47,085] bogon/INFO/locust.runners: Client 'bogon_80a804cda36b80fac17b57fd2d5e7cdb' reported as ready. Currently 4 clients ready to swarm.
 ```
 
-![](/images/locusts-full-speed.jpg)
+![](../images/locusts-full-speed.jpg)
 
 后续，[`ApiTestEngine`]将持续进行优化，欢迎大家多多反馈改进建议。
 

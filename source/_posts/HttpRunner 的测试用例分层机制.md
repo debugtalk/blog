@@ -67,7 +67,7 @@ tags:
 
 按照常规的接口测试用例编写方式，我们需要创建3个场景文件，然后在各个文件中分别描述三个测试场景相关的接口信息。示意图如下所示。
 
-![](/images/httprunner-testcase-layer-1.jpeg)
+![](../images/httprunner-testcase-layer-1.jpeg)
 
 在本例中，接口（`API_1/2/6`）在场景A和场景C中都进行了定义；接口（`API_3/4/5`）在场景A和场景B中都进行了定义；接口（`API_7/8`）在场景B和场景C中都进行了定义。可以预见，当测试场景增多以后，接口定义描述的维护就会变得非常困难和繁琐。
 
@@ -79,7 +79,7 @@ tags:
 
 示意图如下所示。
 
-![](/images/httprunner-testcase-layer-2.jpeg)
+![](../images/httprunner-testcase-layer-2.jpeg)
 
 具体地，我们可以约定将项目的所有API接口定义放置在`api`目录下，并在`api`目录中按照项目的系统模块来组织接口的定义；同时，将测试场景放置到`testcases`目录中。
 
@@ -161,7 +161,7 @@ tests
 
 实现接口的分层定义描述后，我们就可以避免接口的重复定义。但是，我们回过头来看之前的案例，发现仍然会存在一定的重复。
 
-![](/images/httprunner-testcase-layer-3.jpeg)
+![](../images/httprunner-testcase-layer-3.jpeg)
 
 如上图所示，场景A和场景C都包含了注册新账号（`API_1/2`）和查看登录状态（`API_6`），场景A和场景B都包含了登录已有账号（`API_3/4/5`），场景B和场景C都包含了注销登录（`API_7/8`）。
 
@@ -171,7 +171,7 @@ tests
 
 玩过积木的同学可能就会想到，我们也可以将系统的常用功能封装为模块（suite），只需要在模块中定义一次，然后就可以在测试场景中重复进行引用，从而避免了模块功能的重复描述。
 
-![](/images/httprunner-testcase-layer-4.jpeg)
+![](../images/httprunner-testcase-layer-4.jpeg)
 
 具体地，我们可以约定将项目的所有模块定义放置在`suite`目录下，并在`suite`目录中按照项目的功能来组织模块的定义。
 

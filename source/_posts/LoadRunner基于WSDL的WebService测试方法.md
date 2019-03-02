@@ -27,7 +27,7 @@ http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx)。
 
 采用Loadrunner测试WebService时，在单协议里面选择Web Services即可。当然，这并不意味着Loadrunner测试WebService只能采用Web Services协议，在后续的文章中将向大家介绍如何通过HTTP协议来测试WebService。
 
-![](/images/130802_01.png)
+![](../images/130802_01.png)
 
 ## 导入WebService的描述信息WSDL
 
@@ -44,17 +44,17 @@ WSDL 是基于 XML 的用于描述 WebService 以及如何访问 WebService 的�
 
 通过WSDL的URL地址进行导入时，操作方式如下图所示。
 
-![](/images/130802_02.png)
+![](../images/130802_02.png)
 
 需要说明的是，填写的URL地址末尾必须包含`?WSDL`。换句话说，只有在以`?WSDL`结尾时才能对应到WSDL文件的路径。大家可以在浏览器中对WSDL的URL地址进行访问，查看WSDL当前是否有效。
 
 如果选择直接导入本地WSDL文件的方式，则需要先将WebService对应的WSDL文件下载至本地。下载时，只需将WebService的地址末尾加上 "?WSDL" 后在浏览器中进行访问，然后对网页进行保存时将文件另存为".wsdl"的文件即可。如下图所示。
 
-![](/images/130802_03.png)
+![](../images/130802_03.png)
 
 获取到WSDL文件以后，便可在LoadRunner中以文件的进行导入，操作方式如下图所示。
 
-![](/images/130802_04.png)
+![](../images/130802_04.png)
 
 两种导入方式效果都是一样的，采用任意一种方式都能将WebService的描述信息导入至LoadRunner供其调用。
 
@@ -62,7 +62,7 @@ WSDL 是基于 XML 的用于描述 WebService 以及如何访问 WebService 的�
 
 - 采用**Import URL**的方式可以方便本地获取到最新的WebService描述，当远程服务器端的WebService发生变动以后，本地端可直接对WSDL进行更新，而不需对WSDL进行重新导入。在LoadRunner中，甚至可以通过设置使LoadRunner每次打开脚本的时候自动更新WSDL，如下图所示。
 
-![](/images/130802_05.png)
+![](../images/130802_05.png)
 
 - 采用**Import File**方式的优点在于，可以对下载到本地的WSDL文件进行手工编辑后再使用；而缺点则是无法获取到最新的WebService的描述信息，若要更新则需重新下载WSDL文件并重新导入。
 
@@ -72,11 +72,11 @@ WSDL 是基于 XML 的用于描述 WebService 以及如何访问 WebService 的�
 
 在成功导入WSDL以后，在【Operation】栏目下即可看到所有可供调用的接口。值得注意的是，在本测试案例中，每个接口均包含2个`Port Name`，这是因为该WebService为每个服务接口提供了SOAP1.1和SOAP1.2两个版本的SOAP调用方式。
 
-![](/images/130802_06.png)
+![](../images/130802_06.png)
 
 对比下图可知，这和网页上展示的接口是一致的。
 
-![](/images/130802_07.png)
+![](../images/130802_07.png)
 
 ## 创建调用函数web_service_call
 
@@ -88,7 +88,7 @@ LoadRunner提供的调用函数为web_service_call。调用该函数时，可以
 
 点击【Add Service Call】后进入Web Service Call的可视化编辑界面，如下图所示。
 
-![](/images/130802_08.png)
+![](../images/130802_08.png)
 
 在【Add Service Call】的可视化界面中，对所需调用的Service、Port Name和Operation进行选择。在Operation列表中，可以看到存在5个可供调用的方法，对于每一个Operation，在Port Name下拉框中均可以选择WeatherWebServiceSoap和WeatherWebServiceSoap12，这和上一步骤在【Operations】中查看到的完全一致。
 
@@ -98,22 +98,22 @@ LoadRunner提供的调用函数为web_service_call。调用该函数时，可以
 
 因此，使用getWeatherbyCityName函数接口时我们需对其传入参数theCityName。具体操作时，选中Input Arguments中的参数名theCityName，勾选其右侧的“Include argument in call”，在Value中输入城市名称即可，此处我们输入的是“广州”，如下图所示。
 
-![](/images/130802_09.png)
+![](../images/130802_09.png)
 
 若需要调用getWeatherbyCityName函数的返回结果，则需要事先将其返回结果保存至参数里面。具体操作时，选中Output Arguments中的参数名getWeatherbyCityNameResult[1]，勾选其右侧的“Save returned value in parameter”，在Parameter中输入参数名即可。如下图所示。
 
-![](/images/130802_10.png)
+![](../images/130802_10.png)
 
 完成对Input Arguments和Output Arguments的设置后，点击【OK】按钮，便可看见脚本中新增了一个web_service_call函数，如下图所示。
 
-![](/images/130802_11.png)
+![](../images/130802_11.png)
 
 通过上图可知，之前我们在可视化界面的所有设置均已转换至web_service_call函数。
 
 ## 回放脚本，查看结果
 在“Run-time Settings”中打开日志“Extended log”，勾选“Parameter substitution”和“Data  returned by server”。运行脚本后，查看“Replay Log”，如下图所示。
 
-![](/images/130802_12.png)
+![](../images/130802_12.png)
 
 详细结果如下所示。
 
@@ -123,7 +123,7 @@ theWeatherInfo = <getWeatherbyCityNameResult XmlType="DynamicParameter"><string>
 
 在浏览器访问该WebService，查询“广州”时得到结果如下图所示。
 
-![](/images/130802_13.png)
+![](../images/130802_13.png)
 
 通过对比LoadRunner的Replay Log和浏览器的返回页面可知，LoadRunner对Web Service进行了正确的调用。
 
@@ -131,20 +131,20 @@ theWeatherInfo = <getWeatherbyCityNameResult XmlType="DynamicParameter"><string>
 
 脚本虽已调试成功，可以得到正确的结果。但若要进行性能测试，我们还需对脚本进行参数化，如下图所示。
 
-![](/images/130802_14.png)
+![](../images/130802_14.png)
 
 或者，如果我们是只想利用返回报文的一小部分，而不是全部。在这种情况下，我们可以指定将某部分保存至参数，以便后续的使用。
 
 例如，我们只想获得某个城市当天的最低温度和最高温度。通过返回报文可知，该字段是输出结果中的第6个字段。那么，我们便可以将该字段保存至一个参数，这里指定为Lowest_Highest_Temperature，如下图所示。
 
-![](/images/130802_15.png)
+![](../images/130802_15.png)
 
 生成脚本如下所示：
 
-![](/images/130802_16.png)
+![](../images/130802_16.png)
 
 运行结果如下图所示。
 
-![](/images/130802_17.png)
+![](../images/130802_17.png)
 
 当然，此处只是列举了一个简单的例子。通过对web_service_call函数的灵活应用，可以实现更多复杂、强大的功能。

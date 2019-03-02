@@ -102,7 +102,7 @@ tags:
 
 因此，借着 2.0 版本发布之际，我自己用 Keynote 画了一个。
 
-![HttpRunner-logo](/images/HttpRunner-logo.png)
+![HttpRunner-logo](../images/HttpRunner-logo.png)
 
 个人的美工水平实在有限，让大家见笑了。
 

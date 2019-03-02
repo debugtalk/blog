@@ -76,15 +76,15 @@ $ ruby run.rb -p "${OUTPUT_FOLDER}/${SCHEME}.app.zip" --disable_output_color > t
 
 安装完该插件后，在Jenkins配置界面的`Post-build Actions`栏目中，`Add post-build action`选项列表中就会多出`Execute a set of scripts`选项。选择该项后，会出现如下配置界面。
 
-![Jenkins Post_build_Actions Execute_shell menu](/images/Jenkins_Post_build_Actions_Execute_shell_menu.jpg)
+![Jenkins Post_build_Actions Execute_shell menu](../images/Jenkins_Post_build_Actions_Execute_shell_menu.jpg)
 
 选择`Execute shell`后，会出现一个文本框，然后我们就可以将构建检查的命令填写到里面。
 
-![Jenkins Post_build_Actions Execute_shell](/images/Jenkins_Post_build_Actions_Execute_shell.jpg)
+![Jenkins Post_build_Actions Execute_shell](../images/Jenkins_Post_build_Actions_Execute_shell.jpg)
 
 在这里我们用到了`${AppiumBooster_Folder}`参数，该参数也需要通过`String Parameter`来进行定义，用于指定`AppiumBooster`项目的路径。
 
-![Jenkins String Parameter](/images/Jenkins_String_Parameter.jpg)
+![Jenkins String Parameter](../images/Jenkins_String_Parameter.jpg)
 
 最后，为了便于将执行自动化测试用例的日志和执行构建的日志分开，我们将执行自动化测试用例的日志写入到了`test_result.log`文件中。然后，在`Archives build artifacts`中就可以通过`${AppiumBooster_Folder}/test_result.log`将执行构建检查的日志收集起来，并展示到每次构建的页面中。
 

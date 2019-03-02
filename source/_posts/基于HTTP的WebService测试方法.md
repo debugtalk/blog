@@ -24,13 +24,13 @@ http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx)的基础上�
 
 例如，接口getWeatherbyCityName的测试工具如下图所示。在theCityName参数框内输入城市的名称，点击【调用】按钮，即可实现对getWeatherbyCityName接口的调用，并获得返回结果。
 
-![](/images/150213_01.png)
+![](../images/150213_01.png)
 
 在WebService的调用过程中，我们无需关注它具体是采用什么样的通讯协议，因为不管是何种通讯协议，具体传输实现还是会依赖于HTTP。因此，我们可以通过HTTP抓包工具对WebService调用过程中的通讯交互数据包进行捕捉。
 
 在这里我们采用Fiddler Web Debugger进行演示。在浏览器中调用接口getWeatherbyCityName的测试工具时，在Fiddler中抓取到对应的HTTP请求，如下图所示。
 
-![](/images/150213_02.png)
+![](../images/150213_02.png)
 
 从该HTTP请求可以获得如下关键信息：
 
@@ -44,11 +44,11 @@ http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx)的基础上�
 
 在Fiddler中，可使用Composer对HTTP请求进行构造，如下图所示。
 
-![](/images/150213_03.png)
+![](../images/150213_03.png)
 
 在Request Body中，修改请求参数theCityName为不同的城市（例如，重庆），Execute请求，查看返回结果。
 
-![](/images/150213_04.png)
+![](../images/150213_04.png)
 
 ## 在LoadRunner中构造HTTP请求
 
@@ -58,7 +58,7 @@ http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx)的基础上�
 
 具体的代码实现及回放结果如下图所示。
 
-![](/images/150213_05.png)
+![](../images/150213_05.png)
 
 虽然在LoadRunner中返回的中文显示为乱码，但是从城市编码（57516）可以看出，脚本执行后返回了正确的结果。
 

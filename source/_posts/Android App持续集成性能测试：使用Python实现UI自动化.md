@@ -154,7 +154,7 @@ button = d(className='android.widget.Button', text='Next')
 Google官方提供了两个工具，`hierarchyviewer`和`uiautomatorviewer`，这两个工具都位于`<android-sdk>/tools/`目录下。关于这两个工具的区别及其各自的特点，本文不进行详细介绍，我们当前只需要知道，在查看控件属性方面，这两个工具实现的功能完全相同，界面也完全相同，我们任选其一即可。
 
 {: .center}
-![uiautomatorviewer](/images/uiautomatorviewer.png)
+![uiautomatorviewer](../images/uiautomatorviewer.png)
 
 通过这个工具，我们可以查看到当前设备屏幕中的UI元素信息：
 

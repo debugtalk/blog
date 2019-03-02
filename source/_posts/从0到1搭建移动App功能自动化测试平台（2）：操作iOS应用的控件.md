@@ -45,7 +45,7 @@ APP的功能自动化测试，简单地来说，就是让功能测试用例自�
 
 运行Appium Server，并启动【Inspector】后，整体界面如下图所示。
 
-![Appium inspector introduction](/images/Appium_inspector_introduction.jpg)
+![Appium inspector introduction](../images/Appium_inspector_introduction.jpg)
 
 现对照着这张图对Appium Inspector进行介绍。
 
