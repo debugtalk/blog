@@ -60,6 +60,15 @@ canvas_nest:
 # Code Highlight theme
 highlight_theme: night eighties
 
+# Post meta display settings
+post_meta:
+  item_text: true
+  created_at: true
+  updated_at:
+    enabled: false
+    another_day: true
+  categories: true
+
 social:
   GitHub: https://github.com/debugtalk || github
   E-Mail: mailto:mail@debugtalk.com || envelope
