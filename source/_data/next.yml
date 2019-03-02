@@ -47,6 +47,9 @@ menu:
 #scheme: Pisces
 scheme: Gemini
 
+# Code Highlight theme
+highlight_theme: night eighties
+
 social:
   GitHub: https://github.com/debugtalk || github
   E-Mail: mailto:mail@debugtalk.com || envelope
