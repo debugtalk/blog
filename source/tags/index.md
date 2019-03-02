@@ -1,3 +1,5 @@
-layout: tags
-title: tags
+---
+title: tagcloud
+type: tags
+comments: false
 ---

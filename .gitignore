@@ -6,6 +6,7 @@ node_modules/
 public/
 .deploy*/
 .sync/*
+package-lock.json
 
 .me_configs.data
 .python-version

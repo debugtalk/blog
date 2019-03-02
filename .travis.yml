@@ -25,15 +25,8 @@ before_install:
 - cp .travis/ssh_config ~/.ssh/config
 - git config --global user.name 'debugtalk'
 - git config --global user.email 'mail@debugtalk.com'
+- git clone https://github.com/theme-next/hexo-theme-next themes/next
 - ls themes
-- git clone https://github.com/debugtalk/notes.git
-- ls notes
-- rm notes/README.md
-- mv notes/about/ source/
-- mv notes/images/ source/
-- mkdir -p source/_posts
-- mv notes/* source/_posts/
-- ls source/
 
 # 安装 hexo 依赖环境
 install:

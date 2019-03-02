@@ -1,0 +1,114 @@
+# override next default configuration
+override: false
+
+favicon:
+  small: /images/favicon-16x16.png
+  medium: /images/favicon-32x32.png
+  apple_touch_icon: /images/apple-touch-icon.png
+  safari_pinned_tab: /images/safari-pinned-tab.svg
+  android_manifest: /images/manifest.json
+  ms_browserconfig: /images/browserconfig.xml
+
+footer:
+  powered:
+    # Hexo link (Powered by Hexo).
+    enable: false
+    # Version info of Hexo after Hexo link (vX.X.X).
+    version: false
+
+  theme:
+    # Theme & scheme info link (Theme - NexT.scheme).
+    enable: false
+    # Version info of NexT after scheme info (vX.X.X).
+    version: false
+
+creative_commons:
+  license: by-nc-sa
+  sidebar: true
+  post: true
+  language:
+
+seo: true
+baidu_push: true
+
+menu:
+  home: / || home
+  tags: /tags/ || tags
+  categories: /categories/ || th
+  archives: /archives/ || archive
+  about: /about/ || user
+  # schedule: /schedule/ || calendar
+  # sitemap: /sitemap.xml || sitemap
+  # commonweal: /404/ || heartbeat
+
+# Schemes
+#scheme: Muse
+#scheme: Mist
+#scheme: Pisces
+scheme: Gemini
+
+social:
+  GitHub: https://github.com/debugtalk || github
+  E-Mail: mailto:mail@debugtalk.com || envelope
+
+social_icons:
+  enable: true
+  icons_only: false
+  transition: false
+
+github_banner: https://github.com/debugtalk || Follow me on GitHub
+
+# Sidebar Avatar
+avatar:
+  # In theme directory (source/images): /images/avatar.gif
+  url: /images/xiaojianguo.jpg
+  # If true, the avatar would be dispalyed in circle.
+  rounded: true
+  # The value of opacity should be choose from 0 to 1 to set the opacity of the avatar.
+  opacity: 1
+  # If true, the avatar would be rotated with the cursor.
+  rotated: true
+
+
+sidebar:
+  position: left
+  # Back to top in sidebar.
+  b2t: true
+  # Scroll percent label in b2t button.
+  scrollpercent: true
+  # Enable sidebar on narrow view (only for Muse | Mist).
+  onmobile: true
+  # Click any blank part of the page to close sidebar (only for Muse | Mist).
+  dimmer: true
+
+local_search:
+  enable: true
+  trigger: auto
+  top_n_per_article: 1
+  unescape: true
+
+# Google Analytics
+google_analytics:
+  tracking_id: UA-81639610-1
+  localhost_ignored: true
+
+# Baidu Analytics ID
+baidu_analytics: 96dc81023a24bbe64c8bfd8aff39582d
+
+# CNZZ count
+cnzz_siteid: 1257477005
+
+busuanzi_count:
+  enable: true
+  total_visitors: true
+  total_visitors_icon: user
+  total_views: true
+  total_views_icon: eye
+  post_views: true
+  post_views_icon: eye
+
+# Wechat Subscriber
+wechat_subscriber:
+  enabled: true
+  qcode: /images/wechat_qrcode.png
+  description: 欢迎关注「DebugTalk」，获取本站最新内容。

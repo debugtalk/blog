@@ -68,12 +68,19 @@ pagination_dir: page
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/debugtalk/hexo-configs
   repository: git@github.com:debugtalk/hexo-configs.git
   branch: gh-pages
 
+search:
+  path: search.xml
+  field: post
+
+sitemap:
+  path: sitemap.xml
+
+baidusitemap:
+  path: baidusitemap.xml
 
 # Themes
 ## themes market: https://hexo.io/themes/
-theme: jacman
-# theme_config:
+theme: next
