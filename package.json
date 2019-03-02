@@ -6,6 +6,7 @@
     "version": "3.8.0"
   },
   "dependencies": {
+    "canvas-nest.js": "^2.0.4",
     "hexo": "^3.8.0",
     "hexo-deployer-git": "^1.0.0",
     "hexo-generator-archive": "^0.1.4",

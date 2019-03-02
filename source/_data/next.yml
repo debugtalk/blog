@@ -47,6 +47,16 @@ menu:
 #scheme: Pisces
 scheme: Gemini
 
+# Canvas-nest
+## Dependencies: https://github.com/theme-next/theme-next-canvas-nest
+canvas_nest:
+  enable: true
+  onmobile: true # display on mobile or not
+  color: '0,0,255' # RGB values, use ',' to separate
+  opacity: 0.5 # the opacity of line: 0~1
+  zIndex: -1 # z-index property of the background
+  count: 99 # the number of lines
+
 # Code Highlight theme
 highlight_theme: night eighties
 
