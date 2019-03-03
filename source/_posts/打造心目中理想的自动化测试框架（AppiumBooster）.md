@@ -196,7 +196,7 @@ Send random text messages:
 
 采用表格来编写测试用例时，只需要在任意表格工具，包括Microsoft Excel、iWork Numbers、WPS等，按照如下形式对测试用例进行描述。
 
-![AppiumBooster CSV Testcase example](../images/AppiumBooster_CSV_Testcase_example.jpg)
+![AppiumBooster CSV Testcase example](/images/AppiumBooster_CSV_Testcase_example.jpg)
 
 然后，将表格内容另存为`CSV`格式的文件，并放置于`testcases`目录中即可。
 

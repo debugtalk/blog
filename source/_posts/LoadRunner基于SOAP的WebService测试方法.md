@@ -74,11 +74,11 @@ SOAPAction: "http://WebXml.com.cn/getWeatherbyCityName"
 
 在LoadRunner的Web Services协议中，点击【Import SOAP】，加载之前准备好的SOAP报文，即xml文件；加载完成后，在URL和SOAP Action中分别填入获取得到的地址信息；在Response Parameter中填写存储返回内容的参数名称；如下图所示。
 
-![](../images/130806_01.png)
+![](/images/130806_01.png)
 
 点击【OK】后，便能在脚本界面中生成一个soap_request函数，如下图所示。
 
-![](../images/130806_02.png)
+![](/images/130806_02.png)
 
 通过上图可知，SOAP报文中的全部内容已成功转换为LoadRunner的soap_request函数。
 
@@ -86,7 +86,7 @@ SOAPAction: "http://WebXml.com.cn/getWeatherbyCityName"
 
 将脚本中的字段theCityName赋值为“广州”；在“Run-time Settings”中打开日志“Extended log”，勾选“Parameter substitution”和“Data returned by server”。运行脚本后，查看“Replay Log”，如下图所示。
 
-![](../images/130806_03.png)
+![](/images/130806_03.png)
 
 在这里如果将脚本回放得到的结果与在浏览器中调用返回的结果进行对比，会发现内容并不一致。在LoadRunner脚本中将theCityName更改为“深圳”、“上海”等城市后重新回放脚本，会发现内容仍然不一致，且LoadRunner每次回放得到的结果都相同。
 
@@ -94,7 +94,7 @@ SOAPAction: "http://WebXml.com.cn/getWeatherbyCityName"
 
 对LR脚本中需传送的汉字进行编码转换，即将脚本中的汉字转换为UTF-8，转换方法如下图所示：
 
-![](../images/130806_04.png)
+![](/images/130806_04.png)
 
 重新回放脚本，查看Replay Log。再次对比LoadRunner的Replay Log和浏览器的返回页面可知，LoadRunner对Web Service实现了正确的调用。
 

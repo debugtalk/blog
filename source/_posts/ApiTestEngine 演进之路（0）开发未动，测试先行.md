@@ -226,15 +226,15 @@ script:
 
 下图是某次提交代码时的构建结果。
 
-![](../images/travis-check-result.jpg)
+![](/images/travis-check-result.jpg)
 
 另外，我们还可以在`GitHub`项目的`README.md`中添加一个`Status Image`，实时显示项目的构建状态，就像下图显示的样子。
 
-![](../images/github-readme-travis-status-image.jpg)
+![](/images/github-readme-travis-status-image.jpg)
 
 配置方式也是很简单，只需要先在`Travis CI`中获取到项目`Status Image`的URL地址，然后添加到`README.md`即可。
 
-![](../images/travis-status-image-url.jpg)
+![](/images/travis-status-image-url.jpg)
 
 ## 为项目添加单元测试覆盖率检查（coveralls）
 
@@ -329,15 +329,15 @@ after_success:
 
 下图是某次提交代码时的覆盖率检查。
 
-![](../images/coveralls-result.jpg)
+![](/images/coveralls-result.jpg)
 
 另外，我们在`GitHub`项目的`README.md`中也同样可以添加一个`Status Image`，实时显示项目的单元测试覆盖率。
 
-![](../images/github-coveralls-badge.jpg)
+![](/images/github-coveralls-badge.jpg)
 
 配置方式也跟之前类似，在[`coveralls`][coveralls]中获取到项目`Status Image`的URL地址，然后添加到`README.md`即可。
 
-![](../images/coveralls-image-url.jpg)
+![](/images/coveralls-image-url.jpg)
 
 最后需要说明的是，项目的单元测试覆盖率只能起到参考作用，没有被单元测试覆盖到的代码我们不能说它肯定有问题，100%覆盖率的代码也并不能保证它肯定没有问题。归根结底，这还是要依赖于单元测试的策略实现，因此我们在写单元测试的时候也要尽可能多地覆盖到各种逻辑路径，以及兼顾到各种异常情况。
 

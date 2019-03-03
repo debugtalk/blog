@@ -14,7 +14,7 @@ tags:
 
 很自然地，我们会想到采用如下形式展现对比结果。
 
-![render table three levels](../images/render_table_three_levels.png)
+![render table three levels](/images/render_table_three_levels.png)
 图1 三层表格
 
 对应地，采用如下数据结构存储结果数据。
@@ -55,7 +55,7 @@ data_hash = {
 
 为了简化问题分析过程，先尝试对两层表格进行绘制。
 
-![render table two levels](../images/render_table_two_levels.png)
+![render table two levels](/images/render_table_two_levels.png)
 图2 两层表格
 
 简化后的数据结构如下：

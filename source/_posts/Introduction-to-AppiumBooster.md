@@ -17,7 +17,7 @@ AppiumBooster helps you to write automation testcases in yaml format or csv tabl
 
 Take DebugTalk+ Discover's login and logout function as an example.
 
-![preview of login and logout](../images/preview_login_and_logout.png)
+![preview of login and logout](/images/preview_login_and_logout.png)
 
 In order to test these functions above, you can write testcases in yaml format like this.
 
@@ -79,7 +79,7 @@ You can also write testcases in any table tools, including MS Excel and iWork Nu
 
 In order to test the same functions above, you can write testcases in tables like this.
 
-![testcases of login and logout](../images/testcase_login_and_logout.png)
+![testcases of login and logout](/images/testcase_login_and_logout.png)
 
 After the testcases are finished, export to CSV format, and put the csv files under `ios/testcases/` directory.
 

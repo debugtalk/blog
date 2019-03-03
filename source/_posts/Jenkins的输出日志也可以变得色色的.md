@@ -22,7 +22,7 @@ tags:
 
 安装完成后，在Jenkins Project的`Configure`页面中，`Build Environment`栏目下会多出`Color ANSI Console Output`配置项，勾选后即可开启颜色输出配置。
 
-![Jenkins Color ANSI Console Output](../images/Jenkins_Color_ANSI_Console_Output.jpg)
+![Jenkins Color ANSI Console Output](/images/Jenkins_Color_ANSI_Console_Output.jpg)
 
 在`ANSI color map`的列表选择框中，存在多个选项，默认情况下，选择`xterm`即可。
 
@@ -32,7 +32,7 @@ tags:
 
 使用`xctool`命令编译iOS应用时，在Jenkins的`Console output`中会看到和`Terminal`中一样的颜色效果。
 
-![Jenkins Console Output Colored](../images/Jenkins_Console_Output_Colored.jpg)
+![Jenkins Console Output Colored](/images/Jenkins_Console_Output_Colored.jpg)
 
 ## 补充说明
 
@@ -119,6 +119,6 @@ puts step_action_desc.red
 
 展示效果如下图所示。
 
-![Terminal Output Colored](../images/Terminal_Output_Colored.jpg)
+![Terminal Output Colored](/images/Terminal_Output_Colored.jpg)
 
 是不是好看多了？

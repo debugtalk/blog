@@ -39,9 +39,9 @@ Before we write testcases, we should know the details of the API. It is a good c
 
 For example, the image below illustrates getting token from the sample service first, and then creating one user successfully.
 
-![](../images/ate-quickstart-http-1.jpg)
+![](/images/ate-quickstart-http-1.jpg)
 
-![](../images/ate-quickstart-http-2.jpg)
+![](/images/ate-quickstart-http-2.jpg)
 
 After thorough understanding of the APIs, we can now begin to write testcases.
 
@@ -329,7 +329,7 @@ Reports generated: /Users/Leo/MyProjects/ApiTestEngine/reports/quickstart-demo-r
 
 Great! The test case runs successfully and generates a `HTML` test report.
 
-![](../images/ate-quickstart-demo-report.jpg)
+![](/images/ate-quickstart-demo-report.jpg)
 
 ## Further more
 

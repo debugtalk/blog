@@ -13,7 +13,7 @@ tags:
 
 在`macOS`中配置Web代理时，通常的做法是在控制面板中进行操作，`System Preferences` -> `Network` -> `Advanced` -> `Proxies`.
 
-![macOS-Web-Proxy-Setting](../images/macOS-Web-Proxy-Setting.jpg)
+![macOS-Web-Proxy-Setting](/images/macOS-Web-Proxy-Setting.jpg)
 
 这种配置方式虽然可以实现需求，但缺点在于操作比较繁琐，特别是在需要频繁切换的情况下，效率极其低下。
 
@@ -117,7 +117,7 @@ $ echo <password> | sudo -S networksetup -setwebproxystate 'Wi-Fi' off && sudo n
 
 配置十分简洁清晰，不用解释也能看懂。完成配置后，在`macOS`顶部菜单栏中就会出现如下效果的快捷方式。
 
-![macOS-Web-Proxy-Setting](../images/shuttle-preview.png)
+![macOS-Web-Proxy-Setting](/images/shuttle-preview.png)
 
 后续，我们就可以通过快捷方式实现一键切换HTTP(S)代理配置、一键启动`mitmproxy`抓包工具了。
 

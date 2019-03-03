@@ -48,7 +48,7 @@ tags:
 
 对于本次演示的APP来说，登录时需要先进入【My Account】页面，然后点击【Login】进入登录页面，接着在登录页面中输入账号密码后再点击【Login】按钮，完成登录操作。
 
-![Preview of DebugTalk Plus login](../images/DebugTalk_Plus_Login.jpg)
+![Preview of DebugTalk Plus login](/images/DebugTalk_Plus_Login.jpg)
 
 确定了操作路径以后，就可以在`Appium Ruby Console`中依次操作一遍，目的是确保代码能正确地对控件进行操作。
 

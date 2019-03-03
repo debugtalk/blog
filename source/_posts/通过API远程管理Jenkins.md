@@ -14,7 +14,7 @@ tags:
 
 为了更好地说明问题，在下图中展示了一个精简的持续集成测试系统。
 
-![Jenkins DroidTestbed](../images/Jenkins-DroidTestbed.png)
+![Jenkins DroidTestbed](/images/Jenkins-DroidTestbed.png)
 
 在该系统中，Jenkins负责定时检测代码库（`Code Repository`）的代码更新情况，当检测到有新的代码提交时，自动采用最新的代码进行构建，并采用构建得到的包（apk）触发自动化测试平台（`DroidTestbed`）执行测试任务。
 
@@ -137,7 +137,7 @@ Jenkins的Remote API以`REST-like`的形式进行提供，通过对特定的API�
 
 先看下整体的系统架构图。
 
-![DroidTestbed DroidMeter](../images/DroidTestbed-DroidMeter.png)
+![DroidTestbed DroidMeter](/images/DroidTestbed-DroidMeter.png)
 
 整个系统实现的功能是Android App的性能持续集成测试平台，主要由`DroidTestbed`和`DroidMeter`两部分组成。
 

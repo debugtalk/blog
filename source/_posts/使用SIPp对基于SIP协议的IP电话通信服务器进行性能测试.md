@@ -36,7 +36,7 @@ SIP系统只有两种构件，即用户代理（user agent）和网络服务器�
 SIP的会话共有三个阶段：建立会话、通信和终止会话。图1给出了一个简单的SIP会话的例子。其中建立会话阶段和终止会话阶段都是使用SIP协议，而中间的通信阶段是使用如RTP这样的传送实时话音分组的协议。
 
 {: .center}
-![SIP_Simple_Session](../images/20140511201122_SIP_Simple_Session.png)
+![SIP_Simple_Session](/images/20140511201122_SIP_Simple_Session.png)
 图1 SIP的简单会话过程
 
 在图1中，主叫方（Tesla）先向被叫方（Marconi）发出INVITE报文，这个报文中含有双方的地址信息以及一些其它信息（如通话时话音编码方式等）；被叫方收到请求后，会返回180 Ringing的状态码，并处于振铃状态；若被叫方接受呼叫请求，则返回200 OK的状态码；主叫方再发送ACK报文作为确认（类似于TCP建立连接时的三次握手），然后双方便完成连接，可以进行通话了；通话过程中，双方中的任何一方都可以发送BYE报文以终止会话。如上便是SIP会话的全过程。
@@ -85,7 +85,7 @@ SIPp具有三种常用工作模式：
 图2是对第三种模式的描述。
 
 {: .center}
-![SIPp_Operating_Principle](../images/20140511201122_SIPp_Operating_Principle.jpg)
+![SIPp_Operating_Principle](/images/20140511201122_SIPp_Operating_Principle.jpg)
 图2 SIPp工作原理
 
 在该种模式下，需先运行服务端UAS，然后再运行客户端UAC。接下来，UAC便参照uac.xml场景文件的描述，发起呼叫；而UAS则参照uas.xml场景文件的描述，对呼叫进行响应；整个通讯过程遵循SIP协议，在本文的1.4节已经进行了介绍。
@@ -227,7 +227,7 @@ Fred;sipphone94
 XML调用CSV的具体方式如图3所示。
 
 {: .center}
-![XML_Invoke_CSV](../images/20140511201122_XML_Invoke_CSV.jpg)
+![XML_Invoke_CSV](/images/20140511201122_XML_Invoke_CSV.jpg)
 图3 XML调用CSV的原理
 
 ### uac.bat
@@ -264,7 +264,7 @@ sipp -sn uac 172.31.89.4:5060 -r 1 -rp 3000 -inf data.csv -p 7098 -i 172.31.89.2
 测试环境的网络拓扑图如图4所示。
 
 {: .center}
-![Network_Topology_Map](../images/20140511201122_Network_Topology_Map.gif)
+![Network_Topology_Map](/images/20140511201122_Network_Topology_Map.gif)
 图4 被测系统的网络拓扑图
 
 ### 测试方法
