@@ -17,3 +17,6 @@ sync_changes.log
 sync_hook.script
 
 **/.Archive
+
+**/.vscode/*
+themes/*
