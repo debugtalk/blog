@@ -37,7 +37,7 @@ filename_case: 0          # Transform filenames to 1 lower case; 2 upper case
 render_drafts: false      # Display drafts?
 post_asset_folder: false  # separate assets on a post-per-post basis?
 relative_link: false      # make links relative to the root folder?
-future: true              # Display future posts?
+future: false              # Display future posts?
 highlight:
   enable: true
   line_number: true
