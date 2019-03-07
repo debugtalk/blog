@@ -71,7 +71,7 @@ deploy:
   # repository: git@github.com:debugtalk/blog.git
   repo:
     github: git@github.com:debugtalk/blog.git
-    coding: git@git.coding.net:debugtalk/debugtalk.coding.me.git
+    coding: git@git.coding.net:debugtalk/blog.git
   branch: gh-pages
 
 search:
