@@ -27,6 +27,8 @@ before_install:
 - ssh-add ~/.ssh/travis_ci_id_rsa
 - ssh-add ~/.ssh/coding_rsa
 - cp .travis/ssh_config ~/.ssh/config
+# - ssh -T git@github.com
+- ssh -T git@git.coding.net
 - git config --global user.name 'debugtalk'
 - git config --global user.email 'mail@debugtalk.com'
 - git clone https://github.com/theme-next/hexo-theme-next themes/next
