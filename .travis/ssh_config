@@ -3,3 +3,9 @@ Host github.com
     StrictHostKeyChecking no
     IdentityFile ~/.ssh/travis_ci_id_rsa
     IdentitiesOnly yes
+
+Host coding.net
+    User git
+    StrictHostKeyChecking no
+    IdentityFile ~/.ssh/coding_rsa
+    IdentitiesOnly yes

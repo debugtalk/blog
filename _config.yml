@@ -68,7 +68,10 @@ pagination_dir: page
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: git@github.com:debugtalk/blog.git
+  # repository: git@github.com:debugtalk/blog.git
+  repo:
+    github: git@github.com:debugtalk/blog.git
+    coding: git@git.coding.net:debugtalk/debugtalk.coding.me.git
   branch: gh-pages
 
 search:
