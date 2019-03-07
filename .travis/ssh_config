@@ -1,11 +1,13 @@
 Host github.com
     User git
     StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
     IdentityFile ~/.ssh/travis_ci_id_rsa
     IdentitiesOnly yes
 
-Host coding.net
+Host git.coding.net
     User git
     StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
     IdentityFile ~/.ssh/coding_rsa
     IdentitiesOnly yes
