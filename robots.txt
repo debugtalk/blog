@@ -10,5 +10,5 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 
-Sitemap: http://debugtalk.com/sitemap.xml
-Sitemap: http://debugtalk.com/baidusitemap.xml
+Sitemap: https://debugtalk.com/sitemap.xml
+Sitemap: https://debugtalk.com/baidusitemap.xml

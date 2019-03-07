@@ -1,138 +1,550 @@
+<!DOCTYPE html>
 
- <!DOCTYPE HTML>
-<html lang="en-us">
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
-  
-    <title>LoadRunner基于WSDL的WebService测试方法 | DebugTalk</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    
-    <meta name="author" content="debugtalk">
-    
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
 
-    
-    <meta name="description" content="在《测试工程师的自我修养–理解WebService》一文中，52test.org对WebService的概念及其相关名词进行了阐述，并引入了一个测试案例：天气预报WebService服务。  作为测试人员的你，假设现在接到一个测试任务，需要对WeatherWebService中的getWeatherbyCityName接口进行性能测试。而开发人员只给你提供了WeatherWebService的WS">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在《测试工程师的自我修养–理解WebService》一文中，52test.org对WebService的概念及其相关名词进行了阐述，并引入了一个测试案例：天气预报WebService服务。  作为测试人员的你，假设现在接到一个测试任务，需要对WeatherWebService中的getWeatherbyCityName接口进行性能测试。而开发人员只给你提供了WeatherWebService的WS">
 <meta name="keywords" content="LoadRunner,WebService,WSDL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LoadRunner基于WSDL的WebService测试方法">
-<meta property="og:url" content="http://debugtalk.com/post/LoadRunner-WSDL-WebService/index.html">
+<meta property="og:title" content="LoadRunner 基于 WSDL 的 WebService 测试方法">
+<meta property="og:url" content="https://debugtalk.com/post/LoadRunner-WSDL-WebService/index.html">
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="在《测试工程师的自我修养–理解WebService》一文中，52test.org对WebService的概念及其相关名词进行了阐述，并引入了一个测试案例：天气预报WebService服务。  作为测试人员的你，假设现在接到一个测试任务，需要对WeatherWebService中的getWeatherbyCityName接口进行性能测试。而开发人员只给你提供了WeatherWebService的WS">
-<meta property="og:locale" content="en-us">
-<meta property="og:image" content="http://debugtalk.com/images/130802_01.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_02.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_03.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_04.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_05.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_06.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_07.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_08.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_09.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_10.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_11.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_12.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_13.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_14.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_15.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_16.png">
-<meta property="og:image" content="http://debugtalk.com/images/130802_17.png">
-<meta property="og:updated_time" content="2019-02-16T13:20:03.768Z">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://debugtalk.com/images/130802_01.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_02.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_03.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_04.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_05.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_06.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_07.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_08.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_09.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_10.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_11.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_12.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_13.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_14.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_15.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_16.png">
+<meta property="og:image" content="https://debugtalk.com/images/130802_17.png">
+<meta property="og:updated_time" content="2019-03-03T06:17:27.503Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LoadRunner基于WSDL的WebService测试方法">
+<meta name="twitter:title" content="LoadRunner 基于 WSDL 的 WebService 测试方法">
 <meta name="twitter:description" content="在《测试工程师的自我修养–理解WebService》一文中，52test.org对WebService的概念及其相关名词进行了阐述，并引入了一个测试案例：天气预报WebService服务。  作为测试人员的你，假设现在接到一个测试任务，需要对WeatherWebService中的getWeatherbyCityName接口进行性能测试。而开发人员只给你提供了WeatherWebService的WS">
-<meta name="twitter:image" content="http://debugtalk.com/images/130802_01.png">
+<meta name="twitter:image" content="https://debugtalk.com/images/130802_01.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/LoadRunner-WSDL-WebService/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>LoadRunner 基于 WSDL 的 WebService 测试方法 | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
 
     
-    <link rel="alternative" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
     
     
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/jacman.jpg">
-    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
-    
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-</html>
-  <body>
-    <header>
       
-<div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="DebugTalk" title="DebugTalk"></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="DebugTalk">DebugTalk</a></h1>
-				<h2 class="blog-motto">探索一个软件工程师的无限可能</h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					<ul>
-					 
-						<li><a href="/">Home</a></li>
-					
-						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/about">About</a></li>
-					
-					<li>
- 					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search">
-						<input type="hidden" name="q" value="site:debugtalk.com">
-					</form>
-					
-					</li>
-				</ul>
-			</ul></nav>			
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
 </div>
     </header>
-    <div id="container">
-      <div id="main" class="post" itemscope="" itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/post/LoadRunner-WSDL-WebService/" title="LoadRunner基于WSDL的WebService测试方法" itemprop="url">LoadRunner基于WSDL的WebService测试方法</a>
-  </h1>
-  <!-- <p class="article-author">By
-       
-		<a href="/about" title="debugtalk" target="_blank" itemprop="author">debugtalk</a>
-		 -->
-  <p class="article-time">
-    <time datetime="2013-08-01T16:00:00.000Z" itemprop="datePublished"> Published 2013/08/02</time>
-    
-    <span id="busuanzi_container_page_pv">
-      | 本文总阅读量<span id="busuanzi_value_page_pv"></span>次
-    </span>
-    
-  </p>
-</header>
 
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#选择Web-Services协议"><span class="toc-number">1.</span> <span class="toc-text">选择Web Services协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导入WebService的描述信息WSDL"><span class="toc-number">2.</span> <span class="toc-text">导入WebService的描述信息WSDL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看WebService服务接口"><span class="toc-number">3.</span> <span class="toc-text">查看WebService服务接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建调用函数web-service-call"><span class="toc-number">4.</span> <span class="toc-text">创建调用函数web_service_call</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#回放脚本，查看结果"><span class="toc-number">5.</span> <span class="toc-text">回放脚本，查看结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完善脚本"><span class="toc-number">6.</span> <span class="toc-text">完善脚本</span></a></li></ol>
-		
-		</div>
-		
-		<p>在《测试工程师的自我修养–理解WebService》一文中，<code>52test.org</code>对WebService的概念及其相关名词进行了阐述，并引入了一个测试案例：<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx" target="_blank" rel="noopener">天气预报WebService服务</a>。</p>
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/LoadRunner-WSDL-WebService/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">LoadRunner 基于 WSDL 的 WebService 测试方法
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-08-02 00:00:00" itemprop="dateCreated datePublished" datetime="2013-08-02T00:00:00+08:00">2013-08-02</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在《测试工程师的自我修养–理解WebService》一文中，<code>52test.org</code>对WebService的概念及其相关名词进行了阐述，并引入了一个测试案例：<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx" target="_blank" rel="noopener">天气预报WebService服务</a>。</p>
 <blockquote>
 <p>作为测试人员的你，假设现在接到一个测试任务，需要对WeatherWebService中的<code>getWeatherbyCityName</code>接口进行性能测试。<br>而开发人员只给你提供了WeatherWebService的WSDL的URL链接（ <a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx?WSDL" target="_blank" rel="noopener">http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx?WSDL</a>  ），然后啥也没说就消失不见了。<br>那么，采用测试工具LoadRunner该怎样对指定接口进行测试呢？</p>
 </blockquote>
 <p>本文将围绕如上测试需求，对LoadRunner基于WSDL的WebService测试方法进行详细介绍。需要说明的是，本文只针对测试脚本的开发展开描述，对测试场景的设计暂不进行讨论。</p>
 <p>本文中采用的LoadRunner版本为V11.0，不同版本可能会存在一定差异。</p>
 <h2 id="选择Web-Services协议"><a href="#选择Web-Services协议" class="headerlink" title="选择Web Services协议"></a>选择Web Services协议</h2><p>采用Loadrunner测试WebService时，在单协议里面选择Web Services即可。当然，这并不意味着Loadrunner测试WebService只能采用Web Services协议，在后续的文章中将向大家介绍如何通过HTTP协议来测试WebService。</p>
-<p><img src="/images/130802_01.png" alt=""></p>
+<p><img src="/images/130802_01.png" alt></p>
 <h2 id="导入WebService的描述信息WSDL"><a href="#导入WebService的描述信息WSDL" class="headerlink" title="导入WebService的描述信息WSDL"></a>导入WebService的描述信息WSDL</h2><p>WSDL 是基于 XML 的用于描述 WebService 以及如何访问 WebService 的语言，它对具体的 WebService 进行了描述，规定了服务的位置，以及此服务所提供的操作（或方法，或服务调用接口API）。如果你熟悉WSDL的文档结构，可以直接阅读WSDL获取相关信息。</p>
 <p>然而，当你尝试直接去阅读WSDL文档时，你会发现这是一件十分痛苦的事情，毕竟WSDL的设计出发点是供程序阅读的，其文档结构对人员的阅读体验不是很好。</p>
 <p>值得庆幸的是，采用LoadRunner测试WebService时，测试人员无需和原始的WSDL文档打交道，只需要在LoadRunner中导入WSDL后，即可对其中定义的函数接口进行调用。</p>
@@ -142,522 +554,1030 @@
 <li>直接导入本地WSDL文件</li>
 </ul>
 <p>通过WSDL的URL地址进行导入时，操作方式如下图所示。</p>
-<p><img src="/images/130802_02.png" alt=""></p>
+<p><img src="/images/130802_02.png" alt></p>
 <p>需要说明的是，填写的URL地址末尾必须包含<code>?WSDL</code>。换句话说，只有在以<code>?WSDL</code>结尾时才能对应到WSDL文件的路径。大家可以在浏览器中对WSDL的URL地址进行访问，查看WSDL当前是否有效。</p>
 <p>如果选择直接导入本地WSDL文件的方式，则需要先将WebService对应的WSDL文件下载至本地。下载时，只需将WebService的地址末尾加上 “?WSDL” 后在浏览器中进行访问，然后对网页进行保存时将文件另存为”.wsdl”的文件即可。如下图所示。</p>
-<p><img src="/images/130802_03.png" alt=""></p>
+<p><img src="/images/130802_03.png" alt></p>
 <p>获取到WSDL文件以后，便可在LoadRunner中以文件的进行导入，操作方式如下图所示。</p>
-<p><img src="/images/130802_04.png" alt=""></p>
+<p><img src="/images/130802_04.png" alt></p>
 <p>两种导入方式效果都是一样的，采用任意一种方式都能将WebService的描述信息导入至LoadRunner供其调用。</p>
 <p>当然，两种导入方式也存在一定的差异。</p>
 <ul>
 <li>采用<strong>Import URL</strong>的方式可以方便本地获取到最新的WebService描述，当远程服务器端的WebService发生变动以后，本地端可直接对WSDL进行更新，而不需对WSDL进行重新导入。在LoadRunner中，甚至可以通过设置使LoadRunner每次打开脚本的时候自动更新WSDL，如下图所示。</li>
 </ul>
-<p><img src="/images/130802_05.png" alt=""></p>
+<p><img src="/images/130802_05.png" alt></p>
 <ul>
 <li>采用<strong>Import File</strong>方式的优点在于，可以对下载到本地的WSDL文件进行手工编辑后再使用；而缺点则是无法获取到最新的WebService的描述信息，若要更新则需重新下载WSDL文件并重新导入。</li>
 </ul>
 <p>明白了两种导入方式的特点之后，大家可以根据实际需求进行选择。</p>
 <h2 id="查看WebService服务接口"><a href="#查看WebService服务接口" class="headerlink" title="查看WebService服务接口"></a>查看WebService服务接口</h2><p>在成功导入WSDL以后，在【Operation】栏目下即可看到所有可供调用的接口。值得注意的是，在本测试案例中，每个接口均包含2个<code>Port Name</code>，这是因为该WebService为每个服务接口提供了SOAP1.1和SOAP1.2两个版本的SOAP调用方式。</p>
-<p><img src="/images/130802_06.png" alt=""></p>
+<p><img src="/images/130802_06.png" alt></p>
 <p>对比下图可知，这和网页上展示的接口是一致的。</p>
-<p><img src="/images/130802_07.png" alt=""></p>
+<p><img src="/images/130802_07.png" alt></p>
 <h2 id="创建调用函数web-service-call"><a href="#创建调用函数web-service-call" class="headerlink" title="创建调用函数web_service_call"></a>创建调用函数web_service_call</h2><p>在LoadRunner中导入WSDL之后，便可以对WebService接口进行调用。</p>
 <p>LoadRunner提供的调用函数为web_service_call。调用该函数时，可以根据其说明文档直接在Editor里面进行编辑，不过更简单且更不易出错的方式还是通过【Add Service Call】进行可视化编辑。帮助文档里对此也有进行说明。</p>
 <blockquote>
 <p>_ web_service_call is a high-level function that lets you modify all the SOAP arguments intuitively. Because editing the arguments is likely to be error-prone, it is recommended that the function be modified in the tree view of Service Test rather than in the script editor._</p>
 </blockquote>
 <p>点击【Add Service Call】后进入Web Service Call的可视化编辑界面，如下图所示。</p>
-<p><img src="/images/130802_08.png" alt=""></p>
+<p><img src="/images/130802_08.png" alt></p>
 <p>在【Add Service Call】的可视化界面中，对所需调用的Service、Port Name和Operation进行选择。在Operation列表中，可以看到存在5个可供调用的方法，对于每一个Operation，在Port Name下拉框中均可以选择WeatherWebServiceSoap和WeatherWebServiceSoap12，这和上一步骤在【Operations】中查看到的完全一致。</p>
 <p>根据本文首部的测试需求，我们在Operation中选择接口getWeatherbyCityName；而由于开发人员未交代SOAP版本信息，因此我们需要对两个版本分别进行测试；在这里我们先选择WeatherWebServiceSoap。</p>
 <p>在【Add Service Call】的可视化界面中可以看出，接口getWeatherbyCityName只有一个输入参数，即theCityName。而该接口则是通过城市名来获取指定城市的天气预报信息。</p>
 <p>因此，使用getWeatherbyCityName函数接口时我们需对其传入参数theCityName。具体操作时，选中Input Arguments中的参数名theCityName，勾选其右侧的“Include argument in call”，在Value中输入城市名称即可，此处我们输入的是“广州”，如下图所示。</p>
-<p><img src="/images/130802_09.png" alt=""></p>
+<p><img src="/images/130802_09.png" alt></p>
 <p>若需要调用getWeatherbyCityName函数的返回结果，则需要事先将其返回结果保存至参数里面。具体操作时，选中Output Arguments中的参数名getWeatherbyCityNameResult[1]，勾选其右侧的“Save returned value in parameter”，在Parameter中输入参数名即可。如下图所示。</p>
-<p><img src="/images/130802_10.png" alt=""></p>
+<p><img src="/images/130802_10.png" alt></p>
 <p>完成对Input Arguments和Output Arguments的设置后，点击【OK】按钮，便可看见脚本中新增了一个web_service_call函数，如下图所示。</p>
-<p><img src="/images/130802_11.png" alt=""></p>
+<p><img src="/images/130802_11.png" alt></p>
 <p>通过上图可知，之前我们在可视化界面的所有设置均已转换至web_service_call函数。</p>
 <h2 id="回放脚本，查看结果"><a href="#回放脚本，查看结果" class="headerlink" title="回放脚本，查看结果"></a>回放脚本，查看结果</h2><p>在“Run-time Settings”中打开日志“Extended log”，勾选“Parameter substitution”和“Data  returned by server”。运行脚本后，查看“Replay Log”，如下图所示。</p>
-<p><img src="/images/130802_12.png" alt=""></p>
+<p><img src="/images/130802_12.png" alt></p>
 <p>详细结果如下所示。</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theWeatherInfo = <span class="tag">&lt;<span class="name">getWeatherbyCityNameResult</span> <span class="attr">XmlType</span>=<span class="string">"DynamicParameter"</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>广东<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>广州<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>59287<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>59287.jpg<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>2013-8-2 21:50:12<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>24℃/30℃<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>8月3日 大雨转中雨<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>无持续风向微风<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>9.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>8.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>今日天气实况：气温：26℃；风向/风力：东风 2级；湿度：96%；空气质量：优；紫外线强度：弱<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>穿衣指数：热，适合穿T恤、短薄外套等夏季服装。\n过敏指数：极不易发，无需担心过敏，可放心外出，享受生活。\n运动指数：较不宜，有较强降水，请在室内进行休闲运动。\n洗车指数：不宜，今天有雨，雨水和泥水会弄脏爱车。\n晾晒指数：不宜，有较强降水会淋湿衣物，不适宜晾晒。\n旅游指数：较不宜，有强降雨，建议您最好还是在室内活动。\n路况指数：湿滑，路面湿滑，车辆易打滑，减慢车速。\n舒适度指数：较不舒适，白天有雨，气温较高，闷热。\n空气污染指数：优，气象条件非常有利于空气污染物扩散。\n紫外线指数：弱，辐射较弱，涂擦SPF12-15、PA+护肤品。<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>25℃/32℃<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>8月4日 阵雨转晴<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>无持续风向微风<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>3.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>0.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>25℃/34℃<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>8月5日 晴<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>无持续风向微风<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>0.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>0.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>广州是广东省的省会,是中国南方最大的海滨城市，广州位于东经113。17`，北纬23。8`，地处中国大陆南部，广东省南部，珠江三角洲北缘。广州临南海，邻近香港特别行政区，是中国通往世界的南大门，广州属丘陵地带。中国的第三大河----珠江从广州市中心穿流而过。广州是一座历史文化名城。相传在远古时候，曾有五位仙人，身穿五色彩服、骑着嘴衔稻穗的五色仙羊降临此地，把稻穗赠给百姓，祝愿这里永无饥荒。从此，广州便有“羊城”、“穗城”的美称，“五羊”也成为广州的象征。广州既是中国也是世界名城，又是一座古城，因历史上有五羊仙子降临献稻穗的故事，广州又称为“羊城”和“穗城”，简称“穗”；广州一年四季如春、繁花似锦，除夕迎春花市闻名海内外，故又有“花城”的美誉。广州地处低纬,属南亚热带季风气候区。地表接受太阳辐射量较多，同时受季风的影响,夏季海洋暖气流形成高温、高湿、多雨的气候；冬季北方大陆冷风形成低温、干燥、少雨的气候。年平均气温为21.4-21.9度，年降雨量平均为1623.6-1899.8mm，北部多于南部。1982年，广州被国务院选定为全国首批历史文化名城之一，是我国重点旅游城市。1999年1月，广州被评为优秀旅游城市。景观：白云山、莲花山、南海神庙、佛山祖庙、广州动物园等。<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;/<span class="name">getWeatherbyCityNameResult</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>在浏览器访问该WebService，查询“广州”时得到结果如下图所示。</p>
-<p><img src="/images/130802_13.png" alt=""></p>
+<p><img src="/images/130802_13.png" alt></p>
 <p>通过对比LoadRunner的Replay Log和浏览器的返回页面可知，LoadRunner对Web Service进行了正确的调用。</p>
 <h2 id="完善脚本"><a href="#完善脚本" class="headerlink" title="完善脚本"></a>完善脚本</h2><p>脚本虽已调试成功，可以得到正确的结果。但若要进行性能测试，我们还需对脚本进行参数化，如下图所示。</p>
-<p><img src="/images/130802_14.png" alt=""></p>
+<p><img src="/images/130802_14.png" alt></p>
 <p>或者，如果我们是只想利用返回报文的一小部分，而不是全部。在这种情况下，我们可以指定将某部分保存至参数，以便后续的使用。</p>
 <p>例如，我们只想获得某个城市当天的最低温度和最高温度。通过返回报文可知，该字段是输出结果中的第6个字段。那么，我们便可以将该字段保存至一个参数，这里指定为Lowest_Highest_Temperature，如下图所示。</p>
-<p><img src="/images/130802_15.png" alt=""></p>
+<p><img src="/images/130802_15.png" alt></p>
 <p>生成脚本如下所示：</p>
-<p><img src="/images/130802_16.png" alt=""></p>
+<p><img src="/images/130802_16.png" alt></p>
 <p>运行结果如下图所示。</p>
-<p><img src="/images/130802_17.png" alt=""></p>
+<p><img src="/images/130802_17.png" alt></p>
 <p>当然，此处只是列举了一个简单的例子。通过对web_service_call函数的灵活应用，可以实现更多复杂、强大的功能。</p>
-  
-	</div>
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
 
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LoadRunner/">LoadRunner</a><a href="/tags/WebService/">WebService</a><a href="/tags/WSDL/">WSDL</a>
-  </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://debugtalk.com/post/LoadRunner-WSDL-WebService/" data-title="LoadRunner基于WSDL的WebService测试方法 | DebugTalk" data-tsina="undefined" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev">
- <a href="/post/concept-about-webservice/" title="测试工程师的自我修养--理解WebService">
-  <strong>上一篇：</strong><br>
-  <span>
-  测试工程师的自我修养--理解WebService</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/post/performance-index-concurrent-users/" title="性能指标--并发用户数（Concurrent Users）">
- <strong>下一篇：</strong><br> 
- <span>性能指标--并发用户数（Concurrent Users）
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-<section id="comments" class="comment">
-  <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-</section>
-
-</div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#选择Web-Services协议"><span class="toc-number">1.</span> <span class="toc-text">选择Web Services协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导入WebService的描述信息WSDL"><span class="toc-number">2.</span> <span class="toc-text">导入WebService的描述信息WSDL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查看WebService服务接口"><span class="toc-number">3.</span> <span class="toc-text">查看WebService服务接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建调用函数web-service-call"><span class="toc-number">4.</span> <span class="toc-text">创建调用函数web_service_call</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#回放脚本，查看结果"><span class="toc-number">5.</span> <span class="toc-text">回放脚本，查看结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完善脚本"><span class="toc-number">6.</span> <span class="toc-text">完善脚本</span></a></li></ol>
- 
-  </div>
-
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
-
-  
-
-  
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			
-				<li><a href="/tags/HttpRunner/" title="HttpRunner">HttpRunner<sup>20</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Android/" title="Android">Android<sup>12</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/AutomationTest/" title="AutomationTest">AutomationTest<sup>8</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>8</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/个人成长/" title="个人成长">个人成长<sup>7</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/测试框架/" title="测试框架">测试框架<sup>7</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Appium/" title="Appium">Appium<sup>7</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/LoadRunner/" title="LoadRunner">LoadRunner<sup>7</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>7</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Jenkins/" title="Jenkins">Jenkins<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/自动化测试/" title="自动化测试">自动化测试<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/F0T1/" title="F0T1">F0T1<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/环境搭建/" title="环境搭建">环境搭建<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Locust/" title="Locust">Locust<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WebService/" title="WebService">WebService<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/性能测试/" title="性能测试">性能测试<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/招聘/" title="招聘">招聘<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/WSDL/" title="WSDL">WSDL<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Ruby/" title="Ruby">Ruby<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/CI/" title="CI">CI<sup>3</sup></a></li>
-			
-		
-		</ul>
-</div>
-
-
-  <div class="linkslist">
-  <p class="asidetitle">Recent GitHub Projects</p>
-    <ul>
-        
-          <li>
-            
-            	<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" title="HttpRunner">HttpRunner</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="https://github.com/HttpRunner/har2case" target="_blank" title="har2case">har2case</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="https://github.com/debugtalk/WebCrawler" target="_blank" title="WebCrawler">WebCrawler</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" title="AppiumBooster">AppiumBooster</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" title="JenkinsTemplateForApp">JenkinsTemplateForApp</a>
-            
-          </li>
-        
-    </ul>
-</div>
-
-  <div class="weixin">
-  <br>
-  <p class="asidetitle">微信公众号</p>
-  <p>欢迎关注「DebugTalk」，获取本站最新内容。</p>
-  <img src="/images/wechat_qrcode.png" width="230px">
-</div>
-
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
-</div>
-
-</aside>
-</div>
+      
     </div>
-    <footer><div id="footer">
-	
-	
-
-  
-			
-		
-
-		<p class="copyright" style="margin-top: 8px;">
-		<a href="http://hexo.io" target="_blank" title="hexo">Hexo</a> & <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019
-		
-		<a href="/about" target="_blank" title="debugtalk">debugtalk</a>
-		
-
-    <!-- Analytics Begin -->
-    
-<script type="text/javascript">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-81639610-1', 'auto');
-ga('send', 'pageview');
-</script>
-
-
-
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-
-
-
-
-<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
-
-
-
-<script>
-(function(){
-  var bp = document.createElement('script');
-  var curProtocol = window.location.protocol.split(':')[0];
-  if (curProtocol === 'https') {
-    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-  }
-  else {
-    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-  }
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(bp, s);
-})();
-</script>
-
-
-    <!-- Analytics End -->
 
     
-    <span id="busuanzi_container_site_pv">
-      # 本站总访问量<span id="busuanzi_value_site_pv"></span>次
-    </span>
+
     
-		</p>
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
 </div>
-</footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
 
-<script type="text/javascript">
-$(document).ready(function(){
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
   
-  $(window).resize(function(){
-    getSize();
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else{
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/LoadRunner-WSDL-WebService/" title="LoadRunner 基于 WSDL 的 WebService 测试方法">https://debugtalk.com/post/LoadRunner-WSDL-WebService/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
       
-      $('#toc.toc-aside').css('display', 'none');
+        <div class="post-tags">
+          
+            <a href="/tags/LoadRunner/" rel="tag"># LoadRunner</a>
+          
+            <a href="/tags/WebService/" rel="tag"># WebService</a>
+          
+            <a href="/tags/WSDL/" rel="tag"># WSDL</a>
+          
+        </div>
       
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/performance-index-concurrent-users/" rel="next" title="性能指标--并发用户数（Concurrent Users）">
+                <i class="fa fa-chevron-left"></i> 性能指标--并发用户数（Concurrent Users）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/concept-about-webservice/" rel="prev" title="测试工程师的自我修养--理解WebService">
+                测试工程师的自我修养--理解WebService <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择Web-Services协议"><span class="nav-number">1.</span> <span class="nav-text">选择Web Services协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导入WebService的描述信息WSDL"><span class="nav-number">2.</span> <span class="nav-text">导入WebService的描述信息WSDL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看WebService服务接口"><span class="nav-number">3.</span> <span class="nav-text">查看WebService服务接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建调用函数web-service-call"><span class="nav-number">4.</span> <span class="nav-text">创建调用函数web_service_call</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回放脚本，查看结果"><span class="nav-number">5.</span> <span class="nav-text">回放脚本，查看结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完善脚本"><span class="nav-number">6.</span> <span class="nav-text">完善脚本</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
     }
-  });
-});
-</script>
+    var path = "/" + search_path;
+    // monitor main search box;
 
-<script type="text/javascript">
-$(document).ready(function(){
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
 
 
-<script type="text/javascript">
-$(document).ready(function(){
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});
-</script>
 
 
 
+  
 
-<script type="text/javascript">
+  
 
-var disqus_shortname = 'debugtalk';
+  
 
-(function(){
-  var dsq = document.createElement('script');
-  dsq.type = 'text/javascript';
-  dsq.async = true;
-  dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-}());
-(function(){
-  var dsq = document.createElement('script');
-  dsq.type = 'text/javascript';
-  dsq.async = true;
-  dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-}());
-</script>
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
 
 
+  
 
+  
 
+  
 
+  
 
+  
 
+  
 
-<!-- Totop Begin -->
+  
 
-	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"></a>
-	</div>
-	<script src="/js/totop.js"></script>
+  
 
-<!-- Totop End -->
-
-<!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
-
-
-<!-- MathJax End -->
-
-<!-- Tiny_search Begin -->
-
-<!-- Tiny_search End -->
-
-  </body>
+</body>
 </html>
