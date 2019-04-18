@@ -1,5 +1,5 @@
 ---
-title: HttpRunner 的测试用例分层机制
+title: HttpRunner 的测试用例分层机制（已过期）
 permalink: post/HttpRunner-testcase-layer
 date: 2017/12/23
 categories:
@@ -9,11 +9,13 @@ tags:
   - HttpRunner
 ---
 
+> 从版本 1.4 开始，测试用例分层机制已进行重新设计，本文内容不再适用。
+
 ## 背景描述
 
-在`HttpRunner`中，测试用例引擎最大的特色就是支持`YAML/JSON`格式的用例描述形式。
+在 `HttpRunner` 中，测试用例引擎最大的特色就是支持 `YAML/JSON` 格式的用例描述形式。
 
-采用`YAML/JSON`格式编写维护测试用例，优势还是很明显的：
+采用 `YAML/JSON` 格式编写维护测试用例，优势还是很明显的：
 
 - 相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力；
 - 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。
@@ -81,7 +83,7 @@ tags:
 
 ![](/images/httprunner-testcase-layer-2.jpeg)
 
-具体地，我们可以约定将项目的所有API接口定义放置在`api`目录下，并在`api`目录中按照项目的系统模块来组织接口的定义；同时，将测试场景放置到`testcases`目录中。
+具体地，我们可以约定将项目的所有API接口定义放置在 `api` 目录下，并在 `api` 目录中按照项目的系统模块来组织接口的定义；同时，将测试场景放置到 `testcases` 目录中。
 
 此时测试用例文件的目录结构如下所示：
 
@@ -103,8 +105,8 @@ tests
 
 而对于API接口的定义，与之前的描述方式基本一致，只做了两点调整：
 
-- 接口定义块（`block`）的标识为`api`；
-- 接口定义块中包含`def`字段，形式为`api_name(*args)`，作为接口的唯一标识ID；需要注意的是，即使`api`没有参数，也需要带上括号，`api_name()`；这和编程语言中定义函数是一样的。
+- 接口定义块（`block`）的标识为 `api`；
+- 接口定义块中包含 `def` 字段，形式为 `api_name(*args)` ，作为接口的唯一标识ID；需要注意的是，即使 `api` 没有参数，也需要带上括号，`api_name()`；这和编程语言中定义函数是一样的。
 
 ```yaml
 - api:
@@ -173,9 +175,9 @@ tests
 
 ![](/images/httprunner-testcase-layer-4.jpeg)
 
-具体地，我们可以约定将项目的所有模块定义放置在`suite`目录下，并在`suite`目录中按照项目的功能来组织模块的定义。
+具体地，我们可以约定将项目的所有模块定义放置在 `suite` 目录下，并在 `suite` 目录中按照项目的功能来组织模块的定义。
 
-后续，我们在`testcases`目录中描述测试场景时，就可同时引用接口定义和模块定义了；模块和接口的混合调用，必将为我们编写测试场景带来极大的灵活性。
+后续，我们在 `testcases` 目录中描述测试场景时，就可同时引用接口定义和模块定义了；模块和接口的混合调用，必将为我们编写测试场景带来极大的灵活性。
 
 此时测试用例文件的目录结构如下所示：
 
@@ -207,18 +209,18 @@ tests
 
 需要注意的是，我们在组织测试用例描述的文件目录结构时，遵循约定大于配置的原则：
 
-- API接口定义必须放置在`api`目录下
-- 模块定义必须放置在`suite`目录下
-- 测试场景文件必须放置在`testcases`目录下
-- 相关的函数定义放置在`debugtalk.py`中
+- API接口定义必须放置在 `api` 目录下
+- 模块定义必须放置在 `suite` 目录下
+- 测试场景文件必须放置在 `testcases` 目录下
+- 相关的函数定义放置在 `debugtalk.py` 中
 
-至此，我们实现了测试用例的`接口-模块-场景`分层，从而彻底避免了重复定义描述。
+至此，我们实现了测试用例的 `接口-模块-场景` 分层，从而彻底避免了重复定义描述。
 
 ## 脚手架工具
 
-得益于约定大于配置的原则，在`HttpRunner`中实现了一个脚手架工具，可以快速创建项目的目录结构。该想法来源于`Django`的`django-admin.py startproject project_name`。
+得益于约定大于配置的原则，在 `HttpRunner` 中实现了一个脚手架工具，可以快速创建项目的目录结构。该想法来源于 `Django` 的 `django-admin.py startproject project_name`。
 
-使用方式也与`Django`类似，只需要通过`--startproject`指定新项目的名称即可。
+使用方式也与 `Django` 类似，只需要通过 `--startproject` 指定新项目的名称即可。
 
 ```bash
 $ hrun --startproject helloworld
@@ -231,13 +233,13 @@ INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/testcases
 INFO:root:      created file: /Users/Leo/MyProjects/helloworld/tests/debugtalk.py
 ```
 
-运行之后，就会在指定的目录中生成新项目的目录结构，接下来，我们就可以按照测试用例的`接口-模块-场景`分层原则往里面添加用例描述信息了。
+运行之后，就会在指定的目录中生成新项目的目录结构，接下来，我们就可以按照测试用例的 `接口-模块-场景` 分层原则往里面添加用例描述信息了。
 
 ## 总结
 
 如果看到这里你还不明白测试用例分层的必要性，那也没关系，测试用例分层不是必须的，你还是可以按照之前的方式组织测试用例。不过当你某一天发现需要进行分层管理时，你会发现它就在那里，很实用。
 
-最后，在`HttpRunner`项目的[`examples/HelloWorld`][HelloWorld]目录中，包含了一份完整的分层测试用例示例，相信会对大家有所帮助。
+最后，在 `HttpRunner` 项目的 [`examples/HelloWorld`][HelloWorld] 目录中，包含了一份完整的分层测试用例示例，相信会对大家有所帮助。
 
 
 [HelloWorld]: https://github.com/HttpRunner/HttpRunner/tree/master/examples/HelloWorld
