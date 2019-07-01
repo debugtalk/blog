@@ -134,3 +134,7 @@ wechat_subscriber:
   enabled: true
   qcode: /images/wechat_qrcode.png
   description: 欢迎关注「DebugTalk」，获取本站最新内容。
+
+# slardar
+custom_file_path:
+  head: source/_data/slardar.swig
