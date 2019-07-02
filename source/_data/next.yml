@@ -115,7 +115,7 @@ google_analytics:
   localhost_ignored: true
 
 # Baidu Analytics ID
-baidu_analytics: 96dc81023a24bbe64c8bfd8aff39582d
+# baidu_analytics: 96dc81023a24bbe64c8bfd8aff39582d
 
 # CNZZ count
 cnzz_siteid: 1257477005
