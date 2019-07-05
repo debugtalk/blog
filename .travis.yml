@@ -19,9 +19,9 @@ cache:
 before_install:
 - wget http://devtools.qiniu.com/qshell-linux-x86-v2.4.0.zip
 - unzip qshell-linux-x86-v2.4.0.zip
-- mv qshell-linux-x64-v2.4.0 qshell
-- chmod +x qshell
-- qshell account $qiniu_AccessKey $qiniu_SecretKey debugtalk
+- mv qshell-linux-x86-v2.4.0 qshell
+- chmod +x ./qshell
+- ./qshell account $qiniu_AccessKey $qiniu_SecretKey debugtalk
 
 # 安装 hexo 依赖环境
 install:
