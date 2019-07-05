@@ -17,28 +17,16 @@ cache:
 
 # 构建前的准备工作：配置 SSH 信息
 before_install:
-- openssl aes-256-cbc -K $encrypted_e00f8b3a99e3_key -iv $encrypted_e00f8b3a99e3_iv
-  -in .travis/travis_ci_id_rsa.enc -out ~/.ssh/travis_ci_id_rsa -d
-- chmod 600 ~/.ssh/travis_ci_id_rsa
-- openssl aes-256-cbc -K $encrypted_4c0bc7e0ec6d_key -iv $encrypted_4c0bc7e0ec6d_iv
-  -in .travis/coding_rsa.enc -out ~/.ssh/coding_rsa -d
-- chmod 600 ~/.ssh/coding_rsa
-- eval $(ssh-agent)
-- ssh-add ~/.ssh/travis_ci_id_rsa
-- ssh-add ~/.ssh/coding_rsa
-- cp .travis/ssh_config ~/.ssh/config
-- git config --global user.name 'debugtalk'
-- git config --global user.email 'mail@debugtalk.com'
-- ssh -T git@git.coding.net
-- git clone https://github.com/theme-next/hexo-theme-next themes/next
-- git clone https://github.com/theme-next/theme-next-canvas-nest themes/next/source/lib/canvas-nest
-- ls themes
+- chmod +x qshell
+- qshell account $qiniu_AccessKey $qiniu_SecretKey debugtalk
 
 # 安装 hexo 依赖环境
 install:
 - npm install hexo-cli -g
 - npm install
 
-# 使用 hexo 构建生成 html 文件，并部署到 GitHub Pages
+# 使用 hexo 构建生成 html 文件，并部署到七牛云 CDN
 script:
-- hexo clean && hexo deploy -g
+- hexo clean && hexo generate
+- ./qshell qupload2 --src-dir=public/ --bucket=debugtalk --overwrite true --rescan-local true --overwrite-list overrite-list.log
+- cat overrite-list.log
