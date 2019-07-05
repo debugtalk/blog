@@ -17,7 +17,6 @@ cache:
 
 # 构建前的准备工作：配置 SSH 信息
 before_install:
-- apt-get install wget
 - wget http://devtools.qiniu.com/qshell-linux-x86-v2.4.0.zip
 - unzip qshell-linux-x86-v2.4.0.zip
 - mv qshell-linux-x64-v2.4.0 qshell
