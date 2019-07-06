@@ -22,6 +22,9 @@ before_install:
 - mv qshell-linux-x86-v2.4.0 qshell
 - chmod +x ./qshell
 - ./qshell account $qiniu_AccessKey $qiniu_SecretKey debugtalk
+- git clone https://github.com/theme-next/hexo-theme-next themes/next
+- git clone https://github.com/theme-next/theme-next-canvas-nest themes/next/source/lib/canvas-nest
+- ls themes
 
 # 安装 hexo 依赖环境
 install:
