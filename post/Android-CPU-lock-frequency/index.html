@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。 CPU频率首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。 基于此需求，当前电子设备的CPU都会">
 <meta name="keywords" content="Android">
@@ -108,7 +136,7 @@
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。 CPU频率首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。 基于此需求，当前电子设备的CPU都会">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-02T10:54:38.650Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.625Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="对 Android 设备 CPU 进行锁频">
 <meta name="twitter:description" content="本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。 CPU频率首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。 基于此需求，当前电子设备的CPU都会">
@@ -148,16 +176,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -470,7 +488,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作系统/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
 
                 
                 
@@ -529,22 +554,30 @@
 <p>本文以<code>Nexus 5</code>（系统版本5.1.1）为例，后面的例子均以该设备为例。不同的机型和Android系统版本可能会存在一些差异，请知悉。</p>
 <p>在<code>/sys/devices/system/cpu</code>目录中，文件结构如下所示。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 01:36 cpu0</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 21:06 cpu1</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 21:07 cpu2</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 21:07 cpu3</span><br><span class="line">-rw------- root     root         4096 1970-01-17 10:27 cpuctl</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpufreq</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpuidle</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 kernel_max</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 offline</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 online</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 possible</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 power</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 present</span><br><span class="line">-rw-r--r-- root     root         4096 1970-01-17 10:27 uevent</span><br></pre></td></tr></table></figure>
+
 <h3 id="1、view-overall-cpu-info"><a href="#1、view-overall-cpu-info" class="headerlink" title="1、view overall cpu info"></a>1、view overall cpu info</h3><p>在<code>possible</code>文件中，存储的是当前设备可用的CPU，显示形式以数字的形式。例如<code>0-3</code>代表的就是当前设备总共有4个核，编号分别为0，1，2，3。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat possible</span><br><span class="line">0-3</span><br></pre></td></tr></table></figure>
+
 <p>在<code>online</code>文件中，存储的是当前设备正在运行的CPU。因为有时候设备不需要很高的性能，就可以将部分CPU关闭。不过需要注意的是，不管什么时候，<code>CPU0</code>始终都会处于运行状态。<code>online</code>文件的存储格式与<code>possible</code>类似，如果只有部分CPU运行，且CPU编号不连续的时候，会以逗号进行隔开；例如，<code>0,2</code>表示当前CPU0和CPU2处于运行状态。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat online</span><br><span class="line">0,2</span><br></pre></td></tr></table></figure>
+
 <p>对应的，<code>offline</code>文件标示的是当前设备处于关闭状态的CPU，这和<code>online</code>作为互补，并集刚好就是设备的所有CPU，即<code>possible</code>文件中的内容。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat offline</span><br><span class="line">1,3</span><br></pre></td></tr></table></figure>
+
 <h3 id="2、view-specified-cpu-info"><a href="#2、view-specified-cpu-info" class="headerlink" title="2、view specified cpu info"></a>2、view specified cpu info</h3><p>接下来，我们要获取到特定CPU的信息，就需要进入到对应的文件夹，例如，<code>cpu0/</code>对应的就是CPU0的信息。</p>
 <p>在<code>/sys/devices/system/cpu/cpu0</code>目录中，文件结构如下所示。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll cpu0</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 01:37 cpufreq</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpuidle</span><br><span class="line">-r-------- root     root         4096 1970-01-17 10:27 crash_notes</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:36 online</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 power</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 rq-stats</span><br><span class="line">lrwxrwxrwx root     root              1970-01-17 10:27 subsystem</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 topology</span><br><span class="line">-rw-r--r-- root     root         4096 1970-01-17 10:27 uevent</span><br></pre></td></tr></table></figure>
+
 <p>其中，<code>online</code>文件的内容表示当前CPU是否处于运行状态，若处于运行状态，则内容为1，否则为0；这个和上面讲到的<code>/sys/devices/system/cpu/online</code>能进行对应。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/online</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
 <p>在<code>cpu0/cpufreq/</code>目录下，存储的就是与CPU0的频率相关的信息，文件结构如下所示。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll cpu0/cpufreq/</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:57 UV_mV_table</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 affected_cpus</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 cpu_utilization</span><br><span class="line">-r-------- root     root         4096 2016-01-20 01:57 cpuinfo_cur_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 02:00 cpuinfo_max_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:39 cpuinfo_min_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 cpuinfo_transition_latency</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 related_cpus</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:39 scaling_available_frequencies</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 scaling_available_governors</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:50 scaling_cur_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 scaling_driver</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:50 scaling_governor</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 08:29 scaling_max_freq</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 08:29 scaling_min_freq</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 02:52 scaling_setspeed</span><br></pre></td></tr></table></figure>
+
 <p>在这个目录中，我们需要关注的文件比较多。</p>
 <p>首先是<code>scaling_available_governors</code>和<code>scaling_governor</code>。这里的<code>governor</code>大家可以理解为CPU的工作模式，<code>scaling_available_governors</code>中存储了当前CPU支持的所有工作模式，而<code>scaling_governor</code>存储的是CPU当前所处的工作模式。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/cpufreq/scaling_available_governors</span><br><span class="line">impulse dancedance smartmax interactive conservative ondemand userspace powersave Lionheart bioshock performance</span><br><span class="line"></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/cpufreq/scaling_governor</span><br><span class="line">performance</span><br></pre></td></tr></table></figure>
+
 <p>可以看到，<code>Nexus 5</code>支持非常多的工作模式，这里只对几个常见的模式进行简单说明。</p>
 <ul>
 <li>performance：最高性能模式，即使系统负载非常低，cpu也在最高频率下运行。</li>
@@ -558,25 +591,31 @@
 <p>那么，当前CPU工作的频率是多少，我们要怎么查看呢？</p>
 <p>查看<code>cpuinfo_cur_freq</code>或<code>scaling_cur_freq</code>即可。<code>cpuinfo_cur_freq</code>代表通过硬件实际上读到的频率值，而<code>scaling_cur_freq</code>则是软件当前的设置值，多数情况下这两个值是一致的，但是也有可能因为硬件的原因，有微小的差异。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat cpuinfo_cur_freq</span><br><span class="line">1574400</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_cur_freq</span><br><span class="line">1574400</span><br></pre></td></tr></table></figure>
+
 <h2 id="更改CPU状态信息"><a href="#更改CPU状态信息" class="headerlink" title="更改CPU状态信息"></a>更改CPU状态信息</h2><p>最后回到我们本文的主题，如何对CPU的频率进行设定呢？</p>
 <p>这也和CPU信息查看对应，分为对CPU整体运行情况的设置，和对特定CPU工作模式的设定。</p>
 <p>在此，有两点需要特别进行说明。</p>
 <p>首先，对于高通的CPU，存在一个系统服务，叫作<code>mpdecision service</code>。当这个系统服务处于运行状态时，我们无法对CPU的状态信息进行更改。因此，如果我们要更改高通CPU的工作模式，第一步要做的就是终止<code>mpdecision</code>系统服务。</p>
 <p>操作起来也很简单，在Android shell里面执行如下命令即可。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop mpdecision</span><br></pre></td></tr></table></figure>
+
 <p>第二点需要注意的是，如果我们想要实现对特定CPU的工作状态进行设置，就必须将<code>scaling_governor</code>设置为<code>userspace</code>，只有这样，我们才能对<code>scaling_setspeed</code>进行设置。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed</span><br><span class="line">&lt;unsupported&gt;</span><br><span class="line"></span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # echo userspace &gt; scaling_governor</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed</span><br><span class="line">1574400</span><br></pre></td></tr></table></figure>
+
 <h3 id="1、set-overall-cpu-info"><a href="#1、set-overall-cpu-info" class="headerlink" title="1、set overall cpu info"></a>1、set overall cpu info</h3><p>从宏观层面，我们可以对CPU运行的核数进行设置，即可实现对特定CPU的开启和关闭。当然，我们在前面已经说过，CPU0始终会处于运行状态，因此我们无法将CPU0进行关闭。</p>
 <p>设置的方式很简单，就是往<code>/sys/devices/system/cpu/cpu[i]/online</code>文件中写值即可，写1时开启指定CPU，写0时关闭指定CPU。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> turn off cpu1</span></span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu1 # echo 0 &gt; online</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu1 # cat online</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
 <h3 id="2、set-specified-cpu-info"><a href="#2、set-specified-cpu-info" class="headerlink" title="2、set specified cpu info"></a>2、set specified cpu info</h3><p>在对特定CPU的频率进行设定前，我们需要知道的是，CPU并不能工作在任意频率下，我们只能将CPU的频率设定为它支持的数值。</p>
 <p>通过查看<code>scaling_available_frequencies</code>，我们可以获得当前CPU支持的频率值。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_available_frequencies</span><br><span class="line">300000 422400 652800 729600 883200 960000 1036800 1190400 1267200 1497600 1574400 1728000 1958400 2265600</span><br></pre></td></tr></table></figure>
+
 <p>接下来，我们就可以对CPU的工作频率进行设置了。</p>
 <p>如何进行设置呢？刚开始的时候，我觉得将特定的频率值写入<code>scaling_setspeed</code>或<code>scaling_cur_freq</code>就可以了，通过Google搜索得到的方法中也是这种方式。</p>
 <p>但经过尝试，发现并不可行。为什么会这样？我也还没有找到答案，希望知道原因的朋友能告诉我。</p>
 <p>最后经过尝试，发现通过同时将<code>scaling_max_freq</code>和<code>scaling_min_freq</code>设置为目标频率值，就可以成功地对CPU频率完成设置。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> before setting</span></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ cat scaling_cur_freq</span><br><span class="line">1574400</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> setting</span></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ echo 1728000 &gt; scaling_min_freq</span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ echo 1728000 &gt; scaling_max_freq</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> after setting</span></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ cat scaling_cur_freq</span><br><span class="line">1728000</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -728,7 +767,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -769,7 +808,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -900,7 +965,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

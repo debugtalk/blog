@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,28 +94,56 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
-
-
-  <meta name="description" content="背景描述在HttpRunner中，测试用例引擎最大的特色就是支持YAML/JSON格式的用例描述形式。 采用YAML/JSON格式编写维护测试用例，优势还是很明显的：  相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力； 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。  以最常见的登录注销为例，我们的测试用例通常会描述为如下形式： 1">
+  <meta name="description" content="从版本 1.4 开始，测试用例分层机制已进行重新设计，本文内容不再适用。  背景描述在 HttpRunner 中，测试用例引擎最大的特色就是支持 YAML/JSON 格式的用例描述形式。 采用 YAML/JSON 格式编写维护测试用例，优势还是很明显的：  相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力； 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，">
 <meta name="keywords" content="HttpRunner">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HttpRunner 的测试用例分层机制">
+<meta property="og:title" content="HttpRunner 的测试用例分层机制（已过期）">
 <meta property="og:url" content="https://debugtalk.com/post/HttpRunner-testcase-layer/index.html">
 <meta property="og:site_name" content="DebugTalk">
-<meta property="og:description" content="背景描述在HttpRunner中，测试用例引擎最大的特色就是支持YAML/JSON格式的用例描述形式。 采用YAML/JSON格式编写维护测试用例，优势还是很明显的：  相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力； 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。  以最常见的登录注销为例，我们的测试用例通常会描述为如下形式： 1">
+<meta property="og:description" content="从版本 1.4 开始，测试用例分层机制已进行重新设计，本文内容不再适用。  背景描述在 HttpRunner 中，测试用例引擎最大的特色就是支持 YAML/JSON 格式的用例描述形式。 采用 YAML/JSON 格式编写维护测试用例，优势还是很明显的：  相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力； 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://debugtalk.com/images/httprunner-testcase-layer-1.jpeg">
 <meta property="og:image" content="https://debugtalk.com/images/httprunner-testcase-layer-2.jpeg">
 <meta property="og:image" content="https://debugtalk.com/images/httprunner-testcase-layer-3.jpeg">
 <meta property="og:image" content="https://debugtalk.com/images/httprunner-testcase-layer-4.jpeg">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.439Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.619Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HttpRunner 的测试用例分层机制">
-<meta name="twitter:description" content="背景描述在HttpRunner中，测试用例引擎最大的特色就是支持YAML/JSON格式的用例描述形式。 采用YAML/JSON格式编写维护测试用例，优势还是很明显的：  相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力； 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。  以最常见的登录注销为例，我们的测试用例通常会描述为如下形式： 1">
+<meta name="twitter:title" content="HttpRunner 的测试用例分层机制（已过期）">
+<meta name="twitter:description" content="从版本 1.4 开始，测试用例分层机制已进行重新设计，本文内容不再适用。  背景描述在 HttpRunner 中，测试用例引擎最大的特色就是支持 YAML/JSON 格式的用例描述形式。 采用 YAML/JSON 格式编写维护测试用例，优势还是很明显的：  相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力； 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，">
 <meta name="twitter:image" content="https://debugtalk.com/images/httprunner-testcase-layer-1.jpeg">
 
 
@@ -135,7 +163,7 @@
   };
 </script>
 
-  <title>HttpRunner 的测试用例分层机制 | DebugTalk</title>
+  <title>HttpRunner 的测试用例分层机制（已过期） | DebugTalk</title>
   
 
 
@@ -153,16 +181,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -431,7 +449,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">HttpRunner 的测试用例分层机制
+          <h2 class="post-title" itemprop="name headline">HttpRunner 的测试用例分层机制（已过期）
 
               
             
@@ -475,14 +493,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/测试框架/" itemprop="url" rel="index"><span itemprop="name">测试框架</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/HttpRunner/" itemprop="url" rel="index"><span itemprop="name">HttpRunner</span></a></span>
 
                 
                 
@@ -524,14 +542,18 @@
       
 
       
-        <h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在<code>HttpRunner</code>中，测试用例引擎最大的特色就是支持<code>YAML/JSON</code>格式的用例描述形式。</p>
-<p>采用<code>YAML/JSON</code>格式编写维护测试用例，优势还是很明显的：</p>
+        <blockquote>
+<p>从版本 1.4 开始，测试用例分层机制已进行重新设计，本文内容不再适用。</p>
+</blockquote>
+<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在 <code>HttpRunner</code> 中，测试用例引擎最大的特色就是支持 <code>YAML/JSON</code> 格式的用例描述形式。</p>
+<p>采用 <code>YAML/JSON</code> 格式编写维护测试用例，优势还是很明显的：</p>
 <ul>
 <li>相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力；</li>
 <li>相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。</li>
 </ul>
 <p>以最常见的登录注销为例，我们的测试用例通常会描述为如下形式：</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- config:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">demo-login-logoff</span></span><br><span class="line"><span class="attr">    variable_binds:</span></span><br><span class="line"><span class="attr">        - UserName:</span> <span class="string">test001</span></span><br><span class="line"><span class="attr">        - Password:</span> <span class="number">123456</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        base_url:</span> <span class="attr">http://xxx.debugtalk.com</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Accept:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            User-Agent:</span> <span class="string">iOS/10.3</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">Login</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="string">/api/v1/Account/Login</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        json:</span></span><br><span class="line"><span class="attr">            UserName:</span> <span class="string">$UserName</span></span><br><span class="line"><span class="attr">            Pwd:</span> <span class="string">$Password</span></span><br><span class="line"><span class="attr">            VerCode:</span> <span class="string">""</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["status_code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.IsSuccess",</span> <span class="literal">True</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.Code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">Logoff</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="string">/api/v1/Account/LoginOff</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["status_code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.IsSuccess",</span> <span class="literal">True</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.Code",</span> <span class="number">200</span><span class="string">]</span></span><br></pre></td></tr></table></figure>
+
 <p>相信大家已经对该种用例描述形式十分熟悉了。不过，该种描述形式的问题在于，接口通常会出现在多个测试场景中，而每次都需要对接口进行定义描述，包括请求的URL、Header、Body、以及预期响应值等，这就会产生大量的重复。</p>
 <p>例如，在某个项目中存在三个测试场景：</p>
 <ul>
@@ -546,18 +568,21 @@
 <p>其实也很简单，在编程语言中，如果出现重复代码块，我们通常会将其封装为类或方法，然后在需要时进行调用，以此来消除重复。同样地，我们也可以将项目的API进行统一定义，里面包含API的请求和预期响应描述，然后在测试场景中进行引用即可。</p>
 <p>示意图如下所示。</p>
 <p><img src="/images/httprunner-testcase-layer-2.jpeg" alt></p>
-<p>具体地，我们可以约定将项目的所有API接口定义放置在<code>api</code>目录下，并在<code>api</code>目录中按照项目的系统模块来组织接口的定义；同时，将测试场景放置到<code>testcases</code>目录中。</p>
+<p>具体地，我们可以约定将项目的所有API接口定义放置在 <code>api</code> 目录下，并在 <code>api</code> 目录中按照项目的系统模块来组织接口的定义；同时，将测试场景放置到 <code>testcases</code> 目录中。</p>
 <p>此时测试用例文件的目录结构如下所示：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">✗ tree tests</span><br><span class="line">tests</span><br><span class="line">├── api</span><br><span class="line">│   └── v1</span><br><span class="line">│       ├── Account.yml</span><br><span class="line">│       ├── BusinessTrip.yml</span><br><span class="line">│       ├── Common.yml</span><br><span class="line">│       └── Leave.yml</span><br><span class="line">├── debugtalk.py</span><br><span class="line">└── testcases</span><br><span class="line">    ├── scenario_A.yml</span><br><span class="line">    ├── scenario_B.yml</span><br><span class="line">    └── scenario_C.yml</span><br></pre></td></tr></table></figure>
+
 <p>而对于API接口的定义，与之前的描述方式基本一致，只做了两点调整：</p>
 <ul>
-<li>接口定义块（<code>block</code>）的标识为<code>api</code>；</li>
-<li>接口定义块中包含<code>def</code>字段，形式为<code>api_name(*args)</code>，作为接口的唯一标识ID；需要注意的是，即使<code>api</code>没有参数，也需要带上括号，<code>api_name()</code>；这和编程语言中定义函数是一样的。</li>
+<li>接口定义块（<code>block</code>）的标识为 <code>api</code>；</li>
+<li>接口定义块中包含 <code>def</code> 字段，形式为 <code>api_name(*args)</code> ，作为接口的唯一标识ID；需要注意的是，即使 <code>api</code> 没有参数，也需要带上括号，<code>api_name()</code>；这和编程语言中定义函数是一样的。</li>
 </ul>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- api:</span></span><br><span class="line"><span class="attr">    def:</span> <span class="string">api_v1_Account_Login_POST($UserName,</span> <span class="string">$Password)</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="string">/api/v1/Account/Login</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        json:</span></span><br><span class="line"><span class="attr">            UserName:</span> <span class="string">$UserName</span></span><br><span class="line"><span class="attr">            Pwd:</span> <span class="string">$Password</span></span><br><span class="line"><span class="attr">            VerCode:</span> <span class="string">""</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["status_code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.IsSuccess",</span> <span class="literal">True</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.Code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- api:</span></span><br><span class="line"><span class="attr">    def:</span> <span class="string">api_v1_Account_LoginOff_GET()</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="string">/api/v1/Account/LoginOff</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["status_code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.IsSuccess",</span> <span class="literal">True</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.Code",</span> <span class="number">200</span><span class="string">]</span></span><br></pre></td></tr></table></figure>
+
 <p>有了接口的定义描述后，我们编写测试场景时就可以直接引用接口定义了。</p>
 <p>同样是背景描述中的登录注销场景，测试用例就描述为变为如下形式。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- config:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">demo</span></span><br><span class="line"><span class="attr">    variable_binds:</span></span><br><span class="line"><span class="attr">        - UserName:</span> <span class="string">test001</span></span><br><span class="line"><span class="attr">        - Password:</span> <span class="number">123456</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        base_url:</span> <span class="attr">http://xxx.debugtalk.com</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Accept:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            User-Agent:</span> <span class="string">iOS/10.3</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">Login</span></span><br><span class="line"><span class="attr">    api:</span> <span class="string">api_v1_Account_Login_POST($UserName,</span> <span class="string">$Password)</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">Logoff</span></span><br><span class="line"><span class="attr">    api:</span> <span class="string">api_v1_Account_LoginOff_GET()</span></span><br></pre></td></tr></table></figure>
+
 <p>不难看出，对API接口进行分层定义后，我们在测试用例场景中引用接口定义时，与编程语言里面调用函数的形式基本完全一样，只需要指定接口的名称，以及所需传递的参数值；同样的，即使没有参数，也需要带上括号。</p>
 <p>实现接口的分层定义描述后，我们就可以避免接口的重复定义。但是，我们回过头来看之前的案例，发现仍然会存在一定的重复。</p>
 <p><img src="/images/httprunner-testcase-layer-3.jpeg" alt></p>
@@ -565,24 +590,26 @@
 <p>虽然我们已经将接口的定义描述抽离出来，避免了重复的定义；但是在实际业务场景中，某些功能（例如登录、注销）会在多个场景中重复出现，而该功能又涉及到多个接口的组合调用，这同样也会出现大量的重复。</p>
 <h2 id="接口的模块化封装"><a href="#接口的模块化封装" class="headerlink" title="接口的模块化封装"></a>接口的模块化封装</h2><p>玩过积木的同学可能就会想到，我们也可以将系统的常用功能封装为模块（suite），只需要在模块中定义一次，然后就可以在测试场景中重复进行引用，从而避免了模块功能的重复描述。</p>
 <p><img src="/images/httprunner-testcase-layer-4.jpeg" alt></p>
-<p>具体地，我们可以约定将项目的所有模块定义放置在<code>suite</code>目录下，并在<code>suite</code>目录中按照项目的功能来组织模块的定义。</p>
-<p>后续，我们在<code>testcases</code>目录中描述测试场景时，就可同时引用接口定义和模块定义了；模块和接口的混合调用，必将为我们编写测试场景带来极大的灵活性。</p>
+<p>具体地，我们可以约定将项目的所有模块定义放置在 <code>suite</code> 目录下，并在 <code>suite</code> 目录中按照项目的功能来组织模块的定义。</p>
+<p>后续，我们在 <code>testcases</code> 目录中描述测试场景时，就可同时引用接口定义和模块定义了；模块和接口的混合调用，必将为我们编写测试场景带来极大的灵活性。</p>
 <p>此时测试用例文件的目录结构如下所示：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">✗ tree tests</span><br><span class="line">tests</span><br><span class="line">├── api</span><br><span class="line">│   └── v1</span><br><span class="line">│       ├── Account.yml</span><br><span class="line">│       ├── BusinessTrip.yml</span><br><span class="line">│       ├── Common.yml</span><br><span class="line">│       └── Leave.yml</span><br><span class="line">├── debugtalk.py</span><br><span class="line">├── suite</span><br><span class="line">│   ├── BusinessTravelApplication</span><br><span class="line">│   │   ├── approve-application.yml</span><br><span class="line">│   │   ├── executive-application.yml</span><br><span class="line">│   │   ├── reject-application.yml</span><br><span class="line">│   │   └── submit-application.yml</span><br><span class="line">│   └── LeaveApplication</span><br><span class="line">│       ├── approve.yml</span><br><span class="line">│       ├── cancel.yml</span><br><span class="line">│       └── submit-application.yml</span><br><span class="line">└── testcases</span><br><span class="line">    ├── scenario_A.yml</span><br><span class="line">    ├── scenario_B.yml</span><br><span class="line">    └── scenario_C.yml</span><br></pre></td></tr></table></figure>
+
 <p>需要注意的是，我们在组织测试用例描述的文件目录结构时，遵循约定大于配置的原则：</p>
 <ul>
-<li>API接口定义必须放置在<code>api</code>目录下</li>
-<li>模块定义必须放置在<code>suite</code>目录下</li>
-<li>测试场景文件必须放置在<code>testcases</code>目录下</li>
-<li>相关的函数定义放置在<code>debugtalk.py</code>中</li>
+<li>API接口定义必须放置在 <code>api</code> 目录下</li>
+<li>模块定义必须放置在 <code>suite</code> 目录下</li>
+<li>测试场景文件必须放置在 <code>testcases</code> 目录下</li>
+<li>相关的函数定义放置在 <code>debugtalk.py</code> 中</li>
 </ul>
-<p>至此，我们实现了测试用例的<code>接口-模块-场景</code>分层，从而彻底避免了重复定义描述。</p>
-<h2 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h2><p>得益于约定大于配置的原则，在<code>HttpRunner</code>中实现了一个脚手架工具，可以快速创建项目的目录结构。该想法来源于<code>Django</code>的<code>django-admin.py startproject project_name</code>。</p>
-<p>使用方式也与<code>Django</code>类似，只需要通过<code>--startproject</code>指定新项目的名称即可。</p>
+<p>至此，我们实现了测试用例的 <code>接口-模块-场景</code> 分层，从而彻底避免了重复定义描述。</p>
+<h2 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h2><p>得益于约定大于配置的原则，在 <code>HttpRunner</code> 中实现了一个脚手架工具，可以快速创建项目的目录结构。该想法来源于 <code>Django</code> 的 <code>django-admin.py startproject project_name</code>。</p>
+<p>使用方式也与 <code>Django</code> 类似，只需要通过 <code>--startproject</code> 指定新项目的名称即可。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ hrun --startproject helloworld</span><br><span class="line">INFO:root: Start to create new project: /Users/Leo/MyProjects/helloworld</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/api</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/suite</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/testcases</span><br><span class="line">INFO:root:      created file: /Users/Leo/MyProjects/helloworld/tests/debugtalk.py</span><br></pre></td></tr></table></figure>
-<p>运行之后，就会在指定的目录中生成新项目的目录结构，接下来，我们就可以按照测试用例的<code>接口-模块-场景</code>分层原则往里面添加用例描述信息了。</p>
+
+<p>运行之后，就会在指定的目录中生成新项目的目录结构，接下来，我们就可以按照测试用例的 <code>接口-模块-场景</code> 分层原则往里面添加用例描述信息了。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果看到这里你还不明白测试用例分层的必要性，那也没关系，测试用例分层不是必须的，你还是可以按照之前的方式组织测试用例。不过当你某一天发现需要进行分层管理时，你会发现它就在那里，很实用。</p>
-<p>最后，在<code>HttpRunner</code>项目的<a href="https://github.com/HttpRunner/HttpRunner/tree/master/examples/HelloWorld" target="_blank" rel="noopener"><code>examples/HelloWorld</code></a>目录中，包含了一份完整的分层测试用例示例，相信会对大家有所帮助。</p>
+<p>最后，在 <code>HttpRunner</code> 项目的 <a href="https://github.com/HttpRunner/HttpRunner/tree/master/examples/HelloWorld" target="_blank" rel="noopener"><code>examples/HelloWorld</code></a> 目录中，包含了一份完整的分层测试用例示例，相信会对大家有所帮助。</p>
 
       
     </div>
@@ -625,7 +652,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://debugtalk.com/post/HttpRunner-testcase-layer/" title="HttpRunner 的测试用例分层机制">https://debugtalk.com/post/HttpRunner-testcase-layer/</a>
+    <a href="https://debugtalk.com/post/HttpRunner-testcase-layer/" title="HttpRunner 的测试用例分层机制（已过期）">https://debugtalk.com/post/HttpRunner-testcase-layer/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -734,7 +761,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -775,7 +802,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -906,7 +959,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

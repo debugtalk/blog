@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="DebugTalk">
@@ -143,16 +171,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -405,6 +423,630 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Using-DuoShuo-in-Pelican/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/Using-DuoShuo-in-Pelican/" class="post-title-link" itemprop="url">在Pelican中使用多说评论系统</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-10-05 00:00:00" itemprop="dateCreated datePublished" datetime="2013-10-05T00:00:00+08:00">2013-10-05</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/" itemprop="url" rel="index"><span itemprop="name">4. ToolsNotes</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/others/" itemprop="url" rel="index"><span itemprop="name">others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Pelican默认采用的是Disqus评论系统，但由于Disqus附带的Facebook和Twitter社交功能在国内无法使用，因此我们更希望使用一些国内的SNS平台，比如QQ，新浪微博，豆瓣，人人等。在国产的评论系统中，使用较多的有<a href="http://duoshuo.com" target="_blank" rel="noopener">多说</a>、<a href="http://www.uyan.cc/" target="_blank" rel="noopener">有言</a>等，本文将介绍如何在Pelican博客系统中采用多说评论系统。</p>
+<h2 id="获取多说代码"><a href="#获取多说代码" class="headerlink" title="获取多说代码"></a>获取多说代码</h2><p>在<a href="http://duoshuo.com" target="_blank" rel="noopener">多说首页</a>点击【我要安装】，进入创建站点界面；完成站点信息填写后，点击【创建】按钮，即可获得多说代码，大致如下所示。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Duoshuo Comment BEGIN --&gt;</span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"ds-thread"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line"><span class="keyword">var</span> duoshuoQuery = &#123;<span class="attr">short_name</span>:<span class="string">"leolee"</span>&#125;;</span><br><span class="line">    (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> ds = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line">        ds.type = <span class="string">'text/javascript'</span>;ds.async = <span class="literal">true</span>;</span><br><span class="line">        ds.src = <span class="string">'http://static.duoshuo.com/embed.js'</span>;</span><br><span class="line">        ds.charset = <span class="string">'UTF-8'</span>;</span><br><span class="line">        (<span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>]</span><br><span class="line">        || <span class="built_in">document</span>.getElementsByTagName(<span class="string">'body'</span>)[<span class="number">0</span>]).appendChild(ds);</span><br><span class="line">    &#125;)();</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;!-- Duoshuo Comment END --&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的代码中，short_name即是注册的多说域名。</p>
+<h2 id="修改模板系统"><a href="#修改模板系统" class="headerlink" title="修改模板系统"></a>修改模板系统</h2><p>获得多说代码后，在博客正文末尾对其进行引用，便可使用多说的评论功能。<br>由于我们采用的是模板，因此只需要在article模板中添加对多说代码的引用，便可以一劳永逸。<br>针对Pelican的模板系统，需要修改如下几个地方。</p>
+<p><strong>在 pelicanconf.py 中开启多说评论功能</strong></p>
+<p>模仿Pelican默认的DISQUS，在配置文件pelicanconf.py中添加如下代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DUOSHUO_SITENAME = <span class="string">"leolee"</span></span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，DUOSHUO_SITENAME需要全部字母大写，因为只有这样Pelican才会将其作为全局变量，供其它文件引用。</p>
+<p><strong>添加 DuoShuo_Script.html</strong></p>
+<p>将获取得到的多说代码保存至单个文件中，方便在其它文件中对其进行引用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> DUOSHUO_SITENAME %&#125;</span><br><span class="line">&lt;!-- Duoshuo Comment BEGIN --&gt;</span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"ds-thread"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line"><span class="keyword">var</span> duoshuoQuery = &#123;<span class="attr">short_name</span>:<span class="string">"&#123;&#123; DUOSHUO_SITENAME &#125;&#125;"</span>&#125;;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ds = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line">    ds.type = <span class="string">'text/javascript'</span>;</span><br><span class="line">    ds.async = <span class="literal">true</span>;</span><br><span class="line">    ds.src = <span class="string">'http://static.duoshuo.com/embed.js'</span>;</span><br><span class="line">    ds.charset = <span class="string">'UTF-8'</span>;</span><br><span class="line">    (<span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>]</span><br><span class="line">        || <span class="built_in">document</span>.getElementsByTagName(<span class="string">'body'</span>)[<span class="number">0</span>]).appendChild(ds);</span><br><span class="line">&#125;)();</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;!-- Duoshuo Comment END --&gt;</span></span><br><span class="line"><span class="regexp">&#123;% endif %&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在该文件中，添加了一个if语句，即只有在pelicanconf.py中对DUOSHUO_SITENAME进行设置后才开启多说评论功能。</p>
+<p><strong>添加 DuoShuo_thread.html</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">noscript</span>&gt;</span></span><br><span class="line">Please enable JavaScript to view the comments powered by <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://duoshuo.com/"</span>&gt;</span>DuoShuo<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.</span><br><span class="line"><span class="tag">&lt;/<span class="name">noscript</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>添加这个文件的作用是，当浏览器禁用Javascript后，用户无法看见评论框，而这个代码便是对用户进行提示。</p>
+<p><strong>修改 article.html</strong></p>
+<p>由于评论功能总是出现在文章末尾，因此应该将评论功能模块放在文章模版末尾，即对article.html进行修改，修改内容如下所示。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">&#123;% extends "base.html" %&#125;</span><br><span class="line">&#123;% block title %&#125;&#123;&#123; article.title|striptags &#125;&#125;&#123;% endblock %&#125;</span><br><span class="line">&#123;% block content %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">article</span> <span class="attr">class</span>=<span class="string">"hentry"</span> <span class="attr">role</span>=<span class="string">"article"</span>&gt;</span></span><br><span class="line">    &#123;% include '_includes/article.html' %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">footer</span>&gt;</span></span><br><span class="line">      &#123;% include '_includes/article_infos.html' %&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  &#123;% if DUOSHUO_SITENAME and SITEURL and article.status != "draft" %&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">section</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Comments<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"DuoShuoComment"</span> <span class="attr">aria-live</span>=<span class="string">"polite"</span>&gt;</span></span><br><span class="line">      &#123;% include '_includes/DuoShuo_Script.html' %&#125;</span><br><span class="line">      &#123;% include '_includes/DuoShuo_thread.html' %&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">&#123;% endblock %&#125;</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过以上修改，便可在Pelican博客系统中使用多说评论系统。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/html-character-entity/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/html-character-entity/" class="post-title-link" itemprop="url">HTML 字符实体(Character Entity)</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-10-04 00:00:00" itemprop="dateCreated datePublished" datetime="2013-10-04T00:00:00+08:00">2013-10-04</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/2-Programming/" itemprop="url" rel="index"><span itemprop="name">2. Programming</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/2-Programming/HTML/" itemprop="url" rel="index"><span itemprop="name">HTML</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="字符实体的由来"><a href="#字符实体的由来" class="headerlink" title="字符实体的由来"></a>字符实体的由来</h2><p>在HTML源文件中，有些字符（如&lt;，&gt;，&amp;等）作为特殊字符不能直接使用，如果直接使用的话HTML将不能被正确解析。但如果HTML内容中需要展示这些特殊字符时该怎么处理呢？这就需要使用转义字符串来对其进行转义。</p>
+<p>转义字符串（Escape Sequence）也称字符实体(Character Entity)。在HTML中，定义转义字符串的原因有两个：</p>
+<ul>
+<li>第一个原因：像“&lt;”和“&gt;”这类符号已经用来表示HTML标签，因此就不能直接当作文本中的符号来使用。为了在HTML文档中使用这些符号，就需要定义它的转义字符串。当解释程序遇到这类字符串时就把它解释为真实的字符。在输入转义字符串时，要严格遵守字母大小写的规则。</li>
+<li>第二个原因：有些字符在ASCII字符集中没有定义，因此需要使用转义字符串来表示。</li>
+</ul>
+<h2 id="转义字符串的组成"><a href="#转义字符串的组成" class="headerlink" title="转义字符串的组成"></a>转义字符串的组成</h2><p>转义字符串（Escape Sequence），即字符实体（Character Entity）分成三部分：</p>
+<ul>
+<li>第一部分是一个&amp;符号，英文叫ampersand；</li>
+<li>第二部分是字符实体名称（character entity names）或者是#加上实体编号；</li>
+<li>第三部分是一个分号。</li>
+</ul>
+<p>对于实体编号，采用的是字符的Unicode编码序号，并且可以采用其对应的十进制编码或者十六进制编码进行表示，具体形式为<code>#nnnn</code>或<code>#xhhhh</code>。</p>
+<p>例如，要显示小于号（&lt;），如果采用字符实体名称进行表示，就可以写成<code>&amp;lt;</code>；如果采用字符实体编号的形式，由于其Unicode编码为60（对应16进制为x3c），因此可以写成<code>&amp;#60;</code>或者<code>&amp;#x3c;</code>。</p>
+<p>同一个符号，可以用“实体名称”和“实体编号”两种方式进行表示，“实体名称”的优势在于便于记忆，但不能保证所有的浏览器都能顺利识别它；而“实体编号”，各种浏览器都能处理，其劣势在于不便于记忆。</p>
+<p>提示：实体名称（Entity）是区分大小写的。</p>
+<p>如何显示空格？<br>通常情况下，HTML会自动截去多余的空格，多个空格都将被看做一个空格。为了在网页中增加空格，可以使用<code>&amp;nbsp;</code>表示空格。</p>
+<h2 id="HTML-Encode-amp-Decode"><a href="#HTML-Encode-amp-Decode" class="headerlink" title="HTML Encode &amp; Decode"></a>HTML Encode &amp; Decode</h2><p>对于HTML字符实体的Encode和Decode，即是对字符（character）和其对应的字符实体（Character Entity）进行相互转换。</p>
+<p>HTML Encode: 字符(Character) =&gt; 字符实体(Character Entity)<br>HTML Decode: 字符实体(Character Entity) =&gt; 字符(Character)</p>
+<p>例如，对于汉字“测试”，由于其Unicode编码为<code>\u6D4B\u8BD5</code>（对应的十进制为<code>27979 35797</code>），因此Encode后得到<code>&amp;#27979;&amp;#35797;</code>；反向地，对<code>&amp;#27979;&amp;#35797;</code>进行Decode后便得到“测试”。当然，对<code>&amp;#x6D4B;&amp;#x8BD5;</code>进行Decode同样可以得到“测试”。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Create-Blog-with-Pelican-and-GitCafe-Pages/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/Create-Blog-with-Pelican-and-GitCafe-Pages/" class="post-title-link" itemprop="url">使用 Pelican + GitCafe Pages 创建 Blog</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-10-03 00:00:00" itemprop="dateCreated datePublished" datetime="2013-10-03T00:00:00+08:00">2013-10-03</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/" itemprop="url" rel="index"><span itemprop="name">4. ToolsNotes</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/others/" itemprop="url" rel="index"><span itemprop="name">others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="博客系统的技术实现"><a href="#博客系统的技术实现" class="headerlink" title="博客系统的技术实现"></a>博客系统的技术实现</h2><p>博客系统采用 Pelican + GitCafe Pages 的技术架构。</p>
+<p>其中，Pelican是一个由Python开发的用于生成静态页面的程序，可以将markdown等格式的文本生成模版格式化的html静态页面；而GitCafe提供的Pages服务可以通过项目的形式对Pelican生成的html文件进行托管，并可通过域名绑定的形式实现独立域名。</p>
+<p>这种实现方式与 Jekyll + Github Pages 的实现方式大致相同，差别在于不同的静态页面生成系统和不同的托管平台。而为什么选择GitCafe而非GitHub，是因为GitHub服务器在国外，访问速度较慢，且存在偶尔无法访问的情况。</p>
+<h2 id="博客系统的初始化"><a href="#博客系统的初始化" class="headerlink" title="博客系统的初始化"></a>博客系统的初始化</h2><p>创建 Blog 目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir 52test.org</span><br><span class="line">cd 52test.org</span><br></pre></td></tr></table></figure>
+
+<p>初始化 Blog</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pelican-quickstart</span><br></pre></td></tr></table></figure>
+
+<p>根据提示一步步输入相应的配置项，完成配置后在Blog目录下会生成配置文件pelicanconf.py。但通过pelican-quickstart配置的选项较少，更多的配置选项可以参照Pelican官方网站中的教程对pelicanconf.py进行编辑。</p>
+<h2 id="配置GitCafe"><a href="#配置GitCafe" class="headerlink" title="配置GitCafe"></a>配置GitCafe</h2><p>在使用GitCafe之前，需要对电脑的Git客户端进行配置，使电脑与远程GitCafe服务器完成认证。<br>通常地，我们采用SSH Key认证方式，这需要我们在使用GitCafe前须先建创自已的SSH key。</p>
+<p><strong>进入SSH目录</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh</span><br></pre></td></tr></table></figure>
+
+<p>如果还没有 ~/.ssh 目录的话，请先手工创建一个 <code>mkdir ~/.ssh</code></p>
+<p><strong>生成新的SSH秘钥</strong></p>
+<p>输入下面的代码，将命令中的 <a href="mailto:YOUR_EMAIL@YOUREMAIL.COM" target="_blank" rel="noopener">YOUR_EMAIL@YOUREMAIL.COM</a> 改为你的Email地址，就可以生成新的key文件。当需要输入文件名的时候，点击回车键，即采用默认设置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ssh-keygen -t rsa -C <span class="string">"YOUR_EMAIL@YOUREMAIL.COM"</span></span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/Users/your_user_directory/.ssh/id_rsa):&lt;回车就好&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后系统会要输入加密串（Passphrase）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Enter passphrase (empty for no passphrase):&lt;输入加密串&gt;</span><br><span class="line">Enter same passphrase again:&lt;再次输入加密串&gt;</span><br></pre></td></tr></table></figure>
+
+<p>最后看到如下的界面，即表示ssh key成功完成设置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Your identification has been saved in /c/Users/your_user_directory/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved in /c/Users/your_user_directory/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">15:81:d2:7a:c6:6c:0f:ec:b0:b6:d4:18:b8:d1:41:48 YOUR_EMAIL@YOUREMAIL.COM</span><br></pre></td></tr></table></figure>
+
+<p>SSH 秘钥生成结束后，可以在用户目录 (~/.ssh/) 下看到私钥 id_rsa 和公钥 id_rsa.pub 这两个文件，请妥善保管这两个文件。</p>
+<p><strong>添加 SSH 公钥到 GitCafe</strong></p>
+<p>用文本工具打开公钥文件 ~/.ssh/id_rsa.pub ，复制里面的所有内容到剪贴板。<br>进入 GitCafe-&gt;【账户设置】-&gt;【SSH 公钥管理】设置项，点击【添加新公钥】按钮，在Title文本框中输入标题，在Key文本框粘贴刚才复制的公钥字符串，输入GitCafe账户密码后按【保存】按钮完成操作。</p>
+<p><strong>测试连接</strong></p>
+<p>以上步骤完成后，就可以通过以下命令来测试是否可以连接 GitCafe 服务器了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@gitcafe.com</span><br></pre></td></tr></table></figure>
+
+<p>如果是第一次连接的话，会出现以下警告，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The authenticity of host 'gitcafe.com (50.116.2.223)' can't be established.</span><br><span class="line"><span class="meta">#</span><span class="bash">RSA key fingerprint is 84:9e:c9:8e:7f:36:28:08:7e:13:bf:43:12:74:11:4e.</span></span><br><span class="line"><span class="meta">#</span><span class="bash">Are you sure you want to <span class="built_in">continue</span> connecting (yes/no)?</span></span><br></pre></td></tr></table></figure>
+
+<p>正常情况下，显示的RSA key fingerprint应该与GitCafe提供的公钥一致，即84:9e:c9:8e:7f:36:28:08:7e:13:bf:43:12:74:11:4e。</p>
+<p>如果没有问题，输入yes按回车就可以了，中间会提示输入 passphrase 口令。</p>
+<p>最后，如果连接成功的话，会出现以下信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hi USERNAME! You've successfully authenticated, but GitCafe does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<p>测试通过后，就可以通过Git客户端向GitCafe服务器上传博客内容了。</p>
+<h2 id="撰写文章"><a href="#撰写文章" class="headerlink" title="撰写文章"></a>撰写文章</h2><p>在 content 目录下用 Markdown 语法来写一篇文章，格式大致如下所示，文件保存后缀为<code>.md</code>。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Title: My First Blog #标题</span><br><span class="line">Date: 2013-10-05 #日期</span><br><span class="line">Tags: test, blog #标签</span><br><span class="line">Slug: my-first-post #URL</span><br><span class="line"></span><br><span class="line">文章内容</span><br></pre></td></tr></table></figure>
+
+<h2 id="生成html静态页面"><a href="#生成html静态页面" class="headerlink" title="生成html静态页面"></a>生成html静态页面</h2><p>创建输出目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir leolee</span><br></pre></td></tr></table></figure>
+
+<p>生成页面</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pelican -s pelicanconf.py content -o leolee</span><br></pre></td></tr></table></figure>
+
+<h2 id="上传到-GitCafe"><a href="#上传到-GitCafe" class="headerlink" title="上传到 GitCafe"></a>上传到 GitCafe</h2><p>先到 GitCafe 上创建一个与用户名相同的项目，例如GitCafe帐号名称为leolee，则创建一个名为leolee的项目。</p>
+<p>进入静态页面输出目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd leolee</span><br></pre></td></tr></table></figure>
+
+<p>初始化 git 仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+
+<p>创建一个gitcafe-pages的分支，并切换到该分支</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b gitcafe-pages</span><br></pre></td></tr></table></figure>
+
+<p>添加所有文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
+
+<p>提交</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m "init"</span><br></pre></td></tr></table></figure>
+
+<p>添加远程仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@gitcafe.com:leolee/leolee.git</span><br></pre></td></tr></table></figure>
+
+<p>push 到 GitCafe 仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin gitcafe-pages</span><br></pre></td></tr></table></figure>
+
+<p>完成<br>push 完成以后就可以在访问 GitCafe Pages 地址了。 <a href="http://leolee.gitcafe.com" target="_blank" rel="noopener">http://leolee.gitcafe.com</a></p>
+<p>注：不要用 make html 来构建 Blog ，它会删除输出目录后重新生成 Blog ，这意味着会删除 .git 库。</p>
+<h2 id="更新博客"><a href="#更新博客" class="headerlink" title="更新博客"></a>更新博客</h2><p>为了方便更新博客，可以创建了一个shell脚本，放置在Blog根目录下。在此创建的脚本名称为publish.sh，其内容如下所示。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pelican -s pelicanconf.py content -o leolee</span><br><span class="line">cd leolee</span><br><span class="line">git add .</span><br><span class="line">git commit -m "Update"</span><br><span class="line">git push</span><br><span class="line">cd ../</span><br></pre></td></tr></table></figure>
+
+<p>更新博客时，只需要将新增博客的markdown文件放入content目录中，然后运行如下命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./publish.sh</span></span><br></pre></td></tr></table></figure>
+
+<p>当然，在正式发布前通常会先利用本地服务器进行预览，确定没问题后再进行正式发布。</p>
+<p>Makefile的内容如下所示：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">PY=python</span><br><span class="line">PELICAN=pelican</span><br><span class="line">BASEDIR=<span class="variable">$(CURDIR)</span></span><br><span class="line">INPUTDIR=<span class="variable">$(BASEDIR)</span>/content</span><br><span class="line">OUTPUTDIR=<span class="variable">$(BASEDIR)</span>/output</span><br><span class="line">CONFFILE=<span class="variable">$(BASEDIR)</span>/pelicanconf.py</span><br><span class="line">PELICANOPTS=</span><br><span class="line"></span><br><span class="line"><span class="section">help:</span></span><br><span class="line">    @echo 'Makefile for a pelican Web site                                      '</span><br><span class="line">    @echo '                                                                     '</span><br><span class="line">    @echo 'Usage:                                                               '</span><br><span class="line">    @echo '   make clean                Empty the OUTPUTDIR                     '</span><br><span class="line">    @echo '   make generate             Generate static files for the web site  '</span><br><span class="line">    @echo '   make serve                Serve site at http://localhost:8000     '</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    @echo -n 'Cleaning Output folder..............'</span><br><span class="line">    @rm -rf <span class="variable">$(OUTPUTDIR)</span>/*</span><br><span class="line">    @echo ''</span><br><span class="line">    @echo 'Done'</span><br><span class="line"></span><br><span class="line"><span class="section">generate: clean</span></span><br><span class="line">    <span class="variable">$(PELICAN)</span> <span class="variable">$(INPUTDIR)</span> -o <span class="variable">$(OUTPUTDIR)</span> -s <span class="variable">$(CONFFILE)</span> <span class="variable">$(PELICANOPTS)</span></span><br><span class="line"></span><br><span class="line"><span class="section">serve: generate</span></span><br><span class="line">    cd <span class="variable">$(OUTPUTDIR)</span> &amp;&amp; <span class="variable">$(PY)</span> -m pelican.server</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>: help clean generate serve</span></span><br></pre></td></tr></table></figure>
+
+<p>要预览时，只需要输入如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> make serve</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在浏览器中访问 <a href="http://localhost:8000" target="_blank" rel="noopener">http://localhost:8000</a> 即可进行本地预览。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1]: http://riku.gitcafe.com/pelican-gitcafe.html</span><br><span class="line">[2]: https://gitcafe.com/GitCafe/Help/wiki/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%92%8C%E8%AE%BE%E7%BD%AE-Git#wiki</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Evaluate-Largest-Online-Users/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -468,14 +1110,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
 
                 
                 
@@ -526,6 +1168,7 @@
 </ul>
 <p>相应地，测试脚本需符合如下形式：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">lr_start_transaction(<span class="string">"进入登录页面"</span>);</span><br><span class="line"><span class="comment">/*此处为进入系统登录界面的脚本*/</span></span><br><span class="line">lr_end_transaction(<span class="string">"进入登录页面"</span>, LR_AUTO);</span><br><span class="line"></span><br><span class="line">lr_start_transaction(<span class="string">"登录系统"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*登录脚本--部分1*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*对系统登录进行校验</span></span><br><span class="line"><span class="comment"> *若成功，即新页面中包含"重新登录"，reLogin_Count&gt;0</span></span><br><span class="line"><span class="comment"> *若失败，reLogin_Count=0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">web_reg_find(<span class="string">"Text=重新登录"</span>,</span><br><span class="line">    <span class="string">"SaveCount=reLogin_Count"</span>,</span><br><span class="line">    LAST );</span><br><span class="line"></span><br><span class="line"><span class="comment">/*登录脚本--部分2（包含检查点内容部分）*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对系统登录结果进行检查</span></span><br><span class="line"><span class="keyword">if</span> (atoi(lr_eval_string(<span class="string">"&#123;reLogin_Count&#125;"</span>)) == <span class="number">0</span>)</span><br><span class="line">&#123;    <span class="comment">//登录失败</span></span><br><span class="line">    lr_error_message(<span class="string">"登录失败!!!--UserName：%s"</span>,lr_eval_string(<span class="string">"&#123;UserName&#125;"</span>));</span><br><span class="line">     <span class="comment">//勾选Fail Open Transations on lr_error_message</span></span><br><span class="line">     <span class="comment">//当执到该lr_error_message时，"登录系统"的Transaction失败</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">lr_end_transaction(<span class="string">"登录系统"</span>, LR_AUTO);</span><br></pre></td></tr></table></figure>
+
 <p>以上脚本调试成功后，通过检查点函数及日志信息可以判断出系统登录操作已通过脚本回放成功完成。</p>
 <p>理论上，只要VuGen采用不同帐号迭代运行该脚本，由于只是进行系统登录操作而未进行系统注销或退出操作，业务系统中的在线用户数将持续增加。</p>
 <p>然而在该OA系统中采用此方法时发现，虽然脚本成功运行，但业务系统中的在线用户数并未增长。这说明LoadRunner与浏览器在访问系统的过程中存在差异性。</p>
@@ -534,6 +1177,7 @@
 <p>这就解释了为什么用户在浏览器中登录系统后可以长期地保持在线，而通过脚本成功地进行系统登录后却无法保持在线状态；因为VuGen不会像浏览器那样定期地与服务器进行通讯交互。</p>
 <p>找出其中的差异后，我们便可在VuGen中用脚本模拟浏览器的定期交互功能，简单的实现方法如下所示。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    web_url(<span class="string">"userAction.struts"</span>,</span><br><span class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo"</span>,</span><br><span class="line">        <span class="string">"Resource=0"</span>,</span><br><span class="line">        <span class="string">"RecContentType=text/html"</span>,</span><br><span class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/sysShortMsgReflesh.jsp"</span>,</span><br><span class="line">        <span class="string">"Snapshot=t4.inf"</span>,</span><br><span class="line">        <span class="string">"Mode=HTML"</span>,</span><br><span class="line">        LAST);</span><br><span class="line"></span><br><span class="line">    web_url(<span class="string">"userAction.struts_2"</span>,</span><br><span class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo&amp;time=Mon%20Aug%2012%2015:42:04%20UTC+0800%202013"</span>,</span><br><span class="line">        <span class="string">"Resource=0"</span>,</span><br><span class="line">        <span class="string">"RecContentType=text/html"</span>,</span><br><span class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/reflesh.jsp"</span>,</span><br><span class="line">        <span class="string">"Snapshot=t5.inf"</span>,</span><br><span class="line">        <span class="string">"Mode=HTML"</span>,</span><br><span class="line">        LAST);</span><br><span class="line"></span><br><span class="line">    lr_think_time(<span class="number">30</span>);    <span class="comment">//模拟浏览器与服务器30秒间隔的通讯交互</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>那么，将系统登录脚本和循环函数都放入Action中，在VuGen中采用迭代运行的方式可行吗？</p>
 <p>虽然新增登录用户可以逐个进行，即使用VuGen通过Action迭代的形式采用不同帐号逐个地进行登录操作。但由于用户登录后需要持续间隔地与服务器进行通讯交互才能保持在线，而单线程脚本运行至while(1)后便进入死循环，从而使得Action迭代无效。因此，采用VuGen进行Action迭代的方式是不可行的。</p>
 <p>正确的做法是，在Controller中采用逐步加载的方式，使各个虚拟用户独立地运行，从而保证了各虚拟用户登录成功后保持在线状态。</p>
@@ -565,6 +1209,7 @@
 </ul>
 <p>在本文提到的OA系统中，对链接[<a href="http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。" target="_blank" rel="noopener">http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。</a></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Action()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    web_add_cookie(<span class="string">"USERORGID=db93a2M11f6719ff92Mf528764d624db129b32c21fbca0cb8d6; DOMAIN=10.147.15.28"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line"></span><br><span class="line">        lr_start_transaction(<span class="string">"查看在线用户数目"</span>);</span><br><span class="line"></span><br><span class="line">        web_reg_save_param(<span class="string">"OnlineUsers"</span>,</span><br><span class="line">                <span class="string">"LB=[在线用户数/总用户数：&lt;font color=\"red\"&gt;"</span>,</span><br><span class="line">                <span class="string">"RB=&lt;/font&gt;]"</span>,</span><br><span class="line">                <span class="string">"ORD=2"</span>,</span><br><span class="line">                <span class="string">"Notfound=error"</span>,</span><br><span class="line">                <span class="string">"Search=Body"</span>,</span><br><span class="line">                LAST);</span><br><span class="line"></span><br><span class="line">        web_url(<span class="string">"countAction.struts"</span>,</span><br><span class="line">            <span class="string">"URL=http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser"</span>,</span><br><span class="line">            <span class="string">"Resource=0"</span>,</span><br><span class="line">            <span class="string">"RecContentType=text/html"</span>,</span><br><span class="line">            <span class="string">"Referer="</span>,</span><br><span class="line">            <span class="string">"Snapshot=t1.inf"</span>,</span><br><span class="line">            <span class="string">"Mode=HTML"</span>,</span><br><span class="line">            LAST);</span><br><span class="line"></span><br><span class="line">        lr_output_message(<span class="string">"当前在线用户数目：%s"</span>, lr_eval_string(<span class="string">"&#123;OnlineUsers&#125;"</span>));</span><br><span class="line"></span><br><span class="line">        lr_end_transaction(<span class="string">"查看在线用户数目"</span>, LR_AUTO);</span><br><span class="line"></span><br><span class="line">        lr_think_time(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
           
         
@@ -684,14 +1329,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
 
                 
                 
@@ -730,10 +1375,15 @@
           
             <p>在LoadRunner脚本开发中，经常会遇到参数与变量相互转换的情况，本文对常见的转换情形进行了方法总结。</p>
 <h2 id="变量的赋值"><a href="#变量的赋值" class="headerlink" title="变量的赋值"></a>变量的赋值</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将字符串赋值给变量</span></span><br><span class="line"><span class="keyword">char</span> strTemp[<span class="number">30</span>];</span><br><span class="line"><span class="built_in">strcpy</span>(strTemp, <span class="string">"Hello World!!"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//错误的字符串赋值方式</span></span><br><span class="line">strTemp = <span class="string">"Hello World!!"</span>;</span><br><span class="line"><span class="comment">/* 注：</span></span><br><span class="line"><span class="comment"> * 在LR中若直接将字符串赋值给变量，编译时将会报错</span></span><br><span class="line"><span class="comment"> * 报错信息：operands of = have illegal types `char' and `pointer to char'</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//将数值赋值给变量</span></span><br><span class="line"><span class="keyword">int</span> x = <span class="number">10</span>;</span><br><span class="line"><span class="comment">/* 注：</span></span><br><span class="line"><span class="comment"> * 在LR中，变量的声明一定要放在脚本的最前面，且声明的语句中不要有其他的脚本代码</span></span><br><span class="line"><span class="comment"> * 若将以上申明放置在脚本中部，将会产生如下形式的报错信息</span></span><br><span class="line"><span class="comment"> * illegal statement termination</span></span><br><span class="line"><span class="comment"> * skipping 'int'</span></span><br><span class="line"><span class="comment"> * undeclared identifier 'x'</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="参数的赋值"><a href="#参数的赋值" class="headerlink" title="参数的赋值"></a>参数的赋值</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将字符串赋值给参数</span></span><br><span class="line">lr_save_string(<span class="string">"Hello World!!"</span>,<span class="string">"paraStr"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//将变量中的值赋值给参数</span></span><br><span class="line"><span class="keyword">char</span> strTemp[<span class="number">30</span>];</span><br><span class="line"><span class="built_in">strcpy</span>(strTemp, <span class="string">"Hello World"</span>) ;</span><br><span class="line">lr_save_string(strTemp, <span class="string">"paraStr"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//将数值直接赋值给参数</span></span><br><span class="line">lr_save_int(<span class="number">123</span>, <span class="string">"paraNum"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//将变量中的数值赋值给参数</span></span><br><span class="line"><span class="keyword">int</span> num = <span class="number">10</span>;</span><br><span class="line">lr_save_int(num*<span class="number">2</span>, <span class="string">"paraNum"</span>);</span><br></pre></td></tr></table></figure>
+
 <h2 id="参数的取值"><a href="#参数的取值" class="headerlink" title="参数的取值"></a>参数的取值</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//从参数中进行取值，不管参数是字符串还是数值</span></span><br><span class="line">lr_eval_string(<span class="string">"&#123;paraStr&#125;"</span>);</span><br><span class="line">lr_eval_string(<span class="string">"&#123;paraNum&#125;"</span>);</span><br><span class="line"><span class="comment">//取出的值均为字符串类型，因此输出时格式需为"%s"</span></span><br><span class="line">lr_output_message(<span class="string">"%s"</span>, lr_eval_string(<span class="string">"&#123;paraNum&#125;"</span>));</span><br></pre></td></tr></table></figure>
+
 <h2 id="参数-gt-变量"><a href="#参数-gt-变量" class="headerlink" title="参数=&gt;变量"></a>参数=&gt;变量</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将参数转换为字符串变量，参数paraStr中的值为"Hello World!!"</span></span><br><span class="line"><span class="keyword">char</span> strTemp[<span class="number">30</span>];</span><br><span class="line"><span class="built_in">strcpy</span>(strTemp, lr_eval_string(<span class="string">"&#123;paraStr&#125;"</span>));</span><br><span class="line">lr_output_message(<span class="string">"%s"</span>, strTemp);</span><br><span class="line"></span><br><span class="line"><span class="comment">//将参数转换为数值变量，参数paraNum中的值为"246"</span></span><br><span class="line"><span class="keyword">int</span> num;</span><br><span class="line">num = atoi(lr_eval_string(<span class="string">"&#123;paraNum&#125;"</span>));    <span class="comment">//将字符串转换为数值</span></span><br><span class="line">lr_output_message(<span class="string">"%d"</span>, num);</span><br><span class="line"></span><br><span class="line"><span class="comment">//将参数格式化输出到变量</span></span><br><span class="line">SeatPrefListCount = atoi( lr_eval_string(<span class="string">"&#123;SeatPrefList_count&#125;"</span>) );</span><br><span class="line"><span class="built_in">sprintf</span>(varRandomSeatPref, <span class="string">"&#123;SeatPrefList_%d&#125;"</span>, <span class="number">1</span>+rand()%SeatPrefListCount);</span><br><span class="line"><span class="comment">//将格式化的随机日期写入变量varRandomDepartDate</span></span><br><span class="line"><span class="built_in">sprintf</span>(varRandomDepartDate, <span class="string">"%d/%d/%d"</span>, <span class="number">1</span>+rand()%<span class="number">12</span>, <span class="number">1</span>+rand()%<span class="number">28</span>, <span class="number">2009</span>+rand()%<span class="number">6</span>);</span><br></pre></td></tr></table></figure>
+
 <h2 id="参数-gt-参数"><a href="#参数-gt-参数" class="headerlink" title="参数=&gt;参数"></a>参数=&gt;参数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//参数的复制：将参数paraStr_1的值复制到参数paraStr_2</span></span><br><span class="line">lr_save_string(lr_eval_string(<span class="string">"&#123;paraStr_1&#125;"</span>),<span class="string">"paraStr_2"</span>);</span><br></pre></td></tr></table></figure>
+
 
           
         
@@ -853,14 +1503,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
 
                 
                 
@@ -914,6 +1564,7 @@
 <p>在本文的演示案例中，以接口getWeatherbyCityName为例，大家在<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx?op=getWeatherbyCityName" target="_blank" rel="noopener">getWeatherbyCityName的介绍页面</a>中可以看到，getWeatherbyCityName支持SOAP 1.1和SOAP 1.2。本文采用SOAP 1.1进行演示。</p>
 <p>采用SOAP 1.1的请求报文如下所示：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST /WebServices/WeatherWebService.asmx HTTP/1.1</span><br><span class="line">Host: webservice.webxml.com.cn</span><br><span class="line">Content-Type: text/xml; charset=utf-8</span><br><span class="line">Content-Length: length</span><br><span class="line">SOAPAction: "http://WebXml.com.cn/getWeatherbyCityName"</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xmlns:xsd</span>=<span class="string">"http://www.w3.org/2001/XMLSchema"</span> <span class="attr">xmlns:soap</span>=<span class="string">"http://schemas.xmlsoap.org/soap/envelope/"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">getWeatherbyCityName</span> <span class="attr">xmlns</span>=<span class="string">"http://WebXml.com.cn/"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">theCityName</span>&gt;</span>string<span class="tag">&lt;/<span class="name">theCityName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">getWeatherbyCityName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>将上面这段xml代码保存至一个xml文件，如getWeatherbyCityName.xml，即得到测试所需的SOAP报文。</p>
 <p>在报文头中，我们还获取到两个重要信息：</p>
 <ul>
@@ -1052,14 +1703,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/WebService/" itemprop="url" rel="index"><span itemprop="name">WebService</span></a></span>
 
                 
                 
@@ -1255,14 +1906,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
 
                 
                 
@@ -1357,6 +2008,7 @@
 <p><img src="/images/130802_12.png" alt></p>
 <p>详细结果如下所示。</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theWeatherInfo = <span class="tag">&lt;<span class="name">getWeatherbyCityNameResult</span> <span class="attr">XmlType</span>=<span class="string">"DynamicParameter"</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>广东<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>广州<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>59287<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>59287.jpg<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>2013-8-2 21:50:12<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>24℃/30℃<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>8月3日 大雨转中雨<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>无持续风向微风<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>9.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>8.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>今日天气实况：气温：26℃；风向/风力：东风 2级；湿度：96%；空气质量：优；紫外线强度：弱<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>穿衣指数：热，适合穿T恤、短薄外套等夏季服装。\n过敏指数：极不易发，无需担心过敏，可放心外出，享受生活。\n运动指数：较不宜，有较强降水，请在室内进行休闲运动。\n洗车指数：不宜，今天有雨，雨水和泥水会弄脏爱车。\n晾晒指数：不宜，有较强降水会淋湿衣物，不适宜晾晒。\n旅游指数：较不宜，有强降雨，建议您最好还是在室内活动。\n路况指数：湿滑，路面湿滑，车辆易打滑，减慢车速。\n舒适度指数：较不舒适，白天有雨，气温较高，闷热。\n空气污染指数：优，气象条件非常有利于空气污染物扩散。\n紫外线指数：弱，辐射较弱，涂擦SPF12-15、PA+护肤品。<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>25℃/32℃<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>8月4日 阵雨转晴<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>无持续风向微风<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>3.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>0.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>25℃/34℃<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>8月5日 晴<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>无持续风向微风<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>0.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>0.gif<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;<span class="name">string</span>&gt;</span>广州是广东省的省会,是中国南方最大的海滨城市，广州位于东经113。17`，北纬23。8`，地处中国大陆南部，广东省南部，珠江三角洲北缘。广州临南海，邻近香港特别行政区，是中国通往世界的南大门，广州属丘陵地带。中国的第三大河----珠江从广州市中心穿流而过。广州是一座历史文化名城。相传在远古时候，曾有五位仙人，身穿五色彩服、骑着嘴衔稻穗的五色仙羊降临此地，把稻穗赠给百姓，祝愿这里永无饥荒。从此，广州便有“羊城”、“穗城”的美称，“五羊”也成为广州的象征。广州既是中国也是世界名城，又是一座古城，因历史上有五羊仙子降临献稻穗的故事，广州又称为“羊城”和“穗城”，简称“穗”；广州一年四季如春、繁花似锦，除夕迎春花市闻名海内外，故又有“花城”的美誉。广州地处低纬,属南亚热带季风气候区。地表接受太阳辐射量较多，同时受季风的影响,夏季海洋暖气流形成高温、高湿、多雨的气候；冬季北方大陆冷风形成低温、干燥、少雨的气候。年平均气温为21.4-21.9度，年降雨量平均为1623.6-1899.8mm，北部多于南部。1982年，广州被国务院选定为全国首批历史文化名城之一，是我国重点旅游城市。1999年1月，广州被评为优秀旅游城市。景观：白云山、莲花山、南海神庙、佛山祖庙、广州动物园等。<span class="tag">&lt;/<span class="name">string</span>&gt;</span><span class="tag">&lt;/<span class="name">getWeatherbyCityNameResult</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>在浏览器访问该WebService，查询“广州”时得到结果如下图所示。</p>
 <p><img src="/images/130802_13.png" alt></p>
 <p>通过对比LoadRunner的Replay Log和浏览器的返回页面可知，LoadRunner对Web Service进行了正确的调用。</p>
@@ -1489,14 +2141,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
 
                 
                 
@@ -1680,14 +2332,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
 
                 
                 
@@ -1727,6 +2379,7 @@
             <p>在某个业务场景中，包含数据创建和数据查询两项业务；现需考察数据创建和数据查询两项业务在并发比例为2:1、总并发量为100用户情况下的混合响应时间。</p>
 <h2 id="在Vugen端实现"><a href="#在Vugen端实现" class="headerlink" title="在Vugen端实现"></a>在Vugen端实现</h2><p>对混合比例的设置，可直接在脚本中进行，即通过随机函数rand实现，脚本设计如下所示。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num;</span><br><span class="line">Action()</span><br><span class="line">&#123;</span><br><span class="line">    num = rand()%<span class="number">3</span>;</span><br><span class="line">    lr_start_transaction(<span class="string">"综合业务--数据创建与数据查询"</span>);</span><br><span class="line">    <span class="keyword">if</span>(num&lt;<span class="number">2</span>)&#123;</span><br><span class="line">        Data_Create();  <span class="comment">//数据创建</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        Data_Search();  <span class="comment">//数据查询</span></span><br><span class="line">    &#125;</span><br><span class="line">    lr_end_transaction(<span class="string">"综合业务--数据创建与数据查询"</span>, LR_AUTO);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>该种方式的优缺点对比：</p>
 <p><strong>优点：</strong></p>
 <ul>
@@ -1839,7 +2492,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1880,7 +2533,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2011,7 +2690,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

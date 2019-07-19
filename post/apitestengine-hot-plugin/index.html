@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="背景描述在ApiTestEngine中编写测试用例时，我们有时需要定义全局的变量，或者引用外部函数实现一些动态的计算逻辑。当前采用的方式是：  若需定义全局的参数变量，则要在YAML/JSON的config中，使用variables定义变量； 若需引用外部函数，则要在YAML/JSON的config中，使用import_module_items导入指定的Python模块。  虽然这种方式提供了极大">
 <meta name="keywords" content="HttpRunner">
@@ -109,7 +137,7 @@
 <meta property="og:description" content="背景描述在ApiTestEngine中编写测试用例时，我们有时需要定义全局的变量，或者引用外部函数实现一些动态的计算逻辑。当前采用的方式是：  若需定义全局的参数变量，则要在YAML/JSON的config中，使用variables定义变量； 若需引用外部函数，则要在YAML/JSON的config中，使用import_module_items导入指定的Python模块。  虽然这种方式提供了极大">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://debugtalk.com/images/ate-hot-plugin.png">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.547Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.621Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="约定大于配置：ApiTestEngine实现热加载机制">
 <meta name="twitter:description" content="背景描述在ApiTestEngine中编写测试用例时，我们有时需要定义全局的变量，或者引用外部函数实现一些动态的计算逻辑。当前采用的方式是：  若需定义全局的参数变量，则要在YAML/JSON的config中，使用variables定义变量； 若需引用外部函数，则要在YAML/JSON的config中，使用import_module_items导入指定的Python模块。  虽然这种方式提供了极大">
@@ -150,16 +178,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -472,14 +490,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/测试框架/" itemprop="url" rel="index"><span itemprop="name">测试框架</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/HttpRunner/" itemprop="url" rel="index"><span itemprop="name">HttpRunner</span></a></span>
 
                 
                 
@@ -529,8 +547,10 @@
 <p>虽然这种方式提供了极大的灵活性，但是对于用户来说可能会显得比较复杂。另外一方面，这种方式也会造成大量重复的情况。</p>
 <p>例如，对于变量来说，假如我们的项目中存在100个测试场景，而每个场景中都需要将用户账号（<code>test@ijd</code>）作为全局变量来使用，那么在现有模式下，我们只能在这100个<code>YAML/JSON</code>文件的<code>config</code>中都采用如下方式定义一遍：</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- config:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">"smoketest for scenario A."</span></span><br><span class="line"><span class="attr">    variables:</span></span><br><span class="line"><span class="attr">        - username:</span> <span class="string">test@ijd</span></span><br></pre></td></tr></table></figure>
+
 <p>同样的，对于外部函数来说，假如我们项目的100个测试场景都需要用到生成随机字符串的函数（<code>gen_random_string</code>），那么我们也不得不在这100个<code>YAML/JSON</code>文件的<code>config</code>中都导入一次该函数所在的<code>Python</code>模块（假设相对于工作目录的路径为<code>extra/utils.py</code>）。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- config:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">"smoketest for scenario A."</span></span><br><span class="line"><span class="attr">    import_module_items:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">extra.utils</span></span><br></pre></td></tr></table></figure>
+
 <p>由此可见，当测试场景越来越多以后，要维护好全局变量和外部函数，必定会是一个很大的工作量。</p>
 <p>那么，如果既要能引用公共的变量和函数，又要减少重复的定义和导入，那要怎么做呢？</p>
 <h2 id="pytest-的-conftest-py"><a href="#pytest-的-conftest-py" class="headerlink" title="pytest 的 conftest.py"></a>pytest 的 conftest.py</h2><p>前段时间在接触<code>pytest</code>时，看到<code>pytest</code>支持<code>conftest.py</code>的插件机制，这是一种在测试文件中可以实现模块自动发现和热加载的机制。具体地，只要是在文件目录存在命名为<code>conftest.py</code>的文件，里面定义的<code>hook</code>函数都会在<code>pytest</code>运行过程中被导入，并可被测试用例进行调用。同时，<code>conftest.py</code>存在优先级策略，从测试用例所在目录到系统根目录的整个路径中，越靠近测试用例的<code>conftest.py</code>优先级越高。</p>
@@ -564,6 +584,7 @@
 <p>3、从热加载的顺序可以看出，查找变量或函数的顺序是从测试用例所在目录开始，沿着父路径逐层往上，直到系统的根目录。因此，我们可以利用这个优先级原则来组织我们的用例和依赖的<code>Python</code>函数模块。例如，我们可以将不同模块的测试用例集文件放在不同的文件夹下：针对各个模块独有的依赖函数和变量，可以放置在对应文件夹的<code>debugtalk.py</code>文件中；而整个项目公共的函数和变量，就可以放置到项目文件夹的<code>debugtalk.py</code>中。</p>
 <p>文件组织结构如下所示：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  project ✗ tree .</span><br><span class="line">.</span><br><span class="line">├── debugtalk.py</span><br><span class="line">├── module_A</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── debugtalk.py</span><br><span class="line">│   ├── testsetA1.yml</span><br><span class="line">│   └── testsetA2.yml</span><br><span class="line">└── module_B</span><br><span class="line">    ├── __init__.py</span><br><span class="line">    ├── debugtalk.py</span><br><span class="line">    ├── testsetB1.yml</span><br><span class="line">    └── testsetB2.yml</span><br></pre></td></tr></table></figure>
+
 <p>这其中还有一点需要格外注意。因为我们在框架运行过程中需要将<code>debugtalk.py</code>作为函数模块进行导入，因此我们首先要保障<code>debugtalk.py</code>满足<code>Python</code>模块的要求，也就是在对应的文件夹中要包含<code>__init__.py</code>文件。</p>
 <p>如果对热加载机制的实现感兴趣，可直接阅读框架源码，重点只需查看<a href="https://github.com/debugtalk/ApiTestEngine/blob/master/ate/utils.py" target="_blank" rel="noopener"><code>ate/utils.py</code></a>中的三个函数：</p>
 <ul>
@@ -731,7 +752,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -772,7 +793,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -903,7 +950,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

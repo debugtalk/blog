@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="背景介绍 在性能测试工作中，有时需要对业务系统所能支持的最大在线用户数目进行评估。这与我们接触最多的压力测试不一样，因为用户在线时只是与服务器保持连接，并不一定对服务器有业务请求，从而对服务器不一定会产生压力。然而，在线用户数目并非可以无限增长，当在线用户数目达到应用服务器（或者WebLogic等中间件，或者数据库连接池等）的连接数设置的极限时，业务系统同样可能会发生异常，出现新用户无法登录，或者">
 <meta name="keywords" content="LoadRunner">
@@ -109,7 +137,7 @@
 <meta property="og:description" content="背景介绍 在性能测试工作中，有时需要对业务系统所能支持的最大在线用户数目进行评估。这与我们接触最多的压力测试不一样，因为用户在线时只是与服务器保持连接，并不一定对服务器有业务请求，从而对服务器不一定会产生压力。然而，在线用户数目并非可以无限增长，当在线用户数目达到应用服务器（或者WebLogic等中间件，或者数据库连接池等）的连接数设置的极限时，业务系统同样可能会发生异常，出现新用户无法登录，或者">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://debugtalk.com/images/20130822202622_Online-Users-Communication-between-Browser-and-Server.png">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.439Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.632Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="测试最大在线用户数">
 <meta name="twitter:description" content="背景介绍 在性能测试工作中，有时需要对业务系统所能支持的最大在线用户数目进行评估。这与我们接触最多的压力测试不一样，因为用户在线时只是与服务器保持连接，并不一定对服务器有业务请求，从而对服务器不一定会产生压力。然而，在线用户数目并非可以无限增长，当在线用户数目达到应用服务器（或者WebLogic等中间件，或者数据库连接池等）的连接数设置的极限时，业务系统同样可能会发生异常，出现新用户无法登录，或者">
@@ -150,16 +178,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -472,14 +490,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
 
                 
                 
@@ -535,6 +553,7 @@
 </ul>
 <p>相应地，测试脚本需符合如下形式：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">lr_start_transaction(<span class="string">"进入登录页面"</span>);</span><br><span class="line"><span class="comment">/*此处为进入系统登录界面的脚本*/</span></span><br><span class="line">lr_end_transaction(<span class="string">"进入登录页面"</span>, LR_AUTO);</span><br><span class="line"></span><br><span class="line">lr_start_transaction(<span class="string">"登录系统"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*登录脚本--部分1*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*对系统登录进行校验</span></span><br><span class="line"><span class="comment"> *若成功，即新页面中包含"重新登录"，reLogin_Count&gt;0</span></span><br><span class="line"><span class="comment"> *若失败，reLogin_Count=0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">web_reg_find(<span class="string">"Text=重新登录"</span>,</span><br><span class="line">    <span class="string">"SaveCount=reLogin_Count"</span>,</span><br><span class="line">    LAST );</span><br><span class="line"></span><br><span class="line"><span class="comment">/*登录脚本--部分2（包含检查点内容部分）*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对系统登录结果进行检查</span></span><br><span class="line"><span class="keyword">if</span> (atoi(lr_eval_string(<span class="string">"&#123;reLogin_Count&#125;"</span>)) == <span class="number">0</span>)</span><br><span class="line">&#123;    <span class="comment">//登录失败</span></span><br><span class="line">    lr_error_message(<span class="string">"登录失败!!!--UserName：%s"</span>,lr_eval_string(<span class="string">"&#123;UserName&#125;"</span>));</span><br><span class="line">     <span class="comment">//勾选Fail Open Transations on lr_error_message</span></span><br><span class="line">     <span class="comment">//当执到该lr_error_message时，"登录系统"的Transaction失败</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">lr_end_transaction(<span class="string">"登录系统"</span>, LR_AUTO);</span><br></pre></td></tr></table></figure>
+
 <p>以上脚本调试成功后，通过检查点函数及日志信息可以判断出系统登录操作已通过脚本回放成功完成。</p>
 <p>理论上，只要VuGen采用不同帐号迭代运行该脚本，由于只是进行系统登录操作而未进行系统注销或退出操作，业务系统中的在线用户数将持续增加。</p>
 <p>然而在该OA系统中采用此方法时发现，虽然脚本成功运行，但业务系统中的在线用户数并未增长。这说明LoadRunner与浏览器在访问系统的过程中存在差异性。</p>
@@ -543,6 +562,7 @@
 <p>这就解释了为什么用户在浏览器中登录系统后可以长期地保持在线，而通过脚本成功地进行系统登录后却无法保持在线状态；因为VuGen不会像浏览器那样定期地与服务器进行通讯交互。</p>
 <p>找出其中的差异后，我们便可在VuGen中用脚本模拟浏览器的定期交互功能，简单的实现方法如下所示。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    web_url(<span class="string">"userAction.struts"</span>,</span><br><span class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo"</span>,</span><br><span class="line">        <span class="string">"Resource=0"</span>,</span><br><span class="line">        <span class="string">"RecContentType=text/html"</span>,</span><br><span class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/sysShortMsgReflesh.jsp"</span>,</span><br><span class="line">        <span class="string">"Snapshot=t4.inf"</span>,</span><br><span class="line">        <span class="string">"Mode=HTML"</span>,</span><br><span class="line">        LAST);</span><br><span class="line"></span><br><span class="line">    web_url(<span class="string">"userAction.struts_2"</span>,</span><br><span class="line">        <span class="string">"URL=http://10.147.15.28:9001/userAction.struts?actionType=refreshDynaInfo&amp;time=Mon%20Aug%2012%2015:42:04%20UTC+0800%202013"</span>,</span><br><span class="line">        <span class="string">"Resource=0"</span>,</span><br><span class="line">        <span class="string">"RecContentType=text/html"</span>,</span><br><span class="line">        <span class="string">"Referer=http://10.147.15.28:9001/jsp/oa/infocomm/sms/sysShortMsg/reflesh.jsp"</span>,</span><br><span class="line">        <span class="string">"Snapshot=t5.inf"</span>,</span><br><span class="line">        <span class="string">"Mode=HTML"</span>,</span><br><span class="line">        LAST);</span><br><span class="line"></span><br><span class="line">    lr_think_time(<span class="number">30</span>);    <span class="comment">//模拟浏览器与服务器30秒间隔的通讯交互</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>那么，将系统登录脚本和循环函数都放入Action中，在VuGen中采用迭代运行的方式可行吗？</p>
 <p>虽然新增登录用户可以逐个进行，即使用VuGen通过Action迭代的形式采用不同帐号逐个地进行登录操作。但由于用户登录后需要持续间隔地与服务器进行通讯交互才能保持在线，而单线程脚本运行至while(1)后便进入死循环，从而使得Action迭代无效。因此，采用VuGen进行Action迭代的方式是不可行的。</p>
 <p>正确的做法是，在Controller中采用逐步加载的方式，使各个虚拟用户独立地运行，从而保证了各虚拟用户登录成功后保持在线状态。</p>
@@ -574,6 +594,7 @@
 </ul>
 <p>在本文提到的OA系统中，对链接[<a href="http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。" target="_blank" rel="noopener">http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser]进行请求可以返回得到当前系统在线用户数目的统计信息。对应地，设计如下脚本，即可实现对系统实时在线用户数目的查看。</a></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Action()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    web_add_cookie(<span class="string">"USERORGID=db93a2M11f6719ff92Mf528764d624db129b32c21fbca0cb8d6; DOMAIN=10.147.15.28"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line"></span><br><span class="line">        lr_start_transaction(<span class="string">"查看在线用户数目"</span>);</span><br><span class="line"></span><br><span class="line">        web_reg_save_param(<span class="string">"OnlineUsers"</span>,</span><br><span class="line">                <span class="string">"LB=[在线用户数/总用户数：&lt;font color=\"red\"&gt;"</span>,</span><br><span class="line">                <span class="string">"RB=&lt;/font&gt;]"</span>,</span><br><span class="line">                <span class="string">"ORD=2"</span>,</span><br><span class="line">                <span class="string">"Notfound=error"</span>,</span><br><span class="line">                <span class="string">"Search=Body"</span>,</span><br><span class="line">                LAST);</span><br><span class="line"></span><br><span class="line">        web_url(<span class="string">"countAction.struts"</span>,</span><br><span class="line">            <span class="string">"URL=http://10.147.15.28:9001/countAction.struts?actionType=listOnlineUser"</span>,</span><br><span class="line">            <span class="string">"Resource=0"</span>,</span><br><span class="line">            <span class="string">"RecContentType=text/html"</span>,</span><br><span class="line">            <span class="string">"Referer="</span>,</span><br><span class="line">            <span class="string">"Snapshot=t1.inf"</span>,</span><br><span class="line">            <span class="string">"Mode=HTML"</span>,</span><br><span class="line">            LAST);</span><br><span class="line"></span><br><span class="line">        lr_output_message(<span class="string">"当前在线用户数目：%s"</span>, lr_eval_string(<span class="string">"&#123;OnlineUsers&#125;"</span>));</span><br><span class="line"></span><br><span class="line">        lr_end_transaction(<span class="string">"查看在线用户数目"</span>, LR_AUTO);</span><br><span class="line"></span><br><span class="line">        lr_think_time(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -725,7 +746,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -766,7 +787,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -897,7 +944,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

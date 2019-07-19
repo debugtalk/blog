@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="在《【LocustPlus序】漫谈服务端性能测试》中，我对服务端性能测试的基础概念和性能测试工具的基本原理进行了介绍，并且重点推荐了Locust这一款开源性能测试工具。然而，当前在网络上针对Locust的教程极少，不管是中文还是英文，基本都是介绍安装方法和简单的测试案例演示，但对于较复杂测试场景的案例演示却基本没有，因此很多测试人员都感觉难以将Locust应用到实际的性能测试工作当中。 经过一段时">
 <meta name="keywords" content="Locust">
@@ -112,7 +140,7 @@
 <meta property="og:image" content="https://debugtalk.com/images/14877299635610.jpg">
 <meta property="og:image" content="https://debugtalk.com/images/14877300553617.jpg">
 <meta property="og:image" content="https://debugtalk.com/images/14877305222231.jpg">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.409Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.630Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入浅出开源性能测试工具 Locust（使用篇）">
 <meta name="twitter:description" content="在《【LocustPlus序】漫谈服务端性能测试》中，我对服务端性能测试的基础概念和性能测试工具的基本原理进行了介绍，并且重点推荐了Locust这一款开源性能测试工具。然而，当前在网络上针对Locust的教程极少，不管是中文还是英文，基本都是介绍安装方法和简单的测试案例演示，但对于较复杂测试场景的案例演示却基本没有，因此很多测试人员都感觉难以将Locust应用到实际的性能测试工作当中。 经过一段时">
@@ -153,16 +181,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -475,14 +493,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
 
                 
                 
@@ -536,6 +554,7 @@
 <h2 id="脚本编写"><a href="#脚本编写" class="headerlink" title="脚本编写"></a>脚本编写</h2><p>编写<code>Locust</code>脚本，是使用<code>Locust</code>的第一步，也是最为重要的一步。</p>
 <h3 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h3><p>先来看一个最简单的示例。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> HttpLocust, TaskSet, task</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteTasks</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_start</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.client.post(<span class="string">"/login"</span>, &#123;</span><br><span class="line">            <span class="string">"username"</span>: <span class="string">"test"</span>,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"123456"</span></span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @task(2)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.client.get(<span class="string">"/"</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @task(1)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">about</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.client.get(<span class="string">"/about/"</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    task_set = WebsiteTasks</span><br><span class="line">    host = <span class="string">"https://debugtalk.com"</span></span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">5000</span></span><br></pre></td></tr></table></figure>
+
 <p>在这个示例中，定义了针对<code>https://debugtalk.com</code>网站的测试场景：先模拟用户登录系统，然后随机地访问首页（<code>/</code>）和关于页面（<code>/about/</code>），请求比例为<code>2:1</code>；并且，在测试过程中，两次请求的间隔时间为<code>1~5</code>秒间的随机值。</p>
 <p>那么，如上Python脚本是如何表达出以上测试场景的呢？</p>
 <p>从脚本中可以看出，脚本主要包含两个类，一个是<code>WebsiteUser</code>（继承自<code>HttpLocust</code>，而<code>HttpLocust</code>继承自<code>Locust</code>），另一个是<code>WebsiteTasks</code>（继承自<code>TaskSet</code>）。事实上，在<code>Locust</code>的测试脚本中，所有业务测试场景都是在<code>Locust</code>和<code>TaskSet</code>两个类的继承子类中进行描述的。</p>
@@ -566,12 +585,16 @@
 <p>在<code>TaskSet</code>子类中定义任务信息时，可以采取两种方式，<code>@task装饰器</code>和<code>tasks属性</code>。</p>
 <p>采用<code>@task装饰器</code>定义任务信息时，描述形式如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"><span class="meta">    @task(1)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_job1</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.client.get(<span class="string">'/job1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @task(2)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_job2</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.client.get(<span class="string">'/job2'</span>)</span><br></pre></td></tr></table></figure>
+
 <p>采用<code>tasks属性</code>定义任务信息时，描述形式如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_job1</span><span class="params">(obj)</span>:</span></span><br><span class="line">    obj.client.get(<span class="string">'/job1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_job2</span><span class="params">(obj)</span>:</span></span><br><span class="line">    obj.client.get(<span class="string">'/job2'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line">    tasks = &#123;test_job1:<span class="number">1</span>, test_job2:<span class="number">2</span>&#125;</span><br><span class="line">    <span class="comment"># tasks = [(test_job1,1), (test_job1,2)] # 两种方式等价</span></span><br></pre></td></tr></table></figure>
+
 <p>在如上两种定义任务信息的方式中，均设置了权重属性，即执行<code>test_job2</code>的频率是<code>test_job1</code>的两倍。</p>
 <p>若不指定执行任务的权重，则相当于比例为<code>1:1</code>。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_job1</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.client.get(<span class="string">'/job1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_job2</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.client.get(<span class="string">'/job2'</span>)</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_job1</span><span class="params">(obj)</span>:</span></span><br><span class="line">    obj.client.get(<span class="string">'/job1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_job2</span><span class="params">(obj)</span>:</span></span><br><span class="line">    obj.client.get(<span class="string">'/job2'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line">    tasks = [test_job1, test_job2]</span><br><span class="line">    <span class="comment"># tasks = &#123;test_job1:1, test_job2:1&#125; # 两种方式等价</span></span><br></pre></td></tr></table></figure>
+
 <p>在<code>TaskSet</code>子类中除了定义任务信息，还有一个是经常用到的，那就是<code>on_start</code>函数。这个和<code>LoadRunner</code>中的<code>vuser_init</code>功能相同，在正式执行测试前执行一次，主要用于完成一些初始化的工作。例如，当测试某个搜索功能，而该搜索功能又要求必须为登录态的时候，就可以先在<code>on_start</code>中进行登录操作；前面也提到，<code>HttpLocust</code>使用到了<code>requests.Session</code>，因此后续所有任务执行过程中就都具有登录态了。</p>
 <h3 id="脚本增强"><a href="#脚本增强" class="headerlink" title="脚本增强"></a>脚本增强</h3><p>掌握了<code>HttpLocust</code>和<code>TaskSet</code>，我们就基本具备了编写测试脚本的能力。此时再回过头来看前面的案例，相信大家都能很好的理解了。</p>
 <p>然而，当面对较复杂的测试场景，可能有的同学还是会感觉无从下手；例如，很多时候脚本需要做关联或参数化处理，这些在<code>LoadRunner</code>中集成的功能，换到<code>Locust</code>中就不知道怎么实现了。可能也是这方面的原因，造成很多测试人员都感觉难以将Locust应用到实际的性能测试工作当中。</p>
@@ -606,6 +629,7 @@
 <p>在<code>Locust</code>的单进程<code>no_web</code>运行模式中，我们可以通过<code>--no_web</code>参数，指定并发数（<code>-c</code>）和总执行次数（<code>-n</code>），直接在<code>Terminal</code>中执行脚本。</p>
 <p>在此基础上，当我们想要调试<code>Locust</code>脚本时，就可以在脚本中需要调试的地方通过<code>print</code>打印日志，然后将并发数和总执行次数都指定为1，执行形式如下所示。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ locust -f locustfile.py --no_web -c 1 -n 1</span><br></pre></td></tr></table></figure>
+
 <p>通过这种方式，我们就能很方便地对<code>Locust</code>脚本进行调试了。</p>
 <h2 id="执行测试"><a href="#执行测试" class="headerlink" title="执行测试"></a>执行测试</h2><p><code>Locust</code>脚本调试通过后，就算是完成了所有准备工作，可以开始进行压力测试了。</p>
 <p><code>Locust</code>是通过在<code>Terminal</code>中执行命令进行启动的，通用的参数有如下两个：</p>
@@ -622,12 +646,14 @@
 <li><code>-r, --hatch-rate</code>：指定并发加压速率，默认值位1。</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">$ locust -H https://debugtalk.com -f demo.py --no-web -c1 -n2</span><br><span class="line">[2017-02-21 21:27:26,522] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2</span><br><span class="line">[2017-02-21 21:27:26,523] Leos-MacBook-Air.local/INFO/locust.runners: Hatching and swarming 1 clients at the rate 1 clients/s...</span><br><span class="line"> Name                                                          <span class="comment"># reqs      # fails     Avg     Min     Max  |  Median   req/s</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> Total                                                              0     0(0.00%)                                       0.00</span><br><span class="line"></span><br><span class="line">[2017-02-21 21:27:27,526] Leos-MacBook-Air.local/INFO/locust.runners: All locusts hatched: WebsiteUser: 1</span><br><span class="line">[2017-02-21 21:27:27,527] Leos-MacBook-Air.local/INFO/locust.runners: Resetting stats</span><br><span class="line"></span><br><span class="line"> Name                                                          <span class="comment"># reqs      # fails     Avg     Min     Max  |  Median   req/s</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> GET /about/                                                        0     0(0.00%)       0       0       0  |       0    0.00</span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> Total                                                              0     0(0.00%)                                       0.00</span><br><span class="line"></span><br><span class="line"> Name                                                          <span class="comment"># reqs      # fails     Avg     Min     Max  |  Median   req/s</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> GET /about/                                                        1     0(0.00%)      17      17      17  |      17    0.00</span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> Total                                                              1     0(0.00%)                                       0.00</span><br><span class="line"></span><br><span class="line">[2017-02-21 21:27:32,420] Leos-MacBook-Air.local/INFO/locust.runners: All locusts dead</span><br><span class="line"></span><br><span class="line">[2017-02-21 21:27:32,421] Leos-MacBook-Air.local/INFO/locust.main: Shutting down (<span class="built_in">exit</span> code 0), <span class="built_in">bye</span>.</span><br><span class="line"> Name                                                          <span class="comment"># reqs      # fails     Avg     Min     Max  |  Median   req/s</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> GET /                                                              1     0(0.00%)      20      20      20  |      20    0.00</span><br><span class="line"> GET /about/                                                        1     0(0.00%)      17      17      17  |      17    0.00</span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> Total                                                              2     0(0.00%)                                       0.00</span><br><span class="line"></span><br><span class="line">Percentage of the requests completed within given <span class="built_in">times</span></span><br><span class="line"> Name                                                           <span class="comment"># reqs    50%    66%    75%    80%    90%    95%    98%    99%   100%</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> GET /                                                               1     20     20     20     20     20     20     20     20     20</span><br><span class="line"> GET /about/                                                         1     17     17     17     17     17     17     17     17     17</span><br><span class="line">--------------------------------------------------------------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
 <p><strong>web</strong></p>
 <p>如果采用<code>web</code>形式，，则通常情况下无需指定其它额外参数，<code>Locust</code>默认采用<code>8089</code>端口启动<code>web</code>；如果要使用其它端口，就可以使用如下参数进行指定。</p>
 <ul>
 <li><code>-P, --port</code>：指定web端口，默认为<code>8089</code>.</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ locust -H https://debugtalk.com -f demo.py</span><br><span class="line">[2017-02-21 21:31:26,334] Leos-MacBook-Air.local/INFO/locust.main: Starting web monitor at *:8089</span><br><span class="line">[2017-02-21 21:31:26,334] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2</span><br></pre></td></tr></table></figure>
+
 <p>此时，<code>Locust</code>并没有开始执行测试，还需要在Web页面中配置参数后进行启动。</p>
 <p>如果<code>Locust</code>运行在本机，在浏览器中访问<code>http://localhost:8089</code>即可进入<code>Locust</code>的Web管理页面；如果<code>Locust</code>运行在其它机器上，那么在浏览器中访问<code>http://locust_machine_ip:8089</code>即可。</p>
 <p>在<code>Locust</code>的Web管理页面中，需要配置的参数只有两个：</p>
@@ -639,11 +665,14 @@
 <h3 id="多进程分布式运行"><a href="#多进程分布式运行" class="headerlink" title="多进程分布式运行"></a>多进程分布式运行</h3><p>不管是<code>单机多进程</code>，还是<code>多机负载</code>模式，运行方式都是一样的，都是先运行一个<code>master</code>，再启动多个<code>slave</code>。</p>
 <p>启动<code>master</code>时，需要使用<code>--master</code>参数；同样的，如果要使用<code>8089</code>以外的端口，还需要使用<code>-P, --port</code>参数。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ locust -H https://debugtalk.com -f demo.py --master --port=8088</span><br><span class="line">[2017-02-21 22:59:57,308] Leos-MacBook-Air.local/INFO/locust.main: Starting web monitor at *:8088</span><br><span class="line">[2017-02-21 22:59:57,310] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2</span><br></pre></td></tr></table></figure>
+
 <p><code>master</code>启动后，还需要启动<code>slave</code>才能执行测试任务。</p>
 <p>启动<code>slave</code>时需要使用<code>--slave</code>参数；在<code>slave</code>中，就不需要再指定端口了。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ locust -H https://debugtalk.com -f demo.py --slave</span><br><span class="line">[2017-02-21 23:07:58,696] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2</span><br><span class="line">[2017-02-21 23:07:58,696] Leos-MacBook-Air.local/INFO/locust.runners: Client <span class="string">'Leos-MacBook-Air.local_980ab0eec2bca517d03feb60c31d6a3a'</span> reported as</span><br><span class="line"> ready. Currently 2 clients ready to swarm.</span><br></pre></td></tr></table></figure>
+
 <p>如果<code>slave</code>与<code>master</code>不在同一台机器上，还需要通过<code>--master-host</code>参数再指定<code>master</code>的IP地址。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ locust -H https://debugtalk.com -f demo.py --slave --master-host=&lt;locust_machine_ip&gt;</span><br><span class="line">[2017-02-21 23:07:58,696] Leos-MacBook-Air.local/INFO/locust.main: Starting Locust 0.8a2</span><br><span class="line">[2017-02-21 23:07:58,696] Leos-MacBook-Air.local/INFO/locust.runners: Client <span class="string">'Leos-MacBook-Air.local_980ab0eec2bca517d03feb60c31d6a3a'</span> reported as</span><br><span class="line"> ready. Currently 2 clients ready to swarm.</span><br></pre></td></tr></table></figure>
+
 <p><code>master</code>和<code>slave</code>都启动完毕后，就可以在浏览器中通过<code>http://locust_machine_ip:8089</code>进入<code>Locust</code>的Web管理页面了。使用方式跟单进程<code>web</code>形式完全相同，只是此时是通过多进程负载来生成并发压力，在<code>web</code>管理界面中也能看到实际的<code>slave</code>数量。</p>
 <h2 id="测试结果展示"><a href="#测试结果展示" class="headerlink" title="测试结果展示"></a>测试结果展示</h2><p><code>Locust</code>在执行测试的过程中，我们可以在<code>web</code>界面中实时地看到结果运行情况。</p>
 <p>相比于<code>LoadRunner</code>，<code>Locust</code>的结果展示十分简单，主要就四个指标：<code>并发数</code>、<code>RPS</code>、<code>响应时间</code>、<code>异常率</code>。但对于大多数场景来说，这几个指标已经足够了。</p>
@@ -810,7 +839,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -851,7 +880,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -982,7 +1037,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

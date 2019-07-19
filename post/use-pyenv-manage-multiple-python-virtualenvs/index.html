@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="背景从接触Python以来，一直都是采用virtualenv和virtualenvwrapper来管理不同项目的依赖环境，通过workon、mkvirtualenv等命令进行虚拟环境切换，很是愉快。 然而，最近想让项目能兼容更多的Python版本，例如至少同时兼容Python2.7和Python3.3+，就发现采用之前的方式行不通了。 最大的问题在于，在本地计算机同时安装Python2.7和Pyt">
 <meta name="keywords" content="Python,pyenv">
@@ -108,7 +136,7 @@
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="背景从接触Python以来，一直都是采用virtualenv和virtualenvwrapper来管理不同项目的依赖环境，通过workon、mkvirtualenv等命令进行虚拟环境切换，很是愉快。 然而，最近想让项目能兼容更多的Python版本，例如至少同时兼容Python2.7和Python3.3+，就发现采用之前的方式行不通了。 最大的问题在于，在本地计算机同时安装Python2.7和Pyt">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-02T11:00:39.438Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.622Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 pyenv 管理多个 Python 版本依赖环境">
 <meta name="twitter:description" content="背景从接触Python以来，一直都是采用virtualenv和virtualenvwrapper来管理不同项目的依赖环境，通过workon、mkvirtualenv等命令进行虚拟环境切换，很是愉快。 然而，最近想让项目能兼容更多的Python版本，例如至少同时兼容Python2.7和Python3.3+，就发现采用之前的方式行不通了。 最大的问题在于，在本地计算机同时安装Python2.7和Pyt">
@@ -148,16 +176,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -470,7 +488,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/2-Programming/" itemprop="url" rel="index"><span itemprop="name">2. Programming</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/2-Programming/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
 
                 
                 
@@ -535,6 +560,7 @@
 </ul>
 <h3 id="install-amp-amp-config"><a href="#install-amp-amp-config" class="headerlink" title="install &amp;&amp; config"></a>install &amp;&amp; config</h3><p>通过如下命令安装<code>pyenv</code>全家桶。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash</span><br></pre></td></tr></table></figure>
+
 <p>内容除了包含<code>pyenv</code>以外，还包含如下插件：</p>
 <ul>
 <li><code>pyenv-doctor</code></li>
@@ -545,47 +571,65 @@
 </ul>
 <p>安装完成后，<code>pyenv</code>命令还没有加进系统的环境变量，需要将如下内容加到<code>~/.zshrc</code>中，然后执行<code>source ~/.zshrc</code>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$HOME/.pyenv/bin:$PATH</span><br><span class="line">eval &quot;$(pyenv init -)&quot;</span><br><span class="line">eval &quot;$(pyenv virtualenv-init -)&quot;</span><br></pre></td></tr></table></figure>
+
 <p>完成以上操作后，<code>pyenv</code>就安装完成了。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv -v</span><br><span class="line">pyenv 1.0.8</span><br></pre></td></tr></table></figure>
+
 <p>如果不确定<code>pyenv</code>的环境是否安装正常，可以通过<code>pyenv doctor</code>命令对环境进行检测。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv doctor</span><br><span class="line">Cloning /Users/Leo/.pyenv/plugins/pyenv-doctor/bin/.....</span><br><span class="line">Installing python-pyenv-doctor...</span><br><span class="line"></span><br><span class="line">BUILD FAILED (OS X 10.12.3 using python-build 20160602)</span><br><span class="line"></span><br><span class="line">Last 10 log lines:</span><br><span class="line">checking for memory.h... yes</span><br><span class="line">checking for strings.h... yes</span><br><span class="line">checking for inttypes.h... yes</span><br><span class="line">checking for stdint.h... yes</span><br><span class="line">checking for unistd.h... yes</span><br><span class="line">checking openssl/ssl.h usability... no</span><br><span class="line">checking openssl/ssl.h presence... no</span><br><span class="line">checking for openssl/ssl.h... no</span><br><span class="line">configure: error: OpenSSL development header is not installed.</span><br><span class="line">make: *** No targets specified and no makefile found.  Stop.</span><br><span class="line">Problem(s) detected while checking system.</span><br></pre></td></tr></table></figure>
+
 <p>通过检测，可以发现本地环境可能存在的问题，例如，从以上输出可以看出，本地的<code>OpenSSL development header</code>还没有安装。根据提示的问题，逐一进行修复，直到检测不再出现问题为止。</p>
 <h3 id="update"><a href="#update" class="headerlink" title="update"></a>update</h3><p>通过<code>pyenv update</code>命令，可以更新<code>pyenv</code>全家桶的所有内容。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv update</span><br><span class="line">Updating /Users/Leo/.pyenv...</span><br><span class="line">From https://github.com/yyuu/pyenv</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-doctor...</span><br><span class="line">From https://github.com/yyuu/pyenv-doctor</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-installer...</span><br><span class="line">From https://github.com/yyuu/pyenv-installer</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-update...</span><br><span class="line">From https://github.com/yyuu/pyenv-update</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-virtualenv...</span><br><span class="line">From https://github.com/yyuu/pyenv-virtualenv</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-which-ext...</span><br><span class="line">From https://github.com/yyuu/pyenv-which-ext</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br></pre></td></tr></table></figure>
+
 <h2 id="pyenv的核心使用方法"><a href="#pyenv的核心使用方法" class="headerlink" title="pyenv的核心使用方法"></a>pyenv的核心使用方法</h2><p><code>pyenv</code>的主要功能如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv -h</span><br><span class="line">Usage: pyenv &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">Some useful pyenv commands are:</span><br><span class="line">   commands    List all available pyenv commands</span><br><span class="line">   local       Set or show the local application-specific Python version</span><br><span class="line">   global      Set or show the global Python version</span><br><span class="line">   shell       Set or show the shell-specific Python version</span><br><span class="line">   install     Install a Python version using python-build</span><br><span class="line">   uninstall   Uninstall a specific Python version</span><br><span class="line">   rehash      Rehash pyenv shims (run this after installing executables)</span><br><span class="line">   version     Show the current Python version and its origin</span><br><span class="line">   versions    List all Python versions available to pyenv</span><br><span class="line">   which       Display the full path to an executable</span><br><span class="line">   whence      List all Python versions that contain the given executable</span><br><span class="line"></span><br><span class="line">See `pyenv help &lt;command&gt;&apos; for information on a specific command.</span><br><span class="line">For full documentation, see: https://github.com/yyuu/pyenv#readme</span><br></pre></td></tr></table></figure>
+
 <h3 id="查看所有可安装的Python版本"><a href="#查看所有可安装的Python版本" class="headerlink" title="查看所有可安装的Python版本"></a>查看所有可安装的<code>Python</code>版本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv install --list</span><br><span class="line">Available versions:</span><br><span class="line">  2.1.3</span><br><span class="line">  ...</span><br><span class="line">  2.7.12</span><br><span class="line">  2.7.13</span><br><span class="line">  ...</span><br><span class="line">  3.5.3</span><br><span class="line">  3.6.0</span><br><span class="line">  3.6-dev</span><br><span class="line">  3.6.1</span><br><span class="line">  3.7-dev</span><br></pre></td></tr></table></figure>
+
 <p>需要注意的是，如果是采用<code>brew</code>命令安装的<code>pyenv</code>，可能会发现<code>Python</code>版本库中没有最新的<code>Python</code>版本。所以建议还是通过<code>GitHub</code>源码方式安装<code>pyenv</code>。</p>
 <h3 id="安装指定版本的Python环境"><a href="#安装指定版本的Python环境" class="headerlink" title="安装指定版本的Python环境"></a>安装指定版本的<code>Python</code>环境</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv install 3.6.0</span><br><span class="line">Downloading Python-3.6.0.tar.xz...</span><br><span class="line">-&gt; https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz</span><br><span class="line">Installing Python-3.6.0...</span><br><span class="line">Installed Python-3.6.0 to /Users/Leo/.pyenv/versions/3.6.0</span><br></pre></td></tr></table></figure>
+
 <h3 id="查看当前系统中所有可用的Python版本"><a href="#查看当前系统中所有可用的Python版本" class="headerlink" title="查看当前系统中所有可用的Python版本"></a>查看当前系统中所有可用的<code>Python</code>版本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv versions</span><br><span class="line">* system (set by /Users/Leo/.pyenv/version)</span><br><span class="line">  2.7.13</span><br><span class="line">  3.6.0</span><br></pre></td></tr></table></figure>
+
 <h3 id="切换Python版本"><a href="#切换Python版本" class="headerlink" title="切换Python版本"></a>切换<code>Python</code>版本</h3><p><code>pyenv</code>可以从三个维度来管理<code>Python</code>环境，简称为：<code>当前系统</code>、<code>当前目录</code>、<code>当前shell</code>。这三个维度的优先级从左到右依次升高，即<code>当前系统</code>的优先级最低、<code>当前shell</code>的优先级最高。</p>
 <p>如果想修改系统全局的Python环境，可以采用<code>pyenv global PYTHON_VERSION</code>命令。该命令执行后会在<code>$(pyenv root)</code>目录（默认为<code>~/.pyenv</code>）中创建一个名为<code>version</code>的文件（如果该文件已存在，则修改该文件的内容），里面记录着系统全局的Python版本号。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv global 2.7.13</span><br><span class="line">$ cat ~/.pyenv/version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv version</span><br><span class="line">2.7.13 (<span class="built_in">set</span> by /Users/Leo/.pyenv/version)</span><br><span class="line"></span><br><span class="line">$ pyenv global 3.6.0</span><br><span class="line">$ cat ~/.pyenv/version</span><br><span class="line">3.6.0</span><br><span class="line">$ pyenv version</span><br><span class="line">3.6.0 (<span class="built_in">set</span> by /Users/Leo/.pyenv/version)</span><br></pre></td></tr></table></figure>
+
 <p>通常情况下，对于特定的项目，我们可能需要切换不同的Python环境，这个时候就可以通过<code>pyenv local PYTHON_VERSION</code>命令来修改<code>当前目录</code>的Python环境。命令执行后，会在当前目录中生成一个<code>.python-version</code>文件（如果该文件已存在，则修改该文件的内容），里面记录着当前目录使用的Python版本号。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ cat ~/.pyenv/version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv <span class="built_in">local</span> 3.6.0</span><br><span class="line">$ cat .python-version</span><br><span class="line">3.6.0</span><br><span class="line">$ cat ~/.pyenv/version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv version</span><br><span class="line">3.6.0 (<span class="built_in">set</span> by /Users/Leo/MyProjects/.python-version)</span><br><span class="line">$ pip -V</span><br><span class="line">pip 9.0.1 from /Users/Leo/.pyenv/versions/3.6.0/lib/python3.6/site-packages (python 3.6)</span><br></pre></td></tr></table></figure>
+
 <p>可以看出，当前目录中的<code>.python-version</code>配置优先于系统全局的<code>~/.pyenv/version</code>配置。</p>
 <p>另外一种情况，通过执行<code>pyenv shell PYTHON_VERSION</code>命令，可以修改<code>当前shell</code>的Python环境。执行该命令后，会在当前<code>shell session</code>（Terminal窗口）中创建一个名为<code>PYENV_VERSION</code>的环境变量，然后在<code>当前shell</code>的任意目录中都会采用该环境变量设定的Python版本。此时，<code>当前系统</code>和<code>当前目录</code>中设定的Python版本均会被忽略。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="variable">$PYENV_VERSION</span></span><br><span class="line"></span><br><span class="line">$ pyenv shell 3.6.0</span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$PYENV_VERSION</span></span><br><span class="line">3.6.0</span><br><span class="line">$ cat .python-version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv version</span><br><span class="line">3.6.0 (<span class="built_in">set</span> by PYENV_VERSION environment variable)</span><br></pre></td></tr></table></figure>
+
 <p>顾名思义，<code>当前shell</code>的Python环境仅在当前shell中生效，重新打开一个新的shell后，该环境也就失效了。如果想在<code>当前shell</code>中取消shell级别的Python环境，采用<code>unset</code>命令重置<code>PYENV_VERSION</code>环境变量即可。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cat .python-version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv version</span><br><span class="line">3.6.0 (<span class="built_in">set</span> by PYENV_VERSION environment variable)</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">unset</span> PYENV_VERSION</span><br><span class="line">$ pyenv version</span><br><span class="line">2.7.13 (<span class="built_in">set</span> by /Users/Leo/MyProjects/.python-version)</span><br></pre></td></tr></table></figure>
+
 <h2 id="管理多个依赖库环境"><a href="#管理多个依赖库环境" class="headerlink" title="管理多个依赖库环境"></a>管理多个依赖库环境</h2><p>经过以上操作，我们在本地计算机中就可以安装多个版本的<code>Python</code>运行环境，并可以按照实际需求进行灵活地切换。然而，很多时候在同一个<code>Python</code>版本下，我们仍然希望能根据项目进行环境分离，就跟之前我们使用<code>virtualenv</code>一样。</p>
 <p>在<code>pyenv</code>中，也包含这么一个插件，<a href="https://github.com/pyenv/pyenv-virtualenv" target="_blank" rel="noopener"><code>pyenv-virtualenv</code></a>，可以实现同样的功能。</p>
 <p>使用方式如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv virtualenv PYTHON_VERSION PROJECT_NAME</span><br></pre></td></tr></table></figure>
+
 <p>其中，<code>PYTHON_VERSION</code>是具体的Python版本号，例如，<code>3.6.0</code>，<code>PROJECT_NAME</code>是我们自定义的项目名称。比较好的实践方式是，在<code>PROJECT_NAME</code>也带上Python的版本号，以便于识别。</p>
 <p>现假设我们有<code>XDiff</code>这么一个项目，想针对<code>Python 2.7.13</code>和<code>Python 3.6.0</code>分别创建一个虚拟环境，那就可以依次执行如下命令。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv virtualenv 3.6.0 py36_XDiff</span><br><span class="line">$ pyenv virtualenv 2.7.13 py27_XDiff</span><br></pre></td></tr></table></figure>
+
 <p>创建完成后，通过执行<code>pyenv virtualenvs</code>命令，就可以看到本地所有的项目环境。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv virtualenvs</span><br><span class="line">  2.7.13/envs/py27_XDiff (created from /Users/Leo/.pyenv/versions/2.7.13)</span><br><span class="line">* 3.6.0/envs/py36_XDiff (created from /Users/Leo/.pyenv/versions/3.6.0)</span><br><span class="line">  py27_XDiff (created from /Users/Leo/.pyenv/versions/2.7.13)</span><br><span class="line">  py36_XDiff (created from /Users/Leo/.pyenv/versions/3.6.0)</span><br></pre></td></tr></table></figure>
+
 <p>通过这种方式，在同一个Python版本下我们也可以创建多个虚拟环境，然后在各个虚拟环境中分别维护依赖库环境。</p>
 <p>例如，<code>py36_XDiff</code>虚拟环境位于<code>/Users/Leo/.pyenv/versions/3.6.0/envs</code>目录下，而其依赖库位于<code>/Users/Leo/.pyenv/versions/3.6.0/lib/python3.6/site-packages</code>中。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pip -V</span><br><span class="line">pip 9.0.1 from /Users/Leo/.pyenv/versions/3.6.0/lib/python3.6/site-packages (python 3.6)</span><br></pre></td></tr></table></figure>
+
 <p>后续在项目开发过程中，我们就可以通过<code>pyenv local XXX</code>或<code>pyenv activate PROJECT_NAME</code>命令来切换项目的<code>Python</code>环境。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜  MyProjects pyenv <span class="built_in">local</span> py27_XDiff</span><br><span class="line">(py27_XDiff) ➜  MyProjects pyenv version</span><br><span class="line">py27_XDiff (<span class="built_in">set</span> by /Users/Leo/MyProjects/.python-version)</span><br><span class="line">(py27_XDiff) ➜  MyProjects python -V</span><br><span class="line">Python 2.7.13</span><br><span class="line">(py27_XDiff) ➜  MyProjects pip -V</span><br><span class="line">pip 9.0.1 from /Users/Leo/.pyenv/versions/2.7.13/envs/py27_XDiff/lib/python2.7/site-packages (python 2.7)</span><br></pre></td></tr></table></figure>
+
 <p>可以看出，切换环境后，<code>pip</code>命令对应的目录也随之改变，即始终对应着当前的Python虚拟环境。</p>
 <p>对应的，采用<code>pyenv deactivate</code>命令退出当前项目的<code>Python</code>虚拟环境。</p>
 <p>如果想移除某个项目环境，可以通过如下命令实现。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv uninstall PROJECT_NAME</span><br></pre></td></tr></table></figure>
+
 <p>以上便是日常开发工作中常用的<code>pyenv</code>命令，基本可以满足绝大多数依赖库环境管理方面的需求。</p>
 
       
@@ -740,7 +784,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -781,7 +825,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -912,7 +982,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

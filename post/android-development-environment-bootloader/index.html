@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,21 +94,49 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="在刚接触Android开发时，通常需要对设备进行root操作，而在root之前，必须要做的一步就是先对设备的Bootloader进行解锁。那么什么是Bootloader？为什么必须要对Bootloader进行解锁？如何对Bootloader进行解锁？本文便围绕着几个问题展开进行介绍。 About Bootloader顾名思义，Bootloader是操作系统在启动之前需要执行的一段小程序。通过这段小">
-<meta name="keywords" content="Android">
+<meta name="keywords" content="Android,BootLoader">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android开发环境配置1：详解Bootloader">
 <meta property="og:url" content="https://debugtalk.com/post/android-development-environment-bootloader/index.html">
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="在刚接触Android开发时，通常需要对设备进行root操作，而在root之前，必须要做的一步就是先对设备的Bootloader进行解锁。那么什么是Bootloader？为什么必须要对Bootloader进行解锁？如何对Bootloader进行解锁？本文便围绕着几个问题展开进行介绍。 About Bootloader顾名思义，Bootloader是操作系统在启动之前需要执行的一段小程序。通过这段小">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-02T10:54:38.650Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.625Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android开发环境配置1：详解Bootloader">
 <meta name="twitter:description" content="在刚接触Android开发时，通常需要对设备进行root操作，而在root之前，必须要做的一步就是先对设备的Bootloader进行解锁。那么什么是Bootloader？为什么必须要对Bootloader进行解锁？如何对Bootloader进行解锁？本文便围绕着几个问题展开进行介绍。 About Bootloader顾名思义，Bootloader是操作系统在启动之前需要执行的一段小程序。通过这段小">
@@ -148,16 +176,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -470,7 +488,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/环境搭建/" itemprop="url" rel="index"><span itemprop="name">环境搭建</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
 
                 
                 
@@ -528,14 +553,18 @@
 </ul>
 <p>进入到<code>fastboot</code>模式后，可以看到如下信息。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FASTBOOT MODE</span><br><span class="line">PRODUCT_NAME - hammerhead</span><br><span class="line">VARIANT - hammerhead D821(E) 16GB</span><br><span class="line">HW VERSION - rev_11</span><br><span class="line">BOOTLOADER VERSION - HHZ11k</span><br><span class="line">BASEBAND VERSION - M897aA-2.0.50.1.16</span><br><span class="line">CARRIER INFO - None</span><br><span class="line">SERIAL NUMBER - 03f7fc7ad0081a10</span><br><span class="line">SIGNING - production</span><br><span class="line">SECURE BOOT - enabled</span><br><span class="line">LOCK STATE - locked</span><br></pre></td></tr></table></figure>
+
 <p>在<code>LOCK STATE</code>一项中，可以看到手机当前处于锁定（locked）状态，若需要进行<code>root</code>操作，则必须先进行解锁（unlock）。如果手机已经处于解锁（unlocked）状态了，则不用再进行<code>unlock</code>操作。</p>
 <h3 id="3、对锁定（locked）设备进行解锁（unlock）操作"><a href="#3、对锁定（locked）设备进行解锁（unlock）操作" class="headerlink" title="3、对锁定（locked）设备进行解锁（unlock）操作"></a>3、对锁定（locked）设备进行解锁（unlock）操作</h3><p>解锁操作需要将手机通过USB数据线与电脑连接，在电脑的命令终端中通过<code>fastboot</code>工具命令进行解锁操作。</p>
 <p>首先，保持手机与电脑的USB连接，在命令终端中查看手机在<code>fastboot</code>模式下与电脑的连接状态。若连接正常，则可以看到如下信息。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot devices</span><br><span class="line">03f7fc7ad0081a10	fastboot</span><br></pre></td></tr></table></figure>
+
 <p>然后，在电脑的命令终端中输入如下命令。在手机上会显示<code>Unblock bootloader?</code>警告提示信息，用手机的音量键选择<code>Yes</code>后，按下手机的电源键进行确认。接下来手机便会进行unlock操作。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot oem unlock</span><br><span class="line">...</span><br><span class="line">OKAY [ 14.907s]</span><br><span class="line">finished. total time: 14.907s</span><br></pre></td></tr></table></figure>
+
 <p>出现如上响应信息后，则表明手机已经解锁成功。在手机屏幕上，也可以看到<code>fastboot</code>模式页面中，<code>LOCK STATE</code>的属性值已经变为<code>unlocked</code>。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot reboot</span><br></pre></td></tr></table></figure>
+
 <p>手机unlock完成后，会恢复到出厂设置，<code>USB调试模式</code>设置也已失效，需要重新进行设置。</p>
 
       
@@ -593,6 +622,8 @@
         <div class="post-tags">
           
             <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/BootLoader/" rel="tag"># BootLoader</a>
           
         </div>
       
@@ -688,7 +719,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -729,7 +760,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -860,7 +917,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

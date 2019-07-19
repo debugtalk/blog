@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="What is rootroot的原理破解Android root权限的本质是： 在系统中加入一个任何用户都可能用于登陆的su命令。或者说替换掉系统中的su程序，因为系统中的默认su程序需要验证实际用户权限，只有root和shell用户才有权运行系统默认的su程序，其他用户运行都会返回错误。而破解后的su将不检查实际用户权限，这样普通的用户也将可以运行su程序，也可以通过su程序将自己的权限提升。">
 <meta name="keywords" content="Android">
@@ -108,7 +136,7 @@
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="What is rootroot的原理破解Android root权限的本质是： 在系统中加入一个任何用户都可能用于登陆的su命令。或者说替换掉系统中的su程序，因为系统中的默认su程序需要验证实际用户权限，只有root和shell用户才有权运行系统默认的su程序，其他用户运行都会返回错误。而破解后的su将不检查实际用户权限，这样普通的用户也将可以运行su程序，也可以通过su程序将自己的权限提升。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-02T11:06:20.454Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.626Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 开发环境配置3：Root">
 <meta name="twitter:description" content="What is rootroot的原理破解Android root权限的本质是： 在系统中加入一个任何用户都可能用于登陆的su命令。或者说替换掉系统中的su程序，因为系统中的默认su程序需要验证实际用户权限，只有root和shell用户才有权运行系统默认的su程序，其他用户运行都会返回错误。而破解后的su将不检查实际用户权限，这样普通的用户也将可以运行su程序，也可以通过su程序将自己的权限提升。">
@@ -148,16 +176,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -470,7 +488,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/环境搭建/" itemprop="url" rel="index"><span itemprop="name">环境搭建</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
 
                 
                 
@@ -516,6 +541,7 @@
 <p>在系统中加入一个任何用户都可能用于登陆的su命令。或者说替换掉系统中的su程序，因为系统中的默认su程序需要验证实际用户权限，只有root和shell用户才有权运行系统默认的su程序，其他用户运行都会返回错误。而破解后的su将不检查实际用户权限，这样普通的用户也将可以运行su程序，也可以通过su程序将自己的权限提升。</p>
 <h3 id="判断手机是否root"><a href="#判断手机是否root" class="headerlink" title="判断手机是否root"></a>判断手机是否root</h3><p>通过<code>adb shell</code>连接至手机以后，执行<code>su</code>命令，如果无法执行，则说明该手机无<code>root</code>权限。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ adb shell</span><br><span class="line">shell@hammerhead:/ $</span><br><span class="line">shell@hammerhead:/ $ su</span><br><span class="line">su <span class="built_in">command</span> not found</span><br></pre></td></tr></table></figure>
+
 <h2 id="How-to-root"><a href="#How-to-root" class="headerlink" title="How to root"></a>How to root</h2><p>本文中用到的操作系统为Linux（Debian）；Android设备型号为Nexus 5（HAMMERHEAD），Android版本为4.4.4（Build Num KTU84P）</p>
 <h3 id="准备工作（Prerequisites）"><a href="#准备工作（Prerequisites）" class="headerlink" title="准备工作（Prerequisites）"></a>准备工作（Prerequisites）</h3><ul>
 <li>配置Android调试环境：安装adb和fastboot工具，开启USB调试模式（USB debugging），建立手机与电脑之间的USB调试连接。</li>
@@ -526,32 +552,43 @@
 <h3 id="方法1：flash-rooted-boot-img"><a href="#方法1：flash-rooted-boot-img" class="headerlink" title="方法1：flash rooted boot.img"></a>方法1：flash <code>rooted</code> boot.img</h3><p>进行root操作，最便捷方式的便是刷入已经root过的<code>boot.img</code>对原有<code>boot</code>区域进行擦写覆盖。<br>对于Nexus设备，可以在<a href="https://autoroot.chainfire.eu/" target="_blank" rel="noopener"><code>CF-Auto-Root Repository</code></a>网站上下载对应设备型号的镜像文件，该镜像中包含了<code>SuperSU</code>程序。</p>
 <p>在<code>flash</code>操作前，先将设备切换至<code>fastboot</code>模式。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ adb reboot bootloader</span><br></pre></td></tr></table></figure>
+
 <p>在<code>fastboot</code>模式下，在电脑的命令终端中执行如下命令。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot flash boot CF-Auto-Root-hammerhead-hammerhead-nexus5.img</span><br><span class="line">sending <span class="string">'boot'</span> (9222 KB)...</span><br><span class="line">OKAY [  0.525s]</span><br><span class="line">writing <span class="string">'boot'</span>...</span><br><span class="line">OKAY [  0.787s]</span><br><span class="line">finished. total time: 1.313s</span><br><span class="line"></span><br><span class="line">$ fastboot reboot</span><br><span class="line">rebooting...</span><br><span class="line"></span><br><span class="line">finished. total time: 0.511s</span><br></pre></td></tr></table></figure>
+
 <p>采用<code>fastboot flash boot XXX_boot.img</code>进行操作时，手机会将<code>XXX_boot.img</code>下载至设备并对<code>boot</code>区域进行擦写覆盖，从而使手机获得root权限。即使手机再次重启，root权限仍然存在。</p>
 <p>再次通过<code>adb shell</code>连接至手机，可以看见，现在已经获取到了<code>root</code>权限。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb shell</span><br><span class="line">root@hammerhead:/ <span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="方法2、在Recovery环境下安装SuperSU"><a href="#方法2、在Recovery环境下安装SuperSU" class="headerlink" title="方法2、在Recovery环境下安装SuperSU"></a>方法2、在<code>Recovery</code>环境下安装<code>SuperSU</code></h3><p>该种方法的实现思路在于，给手机安装<code>Custom Recovery</code>，然后在<code>recovery</code>模式下手工安装<code>SuperSU</code>。</p>
 <p>具体的操作方式在《<a href="!--￼12--">详解Recovery</a>》一文中进行了介绍。</p>
 <h3 id="方法3、采用TWRP-Recovery的OpenRecoveryScript引擎执行命令"><a href="#方法3、采用TWRP-Recovery的OpenRecoveryScript引擎执行命令" class="headerlink" title="方法3、采用TWRP Recovery的OpenRecoveryScript引擎执行命令"></a>方法3、采用<code>TWRP Recovery</code>的OpenRecoveryScript引擎执行命令</h3><p>对于<code>2.1</code>及以上版本的<code>TWRP Recovery</code>中，可以使用<code>OpenRecoveryScript</code>引擎，在<code>TWRP Recovery</code>启动时执行命令。</p>
 <h4 id="1、传输root文件至Android设备"><a href="#1、传输root文件至Android设备" class="headerlink" title="1、传输root文件至Android设备"></a>1、传输root文件至Android设备</h4><p>在Android设备未获得root权限之前，具有Write权限的文件夹并不多，通常可将要写入的文件传输至<code>/data/local/tmp/</code>路径下。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb push UPDATE-SuperSU-v2.46.zip /data/<span class="built_in">local</span>/tmp/UPDATE-SuperSU-v2.46.zip</span><br><span class="line">$ adb push busybox-signed.zip /data/<span class="built_in">local</span>/tmp/busybox-signed.zip</span><br></pre></td></tr></table></figure>
+
 <h4 id="2、获取临时root权限"><a href="#2、获取临时root权限" class="headerlink" title="2、获取临时root权限"></a>2、获取临时root权限</h4><p>由于后续操作中要向<code>/cache/recovery/</code>目录写入文件，需要用到root权限。针对这种情况，可以采用已经root过的boot.img进行启动，临时获得root权限。</p>
 <p>首先，将设备切换至<code>fastboot</code>模式</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ adb reboot bootloader</span><br></pre></td></tr></table></figure>
+
 <p>然后，采用已经root过的boot.img进行启动。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ fastboot boot modified_boot_hammerhead_4.4.4_KTU84P.img</span><br><span class="line">downloading <span class="string">'boot.img'</span>...</span><br><span class="line">OKAY [  0.463s]</span><br><span class="line">booting...</span><br><span class="line">OKAY [  0.110s]</span><br><span class="line">finished. total time: 0.573s</span><br></pre></td></tr></table></figure>
+
 <p>此处与方法1的区别在于，这里只是临时地采用已经root过的boot.img进行启动，但并没有对<code>boot</code>分区进行写入。当手机重启后，仍然是采用原有的<code>kernel</code>进行启动。</p>
 <h4 id="3、创建openrecoveryscript文件"><a href="#3、创建openrecoveryscript文件" class="headerlink" title="3、创建openrecoveryscript文件"></a>3、创建<code>openrecoveryscript</code>文件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ touch openrecoveryscript</span><br></pre></td></tr></table></figure>
+
 <p>在<code>openrecoveryscript</code>文件中，写入如下内容。其中，<code>zip</code>软件包的路径要求是存在于Android设备中的完整路径。</p>
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># openrecoveryscript</span><br><span class="line"><span class="keyword">set</span> tw_signed_zip_verify <span class="number">0</span></span><br><span class="line">install /data/local/tmp/perm-recovery-signed.zip</span><br><span class="line">install /data/local/tmp/UPDATE-SuperSU-v2.<span class="number">46</span>.zip</span><br><span class="line">install /data/local/tmp/busybox-signed.zip</span><br></pre></td></tr></table></figure>
+
 <h4 id="4、写入openrecoveryscript文件"><a href="#4、写入openrecoveryscript文件" class="headerlink" title="4、写入openrecoveryscript文件"></a>4、写入<code>openrecoveryscript</code>文件</h4><p>此处就是需要临时用到root权限的地方。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb push openrecoveryscript /cache/recovery/openrecoveryscript</span><br><span class="line">2 KB/s (169 bytes <span class="keyword">in</span> 0.057s)</span><br></pre></td></tr></table></figure>
+
 <p>如果没有root权限，写入文件时会提示<code>Permission denied</code>。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ adb push openrecoveryscript /cache/recovery/openrecoveryscript</span><br><span class="line">failed to copy <span class="string">'openrecoveryscript'</span> to <span class="string">'/cache/recovery/openrecoveryscript'</span>: Permission denied</span><br></pre></td></tr></table></figure>
+
 <h4 id="5、启动TWRP-Recovery环境"><a href="#5、启动TWRP-Recovery环境" class="headerlink" title="5、启动TWRP Recovery环境"></a>5、启动<code>TWRP Recovery</code>环境</h4><p>启动<code>TWRP Recovery</code>时，会执行<code>/cache/recovery/openrecoveryscript</code>文件中的命令，即安装<code>SuperSU</code>等root软件。</p>
 <p>如果手机之前并未安装<code>TWRP Recovery</code>，也可以直接采用<code>TWRP Recovery</code>的镜像包进行启动，同样可以完成<code>/cache/recovery/openrecoveryscript</code>文件中命令的执行。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastboot boot openrecovery-twrp-2.8.7.1-hammerhead.img</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -703,7 +740,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -744,7 +781,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -875,7 +938,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

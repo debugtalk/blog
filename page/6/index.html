@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="DebugTalk">
@@ -143,16 +171,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -405,6 +423,691 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/head-first-git-authority-verification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/head-first-git-authority-verification/" class="post-title-link" itemprop="url">深入浅出 Git 权限校验</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-15 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-15T00:00:00+08:00">2016-06-15</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/" itemprop="url" rel="index"><span itemprop="name">4. ToolsNotes</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>借助上次“掉坑”的经历，我对Git权限校验的两种方式重头进行了梳理，形成了这篇总结记录。</p>
+<p>在本地计算机与GitHub（或GitLab）进行通信时，传输主要基于两种协议，<code>HTTPS</code>和<code>SSH</code>，对应的仓库地址就是<code>HTTPS URLs</code>和<code>SSH URLs</code>。</p>
+<p>首先需要强调的是，<code>HTTPS URLs</code>和<code>SSH URLs</code>对应的是两套完全独立的权限校验方式，主要的区别就是<code>HTTPS URLs</code>采用账号密码进行校验，<code>SSH URLs</code>采用<code>SSH</code>秘钥对进行校验。平时使用的时候我们可以根据实际情况，选择一种即可。</p>
+<h2 id="HTTPS-URLs"><a href="#HTTPS-URLs" class="headerlink" title="HTTPS URLs"></a>HTTPS URLs</h2><p>GitHub官方推荐采用<code>HTTPS URLs</code>的方式，因为该种方式适用面更广（即使在有防火墙或代理的情况下也同样适用），使用更方便（配置更简单）。</p>
+<p>采用<code>HTTPS URLs</code>地址<code>clone</code>/<code>fetch</code>/<code>pull</code>/<code>push</code>仓库时，事先无需对本地系统进行任何配置，只需要输入GitHub的账号和密码即可。不过如果每次都要手动输入账号密码，也是一件很繁琐的事情。</p>
+<p>好在已经有多个机制可以让操作不用这么麻烦。</p>
+<p>在Mac系统中，在启用<code>Keychain</code>机制的情况下，首次输入GitHub账号密码后，认证信息就会自动保存到系统的<code>Keychain</code>中，下次再次访问仓库时就会自动读取<code>Keychain</code>中保存的认证信息。</p>
+<p>在非Mac系统中，虽然没有<code>Keychain</code>机制，但是Git提供了<code>credential helper</code>机制，可以将账号密码以cache的形式在内存中缓存一段时间（默认15分钟），或者以文件的形式存储起来（<code>~/.git-credentials</code>）。当然，Mac系统如果不启用<code>Keychain</code>机制，也可以采用这种方式。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cache credential in memory</span></span><br><span class="line">$ git config --global credential.helper cache</span><br><span class="line"><span class="comment"># store credential in ~/.git-credential</span></span><br><span class="line">$ git config --global credential.helper store</span><br></pre></td></tr></table></figure>
+
+<p>在<code>credential.helper</code>设置为<code>store</code>的情况下，首次输入GitHub账号密码后，就会自动保存到<code>~/.git-credentials</code>文件中，保存形式为<code>https://user:pass@github.com</code>；下次再次访问仓库时就会自动读取<code>~/.git-credentials</code>中保存的认证信息。</p>
+<p>另一个需要说明的情况是，如果在GitHub中开启了<code>2FA（two-factor authentication）</code>，那么在本地系统中输入GitHub账号密码时，不能输入原始的密码（即GitHub网站的登录密码），而是需要事先在GitHub网站中创建一个<code>Personal access token</code>，后续在访问代码仓库需要进行权限校验的时候，采用<code>access token</code>作为密码进行输入。</p>
+<h2 id="SSH-URLs"><a href="#SSH-URLs" class="headerlink" title="SSH URLs"></a>SSH URLs</h2><p>除了<code>HTTPS URLs</code>，还可以采用<code>SSH URLs</code>的方式访问GitHub代码仓库。</p>
+<p>采用<code>SSH URLs</code>方式之前，需要先在本地计算机中生成<code>SSH keypair</code>（秘钥对，包括私钥和公钥）。默认情况下，生成的秘钥位于<code>$HOME/.ssh/</code>目录中，文件名称分别为<code>id_rsa</code>和<code>id_rsa.pub</code>，通常无需修改，保持默认即可。不过，如果一台计算机中存在多个秘钥对，就需要修改秘钥文件名，名称没有强制的命名规范，便于自己辨识即可。</p>
+<p>如下是创建秘钥对的过程。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">➜ ssh-keygen -t rsa -b 4096 -C <span class="string">"mail@debugtalk.com"</span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/Users/Leo/.ssh/id_rsa): /Users/Leo/.ssh/debugtalk_id_rsa</span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): &lt;myPassphrase&gt;</span><br><span class="line">Enter same passphrase again: &lt;myPassphrase&gt;</span><br><span class="line">Your identification has been saved <span class="keyword">in</span> /Users/Leo/.ssh/debugtalk_id_rsa.</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> /Users/Leo/.ssh/debugtalk_id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:jCyEEKjlCU1klROnuBg+UH08GJ1u252rQMADdD9kYMo mail@debugtalk.com</span><br><span class="line">The key<span class="string">'s randomart image is:</span></span><br><span class="line"><span class="string">+---[RSA 4096]----+</span></span><br><span class="line"><span class="string">|+*BoBO+.         |</span></span><br><span class="line"><span class="string">|o=oO=**          |</span></span><br><span class="line"><span class="string">|++E.*+o.         |</span></span><br><span class="line"><span class="string">|+ooo +o+         |</span></span><br><span class="line"><span class="string">|.o. ..+oS. .     |</span></span><br><span class="line"><span class="string">|  .  o. . o      |</span></span><br><span class="line"><span class="string">|      .    .     |</span></span><br><span class="line"><span class="string">|       .  .      |</span></span><br><span class="line"><span class="string">|        ..       |</span></span><br><span class="line"><span class="string">+----[SHA256]-----+</span></span><br></pre></td></tr></table></figure>
+
+<p>在创建秘钥的过程中，系统还建议创建一个名为<code>passphrase</code>的东西，这是用来干嘛的呢？</p>
+<blockquote>
+<p>首先，单独采用密码肯定是不够安全的。如果密码太简单，那么就很容易被暴力破解，如果密码太复杂，那么用户就很难记忆，记录到小本子里面更不安全。</p>
+</blockquote>
+<blockquote>
+<p>因此，<code>SSH keys</code>诞生了。<code>SSH</code>秘钥对的可靠性非常高，被暴力破解的可能性基本没有。不过，这要求用户非常谨慎地保管好私钥，如果别人使用你的计算机时偷偷地将你的私钥拷走了，那么就好比是别人拿到了你家里的钥匙，也能随时打开你家的门。</p>
+</blockquote>
+<blockquote>
+<p>基于以上情况，解决办法就是在<code>SSH keys</code>之外再增加一个密码，即<code>passphrase</code>。只有同时具备<code>SSH private key</code>和<code>passphrase</code>的情况下，才能通过<code>SSH</code>的权限校验，这就大大地增加了安全性。当然，这个<code>passphrase</code>也不是必须的，在创建秘钥对时也可以不设置<code>passphrase</code>。</p>
+</blockquote>
+<blockquote>
+<p>另外，如果每次权限校验时都要输入<code>passphrase</code>，这也是挺麻烦的。好在我们不用再担心这个问题，因为<code>ssh-agent</code>可以帮我们记住<code>passphrase</code>，Mac系统的Keychain也可以记住<code>passphrase</code>，这样我们在同一台计算机中就不用重新输入密码了。</p>
+</blockquote>
+<p>秘钥对创建好以后，私钥存放于本地计算机（<code>~/.ssh/id_rsa</code>），将公钥（<code>~/.ssh/id_rsa.pub</code>）中的内容添加至GitHub账户。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># copy the contents of id_rsa.pub to the clipboard</span></span><br><span class="line">➜ pbcopy &lt; ~/.ssh/id_rsa.pub</span><br><span class="line"></span><br><span class="line"><span class="comment"># paste to GitHub</span></span><br><span class="line"><span class="comment"># Login GitHub, 【Settings】-&gt;【SSH and GPG keys】-&gt;【New SSH Key】</span></span><br></pre></td></tr></table></figure>
+
+<p>不过，如果此时检测本地计算机与GitHub的连接状态，会发现系统仍提示权限校验失败。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ ssh -T git@github.com</span><br><span class="line">Permission denied (publickey).</span><br></pre></td></tr></table></figure>
+
+<p>这是因为在本地计算机与GitHub建立连接的时候，实际上是本机计算机的<code>ssh-agent</code>与GitHub服务器进行通信。虽然本地计算机有了私钥，但是<code>ssh-agent</code>并不知道私钥存储在哪儿。因此，要想正常使用秘钥对，需要先将私钥加入到本地计算机的<code>ssh-agent</code>中（添加过程中需要输入<code>passphrase</code>）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># start ssh-agent in the background</span></span><br><span class="line">➜ <span class="built_in">eval</span> <span class="string">"<span class="variable">$(ssh-agent -s)</span>"</span></span><br><span class="line">Agent pid 78370</span><br><span class="line"></span><br><span class="line">➜ ssh-add ~/.ssh/id_rsa</span><br><span class="line">Enter passphrase <span class="keyword">for</span> /Users/Leo/.ssh/id_rsa: &lt;myPassphrase&gt;</span><br><span class="line">Identity added: /Users/Leo/.ssh/id_rsa (/Users/Leo/.ssh/id_rsa)</span><br></pre></td></tr></table></figure>
+
+<p>添加完成后，就可以查看到当前计算机中存储的密钥。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ ssh-add -l</span><br><span class="line">4096 SHA256:xRg49AgTxxxxxxxx8q2SPPOfxxxxxxxxRlBY /Users/Leo/.ssh/id_rsa (RSA)</span><br></pre></td></tr></table></figure>
+
+<p>再次检测本地计算机与GitHub的连接状态，校验就正常通过了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ ssh -T git@github.com</span><br><span class="line">Hi leolee! You<span class="string">'ve successfully authenticated, but GitHub does not provide shell access.</span></span><br></pre></td></tr></table></figure>
+
+<p>后续再进行<code>clone</code>/<code>fetch</code>/<code>pull</code>/<code>push</code>操作时，就可以正常访问GitHub代码仓库了，并且也不需要再重新输入账号密码。</p>
+<p>而且，将私钥加入<code>ssh-agent</code>后，即使删除私钥文件，本地计算机仍可以正常访问GitHub代码仓库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜ rm -rf ~/.ssh</span><br><span class="line">➜ ssh-add -l</span><br><span class="line">4096 SHA256:xRg49AgTxxxxxxxx8q2SPPOfxxxxxxxxRlBY /Users/Leo/.ssh/id_rsa (RSA)</span><br><span class="line">➜ ssh -T git@github.com</span><br><span class="line">The authenticity of host <span class="string">'github.com (192.30.252.130)'</span> can<span class="string">'t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no)? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added '</span>github.com,192.30.252.130<span class="string">' (RSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Hi leolee! You'</span>ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<p>只有执行<code>ssh-add -D</code>或<code>ssh-add -d pub_key</code>命令，将私钥从<code>ssh-agent</code>删除后，认证信息才会失效。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ ssh-add -d ~/.ssh/id_rsa.pub</span><br><span class="line">Identity removed: /Users/Leo/.ssh/id_rsa.pub (mail@debugtalk.com)</span><br><span class="line">➜ ssh-add -l</span><br><span class="line">The agent has no identities.</span><br><span class="line">➜ ssh -T git@github.com</span><br><span class="line">Permission denied (publickey).</span><br></pre></td></tr></table></figure>
+
+<h2 id="同时使用多个GitHub账号"><a href="#同时使用多个GitHub账号" class="headerlink" title="同时使用多个GitHub账号"></a>同时使用多个GitHub账号</h2><p>熟悉了<code>HTTPS URLs</code>和<code>SSH URLs</code>这两种校验方式之后，我们再来看之前遇到的问题。要想在一台计算机上同时使用多个GitHub账号访问不同的仓库，需要怎么做呢？</p>
+<p>为了更好地演示，现假设有两个GitHub账号，<code>debugtalk</code>和<code>leolee</code>，在两个账号中各自有一个仓库，<code>debugtalk/DroidMeter</code>和<code>DebugTalk/MobileStore</code>（公司私有库）。</p>
+<p>前面已经说过，<code>HTTPS URLs</code>和<code>SSH URLs</code>对应着两套独立的权限校验方式，因此这两套方式应该是都能单独实现我们的需求的。</p>
+<p>不过在详细讲解Git权限校验的问题之前，我们先来回顾下Git配置文件的优先级。</p>
+<h3 id="Git配置存储位置及其优先级"><a href="#Git配置存储位置及其优先级" class="headerlink" title="Git配置存储位置及其优先级"></a>Git配置存储位置及其优先级</h3><p><code>Unix-like</code>系统中，保存Git用户信息的主要有3个地方（Mac系统多一个<code>Keychain</code>）：</p>
+<ul>
+<li><code>/etc/gitconfig</code>：存储当前系统所有用户的git配置信息，使用带有<code>--system</code>选项的<code>git config</code>时，配置信息会写入该文件；</li>
+<li><code>~/.gitconfig</code>或<code>~/.config/git/config</code>：存储当前用户的git配置信息，使用带有<code>--global</code>选项的<code>git config</code>时，配置信息会写入该文件；</li>
+<li><code>Keychain Access</code>：在开启<code>Keychain</code>机制的情况下，进行权限校验后会自动将账号密码保存至<code>Keychain Access</code>。</li>
+<li>仓库的Git目录中的config文件（即<code>repo/.git/config</code>）：存储当前仓库的git配置信息，在仓库中使用带有<code>--local</code>选项的<code>git config</code>时，配置信息会写入该文件；</li>
+</ul>
+<p>在优先级方面，以上4个配置项的优先级从上往下依次上升，即<code>repo/.git/config</code>的优先级最高，然后<code>Keychain Access</code>会覆盖<code>~/.gitconfig</code>中的配置，<code>~/.gitconfig</code>会覆盖<code>/etc/gitconfig</code>中的配置。</p>
+<h3 id="基于SSH协议实现多账号共存"><a href="#基于SSH协议实现多账号共存" class="headerlink" title="基于SSH协议实现多账号共存"></a>基于<code>SSH</code>协议实现多账号共存</h3><p>先来看下如何采用<code>SSH URLs</code>实现我们的需求。</p>
+<p>在处理多账号共存问题之前，两个账号均已分别创建<code>SSH</code>秘钥对，并且<code>SSH-key</code>均已加入本地计算机的<code>ssh-agent</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ ssh-add -l</span><br><span class="line">4096 SHA256:lqujbjkWM1xxxxxxxxxxG6ERK6DNYj9tXExxxxxx8ew /Users/Leo/.ssh/debugtalk_id_rsa (RSA)</span><br><span class="line">4096 SHA256:II2O9vZutdQr8xxxxxxxxxxD7EYvxxxxxxbynx2hHtg /Users/Leo/.ssh/id_rsa (RSA)</span><br></pre></td></tr></table></figure>
+
+<p>在详细讲解多账号共存的问题之前，我们先来回想下平时在Terminal中与GitHub仓库进行交互的场景。</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  DroidMeter git:(master) git pull</span><br><span class="line">Already up-to-date.</span><br><span class="line">➜  DroidMeter git:(master) touch README.md</span><br><span class="line">➜  DroidMeter git:(master) ✗ git add .</span><br><span class="line">➜  DroidMeter git:(master) ✗ git commit -m <span class="string">"add README"</span></span><br><span class="line">➜  DroidMeter git:(master) git push</span><br><span class="line">Counting objects: 3, <span class="keyword">done</span>.</span><br><span class="line">Delta compression using up to 4 threads.</span><br><span class="line">Compressing objects: 100% (2/2), <span class="keyword">done</span>.</span><br><span class="line">Writing objects: 100% (3/3), 310 bytes | 0 bytes/s, <span class="keyword">done</span>.</span><br><span class="line">Total 3 (delta 0), reused 0 (delta 0)</span><br><span class="line">To git@debugtalk:debugtalk/DroidMeter.git</span><br><span class="line">   7df6839..68d085b  master -&gt; master</span><br></pre></td></tr></table></figure>
+
+<p>在操作过程中，本地计算机的<code>ssh-agent</code>与GitHub服务器建立了连接，并进行了账号权限校验。</p>
+<p>当本地计算机只有一个GitHub账号时，这个行为并不难理解，系统应该会采用这个唯一的GitHub账号进行操作。那如果本地计算机中有多个Github账号时，系统是根据什么来判断应该选择哪个账号呢？</p>
+<p>实际情况是，系统没法进行判断。系统只会有一个默认的账号，然后采用这个默认的账号去操作所有的代码仓库，当账号与仓库不匹配时，就会报权限校验失败的错误。</p>
+<p>那要怎样才能让系统正确区分账号呢？这就需要我们手动进行配置，配置文件即是<code>~/.ssh/config</code>。</p>
+<p>创建<code>~/.ssh/config</code>文件，在其中填写如下内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># debugtalk</span></span><br><span class="line">Host debugtalk</span><br><span class="line">    HostName github.com</span><br><span class="line">    User git</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line"><span class="comment"># DT</span></span><br><span class="line">Host leolee</span><br><span class="line">    HostName github.com</span><br><span class="line">    User git</span><br><span class="line">    IdentityFile ~/.ssh/dt_id_rsa</span><br></pre></td></tr></table></figure>
+
+<p>要理解以上配置文件的含义并不难，我们可以对比看下两个项目的<code>SSH URLs</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git@github.com:debugtalk/DroidMeter.git</span><br><span class="line">git@github.com:DTSZ/Store_Android.git</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>git</code>是本地<code>ssh-agent</code>与GitHub服务器建立<code>SSH</code>连接采用的用户名（即<code>User</code>），<code>github.com</code>是GitHub服务器的主机（即<code>HostName</code>）。</p>
+<p>可以看出，如果采用原始的<code>SSH URLs</code>，由于<code>User</code>和<code>HostName</code>都相同，本地计算机并不知道应该采用哪个<code>SSH-key</code>去建立连接。</p>
+<p>因此，通过创建<code>~/.ssh/config</code>文件，在<code>Host</code>中进行区分，然后经过<code>CNAME</code>映射到<code>HostName</code>，然后分别指向不同的<code>SSH-key</code>，即<code>IdentityFile</code>。由于<code>HostName</code>才是真正指定GitHub服务器主机的字段，因此这么配置不会对本地<code>ssh-agent</code>连接GitHub主机产生影响，再加上<code>Host</code>别名指向了不同的<code>SSH-key</code>，从而实现了对两个GitHub账号的分离。</p>
+<p>配置完毕后，两个GitHub账号就可以通过<code>Host</code>别名来进行区分了。后续再与GitHub服务器进行通信时，就可以采用<code>Host</code>别名代替原先的<code>github.com</code>。例如，测试本地<code>ssh-agent</code>与GitHub服务器的连通性时，可采用如下方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ ssh -T git@debugtalk</span><br><span class="line">Hi debugtalk! You have successfully authenticated, but GitHub does not provide shell access.</span><br><span class="line">➜ ssh -T git@leolee</span><br><span class="line">Hi leolee! You have successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，此时两个账号各司其职，不会再出现混淆的情况。</p>
+<p>不过，我们还遗漏了很重要的一点。在本地代码仓库中执行<code>push</code>/<code>pull</code>/<code>fetch</code>等操作的时候，命令中并不会包含<code>Host</code>信息，那系统怎么知道我们要采用哪个GitHub账号进行操作呢？</p>
+<p>答案是，系统还是没法判断，需要我们进行配置指定。</p>
+<p>显然，不同的仓库可能对应着不同的GitHub账号，因此这个配置不能配置成全局的，而只能在各个项目中分别进行配置，即<code>repo/.git/config</code>文件。</p>
+<p>配置的方式如下：</p>
+<p>在<code>debugtalk/DroidMeter</code>仓库中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ git remote add origin git@debugtalk:debugtalk/DroidMeter.git</span><br></pre></td></tr></table></figure>
+
+<p>在<code>DebugTalk/MobileStore.git</code>仓库中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ git remote add origin git@leolee:DebugTalk/MobileStore.git</span><br></pre></td></tr></table></figure>
+
+<p>配置的原理也很容易理解，就是将仓库的<code>Host</code>更换为之前设置的别名。添加完毕后，后续再在两个仓库中执行任何<code>git</code>操作时，系统就可以选择正确的<code>SSH-key</code>与GitHub服务器进行交互了。</p>
+<h3 id="基于HTTPS协议实现多账号共存"><a href="#基于HTTPS协议实现多账号共存" class="headerlink" title="基于HTTPS协议实现多账号共存"></a>基于<code>HTTPS</code>协议实现多账号共存</h3><p>再来看下如何采用<code>HTTPS URLs</code>实现我们的需求。</p>
+<p>有了前面的经验，我们的思路就清晰了许多。采用<code>HTTPS URLs</code>的方式进行Git权限校验后，系统会将GitHub账号密码存储到<code>Keychain</code>中（Mac系统），或者存储到<code>~/.git-credentials</code>文件中（<code>Git credential helper</code>）。</p>
+<p>不管是存储到哪里，我们面临的问题都是相同的，即如何在代码仓库中区分采用哪个GitHub账号。</p>
+<p>配置的方式其实也很简单：</p>
+<p>在<code>debugtalk/DroidMeter</code>仓库中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ git remote add origin https://debugtalk@github.com/debugtalk/DroidMeter.git</span><br></pre></td></tr></table></figure>
+
+<p>在<code>DebugTalk/MobileStore.git</code>仓库中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜ git remote add origin https://leolee@github.com/DebugTalk/MobileStore.git</span><br></pre></td></tr></table></figure>
+
+<p>配置的原理也很容易理解，将GitHub用户名添加到仓库的Git地址中，这样在执行git命令的时候，系统就会采用指定的GitHub用户名去<code>Keychain</code>或<code>~/.git-credentials</code>中寻找对应的认证信息，账号使用错乱的问题也就不复存在了。</p>
+<p><code>Done!</code></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/trap-in-GitHub-authority-verification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/trap-in-GitHub-authority-verification/" class="post-title-link" itemprop="url">GitHub 权限校验失败给我的启发</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-14 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-14T00:00:00+08:00">2016-06-14</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/" itemprop="url" rel="index"><span itemprop="name">4. ToolsNotes</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>众所周知，在GitHub中，每个仓库都有两个地址，分别基于<code>HTTPS</code>协议和<code>SSH</code>协议，两个协议对应的URL地址（repository_url）形式如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># HTTPS</span></span><br><span class="line">https://github.com/XY/MobileStore.git</span><br><span class="line"><span class="comment"># SSH</span></span><br><span class="line">git@github.com:XY/MobileStore.git</span><br></pre></td></tr></table></figure>
+
+<p>正常情况下，只要在本地正确地配置好了<code>git</code>账号，采用这两个地址中的任意一个，都可以通过<code>git clone repository_url</code>获取代码。</p>
+<p>但最近我在Macbook Air中<code>clone</code>公司托管在GitHub私有库中的代码时，发现无法通过<code>HTTPS</code>协议的地址<code>clone</code>代码，始终提示<code>remote: Repository not found.</code>的错误。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ git <span class="built_in">clone</span> https://github.com/XY/MobileStore.git</span><br><span class="line">Cloning into <span class="string">'MobileStore'</span>...</span><br><span class="line">remote: Repository not found.</span><br><span class="line">fatal: repository <span class="string">'https://github.com/XY/MobileStore.git/'</span> not found</span><br></pre></td></tr></table></figure>
+
+<p>首先，这个代码仓库是确实存在的，而且地址肯定也是没有问题的，通过URL地址也能在浏览器中访问到对应的GitHub仓库页面。</p>
+<p>其次，在本地对<code>git</code>的配置也是没有问题的，通过<code>SSH</code>协议的地址是可以正常<code>clone</code>代码的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ git <span class="built_in">clone</span> git@github.com:XY/MobileStore.git</span><br><span class="line">Cloning into <span class="string">'MobileStore'</span>...</span><br><span class="line">Warning: Permanently added the RSA host key <span class="keyword">for</span> IP address <span class="string">'192.30.252.131'</span> to the list of known hosts.</span><br><span class="line">remote: Counting objects: 355, <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (3/3), <span class="keyword">done</span>.</span><br></pre></td></tr></table></figure>
+
+<p>并且，如果在<code>HTTPS</code>协议的URL地址中加上GitHub账号，也是可以正常<code>clone</code>代码的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ git <span class="built_in">clone</span> https://leolee@github.com/XY/MobileStore.git</span><br><span class="line">Cloning into <span class="string">'MobileStore'</span>...</span><br><span class="line">remote: Counting objects: 355, <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (3/3), <span class="keyword">done</span>.</span><br></pre></td></tr></table></figure>
+
+<p>更奇怪的是，在我的另一台Mac Mini中，采用同样的账号配置，两种协议的URL地址却都能正常<code>clone</code>代码，仔细地对比了两台电脑的<code>git</code>配置，都是一样的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜ cat ~/.git-credentials</span><br><span class="line">https://leolee:340d247cxxxxxxxxf39556e38fe2b0baxxxxxxxx@github.com</span><br><span class="line">➜</span><br><span class="line">➜ cat ~/.gitconfig</span><br><span class="line">[credential]</span><br><span class="line">truehelper = store</span><br></pre></td></tr></table></figure>
+
+<p>那问题出在哪儿呢？</p>
+<h2 id="定位分析"><a href="#定位分析" class="headerlink" title="定位分析"></a>定位分析</h2><p>通过Google得知，产生<code>remote: Repository not found.</code>报错的原因主要有两个，一是仓库地址错误，二是权限校验不通过。显然，第一个原因可以直接排除，在Macbook Air中出现该问题应该就是账号权限校验失败造成的。</p>
+<p>对背景描述中的现象进行整理，重点关注两个疑点：</p>
+<ul>
+<li>通过<code>HTTPS</code>协议的URL地址进行<code>git clone</code>时，系统没有提示让输入用户名密码，就直接返回权限校验失败的异常；</li>
+<li>在<code>HTTPS</code>协议的URL地址中加上GitHub用户名，就可以正常<code>clone</code>，而且，系统也没有提示输入密码。</li>
+</ul>
+<p>这说明，在系统中的某个地方，应该是保存了GitHub账号密码的，所以在未指定账号的情况下，<code>git clone</code>时系统就不再要求用户输入账号密码，而是直接读取那个保存好的账号信息；但是，那个保存的GitHub账号密码应该是存在问题的，这就造成采用那个账号信息去GitHub校验时无法通过，从而返回异常报错。</p>
+<p>基于以上推测，寻找问题根源的当务之急是找到保存GitHub账号密码的地方。</p>
+<p>通过查看Git官方文档，存储Git用户信息的地方有三个：</p>
+<ul>
+<li><code>/etc/gitconfig</code>：存储当前系统所有用户的git配置信息；</li>
+<li><code>~/.gitconfig</code>或<code>~/.config/git/config</code>：存储当前用户的git配置信息；</li>
+<li>仓库的Git目录中的config文件（即<code>repo/.git/config</code>）：存储当前仓库的git配置信息。</li>
+</ul>
+<p>这三个配置项的优先级从上往下依次上升，即<code>repo/.git/config</code>会覆盖<code>~/.gitconfig</code>中的配置，<code>~/.gitconfig</code>会覆盖<code>/etc/gitconfig</code>中的配置。</p>
+<p>回到当前问题，由于还没有进入到具体的Git仓库，因此<code>repo/.git/config</code>可直接排除；然后是查看当前用户的git配置，在当前用户HOME目录下没有<code>~/.config/git/config</code>文件，只有<code>~/.gitconfig</code>，不过在<code>~/.gitconfig</code>中并没有账号信息；再去查看系统级的git配置信息，即<code>/etc/gitconfig</code>文件，但发现当前系统中并没有该文件。</p>
+<p>找遍了Git用户信息可能存储的地方，都没有看到账号配置信息，那还可能存储在哪儿呢？</p>
+<p>这时基本上是毫无思路了，只能靠各种胡乱猜测，甚至尝试采用Wireshark分别在两台Mac上对<code>git clone</code>的过程进行抓包，对比通讯数据的差异，但都没有找到答案。</p>
+<p>最后，无意中想到了Mac的<code>Keychain</code>机制。在Mac OSX的<code>Keychain</code>中，可以保存用户的账号密码等<code>credentials</code>，那git账号会不会也保存到<code>Keychain</code>中了呢？</p>
+<p>在Macbook Air中打开<code>Keychain Access</code>应用软件，搜索<code>github</code>，果然发现存在记录。</p>
+<p><img src="/images/Mac_Keychain_GitHub.jpg" alt="Mac Keychain of GitHub"></p>
+<p>而且，<code>github.com</code>这一项还存在两条记录。一条是我的个人账号<code>debugtalk</code>，另一条是公司的工作账号<code>leolee</code>。</p>
+<p><strong>至此，真相大白！！！</strong></p>
+<p>在我的Macbook Air中，<code>Keychain Access</code>中保存了我的GitHub个人账号（<code>debugtalk</code>），该账号是没有权限访问公司私有仓库的。但是在Terminal中执行<code>git clone</code>命令时，系统优先读取了我的个人账号，并用该账号向GitHub发起校验请求，从而造成读取公司私有仓库时权限校验失败。然而，在<code>HTTPS</code>协议的URL地址中加上GitHub工作账号（<code>leolee</code>）时，由于此时指定了账号名称，因此在<code>Keychain</code>中读取账号信息时就可以找到对应账号（包含密码），并且在无需输入密码的情况下就能成功通过GitHub的权限校验，进而成功<code>clone</code>得到代码。</p>
+<p>原因弄清楚之后，解决方式就很简单了，在<code>Keychain</code>中删除个人账号，然后就正常了。</p>
+<h2 id="总结回顾"><a href="#总结回顾" class="headerlink" title="总结回顾"></a>总结回顾</h2><p>但是，问题真的解决了么？</p>
+<p>并没有！</p>
+<p>简单粗暴地在Keychain中将个人GitHub账号删除了，虽然再次访问公司代码仓库时正常了，那我要再访问个人仓库时该怎么办呢？</p>
+<p>貌似并没有清晰的思路。虽然网上也有不少操作指导教程，但是对于操作背后的原理，还是有很多不清晰的地方。</p>
+<p>再回到前面的背景描述，以及定位问题的整个过程，不由地悲从中来。使用GitHub好歹也有好几年了，但是连最基本的概念都还一头雾水，所以遇到问题后只能靠瞎猜，东碰西撞，最后瞎猫碰到死耗子。</p>
+<p>GitHub的<code>HTTPS</code>协议和<code>SSH</code>协议，这本来就对应着两套完全独立的权限校验方式，而我在<code>HTTPS</code>协议不正常的情况下还去查看<code>SSH</code>协议，这本来就实属多余。</p>
+<p>借助这次“掉坑”的经历，我对<code>Git</code>权限校验的两种方式重头进行了梳理，并单独写了一篇博客，《深入浅出Git权限校验》，虽然花了些时间，但总算是扫清了萦绕多年的迷雾，感觉倍儿爽！</p>
+<p>如果你也对<code>Git的权限校验</code>没有清晰的了解，遇到权限校验出错时只能“换一种方法试试”，也不知道怎么让一台计算机同时支持多个GitHub账号，那么也推荐看下那篇博客。</p>
+<p>在微信公众号<code>debugtalk</code>中输入<code>Git权限校验</code>，获取《深入浅出Git权限校验》。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/promotion-page-test/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/promotion-page-test/" class="post-title-link" itemprop="url">关于促销活动页面测试的那些事儿</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-09 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-09T00:00:00+08:00">2016-06-09</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/功能测试/" itemprop="url" rel="index"><span itemprop="name">功能测试</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这篇文章来说说促销活动页面测试的那些事儿。</p>
+<h2 id="什么是促销活动页面？"><a href="#什么是促销活动页面？" class="headerlink" title="什么是促销活动页面？"></a>什么是促销活动页面？</h2><p>通常电商平台在节假日会做一些促销活动，而活动的宣传方式，主要会采用H5静态页面的形式，也就是本文中要讲的促销活动页面。</p>
+<p>这些活动页面的特点是元素构成很简单，在页面中只包含一些促销商品的图片及其价格，而且价格往往都是写死在页面中，不会涉及到从数据库中读取，完完全全的静态页面；当然，促销活动页面的目的是将用户流量导向电商平台，因此在页面的图片或购买按钮背后会配上URL链接，用户点击链接后会跳转至电商平台对应的购买页面，活动页面也就完成了使命，这往往就是活动页面的全部内容。</p>
+<p>这么看来，促销活动页面跟街上发的传单非常相似，只是传单是纸质的，而活动页面是网页的罢了。</p>
+<h2 id="促销活动页面为什么要这么做呢？"><a href="#促销活动页面为什么要这么做呢？" class="headerlink" title="促销活动页面为什么要这么做呢？"></a>促销活动页面为什么要这么做呢？</h2><p>四方面原因。</p>
+<p>第一，促销活动页面的目的性很强，就是为了主推几款特价商品，因此，商品和价格完全写死也不会有任何问题。</p>
+<p>第二，促销活动页面的时效性很强，为促销活动而生，生命周期就那么几天，促销活动结束后这个活动页面也就作废了，因此也不用考虑复用的问题。</p>
+<p>第三，从投入的人力成本和工作量考虑，促销活动页面的制作只需要设计师和前端工程师就能完成，无需后台开发人员进行配合，也无需对当前的电商平台进行任何功能调整。</p>
+<p>第四，电商平台在做促销活动时，往往会通过各种渠道进行推广，因此活动页面的访问流量是非常巨大的；而采用静态页面的形式，不仅可以极大地提高页面加载速度（图片等静态资源可以通过CDN存储），而且可以极大地减轻流量对电商平台服务器端的压力（用户在浏览活动页面的时候并不会与电商平台进行任何交互）。至于点击链接进入电商平台的流量嘛，毕竟转换率总是存在的，转换以后的流量会小很多，而这部分流量才是真正有效的。</p>
+<h2 id="如何对活动页面进行测试"><a href="#如何对活动页面进行测试" class="headerlink" title="如何对活动页面进行测试"></a>如何对活动页面进行测试</h2><p>那么，就这么简单的一个静态页面，还需要对它进行测试么？</p>
+<p>咋一看，貌似还真没有可测试的内容，因为页面中就找不到一个真正意义上的功能点。</p>
+<p>然而，历史经验表明，在软件工程中无论多简单的功能，都是有可能出现bug的。针对活动页面的形式，我们需要重点关注如下几点。</p>
+<h3 id="1、商品信息一致性"><a href="#1、商品信息一致性" class="headerlink" title="1、商品信息一致性"></a>1、商品信息一致性</h3><p>促销活动页面中的商品信息都是由前端工程师写死的，而非从电商平台的数据库中读取后进行展示。因此，在实际操作中，活动页面上的信息，特别是价格数据，有可能和电商平台中的商品不一致，这个是我们在测试的时候需要重点关注的。</p>
+<p>测试方式很简单，依次点击各个商品的链接，验证跳转的商品页面是否与促销活动页面中的商品信息一致即可。</p>
+<h3 id="2、页面跳转行为一致性"><a href="#2、页面跳转行为一致性" class="headerlink" title="2、页面跳转行为一致性"></a>2、页面跳转行为一致性</h3><p>点击链接跳转页面，应该算是活动页面中唯一具有动作行为的功能了。而对于链接跳转而言，会存在两种形式，一种是在当前页面中加载商品页面，另一种是在新窗口中加载商品页面。</p>
+<p>本来两种形式区别并不大，采用哪种形式都可以，但是从追求完美的角度出发，我们还是需要保证活动页面中的所有链接的跳转行为都是相同的。</p>
+<p>因此，在测试时，逐一点击所有的链接，验证所有链接跳转行为是否一致即可。</p>
+<h3 id="3、页面兼容性"><a href="#3、页面兼容性" class="headerlink" title="3、页面兼容性"></a>3、页面兼容性</h3><p>作为促销活动页面，虽然商品信息是最核心的内容，但是为了能吸引尽量多的用户，页面的设计往往花了很多功夫，力求精美。然而，用户访问活动页面的设备和浏览器五花八门，有可能是采用PC浏览器，有可能是采用iPhone设备，也可能是采用各种品牌和型号的Android设备，精心设计的活动页面在某些设备或浏览器上很有可能就出现样式混乱的情况。因此，促销活动页面的浏览器兼容性也是z在测试时需要重点关注的。</p>
+<p>差异在哪儿呢？差异就是不同的浏览器内核，不同的设备操作系统，不同的屏幕分辨率。</p>
+<p>当然，我们也不可能在所有类型的设备和浏览器上都测一遍，但是主流的浏览器内核和移动设备还是要尽量覆盖的。</p>
+<p>推荐的测试方式如下：</p>
+<ul>
+<li>针对不同浏览器内核的测试，在电脑上采用Chrome、IE、Firefox、Safari浏览器分别加载活动页面；</li>
+<li>针对不同移动设备类型的测试，在iPhone和Android设备上加载活动页面，iPhone和Android设备均只选一款即可；</li>
+<li>针对不同屏幕分辨率的测试，可以在PC浏览器中打开开发者工具，里面可以模拟不同分辨率的设备加载页面，前面提到的浏览器基本都支持这个功能。</li>
+</ul>
+<h3 id="4、文案准确性"><a href="#4、文案准确性" class="headerlink" title="4、文案准确性"></a>4、文案准确性</h3><p>对于促销活动而言，吸引眼球的文案肯定是必不可少的，这也是在测试时需要重点关注的。</p>
+<p>对于文案方面的测试，可以重点从以下几个方面进行考核。</p>
+<p>首先，由于文案通常是由需求方提供，而活动页面是由设计师或前端工程师制作，因此有可能在制作页面的过程中出现了偏差，这个需要测试时仔细核对。</p>
+<p>另外，文案中出现错别字的情况也比较多，这个也需要格外注意，尽量杜绝这样的低级错误。</p>
+<p>还有一种情况，活动促销页面是面向某个国家的用户，语言可能是非汉语也非英语，这个时候周围谁也看不懂文案里面到底写的是啥。这个时候，只能请需求方再三进行确认，文案描述正确是一方面，另一方面就是需要考虑到目标国家的地域文化，不要出现产生歧义和误解的情况。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上内容便是从促销活动页面进行展开，联想到的关于测试的一些内容。</p>
+<p>可以看出，即使是再简单的东西，也是需要进行测试的，而且测试需要考虑的因素也非常多。另一方面，这也说明测试并不应该仅仅局限于技术层面，只有当我们站在业务和质量保障的角度，才会有更开阔的视野。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/confluence-simple-tutorial/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -468,7 +1171,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/效率工具/" itemprop="url" rel="index"><span itemprop="name">效率工具</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/" itemprop="url" rel="index"><span itemprop="name">4. ToolsNotes</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/others/" itemprop="url" rel="index"><span itemprop="name">others</span></a></span>
 
                 
                 
@@ -670,14 +1380,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/自动化测试/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/AppiumBooster/" itemprop="url" rel="index"><span itemprop="name">AppiumBooster</span></a></span>
 
                 
                 
@@ -736,30 +1446,39 @@
 <p>确定了操作路径以后，就可以在<code>Appium Ruby Console</code>中依次操作一遍，目的是确保代码能正确地对控件进行操作。</p>
 <p>第一步要点击【My Account】按钮，因此先查看下Button控件属性。要是不确定目标控件的类型，可以直接执行<code>page</code>命令，然后在返回结果中根据控件名称进行查找。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1] pry(main)&gt; page :button</span><br><span class="line">...（略）</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: My Account</span><br><span class="line">   id: My Account =&gt; My Account</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
 <p>通过返回结果，可以看到【My Account】按钮的name、label属性就是“My Account”，因此可以通过<code>button_exact(&#39;My Account&#39;)</code>方式来定位控件，并进行点击操作。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[2] pry(main)&gt; button_exact('My Account').click</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
 <p>执行命令后，观察iOS模拟器中APP的响应情况，看是否成功进入“My Account”页面。</p>
 <p>第二步也是类似的，操作代码如下：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[3] pry(main)&gt; button_exact('Login').click</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
 <p>进入到登录页面后，再次查看页面中的控件信息：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[4] pry(main)&gt; page</span><br><span class="line">...（略）</span><br><span class="line">UIATextField</span><br><span class="line">   value: Email Address</span><br><span class="line">   id: Email Address =&gt; Email Address</span><br><span class="line">UIASecureTextField</span><br><span class="line">   value: Password (6-16 characters)</span><br><span class="line">   id: Password (6-16 characters) =&gt; Password (6-16 characters)</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: Login</span><br><span class="line">   id: Log In =&gt; Login</span><br><span class="line">       登录     =&gt; Login</span><br><span class="line">...（略）</span><br></pre></td></tr></table></figure>
+
 <p>第三步需要填写账号密码，账号密码的控件属性分别是<code>UIATextField</code>和<code>UIASecureTextField</code>。由于这两个控件的类型在登录页面都是唯一的，因此可以采用控件的类型来进行定位，然后进行输入操作，代码如下：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[5] pry(main)&gt; tag('UIATextField').type 'leo.lee@debugtalk.com'</span><br><span class="line">""</span><br><span class="line">[6] pry(main)&gt; tag('UIASecureTextField').type '123456'</span><br><span class="line">""</span><br></pre></td></tr></table></figure>
+
 <p>执行完输入命令后，在iOS模拟器中可以看到账号密码输入框都成功输入了内容。</p>
 <p>最后第四步点击【Login】按钮，操作上和第二步完全一致。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[7] pry(main)&gt; button_exact('Login').click</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
 <p>执行完以上四个步骤后，在iOS模拟器中看到成功完成账号登录操作，这说明我们的执行命令没有问题，可以用于编写自动化测试代码。整合起来，测试脚本就是下面这样。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">button_exact(<span class="string">'My Account'</span>).click</span><br><span class="line">button_exact(<span class="string">'Login'</span>).click</span><br><span class="line">tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span></span><br><span class="line">tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'12345678'</span></span><br><span class="line">button_exact(<span class="string">'Login'</span>).click</span><br></pre></td></tr></table></figure>
+
 <p>将以上脚本保存为<code>login.rb</code>文件。</p>
 <p>但当我们直接运行<code>login.rb</code>文件时，并不能运行成功。原因很简单，脚本中的<code>button_exact</code>、<code>tag</code>这些方法并没有定义，我们在文件中也没有引入相关库文件。</p>
 <p>在上一篇文章中有介绍过，通过<code>arc</code>启动虚拟机时，会从<code>appium.txt</code>中读取虚拟机的配置信息。类似的，我们在脚本中执行自动化测试时，也会加载虚拟机，因此同样需要在脚本中指定虚拟机的配置信息，并初始化<code>Appium Driver</code>的实例。</p>
 <p>初始化代码可以通过<code>Appium Inspector</code>生成，基本上为固定模式，我们暂时不用深究。</p>
 <p>添加初始化部分的代码后，测试脚本如下所示。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">'rubygems'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'appium_lib'</span></span><br><span class="line"></span><br><span class="line">capabilities = &#123;</span><br><span class="line">  <span class="string">'appium-version'</span> =&gt; <span class="string">'1.0'</span>,</span><br><span class="line">  <span class="string">'platformName'</span> =&gt; <span class="string">'iOS'</span>,</span><br><span class="line">  <span class="string">'platformVersion'</span> =&gt; <span class="string">'9.3'</span>,</span><br><span class="line">&#125;</span><br><span class="line">Appium::Driver.new(<span class="symbol">caps:</span> capabilities).start_driver</span><br><span class="line">Appium.promote_appium_methods Object</span><br><span class="line"></span><br><span class="line"><span class="comment"># testcase: login</span></span><br><span class="line">button_exact(<span class="string">'My Account'</span>).click</span><br><span class="line">button_exact(<span class="string">'Login'</span>).click</span><br><span class="line">tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span></span><br><span class="line">tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'123456'</span></span><br><span class="line">button_exact(<span class="string">'Login'</span>).click</span><br><span class="line"></span><br><span class="line">driver_quit</span><br></pre></td></tr></table></figure>
+
 <h2 id="优化测试脚本：加入等待机制"><a href="#优化测试脚本：加入等待机制" class="headerlink" title="优化测试脚本：加入等待机制"></a>优化测试脚本：加入等待机制</h2><p>如上测试脚本编写好后，在Terminal中运行<code>ruby login.rb</code>，就可以执行脚本了。</p>
 <p>运行命令后，会看到iOS虚拟机成功启动，接着App成功进行加载，然后自动按照前面设计的路径，执行系统登录流程。</p>
 <p>但是，在实际操作过程中，发现有时候运行脚本时会出现找不到控件的异常，异常信息如下所示：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜ ruby login.rb</span><br><span class="line">/Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/common/helper.rb:218:in `_no_such_element': An element could not be located on the page using the given search parameters. (Selenium::WebDriver::Error::NoSuchElementError)</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/ios/helper.rb:578:in `ele_by_json'</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/ios/helper.rb:367:in `ele_by_json_visible_exact'</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/ios/element/button.rb:41:in `button_exact'</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/driver.rb:226:in `rescue in block (4 levels) in promote_appium_methods'</span><br><span class="line">truefrom /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/driver.rb:217:in `block (4 levels) in promote_appium_methods'</span><br><span class="line">truefrom login.rb:28:in `&lt;main&gt;'</span><br></pre></td></tr></table></figure>
+
 <p>更奇怪的是，这个异常并不是稳定出现的，有时候能正常运行整个用例，但有时在某个步骤就会抛出找不到控件的异常。这是什么原因呢？为什么在<code>Appium Ruby Console</code>中单步操作时就不会出现这个问题，但是在执行脚本的时候就会偶尔出现异常呢？</p>
 <p>原来，在我们之前的脚本中，两条命令之间并没有间隔时间，有可能前一条命令执行完后，模拟器中的应用还没有完成下一个页面的加载，下一条命令就又开始查找控件，然后由于找不到控件就抛出异常了。</p>
 <p>这也是为什么我们在<code>Appium Ruby Console</code>中没有出现这样的问题。因为手工输入命令多少会有一些耗时，输入两条命令的间隔时间足够虚拟机中的APP完成下一页面的加载了。</p>
@@ -767,6 +1486,7 @@
 <p>也不用这么麻烦，针对这类情况，<code>ruby_lib</code>实现了<code>wait</code>机制。将执行命令放入到<code>wait{}</code>中后，执行脚本时就会等待该命令执行完成后再去执行下一条命令。当然，等待也不是无休止的，如果等待30秒后还是没有执行完，仍然会抛出异常。</p>
 <p>登录流程的测试脚本修改后如下所示（已省略初始化部分的代码）：</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wait &#123; button_exact(<span class="string">'My Account'</span>).click &#125;</span><br><span class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</span><br><span class="line">wait &#123; tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span> &#125;</span><br><span class="line">wait &#123; tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'123456'</span> &#125;</span><br><span class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</span><br></pre></td></tr></table></figure>
+
 <p>对脚本添加<code>wait</code>机制后，之前出现的找不到控件的异常就不再出现了。</p>
 <h2 id="优化测试脚本：加入结果检测机制"><a href="#优化测试脚本：加入结果检测机制" class="headerlink" title="优化测试脚本：加入结果检测机制"></a>优化测试脚本：加入结果检测机制</h2><p>然而，现在脚本仍然不够完善。</p>
 <p>我们在<code>Appium Ruby Console</code>中手工执行命令后，都是由人工肉眼确认虚拟机中APP是否成功进入下一个页面，或者返回结果是否正确。</p>
@@ -777,6 +1497,7 @@
 <p>当然，对下一页面中的控件进行检测时同样需要加入等待机制的。</p>
 <p>登录流程的测试脚本修改后如下所示（已省略初始化部分的代码）：</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">wait &#123; button_exact(<span class="string">'My Account'</span>).click &#125;</span><br><span class="line">wait &#123; text_exact <span class="string">'System Settings'</span> &#125;</span><br><span class="line"></span><br><span class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</span><br><span class="line">wait &#123; button_exact <span class="string">'Forget password?'</span> &#125;</span><br><span class="line"></span><br><span class="line">wait &#123; tag(<span class="string">'UIATextField'</span>).type <span class="string">'leo.lee@debugtalk.com'</span> &#125;</span><br><span class="line">wait &#123; tag(<span class="string">'UIASecureTextField'</span>).type <span class="string">'12345678'</span> &#125;</span><br><span class="line">wait &#123; button_exact(<span class="string">'Login'</span>).click &#125;</span><br><span class="line">wait &#123; text_exact <span class="string">'My Message'</span> &#125;</span><br></pre></td></tr></table></figure>
+
 <p>至此，系统登录流程的自动化测试脚本我们就编写完成了。</p>
 <h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>在本文中，我们通过系统登录这一典型功能点，演示了编写自动化测试用例的整个流程。</p>
 <p>在下一篇文章中，我们还会对自动化测试脚本的结构进行进一步优化，并实现测试代码工程化。</p>
@@ -899,14 +1620,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/自动化测试/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/AppiumBooster/" itemprop="url" rel="index"><span itemprop="name">AppiumBooster</span></a></span>
 
                 
                 
@@ -969,6 +1690,7 @@
 <p>在实践操作中，Inspector最大的用途就是在可以可视化地查看UI元素信息，并且可以将操作转换为脚本代码，这对初学者尤为有用。</p>
 <p>例如，在预览区点击选中按钮“BUY NOW”，然后在UI信息展示区的Details窗口就可以看到该按钮的所有属性信息。在交互操作区点击【Tap】按钮后，就会模拟用户点击“BUY NOW”按钮，并且在脚本区域生成当次按钮点击的脚本（选择Ruby语言）：</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find_element(<span class="symbol">:name</span>, <span class="string">"BUY NOW &gt;"</span>).click</span><br></pre></td></tr></table></figure>
+
 <p>如上就是使用<code>Appium Inspector</code>的一般性流程。</p>
 <h3 id="Appium-Ruby-Console"><a href="#Appium-Ruby-Console" class="headerlink" title="Appium Ruby Console"></a>Appium Ruby Console</h3><p>有了<code>Appium Inspector</code>，为什么还需要<code>Appium Ruby Console</code>呢？</p>
 <p>其实，<code>Appium Ruby Console</code>也并不是必须的。经过与多个熟悉<code>Appium</code>的前辈交流，他们也从未用过<code>Appium Ruby Console</code>，这说明<code>Appium Ruby Console</code>并不是必须的，没有它也不会影响我们对<code>Appium</code>的使用。</p>
@@ -981,48 +1703,62 @@
 <p>在使用<code>Appium Ruby Console</code>时，虚拟机的配置信息并不会从GUI中读取，而是要通过配置文件进行指定。</p>
 <p>配置文件的名称统一要求为<code>appium.txt</code>，内容形式如下所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[caps]</span><br><span class="line">platformName = &quot;ios&quot;</span><br><span class="line">platformVersion = &apos;9.3&apos;,</span><br><span class="line">app = &quot;/path/to/UICatalog.app.zip&quot;</span><br><span class="line">deviceName = &quot;iPhone Simulator&quot;</span><br></pre></td></tr></table></figure>
+
 <p>其中，<code>platformName</code>指定虚拟机操作系统类型，“ios”或者”android”；<code>platformVersion</code>指定操作系统的版本，例如iOS的’9.3’，或者Android的’5.1’；<code>app</code>指定被测应用安装包的路径。这三个参数是必须的，与Inspector中的配置也能对应上。</p>
 <p>在使用<code>Appium Ruby Console</code>时，首先需要启动<code>Appium Server</code>，通过<code>GUI</code>或者<code>Terminal</code>均可。</p>
 <p>然后，在Terminal中，进入到<code>appium.txt</code>文件所在的目录，执行<code>arc</code>命令即可启动<code>Appium Ruby Console</code>。<code>arc</code>，即是appium ruby console首字母的组合。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ ls</span><br><span class="line">appium.txt</span><br><span class="line">➜ arc</span><br><span class="line">[1] pry(main)&gt;</span><br></pre></td></tr></table></figure>
+
 <p>接下来，就可以通过执行命令查询当前设备屏幕中的控件信息。</p>
 <p>使用频率最高的一个命令是<code>page</code>，通过这个命令可以查看到当前屏幕中所有控件的基本信息。</p>
 <p>例如，当屏幕停留在前面截图中的页面时，执行<code>page</code>命令可以得到如下内容。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">[1] pry(main)&gt; page</span><br><span class="line">UIANavigationBar</span><br><span class="line">   name: HomeView</span><br><span class="line">   id: Home =&gt; Home</span><br><span class="line">       米    =&gt; m</span><br><span class="line">       去看看  =&gt; View</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: tabbar category gray</span><br><span class="line">UIAImage</span><br><span class="line">   name: debugtalk_logo.png</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: tabbar cart gray</span><br><span class="line">UIATableView</span><br><span class="line">   value: rows 1 to 4 of 15</span><br><span class="line">UIAPageIndicator</span><br><span class="line">   value: page 2 of 2</span><br><span class="line">UIATableCell</span><br><span class="line">   name: For the first time ever in a hand held camera, the Osmo brings professional, realtime cinema-quality stabilization.</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: For the first time ever in a hand held camera, the Osmo brings professional, realtime cinema-quality stabilization.</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: OSMO</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: SHOP NOW &gt;</span><br><span class="line">UIATableCell</span><br><span class="line">   name: Ronin</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: Ronin</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: Phantom</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">... (略)</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: Store</span><br><span class="line">   value: 1</span><br><span class="line">   id: 门店 =&gt; Store</span><br><span class="line">... (略)</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: My Account</span><br><span class="line">   id: My Account =&gt; My Account</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
 <p>通过返回信息，我们就可以看到所有控件的type、name、label、value属性值。如果在某个控件下没有显示label或value，这是因为这个值为空，我们可以不予理会。</p>
 <p>由于<code>page</code>返回的信息太多，可能不便于查看，因此在使用<code>page</code>命令时，也可以指定控件的类型，相当于对当前屏幕的控件进行筛选，只返回指定类型的控件信息。</p>
 <p>指定控件类型时，可以通过string类型进行指定（如 page “Image”），也可通过symbol类型进行指定（如 page :cell）。指定的类型可只填写部分内容，并且不分区大小写。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[2] pry(main)&gt; page "Image"</span><br><span class="line">UIAImage</span><br><span class="line">   name: debugtalk_logo.png</span><br><span class="line">nil</span><br><span class="line">[3] pry(main)&gt; page :cell</span><br><span class="line">UIATableCell</span><br><span class="line">   name: DebugTalk’s smartest flying camera ever.</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">UIATableCell</span><br><span class="line">   name: Ronin</span><br><span class="line">UIATableCell</span><br><span class="line">   name: Phantom</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
 <p>如果需要查看当前屏幕的所有控件类型，可以执行<code>page_class</code>命令进行查看。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[4] pry(main)&gt; page_class</span><br><span class="line">14x UIAButton</span><br><span class="line">8x UIAStaticText</span><br><span class="line">4x UIAElement</span><br><span class="line">4x UIATableCell</span><br><span class="line">2x UIAImage</span><br><span class="line">2x UIAWindow</span><br><span class="line">1x UIAPageIndicator</span><br><span class="line">1x UIATableView</span><br><span class="line">1x UIAStatusBar</span><br><span class="line">1x UIANavigationBar</span><br><span class="line">1x UIATabBar</span><br><span class="line">1x UIAApplication</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
 <p>基本上，<code>page</code>返回的控件信息已经足够满足绝大多数场景需求，但有时候情况比较特殊，需要<code>enabled</code>、<code>xpath</code>、<code>visible</code>、坐标等属性信息，这时就可以通过执行<code>source</code>命令。执行<code>source</code>命令后，就可以返回当前屏幕中所有控件的所有信息，以xml格式进行展现。</p>
 <h2 id="定位UI控件"><a href="#定位UI控件" class="headerlink" title="定位UI控件"></a>定位UI控件</h2><p>获取到UI控件的属性信息后，就可以对控件进行定位了。</p>
 <p>首先介绍下最通用的定位方式，<code>find</code>。通过<code>find</code>命令，可以实现在控件的诸多属性值（<code>name</code>、<code>label</code>、<code>value</code>、<code>hint</code>）中查找目标值。查询时不区分大小写，如果匹配结果有多个，则只返回第一个结果。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[5] pry(main)&gt; find('osmo')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x..febd52a30dcdfea32 id=<span class="string">"2"</span>&gt;</span></span><br><span class="line">[6] pry(main)&gt; find('osmo').label</span><br><span class="line">"Osmo"</span><br></pre></td></tr></table></figure>
+
 <p>另一个通用的定位方式是<code>find_element</code>，它也可以实现对所有控件进行查找，但是相对于<code>find</code>，可以对属性类型进行指定。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[7] pry(main)&gt; find_element(:class_name, 'UIATextField')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x31d87e3848df8804 id=<span class="string">"3"</span>&gt;</span></span><br><span class="line">[8] pry(main)&gt; find_element(:class_name, 'UIATextField').value</span><br><span class="line">"Email Address"</span><br></pre></td></tr></table></figure>
+
 <p>不过在实践中发现，采用<code>find</code>、<code>find_element</code>这类通用的定位方式并不好用，因为定位结果经常不是我们期望的。</p>
 <p>经过反复摸索，我推荐根据目标控件的类型，选择对应的定位方式。总结起来，主要有以下三种方式。</p>
 <p>针对Button类型的控件（UIAButton），采用<code>button_exact</code>进行定位：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[9] pry(main)&gt; button_exact('Login')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x..feaebd8302b6d77cc id=<span class="string">"4"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>针对Text类型的控件（UIAStaticText），采用<code>text_exact</code>进行定位：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[10] pry(main)&gt; text_exact('Phantom')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x1347e89100fdcee2 id=<span class="string">"5"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>针对控件类型进行定位时，采用<code>tag</code>；如下方式等价于<code>find_element(:class_name, &#39;UIASecureTextField&#39;)</code>。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[11] pry(main)&gt; tag('UIASecureTextField')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x..fc6f5efd05a82cdca id=<span class="string">"6"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>基本上，这三种方式就已经足够应付绝大多数测试场景了。当然，这三种方式只是我个人经过实践后选择的定位方式，除了这三种，<code>Appium</code>还支持很多种其它定位方式，大家可自行查看<code>Appium</code>官方文档进行选择。</p>
 <p>另外，除了对控件进行定位，有时候我们还想判断当前屏幕中是否存在某个控件（通常用于结果检测判断），这要怎么做呢？</p>
 <p>一种方式是借助于<code>Appium</code>的控件查找机制，即找不到控件时会抛出异常（<code>Selenium::WebDriver::Error::NoSuchElementError</code>）；反过来，当查找某个控件抛出异常时，则说明当前屏幕中不存在该控件。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[12] pry(main)&gt; button_exact('Login_invalid')</span><br><span class="line">Selenium::WebDriver::Error::NoSuchElementError: An element could not be located on the page using the given search parameters.</span><br><span class="line">from /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/common/helper.rb:218:in `_no_such_element'</span><br></pre></td></tr></table></figure>
+
 <p>该种方式可行，但比较暴力，基本上不会采用这种方式。</p>
 <p>另一种更好的方式是，查找当前屏幕中指定控件的个数，若个数不为零，则说明控件存在。具体操作上，将<code>button_exact</code>替换为<code>buttons_exact</code>，将<code>text_exact</code>替换为<code>texts_exact</code>。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[12] pry(main)&gt; buttons_exact('Login').count</span><br><span class="line">1</span><br><span class="line">[13] pry(main)&gt; buttons_exact('Login_invalid').count</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
 <p>除此之外，基于Ruby实现的<code>appium_lib</code>还支持<code>exists</code>方法，可直接返回Boolean值。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[14] pry(main)&gt; exists &#123; button_exact('Login') &#125;</span><br><span class="line">true</span><br><span class="line">[15] pry(main)&gt; exists &#123; button_exact('Login_invalid') &#125;</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+
 <h2 id="对控件执行操作"><a href="#对控件执行操作" class="headerlink" title="对控件执行操作"></a>对控件执行操作</h2><p>定位到具体的控件后，操作就比较容易了。</p>
 <p>操作类型不多，最常用就是点击（click）和输入（type），这两个操作能覆盖80%以上的场景。</p>
 <p>对于点击操作，才定位到的控件后面添加<code>.click</code>方法；对于输入操作，在定位到的输入框控件后面添加<code>.type</code>方法，并传入输入值。</p>
 <p>例如，账号登录操作就包含输入和点击两种操作类型。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[16] pry(main)&gt; find_element(:class_name, 'UIATextField').type 'leo.lee@debugtalk.com'</span><br><span class="line">""</span><br><span class="line">[17] pry(main)&gt; find_element(:class_name, 'UIASecureTextField').type '123456'</span><br><span class="line">""</span><br><span class="line">[18] pry(main)&gt; button_exact('Login').click</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
 <h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>在本文中，我们学习了对iOS UI控件进行交互操作的一般性方法，为编写自动化测试脚本打好了基础。</p>
 <p>在下一篇文章中，我们就要正式开始针对iOS应用编写自动化测试脚本了。</p>
 
@@ -1144,14 +1880,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/自动化测试/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/AppiumBooster/" itemprop="url" rel="index"><span itemprop="name">AppiumBooster</span></a></span>
 
                 
                 
@@ -1223,8 +1959,10 @@
 <p>采用<code>CocoaPods</code>管理的项目，在项目根目录下会包含<code>Podfile</code>和<code>Podfile.lock</code>文件，里面记录了当前项目依赖的第三方库以及对应的版本号。</p>
 <p>安装<code>CocoaPods</code>很简单，采用<code>gem</code>即可。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo gem install cocoapods</span><br></pre></td></tr></table></figure>
+
 <p>然后，进入到iOS项目的目录，执行<code>pod install</code>命令即可安装当前项目的所有依赖。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> Project_Folder</span><br><span class="line">$ pod install</span><br><span class="line">Re-creating CocoaPods due to major version update.</span><br><span class="line">Analyzing dependencies</span><br><span class="line">.....（略）</span><br><span class="line">Downloading dependencies</span><br><span class="line">.....（略）</span><br><span class="line">Generating Pods project</span><br><span class="line">Integrating client project</span><br><span class="line">Sending stats</span><br><span class="line">Pod installation complete! There are 27 dependencies from the Podfile and 28 total pods installed.</span><br></pre></td></tr></table></figure>
+
 <p>关于<code>CocoaPods</code>的更多信息，请自行查看<a href="https://cocoapods.org" target="_blank" rel="noopener">官方网站</a></p>
 <p>在依赖安装完成后，正常情况下，就可以在Xcode中编译项目了。</p>
 <p>没有别的需要注意的，将target选择为模拟器（iOS Simulator）即可。而且针对模拟器进行编译时，也不会涉及到开发者证书的问题，项目配置上会简单很多。待后续讲到真机上的自动化测试时，我再对证书方面的内容进行补充。</p>
@@ -1243,6 +1981,7 @@
 <p>刚开始出现这问题时百思不得其解，因为提示的信息并不明显，Google了好一阵也没找到原因。最后只有详细去看日志信息，才发现问题所在。</p>
 <p>在日志中，发现的报错信息如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[iOS] Error: Could not find a device to launch. You requested &apos;iPhone 6 (8.4)&apos;, but the available devices were: [&quot;Apple TV 1080p (9.2) [98638D25-7C82-48DF-BDCA-7F682F951533] (Simulator)&quot;,&quot;iPad 2 (9.2) [5E22F53E-EAB3-45DF-A1DD-10F58E920679] (Simulator)&quot;,&quot;iPad 2 (9.3) [4B2D2F9A-C099-4C13-8DE9-27C826A521C2] (Simulator)&quot;,&quot;iPad Air (9.2) [825E4997-9CD8-4225-9977-4C7AE2C98389] (Simulator)&quot;,&quot;iPad Air (9.3) [E4523799-E35F-4499-832B-12CF33F09144] (Simulator)&quot;,&quot;iPad Air 2 (9.2) [8057039D-F848-453E-97EC-2F75CAEA2E77] (Simulator)&quot;,&quot;iPad Air 2 (9.3) [0B8F49DA-832A-4248-BA1D-9DA5D11E31FD] (Simulator)&quot;,&quot;iPad Pro (9.2) [AF1F2D06-3067-41B5-AC2B-4B0ED88BF5D9] (Simulator)&quot;,&quot;iPad Pro (9.3) [C39617A6-9D91-4C0B-B25B-741BD57B016C] (Simulator)&quot;,&quot;iPad Retina (9.2) [D3C694E1-E3B4-47BE-AB5E-80B3D4E22FC2] (Simulator)&quot;,&quot;iPad Retina (9.3) [907C7B06-ED2C-48AC-AC46-04E4AD6E0CA3] (Simulator)&quot;,&quot;iPhone 4s (9.2) [1A786195-94E3-4908-8309-7B66D84E4619] (Simulator)&quot;,&quot;iPhone 4s (9.3) [3F76F34B-5A8F-4FD1-928D-56F84C192DDD] (Simulator)&quot;,&quot;iPhone 5 (9.2) [0D79A4CA-71EB-48A6-9EE4-172BEF3EB4E0] (Simulator)&quot;,&quot;iPhone 5 (9.3) [04270D44-F831-4253-95F2-3D205D2BC0D9] (Simulator)&quot;,&quot;iPhone 5s (9.2) [13A16C07-3C5B-4B04-A94B-B40A63238958] (Simulator)&quot;,&quot;iPhone 5s (9.3) [D30A7B34-BA01-4203-80DA-FAEA436725F9] (Simulator)&quot;,&quot;iPhone 6 (9.2) [5D01650F-2A31-4D53-A47A-CCF7FD552ADD] (Simulator)&quot;,&quot;iPhone 6 (9.3) [2F0810F6-C73B-4BA4-93BA-06D4B6D96BDA] (Simulator)&quot;,&quot;iPhone 6 Plus (9.2) [9A840B78-E6CE-4D18-BE83-16B590411641] (Simulator)&quot;,&quot;iPhone 6 Plus (9.3) [27C6557A-B09D-4D8A-9846-DA8FE0A8E8D5] (Simulator)&quot;,&quot;iPhone 6s (9.2) [E7F5B8A5-0E85-404F-A4D4-191D63E7EC1B] (Simulator)&quot;,&quot;iPhone 6s (9.3) [6F702911-13C2-472C-9ECD-BADD4385CB77] (Simulator)&quot;,&quot;iPhone 6s (9.3) + Apple Watch - 38mm (2.2) [B63FFAA4-00A4-473B-9462-3664F41F9001] (Simulator)&quot;,&quot;iPhone 6s Plus (9.2) [58837F78-511A-4F0B-9DDF-782E3B9935BD] (Simulator)&quot;,&quot;iPhone 6s Plus (9.3) [C31003C6-DCE2-414D-AD7F-376F6FA995B0] (Simulator)&quot;,&quot;iPhone 6s Plus (9.3) + Apple Watch - 42mm (2.2) [E3154768-CA23-45CC-90E5-2D0386A57B7D] (Simulator)&quot;]</span><br></pre></td></tr></table></figure>
+
 <p>问题在于，我设置<code>iOS Settings</code>时，将<code>Force Device</code>设置为”iPhone 6”，将<code>Platform Version</code>设置为“8.4”，但是经过组合，<code>iPhone 6 (8.4)</code>并不在可用的模拟器设备列表中。</p>
 <p>再来看日志中提示的可用设备，发现“iPhone 6”设备对应的<code>Platform Version</code>只有“9.2”和“9.3”。然后回到<code>iOS Settings</code>，发现<code>Platform Version</code>的下拉框可选项就没有“9.2”和“9.3”，最新的一个可选版本也就是“8.4”。</p>
 <p><img src="/images/Appium_iOS_Settings_bug.jpg" alt="Appium iOS Settings bug"></p>
@@ -1368,14 +2107,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/自动化测试/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/AppiumBooster/" itemprop="url" rel="index"><span itemprop="name">AppiumBooster</span></a></span>
 
                 
                 
@@ -1454,8 +2193,10 @@
 <p><a href="https://github.com/appium/appium-doctor" target="_blank" rel="noopener"><code>appium-doctor</code></a>是一个用于验证appium安装环境的工具，可以诊断出<code>Node/iOS/Android</code>环境配置方面的常见问题。</p>
 <p><code>appium-doctor</code>采用<code>node.js</code>编写，采用<code>npm</code>即可在Terminal中进行安装：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install appium-doctor -g</span><br></pre></td></tr></table></figure>
+
 <p>安装完毕后，执行<code>appium-doctor</code>命令即可对<code>Appium</code>的环境依赖情况进行检测；指定<code>--ios</code>时只针对iOS环境配置进行检测，指定<code>--android</code>参数时只针对Android环境配置进行检测，若不指定则同时对iOS和Android环境进行检测。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ appium-doctor --ios</span><br><span class="line">info AppiumDoctor <span class="comment">### Diagnostic starting ###</span></span><br><span class="line">info AppiumDoctor  ✔ Xcode is installed at: /Applications/Xcode.app/Contents/Developer</span><br><span class="line">info AppiumDoctor  ✔ Xcode Command Line Tools are installed.</span><br><span class="line">info AppiumDoctor  ✔ DevToolsSecurity is enabled.</span><br><span class="line">info AppiumDoctor  ✔ The Authorization DB is <span class="built_in">set</span> up properly.</span><br><span class="line">info AppiumDoctor  ✔ The Node.js binary was found at: /usr/<span class="built_in">local</span>/bin/node</span><br><span class="line">info AppiumDoctor  ✔ HOME is <span class="built_in">set</span> to: /Users/Leo</span><br><span class="line">info AppiumDoctor <span class="comment">### Diagnostic completed, no fix needed. ###</span></span><br><span class="line">info AppiumDoctor</span><br><span class="line">info AppiumDoctor Everything looks good, <span class="built_in">bye</span>!</span><br><span class="line">info AppiumDoctor</span><br></pre></td></tr></table></figure>
+
 <p>若检测结果全部通过，则说明Appium的相关依赖已经准备就绪，接下来可以继续安装Appium。</p>
 <h2 id="安装Appium"><a href="#安装Appium" class="headerlink" title="安装Appium"></a>安装Appium</h2><p>根据前面的介绍，Appium采用Client-Server的架构设计，因此安装Appium时需要分别安装Server部分和Client部分。</p>
 <p>通常情况下，我们说的Appium都是指代的Server部分。Appium的安装有多种方式：可以通过源码编译安装，也可以在Terminal中通过<code>npm</code>命令安装，另一种是直接下载<a href="https://github.com/appium/appium/releases" target="_blank" rel="noopener"><code>appium.dmg</code></a>后安装应用程序。</p>
@@ -1464,8 +2205,10 @@
 <p>而说的需要安装的Client部分，其实也就是安装这些Library。选定编写测试用例的语言后，我们就可以针对性地进行安装。</p>
 <p>例如，如果选择Ruby语言，那么需要安装的Library就是<code>appium_lib</code>，安装方式如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gem install appium_lib</span><br></pre></td></tr></table></figure>
+
 <p>如果选择Python语言，那么需要安装的Library就是<code>Appium-Python-Client</code>，安装方式如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install Appium-Python-Client</span><br></pre></td></tr></table></figure>
+
 <p>对于其它编程语言，请自行参考官方文档。</p>
 <h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>iOS的自动化测试环境已基本准备就绪了，接下来我们想做的第一件事，就是在模拟器中运行iOS应用。</p>
 <p>在下一篇文章中，我们将从clone项目源码为起点，编译生成iOS app，在Appium中调用模拟器中运行iOS app，并分享实践过程中遇到的一些坑。</p>
@@ -1588,7 +2331,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
 
                 
                 
@@ -1632,14 +2382,18 @@
 <p>关于UID，简单地进行下说明。在Linux系统中，UID表示的是User Identifier，主要用于表示是哪位用户运行了该程序。但在Android系统中，由于Android系统本身就为单用户系统，这时UID就被赋予了新的使命，主要用于实现数据共享。具体地，Android系统为每个应用都分配了一个UID，不同apk的UID几乎都是互不相同的，而对于不同UID的apk，不能共享数据资源。之所以用“几乎”，是因为有时候同一厂家会存在多个产品，并且希望能在多个apk之间实现数据共享，这个时候，便可通过在menifest配置文件中指定相同的sharedUserId，然后在Android系统中安装应用时便会分配相同的UID。</p>
 <p>获取app UID的方式有多种，最简单的方式应该还是从<code>/data/system/packages.list</code>中读取，并通过apk的<code>&lt;PKGNAME&gt;</code>找到对应的UID。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/ # cat /data/system/packages.list | grep com.UCMobile.trunk</span><br><span class="line">com.UCMobile.trunk 10084 0 /data/data/com.UCMobile.trunk default 3003,1028,1015</span><br></pre></td></tr></table></figure>
+
 <p>在这里，10084即是<code>com.UCMobile.trunk</code>的UID。</p>
 <h2 id="获取流量数据"><a href="#获取流量数据" class="headerlink" title="获取流量数据"></a>获取流量数据</h2><p>流量数据分为接收流量（tcp_rcv）和发送流量（tcp_snd）两部分，这两个状态数值我们可以通过读取<code>/proc/uid_stat/&lt;UID&gt;</code>目录下的两个文件得到。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_rcv</span><br><span class="line">3446837</span><br><span class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_snd</span><br><span class="line">134366</span><br></pre></td></tr></table></figure>
+
 <p>通过这种方式，我们就可以读取得到指定apk在当前时刻的累计流量数值。</p>
 <h2 id="获得启动流量数据"><a href="#获得启动流量数据" class="headerlink" title="获得启动流量数据"></a>获得启动流量数据</h2><p>有了前面的基础，我们要测试启动流量就很好实现了。只需要在启动前采集下累计流量数值，然后启动应用，完成启动后再采集一次累计流量数值，前后两次累计数值的差值便是当次启动耗费的流量数。需要注意的是，由于很多时候apk在启动后，会在系统后台异步加载一些数据资源，因此为了保证我们采集到当次启动耗费的全部流量数值，我们在启动应用后最好能等待一段时间。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_snd</span><br><span class="line">15068</span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_rcv</span><br><span class="line">98021</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> start app activity, sleep 10s</span></span><br><span class="line"></span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_snd</span><br><span class="line">23268</span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_rcv</span><br><span class="line">965651</span><br></pre></td></tr></table></figure>
+
 <p>采集到前后两次流量数值后，即可计算得到当次启动耗费的总流量。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当次启动总流量 = (23268 + 965651) - (15068 + 98021) = 875830 bytes</span><br></pre></td></tr></table></figure>
+
 <p>当然，这里的启动还分为好几种，包括首次安装启动、非首次安装启动、覆盖安装启动等。具体的启动方式可根据实际场景来定，但在统计流量的方法方面都是相同的。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文讲解了Android App启动流量测试的一种方法。然而，本次介绍的方法也存在一定局限性，因为<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下的<code>tcp_rcv</code>和<code>tcp_snd</code>文件中都只记录了总值，如果我们只关注总体的流量数值还好，但要是我们希望能测试得到更细化的数据，该方法就没法满足我们的测试需求了。</p>
 <p>举个例子，UC浏览器国际版在启动后，会和美国的服务器进行通讯交互。现在，我们想测试UC浏览器国际版在启动后与美国服务器的通讯流量。</p>
@@ -1763,7 +2517,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
 
                 
                 
@@ -1819,6 +2580,7 @@
 </ul>
 <p>基于以上对<code>tcpdump</code>的介绍，我们要测试浏览器在启动后与美国服务器的通讯流量，就只需要先启动浏览器，然后在<code>adb shell</code>中执行以下命令即可。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1|shell@hammerhead:/ $ su -c /data/local/tmp/tcpdump -v -i any -s 0 -c 2000 -w /sdcard/us.pcap</span><br><span class="line">tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 262144 bytes</span><br><span class="line">2000 packets captured</span><br><span class="line">2024 packets received by filter</span><br><span class="line">0 packets dropped by kernel</span><br></pre></td></tr></table></figure>
+
 <p>在这里之所有指定接收packets数为2000，是因为浏览器启动后并不是立即与美国服务器进行通讯。所以在这里设置了一个比较大的值，确保浏览器与美国服务器的异步通讯数据能包含在这2000packets之中。当然，这个2000只是一个工程实践得到的经验值，具体取多少还是要依赖于具体场景。</p>
 <p>经过一段时间的抓包后，就生产了抓包结果，即<code>/sdcard/us.pcap</code>。</p>
 <h2 id="人工分析pcap文件"><a href="#人工分析pcap文件" class="headerlink" title="人工分析pcap文件"></a>人工分析pcap文件</h2><p>拿到pcap文件只是第一步，我们必须要对这个文件进行解析才能得到我们想要的结果。</p>
@@ -1848,654 +2610,6 @@
 <p>针对本文中的测试场景，解析pcap文件的代码实现如下。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> dpkt</span><br><span class="line"><span class="keyword">from</span> pcap2har <span class="keyword">import</span> pcap</span><br><span class="line"><span class="keyword">from</span> pcap2har <span class="keyword">import</span> http</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parsePcapFile</span><span class="params">(pcap_file, target_host)</span>:</span></span><br><span class="line">    <span class="comment"># parse pcap file</span></span><br><span class="line">    dispatcher = pcap.EasyParsePcap(filename=pcap_file)</span><br><span class="line"></span><br><span class="line">    traffic_total = <span class="number">0</span></span><br><span class="line">    traffic_receive_total = <span class="number">0</span></span><br><span class="line">    traffic_send_total = <span class="number">0</span></span><br><span class="line">    url_list = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># stream为tcp数据流，当为长链接时一个tcp流里面可以有多个http请求</span></span><br><span class="line">    <span class="keyword">for</span> stream <span class="keyword">in</span> dispatcher.tcp.flows():</span><br><span class="line">        <span class="comment"># fwd为请求大小，如果小于200则肯定不是正常的HTTP请求，忽略</span></span><br><span class="line">        <span class="keyword">if</span> stream.fwd.caplen &lt; <span class="number">200</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        pointer = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> pointer &lt; len(stream.fwd.data):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                myrequest = http.Request(stream.fwd, pointer) <span class="comment">#解析请求头</span></span><br><span class="line">            <span class="keyword">except</span> dpkt.Error <span class="keyword">as</span> error:  <span class="comment"># if the message failed</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line">            pointer += myrequest.data_consumed</span><br><span class="line">            myhead = myrequest.msg.headers</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 请求头大小&lt;200时忽略</span></span><br><span class="line">            <span class="keyword">if</span> myrequest.data_consumed &lt; <span class="number">200</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> myhead[<span class="string">"host"</span>] == target_host:</span><br><span class="line">                traffic_receive_total += stream.rev.caplen</span><br><span class="line">                traffic_send_total += stream.fwd.caplen</span><br><span class="line">                traffic_total += stream.streamlen</span><br><span class="line">                url_list.append(myrequest.fullurl)</span><br><span class="line"></span><br><span class="line">    traffic_data = &#123;</span><br><span class="line">        <span class="string">'total'</span>: traffic_total,</span><br><span class="line">        <span class="string">'tcp_snd'</span>: traffic_send_total,</span><br><span class="line">        <span class="string">'tcp_rcv'</span>: traffic_receive_total,</span><br><span class="line">        <span class="string">'url_list'</span>: url_list</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> traffic_data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    pcap_file = <span class="string">""</span></span><br><span class="line">    target_host = <span class="string">"ucus.ucweb.com"</span></span><br><span class="line">    <span class="keyword">print</span> parsePcapFile(pcap_file, target_host)</span><br><span class="line">    <span class="comment"># output: &#123;'url_list': ['http://ucus.ucweb.com/usquery.php'], 'total': 10022, 'tcp_rcv': 6300, 'tcp_snd': 3722&#125;</span></span><br></pre></td></tr></table></figure>
 
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/manage-Jenkins-via-remote-api/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/manage-Jenkins-via-remote-api/" class="post-title-link" itemprop="url">通过 API 远程管理 Jenkins</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2016-05-02 00:00:00" itemprop="dateCreated datePublished" datetime="2016-05-02T00:00:00+08:00">2016-05-02</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>最近接到一个需求，需要对公司内部的Android性能测试平台的分支管理模块进行改造。</p>
-<p>为了更好地说明问题，在下图中展示了一个精简的持续集成测试系统。</p>
-<p><img src="/images/Jenkins-DroidTestbed.png" alt="Jenkins DroidTestbed"></p>
-<p>在该系统中，Jenkins负责定时检测代码库（<code>Code Repository</code>）的代码更新情况，当检测到有新的代码提交时，自动采用最新的代码进行构建，并采用构建得到的包（apk）触发自动化测试平台（<code>DroidTestbed</code>）执行测试任务。</p>
-<p>然后再说下分支管理模块。</p>
-<p>由于我们的持续集成平台通常不止监控一个产品，而每个产品又不止监控一个tag（例如/trunk，/projects/cn/10.9.8），因此，我们的持续集成平台需要有分支管理的功能，即针对每一个产品的每一个tag，单独创建一个分支，并针对各个分支单独指定测试用例集合测试设备。</p>
-<p>具体实现方面，出于单一职责的原则，我们对功能进行了如下划分：</p>
-<ul>
-<li>在Jenkins端针对每一个分支创建一个Job；</li>
-<li>在<code>DroidTestbed</code>端配置测试资源，针对每一个分支分别绑定测试用例集和测试设备，每一个分支会存在一个单独的branch_id；</li>
-<li>在Jenkins端的Job配置中，保存该分支在<code>DroidTestbed</code>中对应的<code>branch_id</code>，实现<code>Jenkins</code>与<code>DroidTestbed</code>的关联。</li>
-</ul>
-<p>整个过程看上去并没有什么问题，那为什么需要对分支管理模块进行改造呢？</p>
-<p>问题就出现在分支配置上面。</p>
-<p>试想一下，每次要新增或修改一个分支的时候，由于Jenkins端和DroidTestbed端的配置是独立的，那么我们就只能在两个平台上分别进行配置。</p>
-<p>另一方面，配置工作本身也较为复杂，例如，在Jenkins端就需要设置的参数包括：repository_url，tag，ref_tag，ref_revision，branch_id，schedule，user_name等；而这其中的大部分参数同样也要在DroidTestbed端进行配置。</p>
-<p>根据历史经验，但凡涉及到复杂且重复的手工操作时，就容易出错。实际情况的确是这样的。在该功能上线后，由于配置复杂，业务组的同学每次要新增一个监控分支时，都需要找到管理员来帮忙配置（说实话，管理员对业务同学能配置正确也没信心）；即使是管理员，也出现过好几次因为疏忽造成配置错误的情况。</p>
-<p>那么，这个问题要怎么解决呢？</p>
-<h2 id="Jenkins-Remote-API-的简介"><a href="#Jenkins-Remote-API-的简介" class="headerlink" title="Jenkins Remote API 的简介"></a>Jenkins Remote API 的简介</h2><p>绕了这么大一个圈子，终于引出本文的主题，Jenkins Remote API。</p>
-<p>实际上，Jenkins本身支持丰富的API接口，我们通过远程调用接口，基本上可以实现所有需要的功能，例如：</p>
-<ul>
-<li>从Jenkins获取Job状态信息</li>
-<li>触发Jenkins执行构建</li>
-<li>创建、复制、修改、删除Job</li>
-</ul>
-<p>回到前面的案例，我们就可以将配置操作全部放在<code>DroidTestbed</code>中，只需要在保存配置项时，由<code>DroidTestbed</code>自动调用Jenkins的Remote API，即可实现配置的同步。</p>
-<h2 id="Jenkins-Remote-API-的调用"><a href="#Jenkins-Remote-API-的调用" class="headerlink" title="Jenkins Remote API 的调用"></a>Jenkins Remote API 的调用</h2><p>现在我们来看下如何调用Jenkins的Remote API。</p>
-<p>Jenkins的Remote API以<code>REST-like</code>的形式进行提供，通过对特定的API执行POST请求即可实现对Jenkins的操作。</p>
-<p>例如，我们搭建的Jenkins站点为<code>http://jenkins.debugtalk.com:8080</code>，那么，访问<code>http://jenkins.debugtalk.com:8080/api</code>即可查看到该站点所有可用的API；若想若某个具体的Job进行操作，如job名称<code>android_core_dashboard_trunk</code>，它的管理页面为<code>http://jenkins.debugtalk.com:8080/job/android_core_dashboard_trunk</code>，那么我们访问<code>http://jenkins.debugtalk.com:8080/job/android_core_dashboard_trunk/api/</code>即可查看到该job可用的API。</p>
-<p>更详细的POST调用方式的介绍可以参考Jenkins的官方<a href="https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API" target="_blank" rel="noopener">wiki</a>，在此就不过多进行介绍。</p>
-<p>可以看出，通过对特定API执行POST请求操作较为原始，因为我们需要关注过多底层细节。事实上，当前已经有前辈针对这一痛点，对底层的POST操作细节进行了封装，形成了一些<code>wrapper</code>方便我们从上层进行更便捷的操作。</p>
-<p>这类<code>wrapper</code>实现的功能类似，都可以方便我们在代码中通过更简洁的方式调用Jenkins API，实现对Jenkins的远程管理，我们只需要根据我们采用的具体编程语言来选择对应的<code>wrapper</code>即可。当然，如果没有找到合适的，我们也可以参照已有的开源<code>wrapper</code>，自己再造一个轮子，原理都是相同的。</p>
-<p>在Jenkins的官方wiki中，推荐了两个较为成熟的<code>API wrapper</code>，一个是基于Python实现的<a href="https://github.com/salimfadhley/jenkinsapi" target="_blank" rel="noopener"><code>salimfadhley/jenkinsapi</code></a>，另一个是基于Ruby实现的<a href="https://github.com/arangamani/jenkins_api_client" target="_blank" rel="noopener"><code>arangamani/jenkins_api_client</code></a>。</p>
-<p>以<code>salimfadhley/jenkinsapi</code>为例，通过使用<code>jenkinsapi</code>，我们在Python中就可以很方便地管理Jenkins。常见的操作方式示例如下。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> jenkinsapi</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> jenkinsapi.jenkins <span class="keyword">import</span> Jenkins</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定Jenkins实例</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J = Jenkins(<span class="string">'http://jenkins.debugtalk.com:8080'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Jenkins版本</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J.version</span><br><span class="line"><span class="number">1.542</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Jenkins的所有jobs</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J.keys()</span><br><span class="line">[<span class="string">'foo'</span>, <span class="string">'test_jenkinsapi'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看指定job的配置信息</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J[<span class="string">'test_jenkinsapi'</span>].get_config()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Jenkins job</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>jobName = <span class="string">'test_job'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>EMPTY_JOB_CONFIG = <span class="string">'''</span></span><br><span class="line"><span class="string">&lt;?xml version='1.0' encoding='UTF-8'?&gt;</span></span><br><span class="line"><span class="string">&lt;project&gt;</span></span><br><span class="line"><span class="string">  &lt;actions&gt;jkkjjk&lt;/actions&gt;</span></span><br><span class="line"><span class="string">  &lt;description&gt;&lt;/description&gt;</span></span><br><span class="line"><span class="string">  &lt;keepDependencies&gt;false&lt;/keepDependencies&gt;</span></span><br><span class="line"><span class="string">  &lt;properties/&gt;</span></span><br><span class="line"><span class="string">  &lt;scm class="hudson.scm.NullSCM"/&gt;</span></span><br><span class="line"><span class="string">  &lt;canRoam&gt;true&lt;/canRoam&gt;</span></span><br><span class="line"><span class="string">  &lt;disabled&gt;false&lt;/disabled&gt;</span></span><br><span class="line"><span class="string">  &lt;blockBuildWhenDownstreamBuilding&gt;false&lt;/blockBuildWhenDownstreamBuilding&gt;</span></span><br><span class="line"><span class="string">  &lt;blockBuildWhenUpstreamBuilding&gt;false&lt;/blockBuildWhenUpstreamBuilding&gt;</span></span><br><span class="line"><span class="string">  &lt;triggers class="vector"/&gt;</span></span><br><span class="line"><span class="string">  &lt;concurrentBuild&gt;false&lt;/concurrentBuild&gt;</span></span><br><span class="line"><span class="string">  &lt;builders/&gt;</span></span><br><span class="line"><span class="string">  &lt;publishers/&gt;</span></span><br><span class="line"><span class="string">  &lt;buildWrappers/&gt;</span></span><br><span class="line"><span class="string">&lt;/project&gt;</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>new_job = J.create_job(jobName, EMPTY_JOB_CONFIG)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新Jenkins job的配置</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> et</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>new_conf = new_job.get_config()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root = et.fromstring(new_conf.strip())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>builders = root.find(<span class="string">'builders'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>shell = et.SubElement(builders, <span class="string">'hudson.tasks.Shell'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>command = et.SubElement(shell, <span class="string">'command'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>command.text = <span class="string">"ls"</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J[jobName].update_config(et.tostring(root))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除Jenkins job</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J.delete_job(jobName)</span><br></pre></td></tr></table></figure>
-<p>更多的使用方法可参考项目文档。</p>
-<p>有些同学在认真研究了这些开源库后也许会说，官方文档已经翻遍了，但是文档中对用法的描述太少了，也没给出API调用的示例，还是不知道怎么使用啊。这个问题在开源库中的确也是普遍存在的。</p>
-<p>介绍个技巧，通常优秀的开源库都会很重视测试，作者可能在文档中没有针对每一个API接口的调用方式进行说明，但通常会针对各个接口编写较为完整的测试代码。我们通过阅读测试代码，就可以充分了解API接口的使用方法了，这也比直接阅读文档有效率得多。</p>
-<h2 id="Read-More-…"><a href="#Read-More-…" class="headerlink" title="Read More …"></a>Read More …</h2><p>最后，如果感觉上面给的示例还不够，还想看看在实际项目中如何远程管理Jenkins，那么可以关注我最近在做的一个开源项目。</p>
-<p>先看下整体的系统架构图。</p>
-<p><img src="/images/DroidTestbed-DroidMeter.png" alt="DroidTestbed DroidMeter"></p>
-<p>整个系统实现的功能是Android App的性能持续集成测试平台，主要由<code>DroidTestbed</code>和<code>DroidMeter</code>两部分组成。</p>
-<p>其中，<code>DroidTestbed</code>部分采用<code>Ruby on Rails</code>编写，核心角色为测试任务管理，可实现测试资源（测试用例、测试设备等）配置，根据代码提交自动触发执行测试任务、测试设备自动化调度、测试任务手动下发，测试结果报表查看等。<code>DroidMeter</code>负责具体的性能测试执行，采用Python编写，可实现控制Android设备执行测试场景，采集性能测试数据，包括内存、启动时间、帧率、包大小、网速、流量等等。</p>
-<p>本文暂时不对该系统进行过多介绍，我后续会单独对各个模块涉及到的技术展开进行详细介绍。如果感兴趣，可关注我的GitHub或微信公众号【DebugTalk】。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/traps-in-sql-null/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/traps-in-sql-null/" class="post-title-link" itemprop="url">SQL语句中关于NULL的那些坑</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2016-04-25 00:00:00" itemprop="dateCreated datePublished" datetime="2016-04-25T00:00:00+08:00">2016-04-25</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>今天在跟进公司内部测试平台线上问题的时候，发现一个忽略已久的问题。</p>
-<p>为了简化问题描述，将其进行了抽象。</p>
-<p>有一张数据表<code>qms_branch</code>，里面包含了一批形式如下所示的数据：</p>
-<table>
-<thead>
-<tr>
-<th>id</th>
-<th>name</th>
-<th>types</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>dashboard_trunk</td>
-<td>dashboard</td>
-</tr>
-<tr>
-<td>2</td>
-<td>monkey_trunk</td>
-<td>monkey</td>
-</tr>
-<tr>
-<td>3</td>
-<td>dashboard_projects_10_9_9</td>
-<td>dashboard</td>
-</tr>
-<tr>
-<td>4</td>
-<td>performance_trunk</td>
-<td></td>
-</tr>
-<tr>
-<td>5</td>
-<td>performance_projects_10_9_8</td>
-<td>performance</td>
-</tr>
-</tbody>
-</table>
-<p>在系统的某个页面中，需要展示出所有<code>dashboard</code>类型以外的分支，于是就采用如下方式进行查询（Rails）。</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">branches = Qms::Branch.where(<span class="string">"types!='dashboard'"</span>)</span><br></pre></td></tr></table></figure>
-<p>这个方式有问题么？</p>
-<p>之前我是觉得没什么问题。但是在代码上线后，实际使用时发现部分分支没有加载出来，这就包括了<code>performance_trunk</code>分支。</p>
-<p>然后就是问题定位，到MySQL的控制台采用SQL语句进行查询：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> qms_branch <span class="keyword">WHERE</span> types != <span class="string">'dashboard'</span></span><br></pre></td></tr></table></figure>
-<p>发现在查询结果中的确没有包含<code>performance_trunk</code>分支。</p>
-<p>这是什么原因呢？为什么在第4条数据中，<code>types</code>属性的值明明就不是<code>dashboard</code>，但是采用<code>types!=&#39;dashboard&#39;</code>就无法查询得到结果呢？</p>
-<h2 id="原因追溯"><a href="#原因追溯" class="headerlink" title="原因追溯"></a>原因追溯</h2><p>查看数据表<code>qms_branch</code>的结构，看到<code>types</code>字段的属性为：<code>DEFAULT NULL</code>。</p>
-<p>经过查询资料，在<a href="http://www.w3schools.com/sql/sql_null_values.asp" target="_blank" rel="noopener">w3schools</a>上找到了答案。</p>
-<blockquote>
-<ul>
-<li>NULL is used as a placeholder for unknown or inapplicable values, it is treated differently from other values.</li>
-<li>It is not possible to test for NULL values with comparison operators, such as =, &lt;, or &lt;&gt;. We will have to use the IS NULL and IS NOT NULL operators instead.</li>
-</ul>
-</blockquote>
-<p>也就是说，在SQL中，<code>NULL</code>并不能采用<code>!=</code>与数值进行比较，若要进行比较，我们只能采用<code>IS NULL</code>或<code>IS NOT NULL</code>。</p>
-<p>于是，我们将SQL语句改为如下形式：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> qms_branch <span class="keyword">WHERE</span> types <span class="keyword">IS</span> <span class="literal">NULL</span> <span class="keyword">or</span> types != <span class="string">'dashboard'</span></span><br></pre></td></tr></table></figure>
-<p>再次查询时，结果集就包含<code>performance_trunk</code>分支了。</p>
-<h2 id="问题延伸"><a href="#问题延伸" class="headerlink" title="问题延伸"></a>问题延伸</h2><p>通过上面例子，我们知道在对NULL进行判断处理时，只能采用<code>IS NULL</code>或<code>IS NOT NULL</code>，而不能采用<code>=, &lt;, &lt;&gt;, !=</code>这些操作符。</p>
-<p>那除此之外，还有别的可能存在的坑么？</p>
-<p>再看一个例子：</p>
-<p>有一张数据表<code>table_foo</code>，其中有一个字段<code>value_field</code>，我们想从这张表中筛选出所有<code>value_field</code>为’value1’，’value2’或NULL的记录。</p>
-<p>那么，我们采用<code>IN</code>操作符，通过如下SQL语句进行查询。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field <span class="keyword">IN</span> (<span class="string">'value1'</span>, <span class="string">'value2'</span>, <span class="literal">NULL</span>)</span><br></pre></td></tr></table></figure>
-<p>这会存在问题么？我们并没有采用<code>=, &lt;, &lt;&gt;, !=</code>对NULL进行比较哦。</p>
-<p>答案是同样存在问题！</p>
-<p>因为在SQL中，<code>IN</code>语句会被转换为多个<code>=</code>语句。例如，上面例子中的SQL在执行时就会被转换为如下SQL语句：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field = <span class="string">'value1'</span> <span class="keyword">OR</span> value_field = <span class="string">'value2'</span> <span class="keyword">OR</span> value_field = <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
-<p>而这个时候，执行<code>value_field = NULL</code>时就会出现问题了。</p>
-<p>正确的做法应该是将<code>NULL</code>相关的判断独立出来，如下SQL才是正确的写法。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field <span class="keyword">IN</span> (<span class="string">'value1'</span>, <span class="string">'value2'</span>) <span class="keyword">OR</span> value_field <span class="keyword">IS</span> <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Android-CPU-lock-frequency/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/Android-CPU-lock-frequency/" class="post-title-link" itemprop="url">对 Android 设备 CPU 进行锁频</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2016-04-18 00:00:00" itemprop="dateCreated datePublished" datetime="2016-04-18T00:00:00+08:00">2016-04-18</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作系统/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。</p>
-<h2 id="CPU频率"><a href="#CPU频率" class="headerlink" title="CPU频率"></a>CPU频率</h2><p>首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。</p>
-<p>基于此需求，当前电子设备的CPU都会存在多个工作频率，并能根据实际场景进行CPU频率的自动切换，以此达到平衡计算性能与能耗的目的。</p>
-<h2 id="锁频的用途"><a href="#锁频的用途" class="headerlink" title="锁频的用途"></a>锁频的用途</h2><p>那么为什么需要锁频呢？</p>
-<p>对于普通用户来说，可能对这些场景比较熟悉：</p>
-<ul>
-<li>在家用笔记本电脑玩游戏的时候，电脑连着电源，不在乎能耗，只想要尽可能高的性能，这个时候就选择高性能模式，即保持CPU在最高频率工作。</li>
-<li>旅行途中使用笔记本电脑，靠电池供电，希望电脑能待机尽可能久，这时就选择省电模式，即CPU保持在最低频率运行。</li>
-</ul>
-<p>作为一名测试工程师，我们在进行软件测试的时候，为了让测试结果真实反映软件本身的效率，从控制变量法的角度，我们希望测试结果尽量不受到硬件本身的影响。这个时候，我们就可以尝试对设备的CPU进行锁频，即保证在测试的过程中，硬件设备的CPU运行在一个恒定的频率。</p>
-<p>说到这里先埋个伏笔，在chromium官方测试库中，部分测试场景在初始化测试环境时，就会将设备所有CPU的频率调到最高状态，后续我会单独以一篇博客的形式对那部分的源码进行分析。对于等不及的朋友，可以先去看下源码，源码路径为<code>pylib/perf/PerfControl.SetHighPerfMode</code>。</p>
-<h2 id="查看CPU状态信息"><a href="#查看CPU状态信息" class="headerlink" title="查看CPU状态信息"></a>查看CPU状态信息</h2><p>在修改CPU的状态之前，我们需要先查看CPU的属性和状态信息，这样才能有针对性地进行正确的设置。</p>
-<p>对于CPU的状态，我们通常会关注两类信息，一是整体层面的，即CPU运行的核数；二是细节层面的，即各个CPU的工作状态，包括所处工作模式、频率大小等。</p>
-<p>在Android系统中，CPU相关的信息存储在<code>/sys/devices/system/cpu</code>目录的文件中，我们可以通过读取该目录下的特定文件获得当前设备的CPU状态信息，也可以通过对该目录下的特定文件进行写值，实现对CPU频率等状态信息的更改。</p>
-<p>本文以<code>Nexus 5</code>（系统版本5.1.1）为例，后面的例子均以该设备为例。不同的机型和Android系统版本可能会存在一些差异，请知悉。</p>
-<p>在<code>/sys/devices/system/cpu</code>目录中，文件结构如下所示。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 01:36 cpu0</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 21:06 cpu1</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 21:07 cpu2</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 21:07 cpu3</span><br><span class="line">-rw------- root     root         4096 1970-01-17 10:27 cpuctl</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpufreq</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpuidle</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 kernel_max</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 offline</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 online</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 possible</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 power</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 present</span><br><span class="line">-rw-r--r-- root     root         4096 1970-01-17 10:27 uevent</span><br></pre></td></tr></table></figure>
-<h3 id="1、view-overall-cpu-info"><a href="#1、view-overall-cpu-info" class="headerlink" title="1、view overall cpu info"></a>1、view overall cpu info</h3><p>在<code>possible</code>文件中，存储的是当前设备可用的CPU，显示形式以数字的形式。例如<code>0-3</code>代表的就是当前设备总共有4个核，编号分别为0，1，2，3。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat possible</span><br><span class="line">0-3</span><br></pre></td></tr></table></figure>
-<p>在<code>online</code>文件中，存储的是当前设备正在运行的CPU。因为有时候设备不需要很高的性能，就可以将部分CPU关闭。不过需要注意的是，不管什么时候，<code>CPU0</code>始终都会处于运行状态。<code>online</code>文件的存储格式与<code>possible</code>类似，如果只有部分CPU运行，且CPU编号不连续的时候，会以逗号进行隔开；例如，<code>0,2</code>表示当前CPU0和CPU2处于运行状态。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat online</span><br><span class="line">0,2</span><br></pre></td></tr></table></figure>
-<p>对应的，<code>offline</code>文件标示的是当前设备处于关闭状态的CPU，这和<code>online</code>作为互补，并集刚好就是设备的所有CPU，即<code>possible</code>文件中的内容。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat offline</span><br><span class="line">1,3</span><br></pre></td></tr></table></figure>
-<h3 id="2、view-specified-cpu-info"><a href="#2、view-specified-cpu-info" class="headerlink" title="2、view specified cpu info"></a>2、view specified cpu info</h3><p>接下来，我们要获取到特定CPU的信息，就需要进入到对应的文件夹，例如，<code>cpu0/</code>对应的就是CPU0的信息。</p>
-<p>在<code>/sys/devices/system/cpu/cpu0</code>目录中，文件结构如下所示。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll cpu0</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 01:37 cpufreq</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpuidle</span><br><span class="line">-r-------- root     root         4096 1970-01-17 10:27 crash_notes</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:36 online</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 power</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 rq-stats</span><br><span class="line">lrwxrwxrwx root     root              1970-01-17 10:27 subsystem</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 topology</span><br><span class="line">-rw-r--r-- root     root         4096 1970-01-17 10:27 uevent</span><br></pre></td></tr></table></figure>
-<p>其中，<code>online</code>文件的内容表示当前CPU是否处于运行状态，若处于运行状态，则内容为1，否则为0；这个和上面讲到的<code>/sys/devices/system/cpu/online</code>能进行对应。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/online</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-<p>在<code>cpu0/cpufreq/</code>目录下，存储的就是与CPU0的频率相关的信息，文件结构如下所示。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll cpu0/cpufreq/</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:57 UV_mV_table</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 affected_cpus</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 cpu_utilization</span><br><span class="line">-r-------- root     root         4096 2016-01-20 01:57 cpuinfo_cur_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 02:00 cpuinfo_max_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:39 cpuinfo_min_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 cpuinfo_transition_latency</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 related_cpus</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:39 scaling_available_frequencies</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 scaling_available_governors</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:50 scaling_cur_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 scaling_driver</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:50 scaling_governor</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 08:29 scaling_max_freq</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 08:29 scaling_min_freq</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 02:52 scaling_setspeed</span><br></pre></td></tr></table></figure>
-<p>在这个目录中，我们需要关注的文件比较多。</p>
-<p>首先是<code>scaling_available_governors</code>和<code>scaling_governor</code>。这里的<code>governor</code>大家可以理解为CPU的工作模式，<code>scaling_available_governors</code>中存储了当前CPU支持的所有工作模式，而<code>scaling_governor</code>存储的是CPU当前所处的工作模式。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/cpufreq/scaling_available_governors</span><br><span class="line">impulse dancedance smartmax interactive conservative ondemand userspace powersave Lionheart bioshock performance</span><br><span class="line"></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/cpufreq/scaling_governor</span><br><span class="line">performance</span><br></pre></td></tr></table></figure>
-<p>可以看到，<code>Nexus 5</code>支持非常多的工作模式，这里只对几个常见的模式进行简单说明。</p>
-<ul>
-<li>performance：最高性能模式，即使系统负载非常低，cpu也在最高频率下运行。</li>
-<li>powersave：省电模式，与performance模式相反，cpu始终在最低频率下运行。</li>
-<li>ondemand：CPU频率跟随系统负载进行变化。</li>
-<li>userspace：可以简单理解为自定义模式，在该模式下可以对频率进行设定。</li>
-</ul>
-<p>对于各种模式对应的含义和策略，在此不进行展开，大家有兴趣的可以自行搜索。</p>
-<p>然后是CPU的工作频率范围，对应的文件有<code>cpuinfo_max_freq</code>、<code>cpuinfo_min_freq</code>、<code>scaling_max_freq</code>、<code>scaling_min_freq</code>。</p>
-<p>以<code>cpuinfo_</code>为前缀的表示CPU硬件支持的频率范围，反映的是CPU自身的特性，与CPU的工作模式无关。而以<code>scaling_</code>为前缀的表示CPU在当前工作模式下的频率范围。</p>
-<p>那么，当前CPU工作的频率是多少，我们要怎么查看呢？</p>
-<p>查看<code>cpuinfo_cur_freq</code>或<code>scaling_cur_freq</code>即可。<code>cpuinfo_cur_freq</code>代表通过硬件实际上读到的频率值，而<code>scaling_cur_freq</code>则是软件当前的设置值，多数情况下这两个值是一致的，但是也有可能因为硬件的原因，有微小的差异。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat cpuinfo_cur_freq</span><br><span class="line">1574400</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_cur_freq</span><br><span class="line">1574400</span><br></pre></td></tr></table></figure>
-<h2 id="更改CPU状态信息"><a href="#更改CPU状态信息" class="headerlink" title="更改CPU状态信息"></a>更改CPU状态信息</h2><p>最后回到我们本文的主题，如何对CPU的频率进行设定呢？</p>
-<p>这也和CPU信息查看对应，分为对CPU整体运行情况的设置，和对特定CPU工作模式的设定。</p>
-<p>在此，有两点需要特别进行说明。</p>
-<p>首先，对于高通的CPU，存在一个系统服务，叫作<code>mpdecision service</code>。当这个系统服务处于运行状态时，我们无法对CPU的状态信息进行更改。因此，如果我们要更改高通CPU的工作模式，第一步要做的就是终止<code>mpdecision</code>系统服务。</p>
-<p>操作起来也很简单，在Android shell里面执行如下命令即可。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop mpdecision</span><br></pre></td></tr></table></figure>
-<p>第二点需要注意的是，如果我们想要实现对特定CPU的工作状态进行设置，就必须将<code>scaling_governor</code>设置为<code>userspace</code>，只有这样，我们才能对<code>scaling_setspeed</code>进行设置。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed</span><br><span class="line">&lt;unsupported&gt;</span><br><span class="line"></span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # echo userspace &gt; scaling_governor</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed</span><br><span class="line">1574400</span><br></pre></td></tr></table></figure>
-<h3 id="1、set-overall-cpu-info"><a href="#1、set-overall-cpu-info" class="headerlink" title="1、set overall cpu info"></a>1、set overall cpu info</h3><p>从宏观层面，我们可以对CPU运行的核数进行设置，即可实现对特定CPU的开启和关闭。当然，我们在前面已经说过，CPU0始终会处于运行状态，因此我们无法将CPU0进行关闭。</p>
-<p>设置的方式很简单，就是往<code>/sys/devices/system/cpu/cpu[i]/online</code>文件中写值即可，写1时开启指定CPU，写0时关闭指定CPU。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> turn off cpu1</span></span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu1 # echo 0 &gt; online</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu1 # cat online</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
-<h3 id="2、set-specified-cpu-info"><a href="#2、set-specified-cpu-info" class="headerlink" title="2、set specified cpu info"></a>2、set specified cpu info</h3><p>在对特定CPU的频率进行设定前，我们需要知道的是，CPU并不能工作在任意频率下，我们只能将CPU的频率设定为它支持的数值。</p>
-<p>通过查看<code>scaling_available_frequencies</code>，我们可以获得当前CPU支持的频率值。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_available_frequencies</span><br><span class="line">300000 422400 652800 729600 883200 960000 1036800 1190400 1267200 1497600 1574400 1728000 1958400 2265600</span><br></pre></td></tr></table></figure>
-<p>接下来，我们就可以对CPU的工作频率进行设置了。</p>
-<p>如何进行设置呢？刚开始的时候，我觉得将特定的频率值写入<code>scaling_setspeed</code>或<code>scaling_cur_freq</code>就可以了，通过Google搜索得到的方法中也是这种方式。</p>
-<p>但经过尝试，发现并不可行。为什么会这样？我也还没有找到答案，希望知道原因的朋友能告诉我。</p>
-<p>最后经过尝试，发现通过同时将<code>scaling_max_freq</code>和<code>scaling_min_freq</code>设置为目标频率值，就可以成功地对CPU频率完成设置。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> before setting</span></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ cat scaling_cur_freq</span><br><span class="line">1574400</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> setting</span></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ echo 1728000 &gt; scaling_min_freq</span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ echo 1728000 &gt; scaling_max_freq</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> after setting</span></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ cat scaling_cur_freq</span><br><span class="line">1728000</span><br></pre></td></tr></table></figure>
 
           
         
@@ -2585,7 +2699,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2626,7 +2740,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2757,7 +2897,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

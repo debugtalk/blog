@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="在本系列的上一篇文章中，我通过系统登录这一典型功能点，演示了编写自动化测试脚本的整个流程，并对测试脚本进行了初步优化。 在本文中，我将重点介绍如何对自动化测试脚本实现⎡工程化⎦的组织和管理。 测试脚本⎡工程化⎦首先说下什么是测试脚本的工程化。 通过之前的工作，我们已经可以让单个自动化测试用例正常运行起来了。然而，这还只算是一个demo，一切才刚刚开始。 试想，一个项目的自动化测试用例少则数百，多则">
 <meta name="keywords" content="Appium,AppiumBooster,iOS,Ruby">
@@ -109,7 +137,7 @@
 <meta property="og:description" content="在本系列的上一篇文章中，我通过系统登录这一典型功能点，演示了编写自动化测试脚本的整个流程，并对测试脚本进行了初步优化。 在本文中，我将重点介绍如何对自动化测试脚本实现⎡工程化⎦的组织和管理。 测试脚本⎡工程化⎦首先说下什么是测试脚本的工程化。 通过之前的工作，我们已经可以让单个自动化测试用例正常运行起来了。然而，这还只算是一个demo，一切才刚刚开始。 试想，一个项目的自动化测试用例少则数百，多则">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://debugtalk.com/images/testcase_login_and_logout.png">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.439Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.611Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从0到1搭建移动App功能自动化测试平台 (4)：自动化测试代码⎡工程化⎦">
 <meta name="twitter:description" content="在本系列的上一篇文章中，我通过系统登录这一典型功能点，演示了编写自动化测试脚本的整个流程，并对测试脚本进行了初步优化。 在本文中，我将重点介绍如何对自动化测试脚本实现⎡工程化⎦的组织和管理。 测试脚本⎡工程化⎦首先说下什么是测试脚本的工程化。 通过之前的工作，我们已经可以让单个自动化测试用例正常运行起来了。然而，这还只算是一个demo，一切才刚刚开始。 试想，一个项目的自动化测试用例少则数百，多则">
@@ -150,16 +178,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -472,14 +490,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/自动化测试/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/AppiumBooster/" itemprop="url" rel="index"><span itemprop="name">AppiumBooster</span></a></span>
 
                 
                 
@@ -530,22 +548,30 @@
 <p>同样地，由于我们的自动化测试脚本是采用Ruby编写的，因此我们也可以使用Minitest/RSpec来管理我们的自动化测试用例。</p>
 <p>基于该想法，我们采用RSpec对之前的系统登录测试用例进行工程结构初始化。对于熟悉Ruby编程，或者有一定代码基础的同学而言，很自然地，可以将测试用例框架初始化为如下结构。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">├── Gemfile</span><br><span class="line">├── android</span><br><span class="line">│   └── appium.txt</span><br><span class="line">├── common</span><br><span class="line">│   ├── requires.rb</span><br><span class="line">│   └── spec_helper.rb</span><br><span class="line">└── ios</span><br><span class="line">    ├── appium.txt</span><br><span class="line">    └── spec</span><br><span class="line">        └── login_spec.rb</span><br></pre></td></tr></table></figure>
+
 <p>在<code>Gemfile</code>中，指定了项目依赖的库。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># filename: Gemfile</span></span><br><span class="line">source <span class="string">'https://gems.ruby-china.org'</span></span><br><span class="line"></span><br><span class="line">gem <span class="string">'rspec'</span></span><br><span class="line">gem <span class="string">'appium_lib'</span></span><br><span class="line">gem <span class="string">'appium_console'</span></span><br></pre></td></tr></table></figure>
+
 <p>在<code>common/spec_helper.rb</code>中，定义了模拟器和RSpec初始化相关的代码。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># filename: common/spec_helper.rb</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">setup_driver</span></span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">if</span> $driver</span><br><span class="line">  appium_txt = File.join(Dir.pwd, <span class="string">'ios'</span>, <span class="string">'appium.txt'</span>)</span><br><span class="line">  caps = Appium.load_appium_txt <span class="symbol">file:</span> appium_txt</span><br><span class="line">  Appium::Driver.new caps</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">promote_methods</span></span></span><br><span class="line">  Appium.promote_appium_methods RSpec::Core::ExampleGroup</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">setup_driver</span><br><span class="line">promote_methods</span><br><span class="line"></span><br><span class="line">RSpec.configure <span class="keyword">do</span> <span class="params">|config|</span></span><br><span class="line"></span><br><span class="line">  config.before(<span class="symbol">:each</span>) <span class="keyword">do</span></span><br><span class="line">    $driver.start_driver</span><br><span class="line">    wait &#123; alert_accept &#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  config.after(<span class="symbol">:each</span>) <span class="keyword">do</span></span><br><span class="line">    driver_quit</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>在<code>common/requires.rb</code>中，实现了对相关库文件的引用。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># filename: common/requires.rb</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># load lib</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'rspec'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'appium_lib'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># setup rspec</span></span><br><span class="line">require_relative <span class="string">'spec_helper'</span></span><br></pre></td></tr></table></figure>
+
 <p>在<code>ios/appium.txt</code>中，对iOS模拟器信息和测试包路径进行了配置。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[caps]</span><br><span class="line">platformName = <span class="string">"ios"</span></span><br><span class="line">deviceName = <span class="string">"iPhone 6s"</span></span><br><span class="line">platformVersion = <span class="string">"9.3"</span></span><br><span class="line">app = <span class="string">"/Users/Leo/MyProjects/AppiumBooster/ios/app/test.app"</span></span><br></pre></td></tr></table></figure>
+
 <p>在<code>ios/spec/</code>目录中，则是测试用例的内容。例如，<code>ios/spec/login_spec.rb</code>对应的就是系统登录的测试用例。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># filename: ios/spec/login_spec.rb</span></span><br><span class="line">require_relative <span class="string">'../../common/requires'</span></span><br><span class="line"></span><br><span class="line">describe <span class="string">'Login'</span> <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">  it <span class="string">'with valid account'</span> <span class="keyword">do</span></span><br><span class="line">    wait &#123; id(<span class="string">'btnMenuMyAccount'</span>).click &#125;</span><br><span class="line">    wait &#123; id <span class="string">'uiviewMyAccount'</span> &#125;</span><br><span class="line"></span><br><span class="line">    wait &#123; id(<span class="string">'tablecellMyAccountLogin'</span>).click &#125;</span><br><span class="line">    wait &#123; id <span class="string">'uiviewLogIn'</span> &#125;</span><br><span class="line"></span><br><span class="line">    wait &#123; id(<span class="string">'txtfieldEmailAddress'</span>).type <span class="string">'leo.lee@debugtalk.com'</span> &#125;</span><br><span class="line">    wait &#123; id(<span class="string">'sectxtfieldPassword'</span>).type <span class="string">'123321'</span> &#125;</span><br><span class="line">    wait &#123; id(<span class="string">'btnLogin'</span>).click &#125;</span><br><span class="line">    wait &#123; id <span class="string">'tablecellMyMessage'</span> &#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>通过以上代码结构初始化，我们的测试用例框架的雏形就形成了。接下来，在Terminal中切换到项目根目录，然后通过<code>rspec ios</code>命令就可以执行ios目录中的测试用例了。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ rspec ios</span><br><span class="line">.</span><br><span class="line"></span><br><span class="line">Finished <span class="keyword">in</span> 2 minutes 7.2 seconds (files took 1.76 seconds to load)</span><br><span class="line">1 example, 0 failures</span><br></pre></td></tr></table></figure>
+
 <p>完整的代码请参考<code>debugtalk/AppiumBooster</code>的<a href="https://github.com/debugtalk/AppiumBooster/tree/1.FirstTest" target="_blank" rel="noopener"><code>1.FirstTest</code>分支</a>。</p>
 <h2 id="添加第二条测试用例"><a href="#添加第二条测试用例" class="headerlink" title="添加第二条测试用例"></a>添加第二条测试用例</h2><p>现在，我们尝试往当前的测试框架中添加第二条测试用例。</p>
 <p>例如，第二条测试用例要实现启动后从当前地区切换至中国。那么，就可以新增<code>ios/spec/change_country_spec.rb</code>。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># filename: ios/spec/change_country_spec.rb</span></span><br><span class="line">require_relative <span class="string">'../../common/requires'</span></span><br><span class="line"></span><br><span class="line">describe <span class="string">'Change country'</span> <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">  it <span class="string">'from Hong Kong to China'</span> <span class="keyword">do</span></span><br><span class="line">    wait &#123; id(<span class="string">'btnMenuMyAccount'</span>).click &#125;</span><br><span class="line">    wait &#123; id <span class="string">'uiviewMyAccount'</span> &#125;</span><br><span class="line"></span><br><span class="line">    wait &#123; id(<span class="string">'tablecellMyAccountSystemSettings'</span>).click &#125;</span><br><span class="line">    wait &#123; id <span class="string">'txtCountryDistrict'</span> &#125;</span><br><span class="line"></span><br><span class="line">    wait &#123; id(<span class="string">'txtCountryDistrict'</span>).click &#125;</span><br><span class="line">    wait &#123; id <span class="string">'uiviewSelectCountry'</span> &#125;</span><br><span class="line"></span><br><span class="line">    wait &#123; id(<span class="string">'tablecellSelectCN'</span>).click &#125;</span><br><span class="line"></span><br><span class="line">    wait &#123; id(<span class="string">'btnArrowLeft'</span>).click &#125;</span><br><span class="line">    wait &#123; id <span class="string">'uiviewMyAccount'</span> &#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>完整的代码请参考<code>debugtalk/AppiumBooster</code>的<a href="https://github.com/debugtalk/AppiumBooster/tree/2.SecondTest" target="_blank" rel="noopener"><code>2.SecondTest</code>分支</a>。</p>
 <p>现在我们凝视已经添加的<a href="https://github.com/debugtalk/AppiumBooster/tree/2.SecondTest/ios/spec" target="_blank" rel="noopener">两个测试用例</a>，有发现什么问题么？</p>
 <p>是的，重复代码太多。在每一步操作中，都要用<code>id</code>来定位控件，还要用<code>wait</code>来实现等待机制。</p>
@@ -553,12 +579,15 @@
 <h2 id="重构：测试用例与控件映射分离"><a href="#重构：测试用例与控件映射分离" class="headerlink" title="重构：测试用例与控件映射分离"></a>重构：测试用例与控件映射分离</h2><p>基于以上问题，我们首要的改造任务就是将测试用例与控件映射进行分离。</p>
 <p>考虑到常用的控件操作方法就只有几个（<code>click</code>，<code>type</code>），因此我们可以将控件操作方法单独封装为一个模块，作为公共模块。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">module</span> <span class="title">Actions</span></span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">click</span></span></span><br><span class="line">    wait &#123; @found_cell.click &#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">type</span><span class="params">(text)</span></span></span><br><span class="line">    wait &#123; @found_cell.type text &#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>然后，将APP中每一个页面封装为一个模块（<code>module</code>），将页面中的控件映射为模块的静态方法（<code>method</code>），并通过<code>include</code>机制引入方法模块。</p>
 <p>例如，登录页面就可以封装为如下代码。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">module</span> <span class="title">Pages</span></span></span><br><span class="line">  <span class="class"><span class="keyword">module</span> <span class="title">Login</span></span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> &lt;&lt; self</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">include</span> Actions</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">def</span> <span class="title">field_Email_Address</span></span></span><br><span class="line">        @found_cell = wait &#123; id <span class="string">'txtfieldEmailAddress'</span> &#125;</span><br><span class="line">        <span class="keyword">self</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">def</span> <span class="title">field_Password</span></span></span><br><span class="line">        @found_cell = wait &#123; id <span class="string">'sectxtfieldPassword'</span> &#125;</span><br><span class="line">        <span class="keyword">self</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">def</span> <span class="title">button_Login</span></span></span><br><span class="line">        @found_cell = wait &#123; id <span class="string">'btnLogin'</span> &#125;</span><br><span class="line">        <span class="keyword">self</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">module</span> <span class="title">Kernel</span></span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">login</span></span></span><br><span class="line">    Pages::Login</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>这里还用到了一点Ruby元编程技巧，就是将页面模块封装为一个方法，并加入到<code>Kernel</code>模块下。这样做的好处就是，我们可以在项目的任意地方直接通过<code>login.button_Login.click</code>这样的形式来对控件进行操作了。</p>
 <p>完成以上改造后，系统登录测试用例就可以采用如下形式进行编写了。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">describe <span class="string">'Login'</span> <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">  it <span class="string">'with valid account'</span> <span class="keyword">do</span></span><br><span class="line">    <span class="comment"># switch to My Account page</span></span><br><span class="line">    my_account.button_My_Account.click</span><br><span class="line">    inner_screen.has_control <span class="string">'uiviewMyAccount'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># enter login page</span></span><br><span class="line">    my_account.button_Login.click</span><br><span class="line">    inner_screen.has_control <span class="string">'uiviewLogIn'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># login</span></span><br><span class="line">    login.field_Email_Address.type <span class="string">'leo.lee@debugtalk.com'</span></span><br><span class="line">    login.field_Password.type <span class="string">'123321'</span></span><br><span class="line">    login.button_Login.click</span><br><span class="line">    inner_screen.has_control <span class="string">'tablecellMyMessage'</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>完整的代码请参考<code>debugtalk/AppiumBooster</code>的<a href="https://github.com/debugtalk/AppiumBooster/tree/3.RefactorV1" target="_blank" rel="noopener"><code>3.RefactorV1</code>分支</a>。</p>
 <h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>经过这一轮重构，我们的测试用例与控件映射已经实现了分离，测试用例的可重用性与可扩展性也得到了极大的提升。</p>
 <p>然而，在当前模式下，所有的测试用例仍然是以代码形式存在的，新增和修改测试用例时都需要到工程目录下编辑Ruby文件。</p>
@@ -723,7 +752,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -764,7 +793,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -895,7 +950,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

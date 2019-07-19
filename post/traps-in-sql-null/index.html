@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,24 +94,52 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
-
-
-  <meta name="description" content="问题描述今天在跟进公司内部测试平台线上问题的时候，发现一个忽略已久的问题。 为了简化问题描述，将其进行了抽象。 有一张数据表qms_branch，里面包含了一批形式如下所示的数据：    id name types     1 dashboard_trunk dashboard   2 monkey_trunk monkey   3 dashboard_projects_10_9_9 dashbo">
+  <meta name="description" content="问题描述今天在跟进公司内部测试平台线上问题的时候，发现一个忽略已久的问题。 为了简化问题描述，将其进行了抽象。 有一张数据表qms_branch，里面包含了一批形式如下所示的数据：    id name types    1 dashboard_trunk dashboard   2 monkey_trunk monkey   3 dashboard_projects_10_9_9 dashboa">
 <meta name="keywords" content="SQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL语句中关于NULL的那些坑">
 <meta property="og:url" content="https://debugtalk.com/post/traps-in-sql-null/index.html">
 <meta property="og:site_name" content="DebugTalk">
-<meta property="og:description" content="问题描述今天在跟进公司内部测试平台线上问题的时候，发现一个忽略已久的问题。 为了简化问题描述，将其进行了抽象。 有一张数据表qms_branch，里面包含了一批形式如下所示的数据：    id name types     1 dashboard_trunk dashboard   2 monkey_trunk monkey   3 dashboard_projects_10_9_9 dashbo">
+<meta property="og:description" content="问题描述今天在跟进公司内部测试平台线上问题的时候，发现一个忽略已久的问题。 为了简化问题描述，将其进行了抽象。 有一张数据表qms_branch，里面包含了一批形式如下所示的数据：    id name types    1 dashboard_trunk dashboard   2 monkey_trunk monkey   3 dashboard_projects_10_9_9 dashboa">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-02T10:55:57.722Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.623Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL语句中关于NULL的那些坑">
-<meta name="twitter:description" content="问题描述今天在跟进公司内部测试平台线上问题的时候，发现一个忽略已久的问题。 为了简化问题描述，将其进行了抽象。 有一张数据表qms_branch，里面包含了一批形式如下所示的数据：    id name types     1 dashboard_trunk dashboard   2 monkey_trunk monkey   3 dashboard_projects_10_9_9 dashbo">
+<meta name="twitter:description" content="问题描述今天在跟进公司内部测试平台线上问题的时候，发现一个忽略已久的问题。 为了简化问题描述，将其进行了抽象。 有一张数据表qms_branch，里面包含了一批形式如下所示的数据：    id name types    1 dashboard_trunk dashboard   2 monkey_trunk monkey   3 dashboard_projects_10_9_9 dashboa">
 
 
 
@@ -148,16 +176,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -470,7 +488,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/2-Programming/" itemprop="url" rel="index"><span itemprop="name">2. Programming</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/2-Programming/SQL/" itemprop="url" rel="index"><span itemprop="name">SQL</span></a></span>
 
                 
                 
@@ -523,8 +548,7 @@
 <th>types</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>1</td>
 <td>dashboard_trunk</td>
 <td>dashboard</td>
@@ -549,14 +573,15 @@
 <td>performance_projects_10_9_8</td>
 <td>performance</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>在系统的某个页面中，需要展示出所有<code>dashboard</code>类型以外的分支，于是就采用如下方式进行查询（Rails）。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">branches = Qms::Branch.where(<span class="string">"types!='dashboard'"</span>)</span><br></pre></td></tr></table></figure>
+
 <p>这个方式有问题么？</p>
 <p>之前我是觉得没什么问题。但是在代码上线后，实际使用时发现部分分支没有加载出来，这就包括了<code>performance_trunk</code>分支。</p>
 <p>然后就是问题定位，到MySQL的控制台采用SQL语句进行查询：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> qms_branch <span class="keyword">WHERE</span> types != <span class="string">'dashboard'</span></span><br></pre></td></tr></table></figure>
+
 <p>发现在查询结果中的确没有包含<code>performance_trunk</code>分支。</p>
 <p>这是什么原因呢？为什么在第4条数据中，<code>types</code>属性的值明明就不是<code>dashboard</code>，但是采用<code>types!=&#39;dashboard&#39;</code>就无法查询得到结果呢？</p>
 <h2 id="原因追溯"><a href="#原因追溯" class="headerlink" title="原因追溯"></a>原因追溯</h2><p>查看数据表<code>qms_branch</code>的结构，看到<code>types</code>字段的属性为：<code>DEFAULT NULL</code>。</p>
@@ -570,6 +595,7 @@
 <p>也就是说，在SQL中，<code>NULL</code>并不能采用<code>!=</code>与数值进行比较，若要进行比较，我们只能采用<code>IS NULL</code>或<code>IS NOT NULL</code>。</p>
 <p>于是，我们将SQL语句改为如下形式：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> qms_branch <span class="keyword">WHERE</span> types <span class="keyword">IS</span> <span class="literal">NULL</span> <span class="keyword">or</span> types != <span class="string">'dashboard'</span></span><br></pre></td></tr></table></figure>
+
 <p>再次查询时，结果集就包含<code>performance_trunk</code>分支了。</p>
 <h2 id="问题延伸"><a href="#问题延伸" class="headerlink" title="问题延伸"></a>问题延伸</h2><p>通过上面例子，我们知道在对NULL进行判断处理时，只能采用<code>IS NULL</code>或<code>IS NOT NULL</code>，而不能采用<code>=, &lt;, &lt;&gt;, !=</code>这些操作符。</p>
 <p>那除此之外，还有别的可能存在的坑么？</p>
@@ -577,13 +603,16 @@
 <p>有一张数据表<code>table_foo</code>，其中有一个字段<code>value_field</code>，我们想从这张表中筛选出所有<code>value_field</code>为’value1’，’value2’或NULL的记录。</p>
 <p>那么，我们采用<code>IN</code>操作符，通过如下SQL语句进行查询。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field <span class="keyword">IN</span> (<span class="string">'value1'</span>, <span class="string">'value2'</span>, <span class="literal">NULL</span>)</span><br></pre></td></tr></table></figure>
+
 <p>这会存在问题么？我们并没有采用<code>=, &lt;, &lt;&gt;, !=</code>对NULL进行比较哦。</p>
 <p>答案是同样存在问题！</p>
 <p>因为在SQL中，<code>IN</code>语句会被转换为多个<code>=</code>语句。例如，上面例子中的SQL在执行时就会被转换为如下SQL语句：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field = <span class="string">'value1'</span> <span class="keyword">OR</span> value_field = <span class="string">'value2'</span> <span class="keyword">OR</span> value_field = <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
+
 <p>而这个时候，执行<code>value_field = NULL</code>时就会出现问题了。</p>
 <p>正确的做法应该是将<code>NULL</code>相关的判断独立出来，如下SQL才是正确的写法。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table_foo <span class="keyword">WHERE</span> value_field <span class="keyword">IN</span> (<span class="string">'value1'</span>, <span class="string">'value2'</span>) <span class="keyword">OR</span> value_field <span class="keyword">IS</span> <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -735,7 +764,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -776,7 +805,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -907,7 +962,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

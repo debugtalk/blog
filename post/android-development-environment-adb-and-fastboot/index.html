@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="1、安装adb和fastboot在对Android进行调试时，常用的工具有adb和fastboot。 Install Android SDKadb和fastboot包含在Android SDK的Platform-tools package里面，安装Android SDK后也就具备了adb和fastboot工具。 下载并安装Android SDK tools，打开SDK Manager并安装Andr">
 <meta name="keywords" content="Android">
@@ -108,7 +136,7 @@
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="1、安装adb和fastboot在对Android进行调试时，常用的工具有adb和fastboot。 Install Android SDKadb和fastboot包含在Android SDK的Platform-tools package里面，安装Android SDK后也就具备了adb和fastboot工具。 下载并安装Android SDK tools，打开SDK Manager并安装Andr">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-02T10:54:38.650Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.625Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android开发环境配置0：adb和fastboot">
 <meta name="twitter:description" content="1、安装adb和fastboot在对Android进行调试时，常用的工具有adb和fastboot。 Install Android SDKadb和fastboot包含在Android SDK的Platform-tools package里面，安装Android SDK后也就具备了adb和fastboot工具。 下载并安装Android SDK tools，打开SDK Manager并安装Andr">
@@ -148,16 +176,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -470,7 +488,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/环境搭建/" itemprop="url" rel="index"><span itemprop="name">环境搭建</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
 
                 
                 
@@ -518,19 +543,26 @@
 <p>安装完成后，adb和fastboot的存放路径为<code>&lt;path-to-sdk&gt;/platform-tools</code>。为了方便后续使用，可对其配置环境变量。</p>
 <p><code>vim ~/.bashrc</code>:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ -d <span class="string">"&lt;path-to-sdk&gt;/platform-tools"</span> ] ; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">export</span> PATH=<span class="string">"&lt;path-to-sdk&gt;/platform-tools:<span class="variable">$PATH</span>"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="Install-from-the-command-line"><a href="#Install-from-the-command-line" class="headerlink" title="Install from the command line"></a>Install from the command line</h3><p>如果只是使用adb和fastboot工具，而不想安装完整的<code>Android SDK</code>，可以采用如下方式单独进行安装。</p>
 <p>for debian-based Linux distributions:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install android-tools-adb</span><br><span class="line">$ sudo apt-get install android-tools-fastboot</span><br></pre></td></tr></table></figure>
-<p>for rpm-based Linux distributions(Fedora/Centos/RHEL):<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install android-tools</span><br></pre></td></tr></table></figure></p>
+
+<p>for rpm-based Linux distributions(Fedora/Centos/RHEL):</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install android-tools</span><br></pre></td></tr></table></figure>
+
 <p>在<code>Mac OS X</code>中，可以采用<code>homebrew</code>进行安装：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install android-platform-tools</span><br></pre></td></tr></table></figure>
+
 <h2 id="2、开启USB调试模式（USB-debugging）"><a href="#2、开启USB调试模式（USB-debugging）" class="headerlink" title="2、开启USB调试模式（USB debugging）"></a>2、开启USB调试模式（USB debugging）</h2><p>对手机进行unlock或root操作需要开启手机的USB调试模式，该设置在手机设置菜单的开发者选项（Developer Options）里面。<br>对于<code>3.2</code>及以前的Android版本，开发者选项的设置位置为：<code>Settings &gt; Applications &gt; Development</code>；<br>对于<code>4.0</code>及以上的Android版本，开发者选项的设置位置为：<code>Setting -&gt; Developer Options</code>；需要注意的是，对于<code>4.2</code>及以上的Android版本，开发者选项默认是隐藏的，开启方式为：进入<code>Setting -&gt; About Phone</code>，连续点击7次<code>Build number</code>。</p>
 <p>进入开发者选项设置页面，开启开发者选项，并勾选USB调试模式。</p>
 <h2 id="3、建立手机与电脑之间的USB调试连接"><a href="#3、建立手机与电脑之间的USB调试连接" class="headerlink" title="3、建立手机与电脑之间的USB调试连接"></a>3、建立手机与电脑之间的USB调试连接</h2><p>对于Windows/Mac OSX的开发环境，安装好adb的USB驱动即可。<br>对于Linux（Debian based）系统的开发环境，若要使用adb或者fastboot工具对手机进行USB调试，则需要配置<code>udev</code>规则。</p>
 <h3 id="创建并配置51-android-rules文件"><a href="#创建并配置51-android-rules文件" class="headerlink" title="创建并配置51-android.rules文件"></a>创建并配置<code>51-android.rules</code>文件</h3><p>创建<code>51-android.rules</code>文件，并设置Read权限。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo touch /etc/udev/rules.d/51-android.rules</span><br><span class="line">$ sudo chmod a+r /etc/udev/rules.d/51-android.rules</span><br><span class="line">$ sudo vim /etc/udev/rules.d/51-android.rules</span><br></pre></td></tr></table></figure>
+
 <p>在<code>51-android.rules</code>文件中，按照如下格式进行配置。</p>
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#HTC</span><br><span class="line">SUBSYSTEM==<span class="string">"usb"</span>, ATTR&#123;idVendor&#125;==<span class="string">"0bb4"</span>, MODE=<span class="string">"0664"</span>, GROUP=<span class="string">"plugdev"</span></span><br></pre></td></tr></table></figure>
+
 <p>在该配置文件中：</p>
 <ul>
 <li><code>ATTR{idVendor}</code>：设备厂商的编号，每个厂商都有专属的唯一编号，例如HTC的venderID为<code>0bb4</code></li>
@@ -539,15 +571,20 @@
 </ul>
 <p>对于venderID，可以在此处查看到主流厂商的编号：<a href="http://developer.android.com/tools/device.html#VendorIds" target="_blank" rel="noopener">all vendors listed by Google</a><br>除此之外，也可以将手机通过USB连接至电脑，采用<code>lsusb</code>命令进行查看。该命令会列出连接至电脑的所有设备，<code>ID</code>属性值即为设备厂商的venderID。例如，在如下命令执行返回结果中可以看到，HTC的venderID为<code>0bb4</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ lsusb</span><br><span class="line">Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub</span><br><span class="line">Bus 001 Device 004: ID 0e0f:0002 VMware, Inc. Virtual USB Hub</span><br><span class="line">Bus 001 Device 003: ID 0e0f:0002 VMware, Inc. Virtual USB Hub</span><br><span class="line">Bus 001 Device 033: ID 0bb4:0cd6 HTC (High Tech Computer Corp.)</span><br><span class="line">Bus 001 Device 002: ID 0e0f:0003 VMware, Inc. Virtual Mouse</span><br><span class="line">Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub</span><br><span class="line">Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub</span><br><span class="line">Bus 004 Device 002: ID 0e0f:0002 VMware, Inc. Virtual USB Hub</span><br><span class="line">Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub</span><br></pre></td></tr></table></figure>
+
 <p>对<code>udev</code>配置完成后还不能即时生效，需要重启系统，或者重启<code>udev</code>才能使其生效。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo /etc/init.d/udev restart</span><br></pre></td></tr></table></figure>
+
 <p>或者</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo sh -c <span class="string">"(udevadm control --reload-rules &amp;&amp; udevadm trigger --action=change)"</span></span><br></pre></td></tr></table></figure>
+
 <p>再次将手机通过USB连接至电脑后，系统便能检测到设备。</p>
 <h3 id="配置用户组"><a href="#配置用户组" class="headerlink" title="配置用户组"></a>配置用户组</h3><p>如果当前登录用户不在<code>plugdev</code>用户组内，采用adb或者fastboot工具进行调试的时候需要<code>sudo</code>权限。为了避免每次都这么麻烦，可以将当前登录用户添加至<code>plugdev</code>用户组。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">leo@debian8:~$ groups</span><br><span class="line">leo cdrom floppy audio dip video netdev scanner lpadmin    <span class="comment"># 可以看出，当前用户leo并不在用户组plugdev里面</span></span><br><span class="line">leo@debian8:~$ sudo gpasswd -a username plugdev            <span class="comment"># 将用户leo添加至用户组plugdev</span></span><br><span class="line">leo@debian8:~$ groups</span><br><span class="line">leo cdrom floppy audio dip video plugdev netdev scanner lpadmin    <span class="comment"># 用户leo已属于用户组plugdev</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="RSA指纹密钥认证"><a href="#RSA指纹密钥认证" class="headerlink" title="RSA指纹密钥认证"></a>RSA指纹密钥认证</h3><p>对于<code>4.2.2</code>及以上的Android版本，将手机开启USB调试模式并连接至电脑以后，手机屏幕上会出现电脑的RSA指纹密钥验证确认请求，这是Android的一套安全机制，只有点击确认以后才能从电脑上通过adb命令与手机建立调试连接。通常，勾选【Always allow from this computer】并点击确认后，手机便与电脑建立了认证连接，之后即可在电脑上采用<code>adb</code>、<code>fastboot</code>工具对手机进行操作。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">HT259W103035	unauthorized    <span class="comment"># 若为进行RSA指纹密钥验证确认，则会出现unauthorized提示</span></span><br><span class="line"></span><br><span class="line">$ adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">HT259W103035	device          <span class="comment"># 显示device，则说明已经建立了调试连接</span></span><br></pre></td></tr></table></figure>
+
 <p>需要说明的是，对于<code>4.2.2</code>及以上的Android版本，adb版本要求<code>1.0.31</code>及以上，对应的Android SDK的版本要求为<code>r16.0.1</code>及以上。</p>
 
       
@@ -700,7 +737,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -741,7 +778,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -872,7 +935,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

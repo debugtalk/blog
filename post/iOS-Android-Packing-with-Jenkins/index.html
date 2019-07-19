@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="背景描述根据项目需求，现要在团队内部搭建一个统一的打包平台，实现对iOS和Android项目的打包。而且为了方便团队内部的测试包分发，希望在打包完成后能生成一个二维码，体验用户（产品、运营、测试等人员）通过手机扫描二维码后就能直接安装测试包。 该需求具有一定的普遍性，基本上所有开发APP的团队都可能会用到，因此我将整个需求实现的过程整理后形成此文，并且真正地做到了零基础上手，到手即飞、开箱即用，希">
 <meta name="keywords" content="Jenkins,iOS">
@@ -110,7 +138,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://debugtalk.com/images/Jenkins_Job_Overview.jpg">
 <meta property="og:image" content="https://debugtalk.com/images/Jenkins_Job_Build_View.jpg">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.440Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.635Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 Jenkins 搭建 iOS&#x2F;Android 持续集成打包平台">
 <meta name="twitter:description" content="背景描述根据项目需求，现要在团队内部搭建一个统一的打包平台，实现对iOS和Android项目的打包。而且为了方便团队内部的测试包分发，希望在打包完成后能生成一个二维码，体验用户（产品、运营、测试等人员）通过手机扫描二维码后就能直接安装测试包。 该需求具有一定的普遍性，基本上所有开发APP的团队都可能会用到，因此我将整个需求实现的过程整理后形成此文，并且真正地做到了零基础上手，到手即飞、开箱即用，希">
@@ -151,16 +179,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -473,7 +491,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/" itemprop="url" rel="index"><span itemprop="name">4. ToolsNotes</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/Jenkins/" itemprop="url" rel="index"><span itemprop="name">Jenkins</span></a></span>
 
                 
                 
@@ -530,6 +555,7 @@
 <p>安装Jenkins的方式有多种，可以运行对应系统类型的安装包，可以通过docker获取镜像，也可以直接运行<code>war</code>包。</p>
 <p>我个人倾向于直接运行<code>war</code>包的形式，只需下载<code>jenkins.war</code>后，运行如下命令即可启动Jenkins。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nohup java -jar jenkins_located_path/jenkins.war --httpPort=88 &amp;</span><br></pre></td></tr></table></figure>
+
 <p>如果不指定<code>httpPort</code>，Jenkins的默认端口为8080。</p>
 <h2 id="Jenkins插件"><a href="#Jenkins插件" class="headerlink" title="Jenkins插件"></a>Jenkins插件</h2><p>Jenkins有非常多的插件，可以实现各种功能的扩展。</p>
 <p>针对搭建的iOS/Android持续集成打包平台，我使用到了如下几个插件。</p>
@@ -782,7 +808,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -823,7 +849,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -954,7 +1006,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

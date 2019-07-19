@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="背景介绍最近接到一个需求，需要对公司内部的Android性能测试平台的分支管理模块进行改造。 为了更好地说明问题，在下图中展示了一个精简的持续集成测试系统。  在该系统中，Jenkins负责定时检测代码库（Code Repository）的代码更新情况，当检测到有新的代码提交时，自动采用最新的代码进行构建，并采用构建得到的包（apk）触发自动化测试平台（DroidTestbed）执行测试任务。 然">
 <meta name="keywords" content="Jenkins">
@@ -110,7 +138,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://debugtalk.com/images/Jenkins-DroidTestbed.png">
 <meta property="og:image" content="https://debugtalk.com/images/DroidTestbed-DroidMeter.png">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.486Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.636Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="通过 API 远程管理 Jenkins">
 <meta name="twitter:description" content="背景介绍最近接到一个需求，需要对公司内部的Android性能测试平台的分支管理模块进行改造。 为了更好地说明问题，在下图中展示了一个精简的持续集成测试系统。  在该系统中，Jenkins负责定时检测代码库（Code Repository）的代码更新情况，当检测到有新的代码提交时，自动采用最新的代码进行构建，并采用构建得到的包（apk）触发自动化测试平台（DroidTestbed）执行测试任务。 然">
@@ -151,16 +179,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -473,7 +491,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/" itemprop="url" rel="index"><span itemprop="name">4. ToolsNotes</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/Jenkins/" itemprop="url" rel="index"><span itemprop="name">Jenkins</span></a></span>
 
                 
                 
@@ -550,6 +575,7 @@
 <p>在Jenkins的官方wiki中，推荐了两个较为成熟的<code>API wrapper</code>，一个是基于Python实现的<a href="https://github.com/salimfadhley/jenkinsapi" target="_blank" rel="noopener"><code>salimfadhley/jenkinsapi</code></a>，另一个是基于Ruby实现的<a href="https://github.com/arangamani/jenkins_api_client" target="_blank" rel="noopener"><code>arangamani/jenkins_api_client</code></a>。</p>
 <p>以<code>salimfadhley/jenkinsapi</code>为例，通过使用<code>jenkinsapi</code>，我们在Python中就可以很方便地管理Jenkins。常见的操作方式示例如下。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> jenkinsapi</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> jenkinsapi.jenkins <span class="keyword">import</span> Jenkins</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定Jenkins实例</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J = Jenkins(<span class="string">'http://jenkins.debugtalk.com:8080'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Jenkins版本</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J.version</span><br><span class="line"><span class="number">1.542</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Jenkins的所有jobs</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J.keys()</span><br><span class="line">[<span class="string">'foo'</span>, <span class="string">'test_jenkinsapi'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看指定job的配置信息</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J[<span class="string">'test_jenkinsapi'</span>].get_config()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Jenkins job</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>jobName = <span class="string">'test_job'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>EMPTY_JOB_CONFIG = <span class="string">'''</span></span><br><span class="line"><span class="string">&lt;?xml version='1.0' encoding='UTF-8'?&gt;</span></span><br><span class="line"><span class="string">&lt;project&gt;</span></span><br><span class="line"><span class="string">  &lt;actions&gt;jkkjjk&lt;/actions&gt;</span></span><br><span class="line"><span class="string">  &lt;description&gt;&lt;/description&gt;</span></span><br><span class="line"><span class="string">  &lt;keepDependencies&gt;false&lt;/keepDependencies&gt;</span></span><br><span class="line"><span class="string">  &lt;properties/&gt;</span></span><br><span class="line"><span class="string">  &lt;scm class="hudson.scm.NullSCM"/&gt;</span></span><br><span class="line"><span class="string">  &lt;canRoam&gt;true&lt;/canRoam&gt;</span></span><br><span class="line"><span class="string">  &lt;disabled&gt;false&lt;/disabled&gt;</span></span><br><span class="line"><span class="string">  &lt;blockBuildWhenDownstreamBuilding&gt;false&lt;/blockBuildWhenDownstreamBuilding&gt;</span></span><br><span class="line"><span class="string">  &lt;blockBuildWhenUpstreamBuilding&gt;false&lt;/blockBuildWhenUpstreamBuilding&gt;</span></span><br><span class="line"><span class="string">  &lt;triggers class="vector"/&gt;</span></span><br><span class="line"><span class="string">  &lt;concurrentBuild&gt;false&lt;/concurrentBuild&gt;</span></span><br><span class="line"><span class="string">  &lt;builders/&gt;</span></span><br><span class="line"><span class="string">  &lt;publishers/&gt;</span></span><br><span class="line"><span class="string">  &lt;buildWrappers/&gt;</span></span><br><span class="line"><span class="string">&lt;/project&gt;</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>new_job = J.create_job(jobName, EMPTY_JOB_CONFIG)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新Jenkins job的配置</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> et</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>new_conf = new_job.get_config()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root = et.fromstring(new_conf.strip())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>builders = root.find(<span class="string">'builders'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>shell = et.SubElement(builders, <span class="string">'hudson.tasks.Shell'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>command = et.SubElement(shell, <span class="string">'command'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>command.text = <span class="string">"ls"</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J[jobName].update_config(et.tostring(root))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除Jenkins job</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>J.delete_job(jobName)</span><br></pre></td></tr></table></figure>
+
 <p>更多的使用方法可参考项目文档。</p>
 <p>有些同学在认真研究了这些开源库后也许会说，官方文档已经翻遍了，但是文档中对用法的描述太少了，也没给出API调用的示例，还是不知道怎么使用啊。这个问题在开源库中的确也是普遍存在的。</p>
 <p>介绍个技巧，通常优秀的开源库都会很重视测试，作者可能在文档中没有针对每一个API接口的调用方式进行说明，但通常会针对各个接口编写较为完整的测试代码。我们通过阅读测试代码，就可以充分了解API接口的使用方法了，这也比直接阅读文档有效率得多。</p>
@@ -710,7 +736,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -751,7 +777,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -882,7 +934,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

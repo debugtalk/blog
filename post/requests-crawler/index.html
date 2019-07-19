@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,21 +94,49 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="背景对于电商类型和内容服务类型的网站，经常会出现因为配置错误造成页面链接无法访问的情况（404）。 显然，要确保网站中的所有链接都具有可访问性，通过人工进行检测肯定是不现实的，常用的做法是使用爬虫技术定期对网站进行资源爬取，及时发现访问异常的链接。 对于网络爬虫，当前市面上已经存在大量的开源项目和技术讨论的文章。不过，感觉大家普遍都将焦点集中在爬取效率方面，例如当前就存在大量讨论不同并发机制哪个效">
-<meta name="keywords" content="requests-crawler,requests-html">
+<meta name="keywords" content="requests,requests-crawler,requests-html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用爬虫技术实现 Web 页面资源可用性检测">
 <meta property="og:url" content="https://debugtalk.com/post/requests-crawler/index.html">
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:description" content="背景对于电商类型和内容服务类型的网站，经常会出现因为配置错误造成页面链接无法访问的情况（404）。 显然，要确保网站中的所有链接都具有可访问性，通过人工进行检测肯定是不现实的，常用的做法是使用爬虫技术定期对网站进行资源爬取，及时发现访问异常的链接。 对于网络爬虫，当前市面上已经存在大量的开源项目和技术讨论的文章。不过，感觉大家普遍都将焦点集中在爬取效率方面，例如当前就存在大量讨论不同并发机制哪个效">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-02T10:56:25.816Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.633Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用爬虫技术实现 Web 页面资源可用性检测">
 <meta name="twitter:description" content="背景对于电商类型和内容服务类型的网站，经常会出现因为配置错误造成页面链接无法访问的情况（404）。 显然，要确保网站中的所有链接都具有可访问性，通过人工进行检测肯定是不现实的，常用的做法是使用爬虫技术定期对网站进行资源爬取，及时发现访问异常的链接。 对于网络爬虫，当前市面上已经存在大量的开源项目和技术讨论的文章。不过，感觉大家普遍都将焦点集中在爬取效率方面，例如当前就存在大量讨论不同并发机制哪个效">
@@ -148,16 +176,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -470,14 +488,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/自动化测试/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/爬虫/" itemprop="url" rel="index"><span itemprop="name">爬虫</span></a></span>
 
                 
                 
@@ -542,6 +560,7 @@
 <p>理清了以上关系后，相信大家对 <a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a> 也就有了更好的理解。</p>
 <p>在使用方面，<a href="https://github.com/kennethreitz/requests-html" target="_blank" rel="noopener">requests-html</a> 也十分简单，用法与 <a href="https://github.com/requests/requests" target="_blank" rel="noopener">requests</a> 基本相同，只是多了 <code>render</code> 功能。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> requests_html <span class="keyword">import</span> HTMLSession</span><br><span class="line"></span><br><span class="line">session = HTMLSession()</span><br><span class="line">r = session.get(<span class="string">'http://python-requests.org'</span>)</span><br><span class="line">r.html.render()</span><br></pre></td></tr></table></figure>
+
 <p>在执行 <code>render()</code> 之后，返回的就是经过渲染后的页面内容。</p>
 <h2 id="爬虫实现访问频率控制"><a href="#爬虫实现访问频率控制" class="headerlink" title="爬虫实现访问频率控制"></a>爬虫实现访问频率控制</h2><p>为了防止流量攻击，很多网站都有访问频率限制，即限制单个 IP 在一定时间段内的访问次数。若超过这个设定的限制，服务器端就会拒绝访问请求，即响应状态码为 403（Forbidden）。</p>
 <p>这用来应对外部的流量攻击或者爬虫是可以的，但在这个限定策略下，公司内部的爬虫测试工具同样也无法正常使用了。针对这个问题，常用的做法就是在应用系统中开设白名单，将公司内部的爬虫测试服务器 IP 加到白名单中，然后针对白名单中的 IP 不做限制，或者提升限额。但这同样可能会出现问题。因为应用服务器的性能不是无限的，假如爬虫的访问频率超过了应用服务器的处理极限，那么就会造成应用服务器不可用的情况，即响应状态码为 503（Service Unavailable Error）。</p>
@@ -573,6 +592,7 @@
 </ul>
 <p>具体的控制方法也很简单，假设我们是要实现 RPS 的控制，那么就可以使用如下方式（只截取关键片段）：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">start_timer = time.time()</span><br><span class="line">requests_queued = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        url = self.fetched_urls_queue.get(timeout=<span class="number">5</span>)</span><br><span class="line">    <span class="keyword">except</span> queue.Empty:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># visited url will not be crawled twice</span></span><br><span class="line">    <span class="keyword">if</span> url <span class="keyword">in</span> self.visited_urls_set:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># limit rps or rpm</span></span><br><span class="line">    <span class="keyword">if</span> requests_queued &gt;= self.requests_limit:</span><br><span class="line">        runtime_secs = time.time() - start_timer</span><br><span class="line">        <span class="keyword">if</span> runtime_secs &lt; self.interval_limit:</span><br><span class="line">            sleep_secs = self.interval_limit - runtime_secs</span><br><span class="line">            <span class="comment"># exceed rps limit, sleep</span></span><br><span class="line">            time.sleep(sleep_secs)</span><br><span class="line"></span><br><span class="line">        start_timer = time.time()</span><br><span class="line">        requests_queued = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    self.unvisited_urls_queue.put(url)</span><br><span class="line">    self.visited_urls_set.add(url)</span><br><span class="line">    requests_queued += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="提升爬虫效率"><a href="#提升爬虫效率" class="headerlink" title="提升爬虫效率"></a>提升爬虫效率</h2><p>对于提升爬虫效率这部分，当前已经有大量的讨论了，重点都是集中在不同的并发机制上面，包括多进程、多线程、asyncio等。</p>
 <p>不过，他们的并发测试结果对于本文中讨论的爬虫场景并不适用。因为在本文的爬虫场景中，实现前端页面渲染是最核心的一项功能特性，而要实现前端页面渲染，底层都是需要使用浏览器内核的，相当于每个 worker 在运行时都会跑一个 Chromium 实例。</p>
 <p>众所周知，Chromium 对于 CPU 和内存的开销都是比较大的，因此为了避免机器资源出现瓶颈，使用多进程机制（multiprocessing）充分调用多处理器的硬件资源无疑是最佳的选择。</p>
@@ -641,6 +661,8 @@
     <footer class="post-footer">
       
         <div class="post-tags">
+          
+            <a href="/tags/requests/" rel="tag"># requests</a>
           
             <a href="/tags/requests-crawler/" rel="tag"># requests-crawler</a>
           
@@ -740,7 +762,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -781,7 +803,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -912,7 +960,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

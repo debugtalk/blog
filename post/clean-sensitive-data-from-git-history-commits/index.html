@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="背景介绍在使用GitHub的过程中，假如某次提交代码时不小心将密码或SSH-key提交进了公共仓库。当然，希望这种事情永远也不会发生，但是如果真遇到了，该怎么办呢？ 如果发现得及时，本地提交后还没有推送到GitHub远程仓库的话，这种情况还好处理，直接修改代码后通过git commit --amend即可。 但如果发现时已经推送到了GitHub远程仓库，或者已过了许久，后续有了很多新的commi">
 <meta name="keywords" content="GitHub,Git">
@@ -109,7 +137,7 @@
 <meta property="og:description" content="背景介绍在使用GitHub的过程中，假如某次提交代码时不小心将密码或SSH-key提交进了公共仓库。当然，希望这种事情永远也不会发生，但是如果真遇到了，该怎么办呢？ 如果发现得及时，本地提交后还没有推送到GitHub远程仓库的话，这种情况还好处理，直接修改代码后通过git commit --amend即可。 但如果发现时已经推送到了GitHub远程仓库，或者已过了许久，后续有了很多新的commi">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://debugtalk.com/images/GitHub_hacker.jpg">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.439Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.634Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【GIT技巧】清除历史提交记录中的敏感信息">
 <meta name="twitter:description" content="背景介绍在使用GitHub的过程中，假如某次提交代码时不小心将密码或SSH-key提交进了公共仓库。当然，希望这种事情永远也不会发生，但是如果真遇到了，该怎么办呢？ 如果发现得及时，本地提交后还没有推送到GitHub远程仓库的话，这种情况还好处理，直接修改代码后通过git commit --amend即可。 但如果发现时已经推送到了GitHub远程仓库，或者已过了许久，后续有了很多新的commi">
@@ -150,16 +178,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -472,7 +490,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/" itemprop="url" rel="index"><span itemprop="name">4. ToolsNotes</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a></span>
 
                 
                 
@@ -524,9 +549,11 @@
 <h2 id="处理方式"><a href="#处理方式" class="headerlink" title="处理方式"></a>处理方式</h2><p>实现的方式有两种，一是通过<code>git filter-branch</code>命令，另一种是采用一款开源的工具，<code>BFG Repo-Cleaner</code>。前者是<code>GIT</code>官方的实现方法，后者是一款采用<code>Scala</code>编写的工具，号称比<code>git filter-branch</code>更简单、更快捷。</p>
 <h3 id="git-filter-branch"><a href="#git-filter-branch" class="headerlink" title="git filter-branch"></a>git filter-branch</h3><p>先来看下<a href="https://help.github.com/articles/removing-sensitive-data-from-a-repository/" target="_blank" rel="noopener"><code>git filter-branch</code></a>这种方式。假设要在所有历史提交记录中删除文件<code>PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA</code>，那么就可以采用如下命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git filter-branch --force --index-filter \</span><br><span class="line"><span class="string">'git rm --cached --ignore-unmatch PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA'</span> \</span><br><span class="line">--prune-empty --tag-name-filter cat -- --all</span><br><span class="line"></span><br><span class="line">&gt; Rewrite 48dc599c80e20527ed902928085e7861e6b3cbe6 (266/266)</span><br><span class="line">&gt; Ref <span class="string">'refs/heads/master'</span> was rewritten</span><br></pre></td></tr></table></figure>
+
 <p>正常情况下，通过执行上面的命令，就可以在所有历史提交记录中彻底删除指定文件。如果要进一步确定的话，可以在<code>.git</code>目录中进行全局搜索，确保已彻底清理干净。</p>
 <p>然后，就可以通过如下命令将本地代码推送到<code>GitHub</code>上，并强制覆盖掉所有历史记录。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin --force --all</span><br></pre></td></tr></table></figure>
+
 <p>可以看出，采用<code>git filter-branch</code>的操作命令十分复杂（复杂到我也不想理会每个参数的具体含义），这还只是选择粗暴地将整个文件进行删除的情况。如果不想删除文件，而是单独修改特定文件特定内容的话，操作会更加复杂，如有兴趣可查看<a href="https://git-scm.com/docs/git-filter-branch" target="_blank" rel="noopener"><code>git官方文档</code></a>。</p>
 <h3 id="BFG-Repo-Cleaner"><a href="#BFG-Repo-Cleaner" class="headerlink" title="BFG Repo-Cleaner"></a>BFG Repo-Cleaner</h3><p>估计也是因为官方的<code>git filter-branch</code>太过复杂，于是<code>Roberto Tyley</code>开发了<a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="noopener"><code>BFG Repo-Cleaner</code></a>这款工具。该工具是专门针对移除历史记录的需求而产生的，这可以从其简介中看出来。</p>
 <blockquote>
@@ -535,10 +562,13 @@
 <p>使用<code>BFG Repo-Cleaner</code>之前，需要先下载<a href="https://rtyley.github.io/bfg-repo-cleaner/#download" target="_blank" rel="noopener"><code>BFG&#39;s jar</code></a>(requires Java 7 or above)。</p>
 <p>如果想实现前面例子中同样的功能，删除文件<code>PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA</code>，可以通过如下命令实现：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar bfg.jar --delete-files PATH-TO-YOUR-FILE-WITH-SENSITIVE-DATA my-repo.git</span><br></pre></td></tr></table></figure>
+
 <p>如果不想删除文件，而是单独修改特定文件特定内容的话，就可以通过如下命令实现：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar bfg.jar --replace-text replacements.txt my-repo.git</span><br></pre></td></tr></table></figure>
+
 <p>在<code>replacements.txt</code>文件中，应包含所有需要替换的内容，格式如下（不包含注释内容）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PASSWORD1                       <span class="comment"># Replace with '***REMOVED***' (default)</span></span><br><span class="line">PASSWORD2==&gt;examplePass         <span class="comment"># replace with 'examplePass' instead</span></span><br><span class="line">PASSWORD3==&gt;                    <span class="comment"># replace with the empty string</span></span><br><span class="line">regex:password=\w+==&gt;password=  <span class="comment"># Replace, using a regex</span></span><br><span class="line">regex:\r(\n)==&gt;<span class="variable">$1</span>               <span class="comment"># Replace Windows newlines with Unix newlines</span></span><br></pre></td></tr></table></figure>
+
 <p>通过执行上述命令，<code>BFG Repo-Cleaner</code>就会扫描代码仓库的所有历史提交记录，并按照<code>replacements.txt</code>文件中的映射进行替换操作。</p>
 <p>通过对比可以看到，<code>BFG Repo-Cleaner</code>的确是更加简洁，这也是<code>GitHub</code>官方推荐的方式。不过，在<code>BFG Repo-Cleaner</code>的介绍文档中也说了，该工具的优势在于简单和快捷，从功能强大的角度来讲，它是比不上<code>git-filter-branch</code>的，有些操作也只能通过<code>git-filter-branch</code>完成。</p>
 <p>如需了解<code>BFG Repo-Cleaner</code>的更多用法，可详细阅读其<a href="https://rtyley.github.io/bfg-repo-cleaner/" target="_blank" rel="noopener">文档</a>。</p>
@@ -703,7 +733,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -744,7 +774,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -875,7 +931,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

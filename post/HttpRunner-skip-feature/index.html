@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,11 +94,39 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="背景介绍近期，某位同学对HttpRunner提了一个需求点：  能否支持类似unittest中的skip注解，方便灵活剔除某些用例，不执行。目前在接口测试日常构建中，会遇到一些接口开发暂时屏蔽了或者降级，导致用例执行失败；所以想当遇到这些情况的时候，能够临时剔除掉某些用例不执行；等后续恢复后，再去掉，然后恢复执行。  针对这种情况，HttpRunner的确没有直接支持。之所以说是没有直接支持，是因">
 <meta name="keywords" content="HttpRunner">
@@ -109,7 +137,7 @@
 <meta property="og:description" content="背景介绍近期，某位同学对HttpRunner提了一个需求点：  能否支持类似unittest中的skip注解，方便灵活剔除某些用例，不执行。目前在接口测试日常构建中，会遇到一些接口开发暂时屏蔽了或者降级，导致用例执行失败；所以想当遇到这些情况的时候，能够临时剔除掉某些用例不执行；等后续恢复后，再去掉，然后恢复执行。  针对这种情况，HttpRunner的确没有直接支持。之所以说是没有直接支持，是因">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://debugtalk.com/images/httprunner-skip.jpg">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.439Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.620Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HttpRunner 通过 skip 机制实现对测试用例的分组执行控制">
 <meta name="twitter:description" content="背景介绍近期，某位同学对HttpRunner提了一个需求点：  能否支持类似unittest中的skip注解，方便灵活剔除某些用例，不执行。目前在接口测试日常构建中，会遇到一些接口开发暂时屏蔽了或者降级，导致用例执行失败；所以想当遇到这些情况的时候，能够临时剔除掉某些用例不执行；等后续恢复后，再去掉，然后恢复执行。  针对这种情况，HttpRunner的确没有直接支持。之所以说是没有直接支持，是因">
@@ -150,16 +178,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -472,14 +490,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/" itemprop="url" rel="index"><span itemprop="name">Development</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Development/测试框架/" itemprop="url" rel="index"><span itemprop="name">测试框架</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/HttpRunner/" itemprop="url" rel="index"><span itemprop="name">HttpRunner</span></a></span>
 
                 
                 
@@ -528,6 +546,7 @@
 <p>针对这种情况，<code>HttpRunner</code>的确没有直接支持。之所以说是没有<code>直接</code>支持，是因为在<code>HttpRunner</code>中存在<code>times</code>关键字，可以指定某个<code>test</code>的运行次数。</p>
 <p>例如，如下<code>test</code>中指定了<code>times</code>为3，那么该<code>test</code>就会运行3次。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">demo</span></span><br><span class="line"><span class="attr">    times:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">    request:</span> <span class="string">&#123;...&#125;</span></span><br><span class="line"><span class="attr">    validate:</span> <span class="string">[...]</span></span><br></pre></td></tr></table></figure>
+
 <p>假如要实现临时屏蔽掉某些<code>test</code>，那么就可以将对应<code>test</code>的<code>times</code>设置为0。</p>
 <p>这虽然也能勉强实现需求，但是这跟直接将临时不运行的<code>test</code>注释掉没什么区别，都需要对测试用例内容进行改动，使用上很是不方便。</p>
 <p>考虑到该需求的普遍性，<code>HttpRunner</code>的确应该增加对该种情况的支持。</p>
@@ -541,6 +560,7 @@
 <h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><p>目标明确了，那需要怎么实现呢？</p>
 <p>首先，我们先看下<code>unittest</code>中这三个函数是怎么实现的；这三个函数定义在<code>unittest/case.py</code>中。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SkipTest</span><span class="params">(Exception)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Raise this exception in a test to skip it.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Usually you can use TestCase.skipTest() or one of the skipping decorators</span></span><br><span class="line"><span class="string">    instead of raising this directly.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">skip</span><span class="params">(reason)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Unconditionally skip a test.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(test_item)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> isinstance(test_item, (type, types.ClassType)):</span><br><span class="line"><span class="meta">            @functools.wraps(test_item)</span></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">skip_wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">                <span class="keyword">raise</span> SkipTest(reason)</span><br><span class="line">            test_item = skip_wrapper</span><br><span class="line"></span><br><span class="line">        test_item.__unittest_skip__ = <span class="literal">True</span></span><br><span class="line">        test_item.__unittest_skip_why__ = reason</span><br><span class="line">        <span class="keyword">return</span> test_item</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">skipIf</span><span class="params">(condition, reason)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Skip a test if the condition is true.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> condition:</span><br><span class="line">        <span class="keyword">return</span> skip(reason)</span><br><span class="line">    <span class="keyword">return</span> _id</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">skipUnless</span><span class="params">(condition, reason)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Skip a test unless the condition is true.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> condition:</span><br><span class="line">        <span class="keyword">return</span> skip(reason)</span><br><span class="line">    <span class="keyword">return</span> _id</span><br></pre></td></tr></table></figure>
+
 <p>不难看出，核心有两点：</p>
 <ul>
 <li>对于<code>skip</code>，只需要在该测试用例中<code>raise SkipTest(reason)</code>，而<code>SkipTest</code>是<code>unittest/case.py</code>中定义的一个异常类；</li>
@@ -551,8 +571,10 @@
 <p>那么，最简单的做法，就是在<code>YAML/JSON</code>测试用例中，新增<code>skip/skipIf/skipUnless</code>参数，然后在<code>_run_test</code>方法中根据参数内容来决定是否执行<code>raise SkipTest(reason)</code>。</p>
 <p>例如，在<code>YAML</code>测试用例中，我们可以按照如下形式新增<code>skip</code>字段，其中对应的值部分就是我们需要的<code>reason</code>。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">demo</span></span><br><span class="line"><span class="attr">    skip:</span> <span class="string">"skip this test unconditionally"</span></span><br><span class="line"><span class="attr">    request:</span> <span class="string">&#123;...&#125;</span></span><br><span class="line"><span class="attr">    validate:</span> <span class="string">[...]</span></span><br></pre></td></tr></table></figure>
+
 <p>接下来在<code>_run_test</code>方法，要处理就十分简单，只需要判断<code>testcase_dict</code>中是否包含<code>skip</code>字段，假如包含，则执行<code>raise SkipTest(reason)</code>即可。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_run_test</span><span class="params">(self, testcase_dict)</span>:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">"skip"</span> <span class="keyword">in</span> testcase_dict:</span><br><span class="line">        skip_reason = testcase_dict[<span class="string">"skip"</span>]</span><br><span class="line">        <span class="keyword">raise</span> SkipTest(skip_reason)</span><br><span class="line"></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
 <p>这对于<code>skip</code>机制来做，完全满足需求；但对于<code>skipIf/skipUnless</code>，可能就会麻烦些，因为我们的用例是在<code>YAML/JSON</code>文本格式的文件中，没法像在<code>unittest</code>中执行<code>condition</code>那样的Python表达式。</p>
 <p>嗯？谁说在<code>YAML/JSON</code>中就不能执行函数表达式的？在<code>HttpRunner</code>中，我们已经实现了该功能，即：</p>
 <ul>
@@ -561,10 +583,13 @@
 </ul>
 <p>在此基础上，我们要实现<code>skipIf/skipUnless</code>就很简单了；很自然地，我们可以想到采用如下形式来进行描述。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">create</span> <span class="string">user</span> <span class="string">which</span> <span class="string">existed</span> <span class="string">(skip</span> <span class="string">if</span> <span class="string">condition)</span></span><br><span class="line"><span class="attr">    skipIf:</span> <span class="string">$&#123;skip_test_in_production_env()&#125;</span></span><br><span class="line"><span class="attr">    request:</span> <span class="string">&#123;...&#125;</span></span><br><span class="line"><span class="attr">    validate:</span> <span class="string">[...]</span></span><br></pre></td></tr></table></figure>
+
 <p>其中，<code>skip_test_in_production_env</code>定义在<code>debugtalk.py</code>文件中。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">skip_test_in_production_env</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">""" skip this test in production environment</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> os.environ[<span class="string">"TEST_ENV"</span>] == <span class="string">"PRODUCTION"</span></span><br></pre></td></tr></table></figure>
+
 <p>然后，在<code>_run_test</code>方法中，我们只需要判断<code>testcase_dict</code>中是否包含<code>skipIf</code>字段，假如包含，则将其对应的函数表达式取出，运行得到其结果，最后再根据运算结果来判断是否执行<code>raise SkipTest(reason)</code>。对函数表达式进行解析的方法在<code>httprunner/context.py</code>的<code>exec_content_functions</code>函数中，具体实现方式可阅读之前的文章。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_run_test</span><span class="params">(self, testcase_dict)</span>:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">"skip"</span> <span class="keyword">in</span> testcase_dict:</span><br><span class="line">        skip_reason = testcase_dict[<span class="string">"skip"</span>]</span><br><span class="line">        <span class="keyword">raise</span> SkipTest(skip_reason)</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">"skipIf"</span> <span class="keyword">in</span> testcase_dict:</span><br><span class="line">        skip_if_condition = testcase_dict[<span class="string">"skipIf"</span>]</span><br><span class="line">        <span class="keyword">if</span> self.context.exec_content_functions(skip_if_condition):</span><br><span class="line">            skip_reason = <span class="string">"&#123;&#125; evaluate to True"</span>.format(skip_if_condition)</span><br><span class="line">            <span class="keyword">raise</span> SkipTest(skip_reason)</span><br><span class="line"></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
 <p><code>skipUnless</code>与<code>skipIf</code>类似，不再重复。</p>
 <p>通过该种方式，我们就可以实现在不对测试用例文件做任何修改的情况下，通过外部方式（例如设定环境变量的值）就可以控制是否执行某些测试用例。</p>
 <h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><code>skip/skipIf/skipUnless</code>机制实现后，我们对测试用例的执行控制就更加灵活方便了。</p>
@@ -728,7 +753,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -769,7 +794,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -900,7 +951,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

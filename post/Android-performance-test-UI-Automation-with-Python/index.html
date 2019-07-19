@@ -15,7 +15,7 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -94,14 +94,42 @@
   };
 </script>
 
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
 
   
 
-
-
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
 
   <meta name="description" content="在进行Android App持续集成性能测试的时候，需要自动化实现UI层面的一些操作，常见的几种场景包括：  测试帧率时，需要模拟滑屏、拖拽操作； 初次安装app后启动应用时，需要点击按钮跳过协议页面； 从Android M(6.0)开始，首次启动应用时会进行系统权限校验，需要勾选checkbox以及点击按钮； 模拟点击按钮登录用户账号；  这些场景虽然看上去互不相关，但是从测试的角度，UI层面的">
-<meta name="keywords" content="Android,UI,Python">
+<meta name="keywords" content="Python,Android,UI">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android App持续集成性能测试：使用Python实现UI自动化">
 <meta property="og:url" content="https://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/index.html">
@@ -109,7 +137,7 @@
 <meta property="og:description" content="在进行Android App持续集成性能测试的时候，需要自动化实现UI层面的一些操作，常见的几种场景包括：  测试帧率时，需要模拟滑屏、拖拽操作； 初次安装app后启动应用时，需要点击按钮跳过协议页面； 从Android M(6.0)开始，首次启动应用时会进行系统权限校验，需要勾选checkbox以及点击按钮； 模拟点击按钮登录用户账号；  这些场景虽然看上去互不相关，但是从测试的角度，UI层面的">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://debugtalk.com/images/uiautomatorviewer.png">
-<meta property="og:updated_time" content="2019-03-03T06:17:27.479Z">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.624Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android App持续集成性能测试：使用Python实现UI自动化">
 <meta name="twitter:description" content="在进行Android App持续集成性能测试的时候，需要自动化实现UI层面的一些操作，常见的几种场景包括：  测试帧率时，需要模拟滑屏、拖拽操作； 初次安装app后启动应用时，需要点击按钮跳过协议页面； 从Android M(6.0)开始，首次启动应用时会进行系统权限校验，需要勾选checkbox以及点击按钮； 模拟点击按钮登录用户账号；  这些场景虽然看上去互不相关，但是从测试的角度，UI层面的">
@@ -150,16 +178,6 @@
   </script>
 
 
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?96dc81023a24bbe64c8bfd8aff39582d";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
 
 
 
@@ -472,7 +490,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
 
                 
                 
@@ -537,9 +562,11 @@
 <p>从Android 4.3开始，系统中就自带了<code>uiautomator</code>命令，命令的路径为<code>/system/bin/uiautomator</code>。</p>
 <p>由于<code>uiautomator</code>命令是运行在Android设备中的，因此需先要将编译好的jar文件push到Android设备中，导入目录为<code>/data/local/tmp/</code>。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  adb push memorytest.jar /data/local/tmp/</span><br></pre></td></tr></table></figure>
+
 <p>完成以上准备工作后，就可以在Android的Terminal中执行了<code>uiautomator</code>命令了。</p>
 <p>详细的<code>uiautomator</code>命令用法可参考官方文档，这里只列出最常用的一种方式：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  adb shell</span><br><span class="line">shell@hammerhead:/ $ uiautomator runtest memorytest.jar -c com.uc.util.TestCases<span class="comment">#slideScreen -e pkgName com.UCMobile</span></span><br></pre></td></tr></table></figure>
+
 <p>在如上示例中，<code>memorytest.jar</code>是我们之前编译好的测试用例jar文件名，<code>com.uc.util.TestCases#slideScreen</code>是Java工程中的类名和方法名，<code>-e</code>后面是传入测试类的<code>name-value</code>参数。</p>
 <p>这里就不再对<code>UI Automator</code>进行过多介绍，后续我会再针对<code>UI Automator</code>单独写一篇更加详细的教程。</p>
 <h2 id="Python调用uiautomator"><a href="#Python调用uiautomator" class="headerlink" title="Python调用uiautomator"></a>Python调用uiautomator</h2><p>通常，我们的持续集成性能测试代码是采用Python编写的，那如何通过Python调用uiautomator呢？</p>
@@ -547,8 +574,10 @@
 <p>首先，需要在Java Project使用<code>UI Automator API</code>编写UI测试场景，编译生成jar文件，并将这个文件导入到Python项目中。</p>
 <p>然后，在Python测试代码中，调用<code>uiautomator</code>命令前需要先将jar文件push到Android设备。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jar_file_path = os.path.join(_project_root_path, <span class="string">"resource/jar/memorytest.jar"</span>)</span><br><span class="line">cmdexec.push(jar_file_path, <span class="string">'/data/local/tmp/'</span>)</span><br></pre></td></tr></table></figure>
+
 <p>接下来，就可以在Python中组装测试命令，并将命令传到Android设备中进行执行。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmd = <span class="string">"uiautomator runtest memorytest.jar -c com.uc.util.TestCases#slideScreen -e pkgName com.UCMobile"</span></span><br><span class="line">cmdexec.sendShellCommand(cmd, timeout_time=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
 <p>需要说明的是，上面代码中的<code>cmdexec</code>是一个封装类的实例，主要实现的是通过adb与Android设备进行交互，例如push/pull文件、执行Android shell命令等。</p>
 <p>经过这么一个流程，可能大家都会感觉到实现起来太过复杂。特别地，如果需要增加一个测试场景，就又要到Java项目中添加测试代码，重新编译为jar文件，并将新的jar文件添加到Python项目中，或者替换原有jar文件。这还不算完，同样地，在Python项目中也需要针对新增的测试场景进行相应的编码。</p>
 <p>难道就没有更便捷的方式么？</p>
@@ -558,9 +587,11 @@
 </blockquote>
 <p>该工具以<code>Python package</code>的形式存在，可通过<code>pip</code>在测试机（PC）上进行安装。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install uiautomator</span><br></pre></td></tr></table></figure>
+
 <p>安装完毕后，无需在Android设备上安装任何东西，只要设备通过adb与主机相连，就可以在主机中通过Python操作Android设备的UI控件。</p>
 <p>如下是简单的示例：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> uiautomator <span class="keyword">import</span> device <span class="keyword">as</span> d</span><br><span class="line"></span><br><span class="line"><span class="comment"># Turn on screen</span></span><br><span class="line">d.screen.on()</span><br><span class="line"></span><br><span class="line"><span class="comment"># press back key</span></span><br><span class="line">d.press.back()</span><br><span class="line"></span><br><span class="line"><span class="comment"># click (x, y) on screen</span></span><br><span class="line">d.click(x, y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># check unchecked checkbox</span></span><br><span class="line">checkbox = d(className=<span class="string">'android.widget.CheckBox'</span>, checked=<span class="string">'false'</span>)</span><br><span class="line">checkbox.click()</span><br><span class="line"></span><br><span class="line"><span class="comment"># click button with text 'Next'</span></span><br><span class="line">d(text=<span class="string">"Clock"</span>).click()</span><br><span class="line">button = d(className=<span class="string">'android.widget.Button'</span>, text=<span class="string">'Next'</span>)</span><br><span class="line">button.click()</span><br><span class="line"></span><br><span class="line"><span class="comment"># swipe from (sx, sy) to (ex, ey)</span></span><br><span class="line">d.swipe(sx, sy, ex, ey)</span><br></pre></td></tr></table></figure>
+
 <p>更详细的使用方法可参考<a href="https://github.com/xiaocong/uiautomator" target="_blank" rel="noopener">项目文档</a>。</p>
 <p>通过这种方式，我们就可以极大地简化Python操作UI控件的方式，不用再对照着<code>UI Automator API</code>使用Java编写测试用例，也不用再反复编译jar文件，省去了同一个测试场景需要维护两套代码的麻烦，整个过程也更加Pythonic。</p>
 <p>当然，<code>pyuiautomator</code>也并非完美，毕竟它不是Google官方维护的，从我实际使用的经历来看，有时候也会存在一些问题。这里先不展开，后续会单独写一篇博客。不过，总的来说，<code>pyuiautomator</code>还是非常值得使用的，它的确可以大大简化测试工作量。</p>
@@ -569,6 +600,7 @@
 <h2 id="定位控件"><a href="#定位控件" class="headerlink" title="定位控件"></a>定位控件</h2><p>在UI中，每个控件都有许多属性，例如<code>class</code>、<code>text</code>、<code>index</code>等等。我们要想对某一个控件进行操作，必然需要先对目标控件进行选择。</p>
 <p>在上面的<code>pyuiautomator</code>用法示例中，已经包含了控件选择的代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">checkbox = d(className=<span class="string">'android.widget.CheckBox'</span>, checked=<span class="string">'false'</span>)</span><br><span class="line">button = d(className=<span class="string">'android.widget.Button'</span>, text=<span class="string">'Next'</span>)</span><br></pre></td></tr></table></figure>
+
 <p>在这两行代码中，分别实现了对checkbox和button的选择。基本原则就是，通过指定的控件属性，可以唯一确定目标控件。</p>
 <p>那么，我们怎么知道目标控件有哪些属性，以及对应的属性值是什么呢？</p>
 <p>Google官方提供了两个工具，<code>hierarchyviewer</code>和<code>uiautomatorviewer</code>，这两个工具都位于<code>&lt;android-sdk&gt;/tools/</code>目录下。关于这两个工具的区别及其各自的特点，本文不进行详细介绍，我们当前只需要知道，在查看控件属性方面，这两个工具实现的功能完全相同，界面也完全相同，我们任选其一即可。</p>
@@ -582,10 +614,13 @@
 <p>获得UI元素的信息后，由于UI控件是以树形结构进行存储，而且每个控件都存在index属性值，因此，理论上讲，通过层级结构和index属性就能唯一指定任意UI控件。</p>
 <p>然而，这并不是最佳实践。因为通常情况下，UI布局的树形结构层级较多，通过层级关系进行指定时会造成书写极为复杂，而且从代码中很难一眼看出指定的是哪个控件。不信？看下这个例子就能体会了。如下代码对应的就是上图中红色方框的控件，可以看出，要是寻找每个控件都要从顶级节点开始，要将根节点到目标控件的路径找出来，这也是一个很大的工作量，而且很容易出错。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">d(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.LinearLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.view.View&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.view.View&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.TextView&apos;)</span><br></pre></td></tr></table></figure>
+
 <p>在实际应用中，我们更多地是采用控件的属性信息来定位控件，一般情况下，采用属性值<code>text</code>就能唯一确定目标控件了。例如同样是对上图中的红色方框进行定位，如下代码就足够了。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d(text=&apos;UC头条有新消息，点击刷新&apos;)</span><br></pre></td></tr></table></figure>
+
 <p>不过，经常会出现目标控件的<code>text</code>属性值为空的情况，这个时候我们一般就会采用<code>class</code>属性和部分层级关系组合的方式。同样是上图中的红色方框，我们也可以使用如下方式进行定位。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d(className=&apos;android.widget.FrameLayout&apos;).child(className=&apos;android.widget.TextView&apos;)</span><br></pre></td></tr></table></figure>
+
 <p>可以看出，同一个控件，我们可以采用多种方式进行定位。具体选择何种定位方式，可以参考如下准则：</p>
 <ul>
 <li>定位方式应保证定位准确</li>
@@ -594,6 +629,7 @@
 </ul>
 <p>这里说到了定位方式的准确性，那要如何进行验证呢？技巧是，采用<code>.count</code>和<code>.info</code>属性值即可。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d(text=<span class="string">'UC头条有新消息，点击刷新'</span>).count</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d(text=<span class="string">'UC头条有新消息，点击刷新'</span>).info</span><br><span class="line">&#123;<span class="string">u'contentDescription'</span>: <span class="literal">None</span>, <span class="string">u'checked'</span>: <span class="literal">False</span>, <span class="string">u'clickable'</span>: <span class="literal">True</span>, <span class="string">u'scrollable'</span>: <span class="literal">False</span>, <span class="string">u'text'</span>: <span class="string">u'UC\u5934\u6761\u6709\u65b0\u6d88\u606f\uff0c\u70b9\u51fb\u5237\u65b0'</span>, <span class="string">u'packageName'</span>: <span class="string">u'com.UCMobile.projectscn1098RHEAD'</span>, <span class="string">u'selected'</span>: <span class="literal">False</span>, <span class="string">u'enabled'</span>: <span class="literal">True</span>, <span class="string">u'bounds'</span>: &#123;<span class="string">u'top'</span>: <span class="number">1064</span>, <span class="string">u'left'</span>: <span class="number">42</span>, <span class="string">u'right'</span>: <span class="number">1038</span>, <span class="string">u'bottom'</span>: <span class="number">1136</span>&#125;, <span class="string">u'className'</span>: <span class="string">u'android.widget.TextView'</span>, <span class="string">u'focusable'</span>: <span class="literal">False</span>, <span class="string">u'focused'</span>: <span class="literal">False</span>, <span class="string">u'checkable'</span>: <span class="literal">False</span>, <span class="string">u'resourceName'</span>: <span class="literal">None</span>, <span class="string">u'longClickable'</span>: <span class="literal">False</span>, <span class="string">u'visibleBounds'</span>: &#123;<span class="string">u'top'</span>: <span class="number">1064</span>, <span class="string">u'left'</span>: <span class="number">42</span>, <span class="string">u'right'</span>: <span class="number">1038</span>, <span class="string">u'bottom'</span>: <span class="number">1136</span>&#125;, <span class="string">u'childCount'</span>: <span class="number">0</span>&#125;</span><br></pre></td></tr></table></figure>
+
 <p>当<code>.count</code>属性值为1，<code>.info</code>属性值的内容与目标控件的属性值一致时，就可以确定我们采用的定位方式是准确的。</p>
 <h2 id="控件操作"><a href="#控件操作" class="headerlink" title="控件操作"></a>控件操作</h2><p>定位到具体的控件后，操作就比较容易了。</p>
 <p>在<code>pyuiautomator</code>中，对<code>UI Automator</code>的UI操作动作进行了封装，常用的操作动作有：</p>
@@ -664,11 +700,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
             <a href="/tags/Android/" rel="tag"># Android</a>
           
             <a href="/tags/UI/" rel="tag"># UI</a>
-          
-            <a href="/tags/Python/" rel="tag"># Python</a>
           
         </div>
       
@@ -764,7 +800,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -805,7 +841,33 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -936,7 +998,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">53</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
