@@ -423,6 +423,211 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/ApiTestEngine-rename-to-HttpRunner/" class="post-title-link" itemprop="url">ApiTestEngine 正式更名为 HttpRunner</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-11-08 00:00:00" itemprop="dateCreated datePublished" datetime="2017-11-08T00:00:00+08:00">2017-11-08</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/HttpRunner/" itemprop="url" rel="index"><span itemprop="name">HttpRunner</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在<a href="https://debugtalk.com/post/apitestengine-not-only-about-json-api/">《ApiTestEngine，不再局限于API的测试》</a>一文的末尾，我提到随着<code>ApiTestEngine</code>的发展，它的实际功能特性和名字已经不大匹配，需要考虑改名了。</p>
+<p>经过慎重考虑，最终决定将<code>ApiTestEngine</code>正式更名为<code>HttpRunner</code>。</p>
+<h2 id="名字的由来"><a href="#名字的由来" class="headerlink" title="名字的由来"></a>名字的由来</h2><p>为什么选择<code>HttpRunner</code>这个名字呢？</p>
+<p>在改名之前，我的想法很明确，就是要在新名字中体现该工具最核心的两个特点：</p>
+<ul>
+<li>该工具可实现任意基于HTTP协议接口的测试（自动化测试、持续集成、线上监控都是以此作为基础）</li>
+<li>该工具可同时实现性能测试（这是区别于其它工具的最大卖点）</li>
+</ul>
+<p>围绕着这两点，我开始踏上了纠结的取名之路。</p>
+<p>首先想到的，<code>ApiTestEngine</code>实现<code>HTTP</code>请求是依赖于<a href="http://python-requests.org" target="_blank" rel="noopener"><code>Python Requests</code></a>，实现性能测试是依赖于<a href="http://locust.io" target="_blank" rel="noopener"><code>Locust</code></a>，而<code>Locust</code>同样依赖于<code>Python Requests</code>。可以说，<code>ApiTestEngine</code>完全是构建在<code>Python Requests</code>之上的，后续无论怎么进化，这一层关系应该都不会变。</p>
+<p>考虑到<code>Python Requests</code>的<code>slogan</code>是：</p>
+<blockquote>
+<p>Python HTTP Requests for Humans™</p>
+</blockquote>
+<p>因此，我想在<code>ApiTestEngine</code>的新名字中应该包含<code>HTTP</code>。</p>
+<p>那如何体现性能测试呢？</p>
+<p>想到的关键词就<code>load</code>、<code>perf</code>、<code>meter</code>这些（来源于LoadRunner，NeoLoad，JMeter），但又不能直接用，因为名字中带有这些词让人感觉就只是性能测试工具。而且，还要考虑跟<code>HTTP</code>这个词进行搭配。</p>
+<p>最终，感觉<code>runner</code>这个词比较合适，一方面这来源于<code>LoadRunner</code>，大众的认可度可能会比较高；同时，这个词用在自动化测试和性能测试上都不会太牵强。</p>
+<p>更重要的是，<code>HttpRunner</code>这个组合词当前还没有人用过，不管是<code>PyPI</code>还是<code>GitHub</code>，甚至域名都是可注册状态。</p>
+<p>所以，就认定<code>HttpRunner</code>这个名字了。</p>
+<h2 id="相关影响"><a href="#相关影响" class="headerlink" title="相关影响"></a>相关影响</h2><p><code>ApiTestEngine</code>更名为<code>HttpRunner</code>之后，会对用户产生哪些影响呢？</p>
+<p>先说结论，没有任何不好的影响！</p>
+<p>在链接访问方面，受益于GitHub仓库链接的自动重定向机制，仓库在改名或者过户（Transfer ownership）之后，访问原有链接会自动实现重定向，因此之前博客中的链接也都不会受到影响。</p>
+<p>新的仓库地址：<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" rel="noopener">https://github.com/HttpRunner/HttpRunner</a></p>
+<p>在使用的命令方面，<code>HttpRunner</code>采用<code>httprunner</code>作为新的命令代替原有的<code>ate</code>命令；当然，为了考虑兼容性，<code>HttpRunner</code>对<code>ate</code>命令也进行了保留，因此<code>httprunner</code>和<code>ate</code>命令同时可用，并完全等价。在性能测试方面，<code>locusts</code>命令保持不变。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ httprunner -V</span><br><span class="line">HttpRunner version: 0.8.1b</span><br><span class="line">PyUnitReport version: 0.1.3b</span><br></pre></td></tr></table></figure>
+
+<p>既然是全新的名字，新的篇章必然也得有一些新的东西。</p>
+<p>为了方面用户安装，<code>HttpRunner</code>已托管至<a href="https://pypi.python.org/pypi/HttpRunner" target="_blank" rel="noopener"><code>PyPI</code></a>；后续大家可以方便的采用<code>pip</code>命令进行安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install HttpRunner</span><br></pre></td></tr></table></figure>
+
+<p>同时，<code>HttpRunner</code>新增了大量使用说明文档（之前的博客主要都是开发过程记录），并托管到专业的<code>readthedocs</code>上面。在文档语言方面，英文优先，中文相对滞后。</p>
+<p>访问网址：</p>
+<ul>
+<li>英文：<a href="http://httprunner.readthedocs.io/" target="_blank" rel="noopener">http://httprunner.readthedocs.io/</a></li>
+<li>中文（滞后）：<a href="http://httprunner-cn.readthedocs.io/" target="_blank" rel="noopener">http://httprunner-cn.readthedocs.io/</a></li>
+</ul>
+<p>另外，为了具有更高的逼格，同时购入域名<code>httprunner.top</code>，后续将作为项目的主页地址。当前还处于实名认证中，预计2~3个工作日后就可以访问了。</p>
+<p>关于项目改名这事儿，就说到这儿吧，希望你们也喜欢。</p>
+<blockquote>
+<p>Hello World, HttpRunner.</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/apitestengine-not-only-about-json-api/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2542,230 +2747,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/ApiTestEngine-2-best-testcase-description/" class="post-title-link" itemprop="url">ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-07-07 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-07T00:00:00+08:00">2017-07-07</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/HttpRunner/" itemprop="url" rel="index"><span itemprop="name">HttpRunner</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在<a href="https://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a>一文中，我们完成了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>基础框架的搭建，并实现了简单接口的测试功能。</p>
-<p>接下来，我们就针对复杂类型的接口（例如包含签名校验等机制），通过对接口的业务参数和技术细节进行分离，实现简洁优雅的接口测试用例描述。</p>
-<h2 id="传统的测试用例编写方式"><a href="#传统的测试用例编写方式" class="headerlink" title="传统的测试用例编写方式"></a>传统的测试用例编写方式</h2><p>对于在自动化测试中将<code>测试数据</code>与<code>代码实现</code>进行分离的好处，我之前已经讲过多次，这里不再重复。</p>
-<p>测试数据与代码实现分离后，简单的接口还好，测试用例编写不会有什么问题；但是当面对复杂一点的接口（例如包含签名校验等机制）时，我们编写自动化测试用例还是会比较繁琐。</p>
-<p>我们从一个最常见的案例入手，看下编写自动化测试用例的过程，相信大家看完后就会对上面那段话有很深的感受。</p>
-<p>以API接口服务（<code>Mock Server</code>）的创建新用户功能为例，该接口描述如下：</p>
-<blockquote>
-<p>请求数据：<br>Url: <a href="http://127.0.0.1:5000/api/users/1000" target="_blank" rel="noopener">http://127.0.0.1:5000/api/users/1000</a><br>Method: POST<br>Headers: {“content-type”: “application/json”, “Random”: “A2dEx”, “Authorization”: “47f135c33e858f2e3f55156ae9f78ee1”}<br>Body: {“name”: “user1”, “password”: “123456”}</p>
-<p>预期的正常响应数据：<br>Status_Code: 201<br>Headers: {‘Date’: ‘Fri, 23 Jun 2017 07:05:41 GMT’, ‘Content-Length’: ‘54’, ‘Content-Type’: ‘application/json’, ‘Server’: ‘Werkzeug/0.12.2 Python/2.7.13’}<br>Body: {“msg”: “user created successfully.”, “success”: true, “uuid”: “JsdfwerL”}</p>
-</blockquote>
-<p>其中，请求<code>Headers</code>中的<code>Random</code>字段是一个5位长的随机字符串，<code>Authorization</code>字段是一个签名值，签名方式为<code>TOKEN+RequestBody+Random</code>拼接字符串的<code>MD5</code>值。更具体的，<code>RequestBody</code>要求字典的<code>Key</code>值按照由小到大的排序方式。接口请求成功后，返回的是一个<code>JSON</code>结构，里面的<code>success</code>字段标识请求成功与否的状态，如果成功，<code>uuid</code>字段标识新创建用户的唯一ID。</p>
-<p>相信只要是接触过接口测试的同学对此应该都会很熟悉，这也是后台系统普遍采用的签名校验方式。在具体的系统中，可能字符串拼接方式或签名算法存在差异，但是模式基本上都是类似的。</p>
-<p>那么面对这样一个接口，我们会怎样编写接口测试用例呢？</p>
-<p>首先，请求的数据是要有的，我们会先准备一个可用的账号，例如<code>{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}</code>。</p>
-<p>然后，由于接口存在签名校验机制，因此我们除了要知道服务器端使用的TOKEN（假设为<code>debugtalk</code>）外，还要准备好<code>Random</code>字段和<code>Authorization</code>字段。<code>Random</code>字段好说，我们随便生成一个，例如<code>A2dEx</code>；<code>Authorization</code>字段就会复杂不少，需要我们按照规定先将<code>RequestBody</code>根据字典的<code>Key</code>值进行排序，得到<code>{&quot;name&quot;: &quot;user1&quot;, &quot;password&quot;: &quot;123456&quot;}</code>，然后与<code>TOKEN</code>和<code>Random</code>字段拼接字符串得到<code>debugtalk{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}A2dEx</code>，接着再找一个<code>MD5</code>工具，计算得到签名值<code>a83de0ff8d2e896dbd8efb81ba14e17d</code>。</p>
-<p>最后，我们才可以完成测试用例的编写。假如我们采用<code>YAML</code>编写测试用例，那么用例写好后应该就是如下样子。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">create</span> <span class="string">user</span> <span class="string">which</span> <span class="string">does</span> <span class="string">not</span> <span class="string">exist</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/users/1000</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            authorization:</span> <span class="string">a83de0ff8d2e896dbd8efb81ba14e17d</span></span><br><span class="line"><span class="attr">            random:</span> <span class="string">A2dEx</span></span><br><span class="line"><span class="attr">    data:</span></span><br><span class="line"><span class="attr">        name:</span> <span class="string">user1</span></span><br><span class="line"><span class="attr">        password:</span> <span class="number">123456</span></span><br><span class="line"><span class="attr">    response:</span></span><br><span class="line"><span class="attr">        status_code:</span> <span class="number">201</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">        body:</span></span><br><span class="line"><span class="attr">            success:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">            msg:</span> <span class="string">user</span> <span class="string">created</span> <span class="string">successfully.</span></span><br><span class="line"><span class="attr">            uuid:</span> <span class="string">JsdfwerL</span></span><br></pre></td></tr></table></figure>
-
-<p>该测试用例可以在<code>ApiTestEngine</code>中正常运行，我们也可以采用同样的方式，对系统的所有接口编写测试用例，以此实现项目的接口自动化测试覆盖。</p>
-<p>但问题在于，每个接口通常会对应多条测试用例，差异只是在于请求的数据会略有不同，而测试用例量越大，我们人工去准备测试数据的工作量也就越大。更令人抓狂的是，我们的系统接口不是一直不变的，有时候会根据业务需求的变化进行一些调整，相应地，我们的测试数据也需要进行同步更新，这样一来，所有相关的测试用例数据就又得重新计算一遍（任意字段数据产生变化，签名值就会大不相同）。</p>
-<p>可以看出，如果是采用这种方式编写维护接口测试用例，人力和时间成本都会非常高，最终的结果必然是接口自动化测试难以在实际项目中得以开展。</p>
-<h2 id="理想的用例描述方式"><a href="#理想的用例描述方式" class="headerlink" title="理想的用例描述方式"></a>理想的用例描述方式</h2><p>在上面案例中，编写接口测试用例时之所以会很繁琐，主要是因为接口存在签名校验机制，导致我们在准备测试数据时耗费了太多时间在这上面。</p>
-<p>然而，对于测试人员来说，接口的业务功能才是需要关注的，至于接口采用什么签名校验机制这类技术细节，的确不应耗费过多时间和精力。所以，我们的接口测试框架应该设法将接口的技术细节实现和业务参数进行拆分，并能自动处理与技术细节相关的部分，从而让业务测试人员只需要关注业务参数部分。</p>
-<p>那要怎么实现呢？</p>
-<p>在开始实现之前，我们不妨借鉴<code>BDD</code>（行为驱动开发）的思想，先想下如何编写接口测试用例的体验最友好，换句话说，就是让业务测试人员写用例写得最爽。</p>
-<p>还是上面案例的接口测试用例，可以看出，最耗时的地方主要是计算签名校验值部分。按理说，签名校验算法我们是已知的，要是可以在测试用例中直接调用签名算法函数就好了。</p>
-<p>事实上，这也是各种模板语言普遍采用的方式，例如<code>Jinja2</code>模板语言，可以在<code>{% %}</code>中执行函数语句，在<code>{{ }}</code>中可以调用变量参数。之前我在设计[<code>AppiumBooster</code>][AppiumBooster]时也采用了类似的思想，可以通过<code>${config.TestEnvAccount.UserName}</code>的方式在测试用例中引用预定义的全局变量。</p>
-<p>基于该思路，假设我们已经实现了<code>gen_random_string</code>这样一个生成指定位数的随机字符串的函数，以及<code>gen_md5</code>这样一个计算签名校验值的函数，那么我们就可以尝试采用如下方式来描述我们的测试用例：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">create</span> <span class="string">user</span> <span class="string">which</span> <span class="string">does</span> <span class="string">not</span> <span class="string">exist</span></span><br><span class="line"><span class="attr">    variables:</span></span><br><span class="line"><span class="attr">        - TOKEN:</span> <span class="string">debugtalk</span></span><br><span class="line"><span class="attr">        - random:</span> <span class="string">$&#123;gen_random_string(5)&#125;</span></span><br><span class="line"><span class="attr">        - json:</span> <span class="string">&#123;"name":</span> <span class="string">"user"</span><span class="string">,</span> <span class="string">"password"</span><span class="string">:</span> <span class="string">"123456"</span><span class="string">&#125;</span></span><br><span class="line"><span class="attr">        - authorization:</span> <span class="string">$&#123;gen_md5($TOKEN,</span> <span class="string">$json,</span> <span class="string">$random)&#125;</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/users/1000</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            authorization:</span> <span class="string">$authorization</span></span><br><span class="line"><span class="attr">            random:</span> <span class="string">$random</span></span><br><span class="line"><span class="attr">        json:</span> <span class="string">$json</span></span><br><span class="line"><span class="attr">    extractors:</span></span><br><span class="line"><span class="attr">        user_uuid:</span> <span class="string">content.uuid</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"status_code"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="number">201</span><span class="string">&#125;</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"content.success"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="literal">true</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>在如上用例中，用到了两种转义符：</p>
-<ul>
-<li><code>$</code>作为变量转义符，<code>$var</code>将不再代表的是普遍的字符串，而是<code>var</code>变量的值；</li>
-<li><code>${}</code>作为函数的转义符，<code>${}</code>内可以直接填写函数名称及调用参数，甚至可以包含变量。</li>
-</ul>
-<p>为什么会选择采用这种描述方式？（<code>Why？</code>）</p>
-<p>其实这也是我经过大量思考和实践之后，才最终确定的描述方式。如果真要讲述这个思路历程。。。还是不细说了，此处可省下一万字。（主要的思路无非就是要实现转义的效果，并且表达要简洁清晰，因此必然会用到特殊字符；而特殊字符在<code>YAML</code>中大多都已经有了特定的含义，排除掉不可用的之后，剩下的真没几个了，然后再借鉴其它框架常用的符号，所以说最终选择<code>$</code>和<code>${}</code>也算是必然。）</p>
-<p>可以确定的是，这种描述方式的好处非常明显，不仅可以实现复杂计算逻辑的函数调用，还可以实现变量的定义和引用。</p>
-<p>除了转义符，由于接口测试中经常需要对结果中的特定字段进行提取，作为后续接口请求的参数，因此我们实现了<code>extractors</code>这样一个结果提取器，只要返回结果是JSON类型，就可以将其中的任意字段进行提取，并保存到一个变量中，方便后续接口请求进行引用。</p>
-<p>另外，为了更好地实现对接口响应结果的校验，我们废弃了先前的方式，实现了独立的结果校验器<code>validators</code>。这是因为，很多时候在比较响应结果时，并不能简单地按照字段值是否相等来进行校验，除此之外，我们可能还需要检查某个字段的长度是否为指定位数，元素列表个数是否大于某个数值，甚至某个字符串是否满足正则匹配等等。</p>
-<p>相信你们肯定会想，以上这些描述方式的确是很简洁，但更多地感觉是在臆想，就像开始说的<code>gen_random_string</code>和<code>gen_md5</code>函数，我们只是假设已经定义好了。就算描述得再优雅再完美，终究也还只是<code>YAML/JSON</code>文本格式而已，要怎样才能转换为执行的代码呢？</p>
-<p>这就要解决<code>How？</code>的问题了。</p>
-<p>嗯，这就是用例模板引擎的核心了，也算是<code>ApiTestEngine</code>最核心的功能特性。</p>
-<p>更具体的，从技术实现角度，主要分为三大块：</p>
-<ul>
-<li>如何在用例描述（<code>YAML/JSON</code>）中实现函数的定义和调用</li>
-<li>如何在用例描述中实现参数的定义和引用，包括用例内部和用例集之间</li>
-<li>如何在用例描述中实现预期结果的描述和测试结果的校验</li>
-</ul>
-<p>这三大块内容涉及到较多的技术实现细节，我们将在后续的文章中结合代码逐个深入进行讲解。</p>
-<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
-<li><a href="https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
-<li><a href="https://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/">《ApiTestEngine 演化之路（0）开发未动，测试先行》</a></li>
-<li><a href="https://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a></li>
-<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code> GitHub源码</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2809,7 +2795,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-count">91</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3017,7 +3003,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">58</span>
+                      
+                    
+                    <span class="site-state-item-count">59</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
