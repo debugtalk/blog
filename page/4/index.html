@@ -423,225 +423,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/ApiTestEngine-2-best-testcase-description/" class="post-title-link" itemprop="url">ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-07-07 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-07T00:00:00+08:00">2017-07-07</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/HttpRunner/" itemprop="url" rel="index"><span itemprop="name">HttpRunner</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在<a href="https://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a>一文中，我们完成了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>基础框架的搭建，并实现了简单接口的测试功能。</p>
-<p>接下来，我们就针对复杂类型的接口（例如包含签名校验等机制），通过对接口的业务参数和技术细节进行分离，实现简洁优雅的接口测试用例描述。</p>
-<h2 id="传统的测试用例编写方式"><a href="#传统的测试用例编写方式" class="headerlink" title="传统的测试用例编写方式"></a>传统的测试用例编写方式</h2><p>对于在自动化测试中将<code>测试数据</code>与<code>代码实现</code>进行分离的好处，我之前已经讲过多次，这里不再重复。</p>
-<p>测试数据与代码实现分离后，简单的接口还好，测试用例编写不会有什么问题；但是当面对复杂一点的接口（例如包含签名校验等机制）时，我们编写自动化测试用例还是会比较繁琐。</p>
-<p>我们从一个最常见的案例入手，看下编写自动化测试用例的过程，相信大家看完后就会对上面那段话有很深的感受。</p>
-<p>以API接口服务（<code>Mock Server</code>）的创建新用户功能为例，该接口描述如下：</p>
-<blockquote>
-<p>请求数据：<br>Url: <a href="http://127.0.0.1:5000/api/users/1000" target="_blank" rel="noopener">http://127.0.0.1:5000/api/users/1000</a><br>Method: POST<br>Headers: {“content-type”: “application/json”, “Random”: “A2dEx”, “Authorization”: “47f135c33e858f2e3f55156ae9f78ee1”}<br>Body: {“name”: “user1”, “password”: “123456”}</p>
-<p>预期的正常响应数据：<br>Status_Code: 201<br>Headers: {‘Date’: ‘Fri, 23 Jun 2017 07:05:41 GMT’, ‘Content-Length’: ‘54’, ‘Content-Type’: ‘application/json’, ‘Server’: ‘Werkzeug/0.12.2 Python/2.7.13’}<br>Body: {“msg”: “user created successfully.”, “success”: true, “uuid”: “JsdfwerL”}</p>
-</blockquote>
-<p>其中，请求<code>Headers</code>中的<code>Random</code>字段是一个5位长的随机字符串，<code>Authorization</code>字段是一个签名值，签名方式为<code>TOKEN+RequestBody+Random</code>拼接字符串的<code>MD5</code>值。更具体的，<code>RequestBody</code>要求字典的<code>Key</code>值按照由小到大的排序方式。接口请求成功后，返回的是一个<code>JSON</code>结构，里面的<code>success</code>字段标识请求成功与否的状态，如果成功，<code>uuid</code>字段标识新创建用户的唯一ID。</p>
-<p>相信只要是接触过接口测试的同学对此应该都会很熟悉，这也是后台系统普遍采用的签名校验方式。在具体的系统中，可能字符串拼接方式或签名算法存在差异，但是模式基本上都是类似的。</p>
-<p>那么面对这样一个接口，我们会怎样编写接口测试用例呢？</p>
-<p>首先，请求的数据是要有的，我们会先准备一个可用的账号，例如<code>{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}</code>。</p>
-<p>然后，由于接口存在签名校验机制，因此我们除了要知道服务器端使用的TOKEN（假设为<code>debugtalk</code>）外，还要准备好<code>Random</code>字段和<code>Authorization</code>字段。<code>Random</code>字段好说，我们随便生成一个，例如<code>A2dEx</code>；<code>Authorization</code>字段就会复杂不少，需要我们按照规定先将<code>RequestBody</code>根据字典的<code>Key</code>值进行排序，得到<code>{&quot;name&quot;: &quot;user1&quot;, &quot;password&quot;: &quot;123456&quot;}</code>，然后与<code>TOKEN</code>和<code>Random</code>字段拼接字符串得到<code>debugtalk{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}A2dEx</code>，接着再找一个<code>MD5</code>工具，计算得到签名值<code>a83de0ff8d2e896dbd8efb81ba14e17d</code>。</p>
-<p>最后，我们才可以完成测试用例的编写。假如我们采用<code>YAML</code>编写测试用例，那么用例写好后应该就是如下样子。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">create</span> <span class="string">user</span> <span class="string">which</span> <span class="string">does</span> <span class="string">not</span> <span class="string">exist</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/users/1000</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            authorization:</span> <span class="string">a83de0ff8d2e896dbd8efb81ba14e17d</span></span><br><span class="line"><span class="attr">            random:</span> <span class="string">A2dEx</span></span><br><span class="line"><span class="attr">    data:</span></span><br><span class="line"><span class="attr">        name:</span> <span class="string">user1</span></span><br><span class="line"><span class="attr">        password:</span> <span class="number">123456</span></span><br><span class="line"><span class="attr">    response:</span></span><br><span class="line"><span class="attr">        status_code:</span> <span class="number">201</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">        body:</span></span><br><span class="line"><span class="attr">            success:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">            msg:</span> <span class="string">user</span> <span class="string">created</span> <span class="string">successfully.</span></span><br><span class="line"><span class="attr">            uuid:</span> <span class="string">JsdfwerL</span></span><br></pre></td></tr></table></figure>
-
-<p>该测试用例可以在<code>ApiTestEngine</code>中正常运行，我们也可以采用同样的方式，对系统的所有接口编写测试用例，以此实现项目的接口自动化测试覆盖。</p>
-<p>但问题在于，每个接口通常会对应多条测试用例，差异只是在于请求的数据会略有不同，而测试用例量越大，我们人工去准备测试数据的工作量也就越大。更令人抓狂的是，我们的系统接口不是一直不变的，有时候会根据业务需求的变化进行一些调整，相应地，我们的测试数据也需要进行同步更新，这样一来，所有相关的测试用例数据就又得重新计算一遍（任意字段数据产生变化，签名值就会大不相同）。</p>
-<p>可以看出，如果是采用这种方式编写维护接口测试用例，人力和时间成本都会非常高，最终的结果必然是接口自动化测试难以在实际项目中得以开展。</p>
-<h2 id="理想的用例描述方式"><a href="#理想的用例描述方式" class="headerlink" title="理想的用例描述方式"></a>理想的用例描述方式</h2><p>在上面案例中，编写接口测试用例时之所以会很繁琐，主要是因为接口存在签名校验机制，导致我们在准备测试数据时耗费了太多时间在这上面。</p>
-<p>然而，对于测试人员来说，接口的业务功能才是需要关注的，至于接口采用什么签名校验机制这类技术细节，的确不应耗费过多时间和精力。所以，我们的接口测试框架应该设法将接口的技术细节实现和业务参数进行拆分，并能自动处理与技术细节相关的部分，从而让业务测试人员只需要关注业务参数部分。</p>
-<p>那要怎么实现呢？</p>
-<p>在开始实现之前，我们不妨借鉴<code>BDD</code>（行为驱动开发）的思想，先想下如何编写接口测试用例的体验最友好，换句话说，就是让业务测试人员写用例写得最爽。</p>
-<p>还是上面案例的接口测试用例，可以看出，最耗时的地方主要是计算签名校验值部分。按理说，签名校验算法我们是已知的，要是可以在测试用例中直接调用签名算法函数就好了。</p>
-<p>事实上，这也是各种模板语言普遍采用的方式，例如<code>Jinja2</code>模板语言，可以在<code>{% %}</code>中执行函数语句，在<code>{{ }}</code>中可以调用变量参数。之前我在设计[<code>AppiumBooster</code>][AppiumBooster]时也采用了类似的思想，可以通过<code>${config.TestEnvAccount.UserName}</code>的方式在测试用例中引用预定义的全局变量。</p>
-<p>基于该思路，假设我们已经实现了<code>gen_random_string</code>这样一个生成指定位数的随机字符串的函数，以及<code>gen_md5</code>这样一个计算签名校验值的函数，那么我们就可以尝试采用如下方式来描述我们的测试用例：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">create</span> <span class="string">user</span> <span class="string">which</span> <span class="string">does</span> <span class="string">not</span> <span class="string">exist</span></span><br><span class="line"><span class="attr">    variables:</span></span><br><span class="line"><span class="attr">        - TOKEN:</span> <span class="string">debugtalk</span></span><br><span class="line"><span class="attr">        - random:</span> <span class="string">$&#123;gen_random_string(5)&#125;</span></span><br><span class="line"><span class="attr">        - json:</span> <span class="string">&#123;"name":</span> <span class="string">"user"</span><span class="string">,</span> <span class="string">"password"</span><span class="string">:</span> <span class="string">"123456"</span><span class="string">&#125;</span></span><br><span class="line"><span class="attr">        - authorization:</span> <span class="string">$&#123;gen_md5($TOKEN,</span> <span class="string">$json,</span> <span class="string">$random)&#125;</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/users/1000</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            authorization:</span> <span class="string">$authorization</span></span><br><span class="line"><span class="attr">            random:</span> <span class="string">$random</span></span><br><span class="line"><span class="attr">        json:</span> <span class="string">$json</span></span><br><span class="line"><span class="attr">    extractors:</span></span><br><span class="line"><span class="attr">        user_uuid:</span> <span class="string">content.uuid</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"status_code"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="number">201</span><span class="string">&#125;</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"content.success"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="literal">true</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>在如上用例中，用到了两种转义符：</p>
-<ul>
-<li><code>$</code>作为变量转义符，<code>$var</code>将不再代表的是普遍的字符串，而是<code>var</code>变量的值；</li>
-<li><code>${}</code>作为函数的转义符，<code>${}</code>内可以直接填写函数名称及调用参数，甚至可以包含变量。</li>
-</ul>
-<p>为什么会选择采用这种描述方式？（<code>Why？</code>）</p>
-<p>其实这也是我经过大量思考和实践之后，才最终确定的描述方式。如果真要讲述这个思路历程。。。还是不细说了，此处可省下一万字。（主要的思路无非就是要实现转义的效果，并且表达要简洁清晰，因此必然会用到特殊字符；而特殊字符在<code>YAML</code>中大多都已经有了特定的含义，排除掉不可用的之后，剩下的真没几个了，然后再借鉴其它框架常用的符号，所以说最终选择<code>$</code>和<code>${}</code>也算是必然。）</p>
-<p>可以确定的是，这种描述方式的好处非常明显，不仅可以实现复杂计算逻辑的函数调用，还可以实现变量的定义和引用。</p>
-<p>除了转义符，由于接口测试中经常需要对结果中的特定字段进行提取，作为后续接口请求的参数，因此我们实现了<code>extractors</code>这样一个结果提取器，只要返回结果是JSON类型，就可以将其中的任意字段进行提取，并保存到一个变量中，方便后续接口请求进行引用。</p>
-<p>另外，为了更好地实现对接口响应结果的校验，我们废弃了先前的方式，实现了独立的结果校验器<code>validators</code>。这是因为，很多时候在比较响应结果时，并不能简单地按照字段值是否相等来进行校验，除此之外，我们可能还需要检查某个字段的长度是否为指定位数，元素列表个数是否大于某个数值，甚至某个字符串是否满足正则匹配等等。</p>
-<p>相信你们肯定会想，以上这些描述方式的确是很简洁，但更多地感觉是在臆想，就像开始说的<code>gen_random_string</code>和<code>gen_md5</code>函数，我们只是假设已经定义好了。就算描述得再优雅再完美，终究也还只是<code>YAML/JSON</code>文本格式而已，要怎样才能转换为执行的代码呢？</p>
-<p>这就要解决<code>How？</code>的问题了。</p>
-<p>嗯，这就是用例模板引擎的核心了，也算是<code>ApiTestEngine</code>最核心的功能特性。</p>
-<p>更具体的，从技术实现角度，主要分为三大块：</p>
-<ul>
-<li>如何在用例描述（<code>YAML/JSON</code>）中实现函数的定义和调用</li>
-<li>如何在用例描述中实现参数的定义和引用，包括用例内部和用例集之间</li>
-<li>如何在用例描述中实现预期结果的描述和测试结果的校验</li>
-</ul>
-<p>这三大块内容涉及到较多的技术实现细节，我们将在后续的文章中结合代码逐个深入进行讲解。</p>
-<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
-<li><a href="https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
-<li><a href="https://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/">《ApiTestEngine 演化之路（0）开发未动，测试先行》</a></li>
-<li><a href="https://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a></li>
-<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code> GitHub源码</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/300-lines-python-code-api-test-framework/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2272,6 +2053,303 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/head-first-locust-advanced-script/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/head-first-locust-advanced-script/" class="post-title-link" itemprop="url">深入浅出开源性能测试工具 Locust（脚本增强）</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-22 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-22T00:00:00+08:00">2017-02-22</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在<a href="/post/head-first-locust-user-guide/">《深入浅出开源性能测试工具Locust（使用篇）》</a>一文中，罗列了编写性能测试脚本时常用的几类脚本增强的场景，本文是对应的代码示例。</p>
+<h2 id="关联"><a href="#关联" class="headerlink" title="关联"></a>关联</h2><p>在某些请求中，需要携带之前从Server端返回的参数，因此在构造请求时需要先从之前的Response中提取出所需的参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_session</span><span class="params">(html)</span>:</span></span><br><span class="line">        tree = etree.HTML(html)</span><br><span class="line">        <span class="keyword">return</span> tree.xpath(<span class="string">"//div[@class='btnbox']/input[@name='session']/@value"</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">    @task(10)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        html = self.client.get(<span class="string">'/login'</span>).text</span><br><span class="line">        username = <span class="string">'user@compay.com'</span></span><br><span class="line">        password = <span class="string">'123456'</span></span><br><span class="line">        session = self.get_session(html)</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: username,</span><br><span class="line">            <span class="string">'password'</span>: password,</span><br><span class="line">            <span class="string">'session'</span>: session</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/login'</span>, data=payload)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="参数化"><a href="#参数化" class="headerlink" title="参数化"></a>参数化</h2><h3 id="循环取数据，数据可重复使用"><a href="#循环取数据，数据可重复使用" class="headerlink" title="循环取数据，数据可重复使用"></a>循环取数据，数据可重复使用</h3><blockquote>
+<p>所有并发虚拟用户共享同一份测试数据，各虚拟用户在数据列表中循环取值。<br>例如，模拟3用户并发请求网页，总共有100个URL地址，每个虚拟用户都会依次循环加载这100个URL地址；加载示例如下表所示。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>vuser1</th>
+<th>vuser2</th>
+<th>vuser3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iteration1</td>
+<td>url1</td>
+<td>url1</td>
+<td>url1</td>
+</tr>
+<tr>
+<td>iteration2</td>
+<td>url2</td>
+<td>url2</td>
+<td>url2</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>iteration100</td>
+<td>url100</td>
+<td>url100</td>
+<td>url100</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_start</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_visit</span><span class="params">(self)</span>:</span></span><br><span class="line">        url = self.locust.share_data[self.index]</span><br><span class="line">        print(<span class="string">'visit url: %s'</span> % url)</span><br><span class="line">        self.index = (self.index + <span class="number">1</span>) % len(self.locust.share_data)</span><br><span class="line">        self.client.get(url)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line">    share_data = [<span class="string">'url1'</span>, <span class="string">'url2'</span>, <span class="string">'url3'</span>, <span class="string">'url4'</span>, <span class="string">'url5'</span>]</span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="保证并发测试数据唯一性，不循环取数据"><a href="#保证并发测试数据唯一性，不循环取数据" class="headerlink" title="保证并发测试数据唯一性，不循环取数据"></a>保证并发测试数据唯一性，不循环取数据</h3><blockquote>
+<p>所有并发虚拟用户共享同一份测试数据，并且保证虚拟用户使用的数据不重复。<br>例如，模拟3用户并发注册账号，总共有9个账号，要求注册账号不重复，注册完毕后结束测试；加载示例如下表所示。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>vuser1</th>
+<th>vuser2</th>
+<th>vuser3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iteration1</td>
+<td>account1</td>
+<td>account2</td>
+<td>account3</td>
+</tr>
+<tr>
+<td>iteration2</td>
+<td>account4</td>
+<td>account6</td>
+<td>account5</td>
+</tr>
+<tr>
+<td>iteration3</td>
+<td>account7</td>
+<td>account9</td>
+<td>account8</td>
+</tr>
+<tr>
+<td>N/A</td>
+<td>-</td>
+<td>—</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_register</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = self.locust.user_data_queue.get()</span><br><span class="line">        <span class="keyword">except</span> queue.Empty:</span><br><span class="line">            print(<span class="string">'account data run out, test ended.'</span>)</span><br><span class="line">            exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'register with user: &#123;&#125;, pwd: &#123;&#125;'</span>\</span><br><span class="line">            .format(data[<span class="string">'username'</span>], data[<span class="string">'password'</span>]))</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: data[<span class="string">'username'</span>],</span><br><span class="line">            <span class="string">'password'</span>: data[<span class="string">'password'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/register'</span>, data=payload)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line"></span><br><span class="line">    user_data_queue = queue.Queue()</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"username"</span>: <span class="string">"test%04d"</span> % index,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"pwd%04d"</span> % index,</span><br><span class="line">            <span class="string">"email"</span>: <span class="string">"test%04d@debugtalk.test"</span> % index,</span><br><span class="line">            <span class="string">"phone"</span>: <span class="string">"186%08d"</span> % index,</span><br><span class="line">        &#125;</span><br><span class="line">        user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="保证并发测试数据唯一性，循环取数据"><a href="#保证并发测试数据唯一性，循环取数据" class="headerlink" title="保证并发测试数据唯一性，循环取数据"></a>保证并发测试数据唯一性，循环取数据</h3><blockquote>
+<p>所有并发虚拟用户共享同一份测试数据，保证并发虚拟用户使用的数据不重复，并且数据可循环重复使用。<br>例如，模拟3用户并发登录账号，总共有9个账号，要求并发登录账号不相同，但数据可循环使用；加载示例如下表所示。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>vuser1</th>
+<th>vuser2</th>
+<th>vuser3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iteration1</td>
+<td>account1</td>
+<td>account2</td>
+<td>account3</td>
+</tr>
+<tr>
+<td>iteration2</td>
+<td>account4</td>
+<td>account6</td>
+<td>account5</td>
+</tr>
+<tr>
+<td>iteration3</td>
+<td>account7</td>
+<td>account9</td>
+<td>account8</td>
+</tr>
+<tr>
+<td>iteration4</td>
+<td>account1</td>
+<td>account2</td>
+<td>account3</td>
+</tr>
+<tr>
+<td>iteration5</td>
+<td>account4</td>
+<td>account5</td>
+<td>account6</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>该种场景的实现方式与上一种场景基本相同，唯一的差异在于，每次使用完数据后，需要再将数据放入队列中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_register</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = self.locust.user_data_queue.get()</span><br><span class="line">        <span class="keyword">except</span> queue.Empty:</span><br><span class="line">            print(<span class="string">'account data run out, test ended.'</span>)</span><br><span class="line">            exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'register with user: &#123;&#125;, pwd: &#123;&#125;'</span>\</span><br><span class="line">            .format(data[<span class="string">'username'</span>], data[<span class="string">'password'</span>]))</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: data[<span class="string">'username'</span>],</span><br><span class="line">            <span class="string">'password'</span>: data[<span class="string">'password'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/register'</span>, data=payload)</span><br><span class="line">        self.locust.user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line"></span><br><span class="line">    user_data_queue = queue.Queue()</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"username"</span>: <span class="string">"test%04d"</span> % index,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"pwd%04d"</span> % index,</span><br><span class="line">            <span class="string">"email"</span>: <span class="string">"test%04d@debugtalk.test"</span> % index,</span><br><span class="line">            <span class="string">"phone"</span>: <span class="string">"186%08d"</span> % index,</span><br><span class="line">        &#125;</span><br><span class="line">        user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/head-first-locust-user-guide/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2581,7 +2659,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/head-first-locust-advanced-script/">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/my-impression-on-italy-and-france/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="debugtalk">
@@ -2601,7 +2679,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/post/head-first-locust-advanced-script/" class="post-title-link" itemprop="url">深入浅出开源性能测试工具 Locust（脚本增强）</a>
+                <a href="/post/my-impression-on-italy-and-france/" class="post-title-link" itemprop="url">春节旅行之意法印象</a>
               
             
           </h2>
@@ -2626,7 +2704,7 @@
                 
               
 
-              <time title="创建时间：2017-02-22 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-22T00:00:00+08:00">2017-02-22</time>
+              <time title="创建时间：2017-02-02 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-02T00:00:00+08:00">2017-02-02</time>
             
 
             
@@ -2644,14 +2722,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/5-Growth/" itemprop="url" rel="index"><span itemprop="name">5. Growth</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/5-Growth/思考-感悟/" itemprop="url" rel="index"><span itemprop="name">思考 & 感悟</span></a></span>
 
                 
                 
@@ -2688,140 +2766,26 @@
       
         
           
-            <p>在<a href="/post/head-first-locust-user-guide/">《深入浅出开源性能测试工具Locust（使用篇）》</a>一文中，罗列了编写性能测试脚本时常用的几类脚本增强的场景，本文是对应的代码示例。</p>
-<h2 id="关联"><a href="#关联" class="headerlink" title="关联"></a>关联</h2><p>在某些请求中，需要携带之前从Server端返回的参数，因此在构造请求时需要先从之前的Response中提取出所需的参数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_session</span><span class="params">(html)</span>:</span></span><br><span class="line">        tree = etree.HTML(html)</span><br><span class="line">        <span class="keyword">return</span> tree.xpath(<span class="string">"//div[@class='btnbox']/input[@name='session']/@value"</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">    @task(10)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        html = self.client.get(<span class="string">'/login'</span>).text</span><br><span class="line">        username = <span class="string">'user@compay.com'</span></span><br><span class="line">        password = <span class="string">'123456'</span></span><br><span class="line">        session = self.get_session(html)</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: username,</span><br><span class="line">            <span class="string">'password'</span>: password,</span><br><span class="line">            <span class="string">'session'</span>: session</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/login'</span>, data=payload)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="参数化"><a href="#参数化" class="headerlink" title="参数化"></a>参数化</h2><h3 id="循环取数据，数据可重复使用"><a href="#循环取数据，数据可重复使用" class="headerlink" title="循环取数据，数据可重复使用"></a>循环取数据，数据可重复使用</h3><blockquote>
-<p>所有并发虚拟用户共享同一份测试数据，各虚拟用户在数据列表中循环取值。<br>例如，模拟3用户并发请求网页，总共有100个URL地址，每个虚拟用户都会依次循环加载这100个URL地址；加载示例如下表所示。</p>
+            <p><img src="/images/Florence1.jpg" alt></p>
+<p>今年春节没有像往常一样回家过年，而是到欧洲旅行（意大利和法国），算是蜜月游吧。第一次到欧洲，确切地说，第一次出国，新鲜感还是蛮大的，趁着返程飞机上的空闲时间，写篇博客记录下。</p>
+<p>我这次旅行全程12天，游玩的城市有罗马、梵蒂冈、佛罗伦萨、米兰和巴黎，景点以历史名胜和城市风光为主。全程自助游，行程安排比较自由宽松。当然，这篇博客并不是旅行攻略，描述的内容也不会面面俱到，只是挑了几个感触较深的点，观点可能很是片面，如有偏颇还请留言讨论。</p>
+<p>先说下总体印象吧。如果说要通过几个关键词来概括这次旅行的所见所闻，特别是跟国内（一二线城市）进行对比的话，我个人的印象是：自然环境优美、生活节奏舒缓、饮食类型单一、公共设施陈旧、公共安全紧张、工程师氛围稀缺。</p>
+<p><img src="/images/Florence2.jpg" alt></p>
+<p>自然环境优美没啥好说的，之前不管是通过网络，还是和朋友的聊天交流，对欧洲的印象就是自然环境特别好。实际情况也的确是这样的。空气质量这块儿我没啥特别的感觉，因为深圳的空气本来也挺好的。见过的河水湖泊很是清澈，完全没有污染的痕迹。绿化非常赞，除了街道的树木，在城市中有很多森林公园。印象最深的就是小动物了，虽然是在城市里，但是到处都能看到鸽子、海鸥，在公园里还能看到野鸡、野鸭、天鹅，而且好玩的是这些动物基本都不怕人，靠近它们的时候也不会躲避，我还趁天鹅把头钻进水里捕食时偷偷摸了它的屁股。想想在国内，能在城市中看见只麻雀就算稀罕了，这方面真是没法比。</p>
+<p>在人文环境方面，最大的感触就是欧洲的生活节奏十分舒缓。店铺通常开得挺晚的，关得也特别早，特别是在罗马和佛罗伦萨，下午六七点天黑后，就基本很少看到人了。在我等天朝IT狗的眼里，他们的工作量真是极其的不饱和啊。可能也是这方面的原因，商家普遍的服务态度都挺好的，很有耐心。有一次在梵蒂冈的礼品店里，虽然语言交流不是很顺畅，但老太太还是很有耐心的一一介绍，最后由于感觉价格比较贵，不大好意思地说不买了，老太太也完全没有表现出任何不悦，而是笑盈盈地说了句<code>Thank you, have a nice day</code>。在欧洲街道上，如果是在没有红绿灯的情况下，司机都会挥手示意让行人先过马路。刚开始的时候还有些不习惯，站在路口等汽车先走，结果司机更有耐心，执意等行人先走。哦对，在欧洲马路上，基本上没有听到汽车喇叭声，有时候没有看到身后的车辆，司机会探出头来打招呼。另外，在欧洲街头经常会看见各种行为艺术，特别是在罗马斗兽场的一条街道上，一路走去，吹拉弹唱跳，形式各异，水准颇高，真是一道靓丽的风景。看到他们总会经不住感叹，人家这才是生活啊，我等只能叫活着。</p>
+<p><img src="/images/Pisa.jpg" alt></p>
+<p>说到语言交流，这跟我之前的预期不大一样。在没出国之前，原以为欧洲的英语应该普及度很高，结果到了这边后发现并非如此，好多本地人并不会英语，即使是警察这样的公务员，会说英语的也是少数，而且口音还特别重。不过语言也真是一个神奇的东西，可能同样的场景，做英语听力理解题时无法正确答题，但是在面对面交流时，加上简单的肢体动作和眼神，基本上只要不是太复杂的场景，都难很好的完成交流。最多为了保险起见，我再用英语复述一遍我的理解，跟对方进行确认即可。哦对了，在欧洲遇到的好多人虽然不会说英语，但是貌似听懂是没啥问题，只是可能有些词汇不理解，需要变换下说法。例如，在询问能不能飞无人机时，跟他们说<code>drone</code>他们都不知道是啥意思，但是说<code>mini aircraft</code>他们就会明白了。</p>
+<p>然后说下差异最大的饮食吧。跟博大精深的中餐相比，欧洲的饮食真是单一乏味。当然，像法餐这样高逼格的不在讨论范围内，价格太贵，我相信即使是本地人也不至于天天这么吃吧。在意大利和法国，当地人吃得最多的应该就是披萨和汉堡了。在我看来，意大利人真是除了披萨意面就没啥别的了。虽然披萨被做出花儿了，各种馅儿的都有，但老是这么吃还是受不了。意面更别提了，我们吃了一次就不想再吃。有一次在披萨店惊奇地发现有米饭，结果还是半生的，完全没法吃，想想也是，微波炉哪能做出米饭来。因此我们后面每到一个城市，就到处找中餐馆。中餐的价格普遍比披萨店贵两倍，面条、炒饭、盖浇饭这类快餐，普遍在7~9欧的样子，如果点菜的话，人均消费差不多要十多欧，这还是在比较克制的情况下。即使是这样，中餐馆的生意还都特别好。在罗马的一家中餐馆给我们的印象尤其深刻，我们是通过大众点评找过去的，结果到了以后发现门口贴纸告知要五点半开门。我们还以为店家不会开门了，就先在旁边的一家披萨店先吃着。过一会儿后，发现那家店门口逐渐聚集了一波中国人，到了五点半的时候，还真准时开门了。进去之后，发现基本满座了，全是中国人。一会儿后，服务员领班说，要等一阵才能点菜，因为厨师们要先吃饭。然后，所有顾客就看着一大桌厨师和服务员在那儿吃。我们也真是长见识了，原来餐馆还能这么开的，牛逼，换成在国内试试？</p>
+<p><img src="/images/chocolates.jpg" alt></p>
+<p>除了饮食，公共基础设施方面跟国内也没法比。首先是公交地铁，普遍比叫陈旧。特别是巴黎的<code>RER</code>线，简直难以相信这就是号称时尚浪漫之都的巴黎，刷票的门坏了好几个，各种电线暴露在外面垂在半空中，好多通道没有电梯，地铁车厢特别脏，地面积了厚厚的泥土和水渍，估计是好久都没有打扫过了，让我们一度以为我们到了假巴黎。然后说下欧洲的公厕，上一次要1欧，即使是在有的麦当劳店里，上厕所也是要收费的，每次想上厕所时换算下，要七块多人民币，真是尿不起啊有木有！不过公厕收费也比较好理解，因为欧洲的人力成本本来就比较高，特别是清洁工这类工种。除了硬件类的基础设施，软件类的服务跟国内相比也落后太多。在国内的时候，基本上带个手机出门就行了，吃饭、购物、叫车全电子化，但是在欧洲都基本还是用现金，大额消费可以刷信用卡，出去一趟回来兜里就好多找零的硬币。当然，虽然欧洲本土的互联网服务不咋地，但是人家能用<code>Google</code>的各项服务啊，光这一项我大天朝就完全被秒杀了。</p>
+<p>在安全方面，感觉氛围比较紧张，没有在国内那么踏实。在机场、车站以及各个旅游景点，到处都是全副武装的大兵，警察也都是配枪的。本来我还打算出国后多拍下风景，特地在出国前买了一台<code>Mavic Pro</code>，结果到那儿以后看到这阵势，又在网上看到各种禁飞条令，因此也不敢造次，要是一不小心被当做恐怖分子击毙就不值了。另外，在街头随处可见流浪汉，甚至好多一家四五口一起睡在路边，估计是从其它国家过来避难的。如果政府没有救助措施的话，估计也会形成一定的安全隐患，之前也听朋友说最好晚上不要出门，抢劫、行窃比较多，还好我们没有遇到。</p>
+<p>最后再说下跟我们软件工程师的相关的吧。不像在国内，上下班时满眼的笔记本电脑背包，在意大利和法国我真是一个都没看到过。我在想，这里是没有程序员的么，还是说程序员的电脑也是装在意大利皮革的手提包里了？不过，在艺术气息如此浓厚的地方，本地人应该也很难对写代码感兴趣吧。在巴黎的<code>Airbnb</code>民宿中，虽然没看到房东本人，但是从房屋装饰、陈列书籍和CD碟片来看，房东应该也是个搞绘画或雕塑的。之前听朋友说欧洲的技术工种稀缺，过去比较好找工作，当时我还颇为心动的；现在看来，是否稀缺不好说，但估计需求也比较少，即使过去，感觉从技术氛围的角度来看，也不是一个好的选择。所以去欧洲工作的想法先暂时搁置吧，后面再找机会去其它国家转转。</p>
+<p>以上便是我这次欧洲意法之行的见闻和感受了，收获还是蛮大的。之前可能是一直处于天朝的大环境中，多多少少会变得有些功利和急躁，大至职业发展薪酬涨幅，小至绩效考核分数排名，很难做到不那么在意。但是当我在欧洲街头看到各类艺人专注于技艺表演时，在阿诺河旁看到白发老人沉浸于绘画写生时，我不禁在想，专注于自己喜爱的事情已经就足够幸福了，何必被世俗的眼光所左右，被眼前的蝇头小利所蒙蔽呢。虽说人生短暂，但是即使从现在开始，也还有好几十年的时光，足够自己折腾了。</p>
+<p>嗯，前提是永远不要为自己设限。</p>
+<blockquote>
+<p>Keep learning and programming.</p>
 </blockquote>
-<table>
-<thead>
-<tr>
-<th>\</th>
-<th>vuser1</th>
-<th>vuser2</th>
-<th>vuser3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>iteration1</td>
-<td>url1</td>
-<td>url1</td>
-<td>url1</td>
-</tr>
-<tr>
-<td>iteration2</td>
-<td>url2</td>
-<td>url2</td>
-<td>url2</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-<tr>
-<td>iteration100</td>
-<td>url100</td>
-<td>url100</td>
-<td>url100</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_start</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_visit</span><span class="params">(self)</span>:</span></span><br><span class="line">        url = self.locust.share_data[self.index]</span><br><span class="line">        print(<span class="string">'visit url: %s'</span> % url)</span><br><span class="line">        self.index = (self.index + <span class="number">1</span>) % len(self.locust.share_data)</span><br><span class="line">        self.client.get(url)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line">    share_data = [<span class="string">'url1'</span>, <span class="string">'url2'</span>, <span class="string">'url3'</span>, <span class="string">'url4'</span>, <span class="string">'url5'</span>]</span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="保证并发测试数据唯一性，不循环取数据"><a href="#保证并发测试数据唯一性，不循环取数据" class="headerlink" title="保证并发测试数据唯一性，不循环取数据"></a>保证并发测试数据唯一性，不循环取数据</h3><blockquote>
-<p>所有并发虚拟用户共享同一份测试数据，并且保证虚拟用户使用的数据不重复。<br>例如，模拟3用户并发注册账号，总共有9个账号，要求注册账号不重复，注册完毕后结束测试；加载示例如下表所示。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>\</th>
-<th>vuser1</th>
-<th>vuser2</th>
-<th>vuser3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>iteration1</td>
-<td>account1</td>
-<td>account2</td>
-<td>account3</td>
-</tr>
-<tr>
-<td>iteration2</td>
-<td>account4</td>
-<td>account6</td>
-<td>account5</td>
-</tr>
-<tr>
-<td>iteration3</td>
-<td>account7</td>
-<td>account9</td>
-<td>account8</td>
-</tr>
-<tr>
-<td>N/A</td>
-<td>-</td>
-<td>—</td>
-<td>-</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_register</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = self.locust.user_data_queue.get()</span><br><span class="line">        <span class="keyword">except</span> queue.Empty:</span><br><span class="line">            print(<span class="string">'account data run out, test ended.'</span>)</span><br><span class="line">            exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'register with user: &#123;&#125;, pwd: &#123;&#125;'</span>\</span><br><span class="line">            .format(data[<span class="string">'username'</span>], data[<span class="string">'password'</span>]))</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: data[<span class="string">'username'</span>],</span><br><span class="line">            <span class="string">'password'</span>: data[<span class="string">'password'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/register'</span>, data=payload)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line"></span><br><span class="line">    user_data_queue = queue.Queue()</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"username"</span>: <span class="string">"test%04d"</span> % index,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"pwd%04d"</span> % index,</span><br><span class="line">            <span class="string">"email"</span>: <span class="string">"test%04d@debugtalk.test"</span> % index,</span><br><span class="line">            <span class="string">"phone"</span>: <span class="string">"186%08d"</span> % index,</span><br><span class="line">        &#125;</span><br><span class="line">        user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="保证并发测试数据唯一性，循环取数据"><a href="#保证并发测试数据唯一性，循环取数据" class="headerlink" title="保证并发测试数据唯一性，循环取数据"></a>保证并发测试数据唯一性，循环取数据</h3><blockquote>
-<p>所有并发虚拟用户共享同一份测试数据，保证并发虚拟用户使用的数据不重复，并且数据可循环重复使用。<br>例如，模拟3用户并发登录账号，总共有9个账号，要求并发登录账号不相同，但数据可循环使用；加载示例如下表所示。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>\</th>
-<th>vuser1</th>
-<th>vuser2</th>
-<th>vuser3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>iteration1</td>
-<td>account1</td>
-<td>account2</td>
-<td>account3</td>
-</tr>
-<tr>
-<td>iteration2</td>
-<td>account4</td>
-<td>account6</td>
-<td>account5</td>
-</tr>
-<tr>
-<td>iteration3</td>
-<td>account7</td>
-<td>account9</td>
-<td>account8</td>
-</tr>
-<tr>
-<td>iteration4</td>
-<td>account1</td>
-<td>account2</td>
-<td>account3</td>
-</tr>
-<tr>
-<td>iteration5</td>
-<td>account4</td>
-<td>account5</td>
-<td>account6</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-</tbody></table>
-<p>该种场景的实现方式与上一种场景基本相同，唯一的差异在于，每次使用完数据后，需要再将数据放入队列中。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_register</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = self.locust.user_data_queue.get()</span><br><span class="line">        <span class="keyword">except</span> queue.Empty:</span><br><span class="line">            print(<span class="string">'account data run out, test ended.'</span>)</span><br><span class="line">            exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'register with user: &#123;&#125;, pwd: &#123;&#125;'</span>\</span><br><span class="line">            .format(data[<span class="string">'username'</span>], data[<span class="string">'password'</span>]))</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: data[<span class="string">'username'</span>],</span><br><span class="line">            <span class="string">'password'</span>: data[<span class="string">'password'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/register'</span>, data=payload)</span><br><span class="line">        self.locust.user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line"></span><br><span class="line">    user_data_queue = queue.Queue()</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"username"</span>: <span class="string">"test%04d"</span> % index,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"pwd%04d"</span> % index,</span><br><span class="line">            <span class="string">"email"</span>: <span class="string">"test%04d@debugtalk.test"</span> % index,</span><br><span class="line">            <span class="string">"phone"</span>: <span class="string">"186%08d"</span> % index,</span><br><span class="line">        &#125;</span><br><span class="line">        user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
-
+<p><img src="/images/Florence3.jpg" alt></p>
 
           
         
@@ -2867,7 +2831,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2911,7 +2875,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">91</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3121,7 +3085,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

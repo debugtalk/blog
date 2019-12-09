@@ -423,196 +423,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/loadrunner-get-system-time/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/loadrunner-get-system-time/" class="post-title-link" itemprop="url">LoadRunner 中获取当前系统时间</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2013-10-28 00:00:00" itemprop="dateCreated datePublished" datetime="2013-10-28T00:00:00+08:00">2013-10-28</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在测试场景中，常会遇到需要提交系统时间的情况。本文对使用LoadRunner获取系统时间的几种方法进行探讨。</p>
-<p>常用的方法有如下四种：</p>
-<ul>
-<li>方法一：使用LR的参数化功能</li>
-<li>方法二：使用LR函数lr_save_datetime()</li>
-<li>方法三：使用C语言标准函数库中的time()和ctime()</li>
-<li>方法四：使用C语言的tm结构，把时间分解成若干元素，再根据需求进行重组</li>
-</ul>
-<h2 id="方法一：使用LR的参数化功能"><a href="#方法一：使用LR的参数化功能" class="headerlink" title="方法一：使用LR的参数化功能"></a>方法一：使用LR的参数化功能</h2><p>操作步骤：</p>
-<p>1、在Parameter List窗口中新建一个参数localtime_now，Parameter type选择为【Date/Time】<br>2、设置Date/Time format，具体格式可参照帮助手册，例如%Y-%m-%d %H:%M:%S对应的是2013-10-28 16:43:06<br>3、在脚本中，利用函数lr_eval_string将参数localtime_now转换为变量tt_1<br>4、在脚本中引用变量tt_1</p>
-<p>对应的脚本如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *tt_1;</span><br><span class="line">tt_1 = lr_eval_string(<span class="string">"&#123;localtime_now&#125;"</span>);</span><br><span class="line">lr_message(<span class="string">"系统当前的时间为：%s"</span>, tt_1);</span><br></pre></td></tr></table></figure>
-
-<p>运行结果：<br>系统当前的时间为：2013-10-28 16:43:06</p>
-<h2 id="方法二：使用LR函数lr-save-datetime"><a href="#方法二：使用LR函数lr-save-datetime" class="headerlink" title="方法二：使用LR函数lr_save_datetime()"></a>方法二：使用LR函数lr_save_datetime()</h2><p>在LoadRunner中，函数lr_save_datetime可以将当前时间赋值给指定参数，并可在赋值时选择时间样式。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *tt_2;</span><br><span class="line"><span class="comment">//获得当前系统时间，并根据设置的格式将当前时间赋值给 times</span></span><br><span class="line">lr_save_datetime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>, DATE_NOW+TIME_NOW, <span class="string">"localtime_2"</span>);</span><br><span class="line">tt_2 = lr_eval_string(<span class="string">"&#123;localtime_2&#125;"</span>);</span><br><span class="line">lr_message(<span class="string">"系统当前的时间为：%s"</span>, tt_2);</span><br></pre></td></tr></table></figure>
-
-<p>运行结果：<br>系统当前的时间为：2013-10-28 17:43:16</p>
-<h2 id="方法三：使用C语言标准函数库中的time-和ctime"><a href="#方法三：使用C语言标准函数库中的time-和ctime" class="headerlink" title="方法三：使用C语言标准函数库中的time()和ctime()"></a>方法三：使用C语言标准函数库中的time()和ctime()</h2><p>对应的脚本如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> tt_3;</span><br><span class="line">time(&amp;tt_3);</span><br><span class="line">lr_message(<span class="string">"系统当前的时间为：%s"</span>, ctime(&amp;tt_3));</span><br></pre></td></tr></table></figure>
-
-<p>运行结果：<br>系统当前的时间为：Mon Oct 28 17:43:16 2013</p>
-<h2 id="方法四：tm结构分解"><a href="#方法四：tm结构分解" class="headerlink" title="方法四：tm结构分解"></a>方法四：tm结构分解</h2><p>说明：tm结构即是一个结构体，将时间分解为9个部分，将时间的各个部分赋值给不同的变量，然后根据实际需求，将各个部分进行重组后使用。</p>
-<p>对应的脚本如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">Action()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tm</span> &#123;</span></span><br><span class="line">        <span class="keyword">int</span> second;   <span class="comment">//取得当前秒数(在分钟后)；取值区间为[0,59]</span></span><br><span class="line">        <span class="keyword">int</span> minute;   <span class="comment">//取得当前分钟数(在小时后)；取值区间为[0,59]</span></span><br><span class="line">        <span class="keyword">int</span> hour;     <span class="comment">//取得当前小时数(从凌晨0点开始)；取值区间为[0,23]</span></span><br><span class="line">        <span class="keyword">int</span> day;      <span class="comment">//取得当前天数(从上月结束开始)；取值区间为[1,31]</span></span><br><span class="line">        <span class="keyword">int</span> month;    <span class="comment">//取得当前月份数(从1月开始)；取值区间为[0,11]</span></span><br><span class="line">        <span class="keyword">int</span> year;     <span class="comment">//取得当前年份数(从1900年开始)</span></span><br><span class="line">        <span class="keyword">int</span> weekday;  <span class="comment">//取得当前日期数(为了获取星期几，从上个星期日开始)；取值区间为[0,6]</span></span><br><span class="line">        <span class="keyword">int</span> yearday;  <span class="comment">//取得当前年份天数(从1月1日开始)；取值区间为[0,365]</span></span><br><span class="line">        <span class="keyword">int</span> daylight; <span class="comment">//取得当前夏令时标识符，实行夏令时的时候，daylight取得一个正数</span></span><br><span class="line">        <span class="comment">//不实行夏令时的进候，daylight为0；</span></span><br><span class="line">        <span class="comment">//不了解情况时，daylight为负数</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> timenow;    <span class="comment">//定义保存时间的变量</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tm</span> *<span class="title">now</span>;</span>  <span class="comment">//定义结构指针</span></span><br><span class="line">    <span class="keyword">int</span> year, month, day, weekday, hour, minute, second;</span><br><span class="line">    <span class="keyword">char</span> *week;</span><br><span class="line">    time(&amp;timenow);  <span class="comment">//获取当前时间</span></span><br><span class="line">    now = (struct tm *)localtime(&amp;timenow);  <span class="comment">//把当前时间的结构指针赋值给now</span></span><br><span class="line">    year = now-&gt;year;</span><br><span class="line">    month = now-&gt;month;</span><br><span class="line">    day = now-&gt;day;</span><br><span class="line">    hour = now-&gt;hour;   <span class="comment">//获取hour值</span></span><br><span class="line">    minute = now-&gt;minute; <span class="comment">//获取minute值</span></span><br><span class="line">    second = now-&gt;second; <span class="comment">//获取second值</span></span><br><span class="line">    weekday = now-&gt;weekday;<span class="comment">//获取week值</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span>(weekday)<span class="comment">//判断得到中文的星期</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>:week =<span class="string">"星期一"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:week =<span class="string">"星期二"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">3</span>:week =<span class="string">"星期三"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">4</span>:week =<span class="string">"星期四"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">5</span>:week =<span class="string">"星期五"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">6</span>:week =<span class="string">"星期六"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0</span>:week =<span class="string">"星期日"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    lr_message(<span class="string">"使用tm结构获取的当前时间为：%d-%d-%d %s %d:%d:%d"</span>,year,month,day,week,hour,minute,second);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>运行结果：<br>使用tm结构获取的当前时间为：113-9-28 星期一 17:43:16</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Using-DuoShuo-in-Pelican/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2444,11 +2254,201 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/scenario-design-scripts-percent-controll/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/scenario-design-scripts-percent-controll/" class="post-title-link" itemprop="url">性能测试场景设计--混合业务场景下的脚本比例控制</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-07-22 00:00:00" itemprop="dateCreated datePublished" datetime="2013-07-22T00:00:00+08:00">2013-07-22</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在某个业务场景中，包含数据创建和数据查询两项业务；现需考察数据创建和数据查询两项业务在并发比例为2:1、总并发量为100用户情况下的混合响应时间。</p>
+<h2 id="在Vugen端实现"><a href="#在Vugen端实现" class="headerlink" title="在Vugen端实现"></a>在Vugen端实现</h2><p>对混合比例的设置，可直接在脚本中进行，即通过随机函数rand实现，脚本设计如下所示。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num;</span><br><span class="line">Action()</span><br><span class="line">&#123;</span><br><span class="line">    num = rand()%<span class="number">3</span>;</span><br><span class="line">    lr_start_transaction(<span class="string">"综合业务--数据创建与数据查询"</span>);</span><br><span class="line">    <span class="keyword">if</span>(num&lt;<span class="number">2</span>)&#123;</span><br><span class="line">        Data_Create();  <span class="comment">//数据创建</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        Data_Search();  <span class="comment">//数据查询</span></span><br><span class="line">    &#125;</span><br><span class="line">    lr_end_transaction(<span class="string">"综合业务--数据创建与数据查询"</span>, LR_AUTO);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该种方式的优缺点对比：</p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>脚本本身实现了比例控制的功能，Controller端的设置较为简单，即在Controller中只需将该混合业务作为单一业务对待，设置也跟单一业务场景的设置方法完全相同；</li>
+<li>测试得到响应时间即为混合业务的响应时间。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>在已有数据创建和数据查询脚本的情况下，针对混合业务场景需要单独创建一个混合业务脚本，且混合比例改变时需要重新修改脚本；</li>
+<li>当需要考察混合业务场景中不同业务类型各自的响应时间时，通过该种方式无法实现。</li>
+</ul>
+<h2 id="在Controller端实现"><a href="#在Controller端实现" class="headerlink" title="在Controller端实现"></a>在Controller端实现</h2><p>在业务类型较多，混合业务场景较为复杂的情况下，采用修改脚本的方式会比较麻烦。例如，若共有5种业务类型，现需要对其任意两种业务的混合场景进行压力测试，如果仍采用第一种方式，那么我们就必须得针对两两业务的混合情况，创建10个混合业务脚本。当业务类型更多，或者混合场景更为复杂（如需考虑任意三种、任意四种业务等的混合情况）时，脚本的创建量会大大增加，且均为乏味的重复性工作。</p>
+<p>针对这种情况，直接在Controller端进行设置会简单得多，只需要加载各个业务脚本，并设置不同脚本的并发数即可。对于本文中的案例，在Controller中的设置方法如下所示。<br><img src="/images/20130722100930_Settings-in-Controller.png" alt="Controller中的设置"></p>
+<p>该种方式的优缺点对比：</p>
+<p><strong>优点：</strong></p>
+<ul>
+<li>无需单独创建混合业务脚本，特别是在业务类型较多的情况时优势更为明显；</li>
+<li>测试得到的响应时间为各个业务独自的响应时间，可以实现对混合业务场景下各个业务的单独分析。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>计算混合业务的响应时间时，需要提取原始测试数据进行计算（不能直接对各个业务的平均响应时间取平均值来作为混合业务的平均响应时间），计算较为复杂。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
   </nav>
 
 
@@ -2492,7 +2492,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">91</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2702,7 +2702,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

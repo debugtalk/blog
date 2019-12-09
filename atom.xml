@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://debugtalk.com/"/>
-  <updated>2019-12-05T05:02:39.321Z</updated>
+  <updated>2019-07-06T08:12:44.000Z</updated>
   <id>https://debugtalk.com/</id>
   
   <author>
@@ -15,35 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>【内推】字节跳动急招测试开发岗 · 成都/北京</title>
-    <link href="https://debugtalk.com/post/bytedance-hire-info/"/>
-    <id>https://debugtalk.com/post/bytedance-hire-info/</id>
-    <published>2019-12-04T16:00:00.000Z</published>
-    <updated>2019-12-05T05:02:39.321Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近在网上看到这么一段话，说得挺贴切的。</p><blockquote><p>当 C 端市场开始变得饱和，B 端便成为一片沃土，这便是当下互联网行业的真实写照。巨头的引领，资本的加持，都在将这种趋势变得更加明显。</p></blockquote><p>事实上，当前国内各个大厂主要的营收都在 C 端市场，与国际大厂（FLAG）B端、C端市场营收各占一半相比，国内 B 端市场还有相当大的空间，因此当前国内各大厂也都在加大 B 端市场的布局。</p><p>字节跳动也不例外，除了今日头条、抖音这些大众熟知的 C 端产品外，在 B 端市场也早已进行了重要布局，包括收购幕布、朝夕日历、坚果云，投资石墨文档成为其大股东等等。当前，字节跳动已孵化出了两条大的 To B 业务线，分别是 Lark（飞书）和 People，团队配置都在千人规模，投入不可谓不大也。</p><p>而本次内推就是重点针对 <strong>People</strong> 业务线。当前 People 业务线正处在<strong>快速扩张期</strong>，有大量的岗位缺口，HC 基本上没限制，因此是一个非常不错的机会。</p><h2 id="关于-People"><a href="#关于-People" class="headerlink" title="关于 People"></a>关于 People</h2><p>可能大家对于 People 业务线不大了解，这里我就先简单介绍下。</p><p>通俗点说，People 覆盖了公司内人力资源相关的所有事务，员工从应聘、面试、入职开始，日常工作流、OKR、薪酬、绩效、休假、福利，到最终离职，方方面面都会使用到 People 的系统。</p><p>那这不就是公司内部业务系统么？也没错，People 从一开始的确就是服务员字节跳动员工的。但差异在于，字节跳动是一家非常重视工具、效率的公司，从 CEO 开始，就非常认可工具对一个企业和组织的价值。Building a company as a product，用做产品的理念打造公司，这是公司的价值观，从我自己入职字节跳动半年多的亲身体验来看，这不仅仅是口号，公司也确确实实是这么去做的，在日常工作中的确也能充分感受到公司文化中对于工具的重视和对效率的追求。具体是什么可能一时说不上来，但都渗透在工作方方面面的细节中，例如我们日常使用的 OKR 管理、会议系统、面试系统、沟通 IM Lark、在线协作套件等等。这些工具在其它公司可能只是作为一般的内部应用（能用就行），但在字节跳动却是花费了非常多的资源进行打磨和迭代，不断提升员工的办公体验。在这种环境下，工作感觉还是特别爽的，习惯后应该是很难再回去了。</p><p>当前，People 业务也组建了独立的商业化团队，开始面向海外和国内拓展 To B 业务，研发团队规模也将达到数百人规模。目标是对标 Workday 和 Salesforce。</p><h2 id="岗位描述"><a href="#岗位描述" class="headerlink" title="岗位描述"></a>岗位描述</h2><p>接下来再来介绍下岗位情况。</p><p>众所周知，字节跳动是一家强中台化的公司。之前在某微信公众号上看到一篇文章，嘉御基金创始合伙人、前阿里巴巴 B2B 总裁卫哲说过这么一段话：</p><blockquote><p>今日头条的崛起很大程度在于今日头条是大互联网公司中第一个率先实现强中台的公司。有了强大的技术中台支持，字节跳动在前台放四五个员工，就能做出抖音这样的产品来，快速试错，不断迭代，大大提高了效率。</p></blockquote><p>而在 People 业务线内，也设立了中台技术团队，在基础架构、业务组件、数据工程、人工智能、商业智能、数据分析、架构工程、质量保障、性能、安全、高可用等各个维度对业务线进行全面支撑。本次重点内推的<strong>测试开发工程师</strong>，也是隶属于中台技术团队，将与诸多架构师、技术大牛和一线业务开发人员紧密协作，共同解决业务飞速增长带来的技术难题。这对于关注技术成长的人来说，的确是非常不错的环境和机会，个人的技术和能力会得到很多锻炼和成长。</p><p>关于测试开发岗位的具体描述和职位要求，详见文末的海报。</p><h2 id="福利待遇"><a href="#福利待遇" class="headerlink" title="福利待遇"></a>福利待遇</h2><p>关于薪酬这块儿我觉得没有太多介绍的必要，薪资在业界也比较透明，字节跳动的薪资待遇也的确担得起 Top 级别，因此完全不用担心。</p><p>其它福利方面也是非常不错，免费但丰盛的每日三餐、下午茶，租房补贴，无限零食，最高比例公积金等等。这些相比于你的薪酬来说并不算多，但的确能极大提升你的幸福感。</p><p>而我最想说的其实是，People 业务线除了在<strong>北京</strong>，在<strong>成都</strong>和<strong>武汉</strong>也有大量研发岗位，甚至<strong>成都</strong>的研发团队占比达到一半！之前在「字节范儿」公众号看到推送的一篇文章，<a href="https://mp.weixin.qq.com/s/mtNIJUks9KSDV6IsylDeBw" target="_blank" rel="noopener">《为什么这些字节跳动人选择新一线城市？》</a>，里面介绍了字节跳动新一线 office 同事们的工作生活，着实令人羡慕不已。因此，对于已经在或者计划去成都武汉的朋友们，可以好好把握机会了。</p><h2 id="投递方式"><a href="#投递方式" class="headerlink" title="投递方式"></a>投递方式</h2><p>如果你看到这里对岗位产生了一些兴趣，那就投递简历试试吧。相信我，你在面试的过程中，随着对字节跳动更多的接触，你也会喜欢上这家公司的。</p><p>考虑到当前已经到年底了，大家也不用担心，可以<strong>年前面试年后入职</strong>；甚至你现在加入，还可以<strong>申请签字费</strong>啥的。从网上某些统计数据来看，年前相比年后的竞争压力相对会小些，而且当前 People 业务线也正处在快速扩张期，有大量的岗位缺口，因此个人建议可以尽早投递。</p><p>如下链接是我的内推链接，大家可以通过直接在线进行简历投递。为了保险起见，投递简历后也可以通过邮箱联系我告知下。我会帮忙跟进状态和进度，并及时反馈结果。</p><p>成都：<a href="https://job.toutiao.com/s/Xrxepn" target="_blank" rel="noopener">https://job.toutiao.com/s/Xrxepn</a><br>北京：<a href="https://job.toutiao.com/s/XrqaPL" target="_blank" rel="noopener">https://job.toutiao.com/s/XrqaPL</a><br>邮箱：<a href="mailto:lilong.129@bytedance.com" target="_blank" rel="noopener">lilong.129@bytedance.com</a></p><p>当然，如果你对字节跳动其它岗位感兴趣，那么也可以找我内推。在下面链接中搜索到你心仪的岗位后，通过邮件联系我即可。</p><p><a href="https://job.bytedance.com/society" target="_blank" rel="noopener">https://job.bytedance.com/society</a></p><p>期待你的加入！</p><p><img src="/images/ByteDance-People-Hire.png" alt></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;最近在网上看到这么一段话，说得挺贴切的。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;当 C 端市场开始变得饱和，B 端便成为一片沃土，这便是当下互联网行业的真实写照。巨头的引领，资本的加持，都在将这种趋势变得更加明显。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;事实上，当前国
-      
-    
-    </summary>
-    
-      <category term="6. Recommendation" scheme="https://debugtalk.com/categories/6-Recommendation/"/>
-    
-    
-      <category term="字节跳动" scheme="https://debugtalk.com/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/"/>
-    
-  </entry>
   
   <entry>
     <title>我的 MTSC 2019 分享经历</title>
@@ -182,9 +153,9 @@
     
       <category term="大疆" scheme="https://debugtalk.com/tags/%E5%A4%A7%E7%96%86/"/>
     
-      <category term="思考记录" scheme="https://debugtalk.com/tags/%E6%80%9D%E8%80%83%E8%AE%B0%E5%BD%95/"/>
-    
       <category term="价值度量" scheme="https://debugtalk.com/tags/%E4%BB%B7%E5%80%BC%E5%BA%A6%E9%87%8F/"/>
+    
+      <category term="思考记录" scheme="https://debugtalk.com/tags/%E6%80%9D%E8%80%83%E8%AE%B0%E5%BD%95/"/>
     
   </entry>
   
@@ -578,6 +549,33 @@
       <category term="HttpRunner" scheme="https://debugtalk.com/tags/HttpRunner/"/>
     
       <category term="HAR" scheme="https://debugtalk.com/tags/HAR/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ApiTestEngine 正式更名为 HttpRunner</title>
+    <link href="https://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/"/>
+    <id>https://debugtalk.com/post/ApiTestEngine-rename-to-HttpRunner/</id>
+    <published>2017-11-07T16:00:00.000Z</published>
+    <updated>2019-07-06T08:12:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在<a href="https://debugtalk.com/post/apitestengine-not-only-about-json-api/">《ApiTestEngine，不再局限于API的测试》</a>一文的末尾，我提到随着<code>ApiTestEngine</code>的发展，它的实际功能特性和名字已经不大匹配，需要考虑改名了。</p><p>经过慎重考虑，最终决定将<code>ApiTestEngine</code>正式更名为<code>HttpRunner</code>。</p><h2 id="名字的由来"><a href="#名字的由来" class="headerlink" title="名字的由来"></a>名字的由来</h2><p>为什么选择<code>HttpRunner</code>这个名字呢？</p><p>在改名之前，我的想法很明确，就是要在新名字中体现该工具最核心的两个特点：</p><ul><li>该工具可实现任意基于HTTP协议接口的测试（自动化测试、持续集成、线上监控都是以此作为基础）</li><li>该工具可同时实现性能测试（这是区别于其它工具的最大卖点）</li></ul><p>围绕着这两点，我开始踏上了纠结的取名之路。</p><p>首先想到的，<code>ApiTestEngine</code>实现<code>HTTP</code>请求是依赖于<a href="http://python-requests.org" target="_blank" rel="noopener"><code>Python Requests</code></a>，实现性能测试是依赖于<a href="http://locust.io" target="_blank" rel="noopener"><code>Locust</code></a>，而<code>Locust</code>同样依赖于<code>Python Requests</code>。可以说，<code>ApiTestEngine</code>完全是构建在<code>Python Requests</code>之上的，后续无论怎么进化，这一层关系应该都不会变。</p><p>考虑到<code>Python Requests</code>的<code>slogan</code>是：</p><blockquote><p>Python HTTP Requests for Humans™</p></blockquote><p>因此，我想在<code>ApiTestEngine</code>的新名字中应该包含<code>HTTP</code>。</p><p>那如何体现性能测试呢？</p><p>想到的关键词就<code>load</code>、<code>perf</code>、<code>meter</code>这些（来源于LoadRunner，NeoLoad，JMeter），但又不能直接用，因为名字中带有这些词让人感觉就只是性能测试工具。而且，还要考虑跟<code>HTTP</code>这个词进行搭配。</p><p>最终，感觉<code>runner</code>这个词比较合适，一方面这来源于<code>LoadRunner</code>，大众的认可度可能会比较高；同时，这个词用在自动化测试和性能测试上都不会太牵强。</p><p>更重要的是，<code>HttpRunner</code>这个组合词当前还没有人用过，不管是<code>PyPI</code>还是<code>GitHub</code>，甚至域名都是可注册状态。</p><p>所以，就认定<code>HttpRunner</code>这个名字了。</p><h2 id="相关影响"><a href="#相关影响" class="headerlink" title="相关影响"></a>相关影响</h2><p><code>ApiTestEngine</code>更名为<code>HttpRunner</code>之后，会对用户产生哪些影响呢？</p><p>先说结论，没有任何不好的影响！</p><p>在链接访问方面，受益于GitHub仓库链接的自动重定向机制，仓库在改名或者过户（Transfer ownership）之后，访问原有链接会自动实现重定向，因此之前博客中的链接也都不会受到影响。</p><p>新的仓库地址：<a href="https://github.com/HttpRunner/HttpRunner" target="_blank" rel="noopener">https://github.com/HttpRunner/HttpRunner</a></p><p>在使用的命令方面，<code>HttpRunner</code>采用<code>httprunner</code>作为新的命令代替原有的<code>ate</code>命令；当然，为了考虑兼容性，<code>HttpRunner</code>对<code>ate</code>命令也进行了保留，因此<code>httprunner</code>和<code>ate</code>命令同时可用，并完全等价。在性能测试方面，<code>locusts</code>命令保持不变。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ httprunner -V</span><br><span class="line">HttpRunner version: 0.8.1b</span><br><span class="line">PyUnitReport version: 0.1.3b</span><br></pre></td></tr></table></figure><p>既然是全新的名字，新的篇章必然也得有一些新的东西。</p><p>为了方面用户安装，<code>HttpRunner</code>已托管至<a href="https://pypi.python.org/pypi/HttpRunner" target="_blank" rel="noopener"><code>PyPI</code></a>；后续大家可以方便的采用<code>pip</code>命令进行安装。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install HttpRunner</span><br></pre></td></tr></table></figure><p>同时，<code>HttpRunner</code>新增了大量使用说明文档（之前的博客主要都是开发过程记录），并托管到专业的<code>readthedocs</code>上面。在文档语言方面，英文优先，中文相对滞后。</p><p>访问网址：</p><ul><li>英文：<a href="http://httprunner.readthedocs.io/" target="_blank" rel="noopener">http://httprunner.readthedocs.io/</a></li><li>中文（滞后）：<a href="http://httprunner-cn.readthedocs.io/" target="_blank" rel="noopener">http://httprunner-cn.readthedocs.io/</a></li></ul><p>另外，为了具有更高的逼格，同时购入域名<code>httprunner.top</code>，后续将作为项目的主页地址。当前还处于实名认证中，预计2~3个工作日后就可以访问了。</p><p>关于项目改名这事儿，就说到这儿吧，希望你们也喜欢。</p><blockquote><p>Hello World, HttpRunner.</p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在&lt;a href=&quot;https://debugtalk.com/post/apitestengine-not-only-about-json-api/&quot;&gt;《ApiTestEngine，不再局限于API的测试》&lt;/a&gt;一文的末尾，我提到随着&lt;code&gt;ApiTestEngin
+      
+    
+    </summary>
+    
+      <category term="1. OpenSource" scheme="https://debugtalk.com/categories/1-OpenSource/"/>
+    
+      <category term="HttpRunner" scheme="https://debugtalk.com/categories/1-OpenSource/HttpRunner/"/>
+    
+    
+      <category term="HttpRunner" scheme="https://debugtalk.com/tags/HttpRunner/"/>
     
   </entry>
   
