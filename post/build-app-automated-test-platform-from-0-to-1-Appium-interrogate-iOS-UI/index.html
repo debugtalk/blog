@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
+
+  
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+  <meta name="description" content="写在前面前两天微信突然发来一条系统消息，提示DebugTalk可以开通原创标识了（同时也有了评论功能），虽然一直在期待，但没想到来得这么快，着实是个不小的惊喜。 另外，最近在公众号后台也收到好几个朋友的信息，有的是询问某某部分什么时候能发布，有的是希望能加快更新速度。说实话，收到这样的信息虽然会有压力，但真的挺开心的，因为这说明DebugTalk至少能给一部分人带去价值，这说明这件事本身还是值得坚">
+<meta name="keywords" content="Appium,iOS,Ruby">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件">
+<meta property="og:url" content="https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="写在前面前两天微信突然发来一条系统消息，提示DebugTalk可以开通原创标识了（同时也有了评论功能），虽然一直在期待，但没想到来得这么快，着实是个不小的惊喜。 另外，最近在公众号后台也收到好几个朋友的信息，有的是询问某某部分什么时候能发布，有的是希望能加快更新速度。说实话，收到这样的信息虽然会有压力，但真的挺开心的，因为这说明DebugTalk至少能给一部分人带去价值，这说明这件事本身还是值得坚">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://debugtalk.com/images/Appium_inspector_introduction.jpg">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件">
+<meta name="twitter:description" content="写在前面前两天微信突然发来一条系统消息，提示DebugTalk可以开通原创标识了（同时也有了评论功能），虽然一直在期待，但没想到来得这么快，着实是个不小的惊喜。 另外，最近在公众号后台也收到好几个朋友的信息，有的是询问某某部分什么时候能发布，有的是希望能加快更新速度。说实话，收到这样的信息虽然会有压力，但真的挺开心的，因为这说明DebugTalk至少能给一部分人带去价值，这说明这件事本身还是值得坚">
+<meta name="twitter:image" content="https://debugtalk.com/images/Appium_inspector_introduction.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件 | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2016-05-29T00:00:00+08:00">2016-05-29</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/AppiumBooster/" itemprop="url" rel="index"><span itemprop="name">AppiumBooster</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>前两天微信突然发来一条系统消息，提示<code>DebugTalk</code>可以开通原创标识了（同时也有了评论功能），虽然一直在期待，但没想到来得这么快，着实是个不小的惊喜。</p>
+<p>另外，最近在公众号后台也收到好几个朋友的信息，有的是询问某某部分什么时候能发布，有的是希望能加快更新速度。说实话，收到这样的信息虽然会有压力，但真的挺开心的，因为这说明<code>DebugTalk</code>至少能给一部分人带去价值，这说明这件事本身还是值得坚持去做的。</p>
+<p>不过，在更新频率这件事儿上，的确是要跟大家说抱歉了。因为<code>DebugTalk</code>发布的内容全都是原创，主题基本上都是来源于我日常测试工作的经验积累，或者我近期学习一些测试技术的收获总结，这也意味着，我写的东西很多时候并不是自己完全熟悉的（完全掌握的东西也没有足够的动力专门花时间去写）。</p>
+<p>就拿最近连载的《从0到1搭建移动App功能自动化测试平台》系列来说，由于我也是边探索边总结，因此中途难免会遇到一些意想不到的坑，造成额外的耗时，而且为了保证文章能尽量通俗易通，我也需要对涉及到的内容充分进行理解，并且经过大量实践进行验证，然后才能站在半个初学者、半个过来人的角度，重新整理思路，最后以尽可能流畅的思路将主题内容讲解清楚。</p>
+<p>基于这些原因，<code>DebugTalk</code>要做到每日更新是很难了，但是保证每周发布1~2篇还是可以的，希望大家能理解。</p>
+<h2 id="关于UI控件"><a href="#关于UI控件" class="headerlink" title="关于UI控件"></a>关于UI控件</h2><p>在上一篇文章中，我们成功地通过Appium Inspector调用模拟器并运行iOS应用，iOS的自动化测试环境也已全部准备就绪了。</p>
+<p>那么接下来，我们就可以开始实现自动化测试了么？</p>
+<p>貌似还不行。在开始之前，我们先想下什么是APP功能自动化测试。</p>
+<p>APP的功能自动化测试，简单地来说，就是让功能测试用例自动地在APP上执行。具体到每一个测试用例，就是能模拟用户行为对UI控件进行操作，自动化地实现一个功能点或者一个流程的操作。再细分到每一步，就是对UI控件进行操作。</p>
+<p>因此，在正式开始编写自动化测试用例之前，我们还需要熟悉如何与APP的UI控件进行交互操作。</p>
+<p>在iOS系统中，UI控件有多种类型，常见的有按钮（UIAButton）、文本（UIAStaticText）、输入框（UIATextField）等等。但不管是对什么类型的UI控件进行操作，基本都可以分解为三步，首先是获取目标控件的属性信息，然后是对目标控件进行定位，最后是对定位到的控件执行动作。</p>
+<h2 id="获取UI控件信息"><a href="#获取UI控件信息" class="headerlink" title="获取UI控件信息"></a>获取UI控件信息</h2><p>在Appium中，要获取iOS的UI控件元素信息，可以采用两种方式：一种是在前一篇文章中提到的Appium Inspector，另一种是借助Ruby实现的<code>appium_console</code>，在Terminal中通过命令进行查询。</p>
+<h3 id="Appium-Inspector"><a href="#Appium-Inspector" class="headerlink" title="Appium Inspector"></a>Appium Inspector</h3><p>运行Appium Server，并启动【Inspector】后，整体界面如下图所示。</p>
+<p><img src="/images/Appium_inspector_introduction.jpg" alt="Appium inspector introduction"></p>
+<p>现对照着这张图对Appium Inspector进行介绍。</p>
+<p>在右边部分，是启动的模拟器，里面运行着我们的待测APP。我们可以像在真机中一样，在模拟器中执行任意功能的操作，当然，模拟器跟真机毕竟还是有区别的，跟传感器相关的功能，例如摄像头、重力感应等，是没法实现的。</p>
+<p>在左边部分，就是<code>Appium Inspector</code>。Inspector主要由如下四个部分组成：</p>
+<ul>
+<li>预览界面区：显示画面与模拟器界面一致；不过，当我们在模拟器中切换界面后，Inspector的预览区中显示图像并不会自动同步，若要同步，需要点击【Refresh】按钮，然后Inspector会将模拟器当前UI信息dump后显示到预览区；在预览区中，可以点击选择任意UI控件。</li>
+<li>UI信息展示区：展示当前界面预览区中所有UI元素的层级关系和UI元素的详细信息；在预览区中点击选择任意UI控件后，在“Details”信息框中展示选中控件的详细信息，包括name、label、value、xpath等属性值；通过层级关系，我们也能了解选中控件在当前界面树状结构中所处的具体位置。</li>
+<li>交互操作区：模拟用户在设备上的操作，例如单击（tap）、滑动（swipe）、晃动（shake）、输入（input）等；操作动作是针对预览界面区选中的控件，因此在操作之前，务必需要先在预览区点击选择UI元素。</li>
+<li>脚本生成区：将用户行为转换为脚本代码；点击【Record】按钮后，会弹出代码区域；在交互操作区进行操作后，就会实时生成对应的脚本代码；代码语言可通过下拉框进行选择，当前支持的语言类型有：C#、Ruby、Objective-C、Java、node.js、Python。</li>
+</ul>
+<p>在实践操作中，Inspector最大的用途就是在可以可视化地查看UI元素信息，并且可以将操作转换为脚本代码，这对初学者尤为有用。</p>
+<p>例如，在预览区点击选中按钮“BUY NOW”，然后在UI信息展示区的Details窗口就可以看到该按钮的所有属性信息。在交互操作区点击【Tap】按钮后，就会模拟用户点击“BUY NOW”按钮，并且在脚本区域生成当次按钮点击的脚本（选择Ruby语言）：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find_element(<span class="symbol">:name</span>, <span class="string">"BUY NOW &gt;"</span>).click</span><br></pre></td></tr></table></figure>
+
+<p>如上就是使用<code>Appium Inspector</code>的一般性流程。</p>
+<h3 id="Appium-Ruby-Console"><a href="#Appium-Ruby-Console" class="headerlink" title="Appium Ruby Console"></a>Appium Ruby Console</h3><p>有了<code>Appium Inspector</code>，为什么还需要<code>Appium Ruby Console</code>呢？</p>
+<p>其实，<code>Appium Ruby Console</code>也并不是必须的。经过与多个熟悉<code>Appium</code>的前辈交流，他们也从未用过<code>Appium Ruby Console</code>，这说明<code>Appium Ruby Console</code>并不是必须的，没有它也不会影响我们对<code>Appium</code>的使用。</p>
+<p>但是，这并不意味着<code>Appium Ruby Console</code>是多余的。经过这些天对<code>Appium</code>的摸索，我越发地喜欢上<code>Appium Ruby Console</code>，并且使用的频率越来越高，现在已基本上很少使用<code>Appium Inspector</code>了。这种感觉怎么说呢？<code>Inspector</code>相比于<code>Ruby Conosle</code>，就像是<code>GUI</code>相比于<code>Linux Terminal</code>，大家应该能体会了吧。</p>
+<p><code>Appium Inspector</code>的功能是很齐全，GUI操作也很方便，但是，最大的问题就是使用的时候非常慢，在预览界面区切换一个页面常常需要好几秒，甚至数十秒，这是很难让人接受的。</p>
+<p>在上一节中也说到了，Inspector最大的用途就是在可以可视化地查看UI元素信息，并且可以将操作转换为脚本代码。但是当我们对<code>Appium</code>的常用API熟悉以后，我们就不再需要由工具来生成脚本，因为自己直接写会更快，前提是我们能知道目标控件的属性信息（type、name、label、value）。</p>
+<p>在这种情况下，如果能有一种方式可以供我们快速查看当前屏幕的控件属性信息，那该有多好。</p>
+<p>庆幸的是，在阅读<code>Appium</code>官方文档时，发现<code>Appium</code>的确是支持命令行方式的，这就是<code>Appium Ruby Console</code>。</p>
+<p><code>Appium Ruby Console</code>是采用Ruby语言开发的，在使用方式上面和Ruby的<code>irb</code>很类似。</p>
+<p>在使用<code>Appium Ruby Console</code>时，虚拟机的配置信息并不会从GUI中读取，而是要通过配置文件进行指定。</p>
+<p>配置文件的名称统一要求为<code>appium.txt</code>，内容形式如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[caps]</span><br><span class="line">platformName = &quot;ios&quot;</span><br><span class="line">platformVersion = &apos;9.3&apos;,</span><br><span class="line">app = &quot;/path/to/UICatalog.app.zip&quot;</span><br><span class="line">deviceName = &quot;iPhone Simulator&quot;</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>platformName</code>指定虚拟机操作系统类型，“ios”或者”android”；<code>platformVersion</code>指定操作系统的版本，例如iOS的’9.3’，或者Android的’5.1’；<code>app</code>指定被测应用安装包的路径。这三个参数是必须的，与Inspector中的配置也能对应上。</p>
+<p>在使用<code>Appium Ruby Console</code>时，首先需要启动<code>Appium Server</code>，通过<code>GUI</code>或者<code>Terminal</code>均可。</p>
+<p>然后，在Terminal中，进入到<code>appium.txt</code>文件所在的目录，执行<code>arc</code>命令即可启动<code>Appium Ruby Console</code>。<code>arc</code>，即是appium ruby console首字母的组合。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ ls</span><br><span class="line">appium.txt</span><br><span class="line">➜ arc</span><br><span class="line">[1] pry(main)&gt;</span><br></pre></td></tr></table></figure>
+
+<p>接下来，就可以通过执行命令查询当前设备屏幕中的控件信息。</p>
+<p>使用频率最高的一个命令是<code>page</code>，通过这个命令可以查看到当前屏幕中所有控件的基本信息。</p>
+<p>例如，当屏幕停留在前面截图中的页面时，执行<code>page</code>命令可以得到如下内容。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">[1] pry(main)&gt; page</span><br><span class="line">UIANavigationBar</span><br><span class="line">   name: HomeView</span><br><span class="line">   id: Home =&gt; Home</span><br><span class="line">       米    =&gt; m</span><br><span class="line">       去看看  =&gt; View</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: tabbar category gray</span><br><span class="line">UIAImage</span><br><span class="line">   name: debugtalk_logo.png</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: tabbar cart gray</span><br><span class="line">UIATableView</span><br><span class="line">   value: rows 1 to 4 of 15</span><br><span class="line">UIAPageIndicator</span><br><span class="line">   value: page 2 of 2</span><br><span class="line">UIATableCell</span><br><span class="line">   name: For the first time ever in a hand held camera, the Osmo brings professional, realtime cinema-quality stabilization.</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: For the first time ever in a hand held camera, the Osmo brings professional, realtime cinema-quality stabilization.</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: OSMO</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: SHOP NOW &gt;</span><br><span class="line">UIATableCell</span><br><span class="line">   name: Ronin</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: Ronin</span><br><span class="line">UIAStaticText</span><br><span class="line">   name, label, value: Phantom</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">... (略)</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: Store</span><br><span class="line">   value: 1</span><br><span class="line">   id: 门店 =&gt; Store</span><br><span class="line">... (略)</span><br><span class="line">UIAButton</span><br><span class="line">   name, label: My Account</span><br><span class="line">   id: My Account =&gt; My Account</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
+<p>通过返回信息，我们就可以看到所有控件的type、name、label、value属性值。如果在某个控件下没有显示label或value，这是因为这个值为空，我们可以不予理会。</p>
+<p>由于<code>page</code>返回的信息太多，可能不便于查看，因此在使用<code>page</code>命令时，也可以指定控件的类型，相当于对当前屏幕的控件进行筛选，只返回指定类型的控件信息。</p>
+<p>指定控件类型时，可以通过string类型进行指定（如 page “Image”），也可通过symbol类型进行指定（如 page :cell）。指定的类型可只填写部分内容，并且不分区大小写。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[2] pry(main)&gt; page "Image"</span><br><span class="line">UIAImage</span><br><span class="line">   name: debugtalk_logo.png</span><br><span class="line">nil</span><br><span class="line">[3] pry(main)&gt; page :cell</span><br><span class="line">UIATableCell</span><br><span class="line">   name: DebugTalk’s smartest flying camera ever.</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">UIATableCell</span><br><span class="line">   name: Ronin</span><br><span class="line">UIATableCell</span><br><span class="line">   name: Phantom</span><br><span class="line">   id: 米 =&gt; m</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
+<p>如果需要查看当前屏幕的所有控件类型，可以执行<code>page_class</code>命令进行查看。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[4] pry(main)&gt; page_class</span><br><span class="line">14x UIAButton</span><br><span class="line">8x UIAStaticText</span><br><span class="line">4x UIAElement</span><br><span class="line">4x UIATableCell</span><br><span class="line">2x UIAImage</span><br><span class="line">2x UIAWindow</span><br><span class="line">1x UIAPageIndicator</span><br><span class="line">1x UIATableView</span><br><span class="line">1x UIAStatusBar</span><br><span class="line">1x UIANavigationBar</span><br><span class="line">1x UIATabBar</span><br><span class="line">1x UIAApplication</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
+<p>基本上，<code>page</code>返回的控件信息已经足够满足绝大多数场景需求，但有时候情况比较特殊，需要<code>enabled</code>、<code>xpath</code>、<code>visible</code>、坐标等属性信息，这时就可以通过执行<code>source</code>命令。执行<code>source</code>命令后，就可以返回当前屏幕中所有控件的所有信息，以xml格式进行展现。</p>
+<h2 id="定位UI控件"><a href="#定位UI控件" class="headerlink" title="定位UI控件"></a>定位UI控件</h2><p>获取到UI控件的属性信息后，就可以对控件进行定位了。</p>
+<p>首先介绍下最通用的定位方式，<code>find</code>。通过<code>find</code>命令，可以实现在控件的诸多属性值（<code>name</code>、<code>label</code>、<code>value</code>、<code>hint</code>）中查找目标值。查询时不区分大小写，如果匹配结果有多个，则只返回第一个结果。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[5] pry(main)&gt; find('osmo')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x..febd52a30dcdfea32 id=<span class="string">"2"</span>&gt;</span></span><br><span class="line">[6] pry(main)&gt; find('osmo').label</span><br><span class="line">"Osmo"</span><br></pre></td></tr></table></figure>
+
+<p>另一个通用的定位方式是<code>find_element</code>，它也可以实现对所有控件进行查找，但是相对于<code>find</code>，可以对属性类型进行指定。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[7] pry(main)&gt; find_element(:class_name, 'UIATextField')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x31d87e3848df8804 id=<span class="string">"3"</span>&gt;</span></span><br><span class="line">[8] pry(main)&gt; find_element(:class_name, 'UIATextField').value</span><br><span class="line">"Email Address"</span><br></pre></td></tr></table></figure>
+
+<p>不过在实践中发现，采用<code>find</code>、<code>find_element</code>这类通用的定位方式并不好用，因为定位结果经常不是我们期望的。</p>
+<p>经过反复摸索，我推荐根据目标控件的类型，选择对应的定位方式。总结起来，主要有以下三种方式。</p>
+<p>针对Button类型的控件（UIAButton），采用<code>button_exact</code>进行定位：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[9] pry(main)&gt; button_exact('Login')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x..feaebd8302b6d77cc id=<span class="string">"4"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>针对Text类型的控件（UIAStaticText），采用<code>text_exact</code>进行定位：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[10] pry(main)&gt; text_exact('Phantom')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x1347e89100fdcee2 id=<span class="string">"5"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>针对控件类型进行定位时，采用<code>tag</code>；如下方式等价于<code>find_element(:class_name, &#39;UIASecureTextField&#39;)</code>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[11] pry(main)&gt; tag('UIASecureTextField')</span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Selenium::WebDriver::Element:0x..fc6f5efd05a82cdca id=<span class="string">"6"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>基本上，这三种方式就已经足够应付绝大多数测试场景了。当然，这三种方式只是我个人经过实践后选择的定位方式，除了这三种，<code>Appium</code>还支持很多种其它定位方式，大家可自行查看<code>Appium</code>官方文档进行选择。</p>
+<p>另外，除了对控件进行定位，有时候我们还想判断当前屏幕中是否存在某个控件（通常用于结果检测判断），这要怎么做呢？</p>
+<p>一种方式是借助于<code>Appium</code>的控件查找机制，即找不到控件时会抛出异常（<code>Selenium::WebDriver::Error::NoSuchElementError</code>）；反过来，当查找某个控件抛出异常时，则说明当前屏幕中不存在该控件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[12] pry(main)&gt; button_exact('Login_invalid')</span><br><span class="line">Selenium::WebDriver::Error::NoSuchElementError: An element could not be located on the page using the given search parameters.</span><br><span class="line">from /Library/Ruby/Gems/2.0.0/gems/appium_lib-8.0.2/lib/appium_lib/common/helper.rb:218:in `_no_such_element'</span><br></pre></td></tr></table></figure>
+
+<p>该种方式可行，但比较暴力，基本上不会采用这种方式。</p>
+<p>另一种更好的方式是，查找当前屏幕中指定控件的个数，若个数不为零，则说明控件存在。具体操作上，将<code>button_exact</code>替换为<code>buttons_exact</code>，将<code>text_exact</code>替换为<code>texts_exact</code>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[12] pry(main)&gt; buttons_exact('Login').count</span><br><span class="line">1</span><br><span class="line">[13] pry(main)&gt; buttons_exact('Login_invalid').count</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<p>除此之外，基于Ruby实现的<code>appium_lib</code>还支持<code>exists</code>方法，可直接返回Boolean值。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[14] pry(main)&gt; exists &#123; button_exact('Login') &#125;</span><br><span class="line">true</span><br><span class="line">[15] pry(main)&gt; exists &#123; button_exact('Login_invalid') &#125;</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+
+<h2 id="对控件执行操作"><a href="#对控件执行操作" class="headerlink" title="对控件执行操作"></a>对控件执行操作</h2><p>定位到具体的控件后，操作就比较容易了。</p>
+<p>操作类型不多，最常用就是点击（click）和输入（type），这两个操作能覆盖80%以上的场景。</p>
+<p>对于点击操作，才定位到的控件后面添加<code>.click</code>方法；对于输入操作，在定位到的输入框控件后面添加<code>.type</code>方法，并传入输入值。</p>
+<p>例如，账号登录操作就包含输入和点击两种操作类型。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[16] pry(main)&gt; find_element(:class_name, 'UIATextField').type 'leo.lee@debugtalk.com'</span><br><span class="line">""</span><br><span class="line">[17] pry(main)&gt; find_element(:class_name, 'UIASecureTextField').type '123456'</span><br><span class="line">""</span><br><span class="line">[18] pry(main)&gt; button_exact('Login').click</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
+
+<h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>在本文中，我们学习了对iOS UI控件进行交互操作的一般性方法，为编写自动化测试脚本打好了基础。</p>
+<p>在下一篇文章中，我们就要正式开始针对iOS应用编写自动化测试脚本了。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
+</div>
+
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/" title="从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件">https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Appium/" rel="tag"># Appium</a>
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/Ruby/" rel="tag"># Ruby</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/" rel="next" title="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">
+                <i class="fa fa-chevron-left"></i> 从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/build-app-automated-test-platform-from-0-to-1-write-iOS-testcase-scripts/" rel="prev" title="从0到1搭建移动App功能自动化测试平台（3）：编写iOS自动化测试脚本">
+                从0到1搭建移动App功能自动化测试平台（3）：编写iOS自动化测试脚本 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于UI控件"><span class="nav-number">2.</span> <span class="nav-text">关于UI控件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取UI控件信息"><span class="nav-number">3.</span> <span class="nav-text">获取UI控件信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Appium-Inspector"><span class="nav-number">3.1.</span> <span class="nav-text">Appium Inspector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Appium-Ruby-Console"><span class="nav-number">3.2.</span> <span class="nav-text">Appium Ruby Console</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定位UI控件"><span class="nav-number">4.</span> <span class="nav-text">定位UI控件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对控件执行操作"><span class="nav-number">5.</span> <span class="nav-text">对控件执行操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#To-be-continued-…"><span class="nav-number">6.</span> <span class="nav-text">To be continued …</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

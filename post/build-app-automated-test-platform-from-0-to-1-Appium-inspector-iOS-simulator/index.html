@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
+
+  
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+  <meta name="description" content="在上一篇文章中，我对本系列教程的项目背景进行了介绍，并对自动化测试平台的建设进行了规划。 在本文中，我将在已准备就绪的iOS自动化测试环境的基础上，通过Appium调用模拟器运行iOS应用。内容很是基础，熟悉的同学可直接略过。 iOS应用安装包的基础知识作为完全的iOS新手，困惑的第一个问题就是iOS安装包文件。 在Android系统中，安装App的途径很多，除了各类应用市场，普通用户也经常直接下">
+<meta name="keywords" content="Appium,iOS,AppiumBooster">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">
+<meta property="og:url" content="https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在上一篇文章中，我对本系列教程的项目背景进行了介绍，并对自动化测试平台的建设进行了规划。 在本文中，我将在已准备就绪的iOS自动化测试环境的基础上，通过Appium调用模拟器运行iOS应用。内容很是基础，熟悉的同学可直接略过。 iOS应用安装包的基础知识作为完全的iOS新手，困惑的第一个问题就是iOS安装包文件。 在Android系统中，安装App的途径很多，除了各类应用市场，普通用户也经常直接下">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://debugtalk.com/images/Appium_iOS_Settings_init.jpg">
+<meta property="og:image" content="https://debugtalk.com/images/Appium_Inspector_Button.jpg">
+<meta property="og:image" content="https://debugtalk.com/images/Appium_iOS_Simulator_Console.jpg">
+<meta property="og:image" content="https://debugtalk.com/images/Appium_Inspector_Error.jpg">
+<meta property="og:image" content="https://debugtalk.com/images/Appium_iOS_Settings_bug.jpg">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">
+<meta name="twitter:description" content="在上一篇文章中，我对本系列教程的项目背景进行了介绍，并对自动化测试平台的建设进行了规划。 在本文中，我将在已准备就绪的iOS自动化测试环境的基础上，通过Appium调用模拟器运行iOS应用。内容很是基础，熟悉的同学可直接略过。 iOS应用安装包的基础知识作为完全的iOS新手，困惑的第一个问题就是iOS安装包文件。 在Android系统中，安装App的途径很多，除了各类应用市场，普通用户也经常直接下">
+<meta name="twitter:image" content="https://debugtalk.com/images/Appium_iOS_Settings_init.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用 | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-05-21 00:00:00" itemprop="dateCreated datePublished" datetime="2016-05-21T00:00:00+08:00">2016-05-21</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/AppiumBooster/" itemprop="url" rel="index"><span itemprop="name">AppiumBooster</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在上一篇文章中，我对本系列教程的项目背景进行了介绍，并对自动化测试平台的建设进行了规划。</p>
+<p>在本文中，我将在已准备就绪的iOS自动化测试环境的基础上，通过Appium调用模拟器运行iOS应用。内容很是基础，熟悉的同学可直接略过。</p>
+<h2 id="iOS应用安装包的基础知识"><a href="#iOS应用安装包的基础知识" class="headerlink" title="iOS应用安装包的基础知识"></a>iOS应用安装包的基础知识</h2><p>作为完全的iOS新手，困惑的第一个问题就是iOS安装包文件。</p>
+<p>在Android系统中，安装App的途径很多，除了各类应用市场，普通用户也经常直接下载apk安装包文件后手动进行安装，因此大家对Android的安装包文件都比较熟悉。</p>
+<p>但是对于iOS系统就不一样了，由于我们普通用户在iOS上安装应用的时候基本上只能通过Apple Store进行安装（未越狱），没有机会接触原始的安装包文件，因此往往连iOS应用的安装包到底是什么格式后缀都不清楚。</p>
+<p>现在我们想在Appium App中通过模拟器运行被测应用，需要指定iOS app的安装包路径，因此需要首先获得一个iOS app安装包。</p>
+<p><img src="/images/Appium_iOS_Settings_init.jpg" alt="Appium initialize iOS Settings"></p>
+<p>那么iOS app的安装包长啥样呢？</p>
+<p>或者在这个问题之前，我们先来看下另一个问题：对于iOS设备来说，如果不通过Apple Store，我们可以怎样安装一个应用？</p>
+<p>针对这个问题，我搜了些资料，也请教了周围的同事，了解到的途径有如下几个：</p>
+<ul>
+<li>企业证书：该种方式适用于企业内部；通过企业证书编译出的iOS应用，无需上传至Apple Store，即可无限制的安装到企业员工的iOS设备中。只是需要解决的一个问题是，由于iOS设备没有文件管理器，没法将安装包拷贝到iOS设备中，因此常用的做法是将安装包（<code>.ipa</code>文件）上传至一些下载服务器（例如<code>fir.im</code>），并生成二维码，然后用户扫描二维码后即可通过浏览器下载安装包并进行安装。由此联想到另外一个方法，通过微信文件传输助手将安装包（<code>.ipa</code>）传输至iOS设备，然后再进行安装应该也是可以的吧？这种方法不知在原理上是否可行，因为在试验时由于安装包大于30M，微信无法传输，所以没能进行验证。</li>
+<li>Xcode：该种方式适用于iOS开发者；开发者在Xcode中连上iOS设备对源码进行编译，编译生成的应用会自动安装至iOS设备。当然，该种方式也是需要iOS开发者证书。</li>
+<li>PP助手：该种方式适用于普通用户；PP助手是一个非苹果官方的设备资源管理工具，可以实现对未越狱的iOS设备进行应用管理，也可以安装本地<code>.ipa</code>文件，前提是<code>.ipa</code>文件具有合适的签名。</li>
+</ul>
+<p>在上面列举的安装应用的途径中，反复提到了<code>.ipa</code>文件，那<code>.ipa</code>应该就是iOS应用程序的后缀了吧？暂且这么认为吧。</p>
+<p>再回到前面的场景，要在iOS模拟器中运行iOS应用，我们是否可以找研发人员要一个<code>.ipa</code>安装包文件，然后就能在模拟器中加载运行应用呢？</p>
+<p>刚开始的时候我是这么认为的。于是我获取到<code>.ipa</code>文件后，在<code>App Path</code>中填写该文件的路径，然后启动Appium Server；接着我再打开Inspector时，发现iOS模拟器启动了，但是在应用启动的时候就出问题了，始终无法正常启动，感觉像是启动崩溃，反复尝试多次仍然如此。</p>
+<p>再次经过Google，总算是明白出现问题的原因了，总结下来有如下几点：</p>
+<ul>
+<li>不管是从Apple Store或iTunes上下载的应用，还是在Xcode中针对真机设备编译生成的<code>.ipa</code>文件，都是面向于ARM处理器的iOS设备，只能在真机设备中进行安装；</li>
+<li>而在Mac OSX系统中运行的iOS模拟器，运行环境是基于Intel处理器的；</li>
+<li>因此，若是针对真机设备编译生成的<code>.ipa</code>文件，是无法在iOS模拟器中正常运行的，毕竟处理器架构都不一样；</li>
+<li>要想在iOS模拟器中运行应用，则必须在Xcode中编译时选择模拟器类型；编译生成的文件后缀为<code>.app</code>。</li>
+</ul>
+<h2 id="准备-app文件"><a href="#准备-app文件" class="headerlink" title="准备.app文件"></a>准备<code>.app</code>文件</h2><p>接下来，就说下如何获取<code>.app</code>文件。</p>
+<p>虽然是测试人员，不会对被测iOS项目贡献代码，但是也不能总是找研发帮忙编译生成<code>.app</code>文件。所以，在本地搭建完整的iOS项目开发环境还是很有必要的。</p>
+<p>对于iOS开发环境的搭建，当前社区中应该已经有了很多完整的教程，我在这儿就不详细描述了，只简单说下我搭建过程中涉及到的几个点。</p>
+<p>首先，Mac OSX、Xcode、Apple Developer Tools这些基础环境的安装，在上一篇文章中已经进行说明了；</p>
+<p>然后，申请项目源码的访问权限，<code>git clone</code>到本地；</p>
+<p>接着是项目依赖环境的问题；通常一个较大型的iOS项目都会引用许多第三方库，而这些依赖库并不会直接保存到项目仓库中，通常是采用<code>CocoaPods</code>进行管理；简单地说，<code>CocoaPods</code>是针对<code>Swift</code>和<code>Objective-C</code>项目的依赖管理器，类似于Java中的<code>Maven</code>，Ruby中的<code>Gem</code>，Python中的<code>pip</code>。</p>
+<p>当然，iOS项目的依赖管理工具也不是只有<code>CocoaPods</code>一个，如果是采用的别的依赖管理器，请自行查找对应的资料。</p>
+<p>采用<code>CocoaPods</code>管理的项目，在项目根目录下会包含<code>Podfile</code>和<code>Podfile.lock</code>文件，里面记录了当前项目依赖的第三方库以及对应的版本号。</p>
+<p>安装<code>CocoaPods</code>很简单，采用<code>gem</code>即可。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo gem install cocoapods</span><br></pre></td></tr></table></figure>
+
+<p>然后，进入到iOS项目的目录，执行<code>pod install</code>命令即可安装当前项目的所有依赖。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> Project_Folder</span><br><span class="line">$ pod install</span><br><span class="line">Re-creating CocoaPods due to major version update.</span><br><span class="line">Analyzing dependencies</span><br><span class="line">.....（略）</span><br><span class="line">Downloading dependencies</span><br><span class="line">.....（略）</span><br><span class="line">Generating Pods project</span><br><span class="line">Integrating client project</span><br><span class="line">Sending stats</span><br><span class="line">Pod installation complete! There are 27 dependencies from the Podfile and 28 total pods installed.</span><br></pre></td></tr></table></figure>
+
+<p>关于<code>CocoaPods</code>的更多信息，请自行查看<a href="https://cocoapods.org" target="_blank" rel="noopener">官方网站</a></p>
+<p>在依赖安装完成后，正常情况下，就可以在Xcode中编译项目了。</p>
+<p>没有别的需要注意的，将target选择为模拟器（iOS Simulator）即可。而且针对模拟器进行编译时，也不会涉及到开发者证书的问题，项目配置上会简单很多。待后续讲到真机上的自动化测试时，我再对证书方面的内容进行补充。</p>
+<p>编译完成后，在Products目录下，就可以看到<code>XXX.app</code>文件，这里的<code>XXX</code>就是项目名称；然后，选中<code>XXX.app</code>文件，【Show in Finder】，即可在文件目录中定位到该文件。</p>
+<p>接下来，将<code>XXX.app</code>文件拷贝出来，或者复制该文件的<code>Full path</code>，怎样都行，只要在<code>Appium</code>的<code>App Path</code>中能定位到该文件就行。</p>
+<h2 id="模拟器中运行iOS应用"><a href="#模拟器中运行iOS应用" class="headerlink" title="模拟器中运行iOS应用"></a>模拟器中运行iOS应用</h2><p>被测应用<code>.app</code>准备就绪后，接下来就可以在iOS模拟器中运行了。</p>
+<p>回到前面的那张图。启动<code>Appium app</code>后，对于模拟器运行的情况，在<code>iOS Settings</code>中必须设置的参数项就3个，<code>App Path</code>、<code>Force Device</code>和<code>Platform Version</code>。对于真机运行的情况，后续再单独进行说明。</p>
+<p>设置完毕后，点击【Launch】，启动<code>Appium Server</code>。</p>
+<p><img src="/images/Appium_Inspector_Button.jpg" alt="Appium inspector button"></p>
+<p>然后，点击图中红框处的按钮，即可通过<code>Inspector</code>启动模拟器，并在模拟器中加载iOS应用。</p>
+<p><img src="/images/Appium_iOS_Simulator_Console.jpg" alt="Appium iOS Simulator Console"></p>
+<p>在模拟器中，我们可以像在真机中一样，体验被测应用的各项功能；并且，在Appium的日志台中，可以实时查看到日志信息。</p>
+<h2 id="经历的一个坑"><a href="#经历的一个坑" class="headerlink" title="经历的一个坑"></a>经历的一个坑</h2><p>整个过程是挺简单的，不过，在探索过程中我还是有遇到一个坑。</p>
+<p>通过<code>Inspector</code>启动模拟器时，总是弹框报错，报错形式如下。</p>
+<p><img src="/images/Appium_Inspector_Error.jpg" alt="Appium Inspector Error"></p>
+<p>刚开始出现这问题时百思不得其解，因为提示的信息并不明显，Google了好一阵也没找到原因。最后只有详细去看日志信息，才发现问题所在。</p>
+<p>在日志中，发现的报错信息如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[iOS] Error: Could not find a device to launch. You requested &apos;iPhone 6 (8.4)&apos;, but the available devices were: [&quot;Apple TV 1080p (9.2) [98638D25-7C82-48DF-BDCA-7F682F951533] (Simulator)&quot;,&quot;iPad 2 (9.2) [5E22F53E-EAB3-45DF-A1DD-10F58E920679] (Simulator)&quot;,&quot;iPad 2 (9.3) [4B2D2F9A-C099-4C13-8DE9-27C826A521C2] (Simulator)&quot;,&quot;iPad Air (9.2) [825E4997-9CD8-4225-9977-4C7AE2C98389] (Simulator)&quot;,&quot;iPad Air (9.3) [E4523799-E35F-4499-832B-12CF33F09144] (Simulator)&quot;,&quot;iPad Air 2 (9.2) [8057039D-F848-453E-97EC-2F75CAEA2E77] (Simulator)&quot;,&quot;iPad Air 2 (9.3) [0B8F49DA-832A-4248-BA1D-9DA5D11E31FD] (Simulator)&quot;,&quot;iPad Pro (9.2) [AF1F2D06-3067-41B5-AC2B-4B0ED88BF5D9] (Simulator)&quot;,&quot;iPad Pro (9.3) [C39617A6-9D91-4C0B-B25B-741BD57B016C] (Simulator)&quot;,&quot;iPad Retina (9.2) [D3C694E1-E3B4-47BE-AB5E-80B3D4E22FC2] (Simulator)&quot;,&quot;iPad Retina (9.3) [907C7B06-ED2C-48AC-AC46-04E4AD6E0CA3] (Simulator)&quot;,&quot;iPhone 4s (9.2) [1A786195-94E3-4908-8309-7B66D84E4619] (Simulator)&quot;,&quot;iPhone 4s (9.3) [3F76F34B-5A8F-4FD1-928D-56F84C192DDD] (Simulator)&quot;,&quot;iPhone 5 (9.2) [0D79A4CA-71EB-48A6-9EE4-172BEF3EB4E0] (Simulator)&quot;,&quot;iPhone 5 (9.3) [04270D44-F831-4253-95F2-3D205D2BC0D9] (Simulator)&quot;,&quot;iPhone 5s (9.2) [13A16C07-3C5B-4B04-A94B-B40A63238958] (Simulator)&quot;,&quot;iPhone 5s (9.3) [D30A7B34-BA01-4203-80DA-FAEA436725F9] (Simulator)&quot;,&quot;iPhone 6 (9.2) [5D01650F-2A31-4D53-A47A-CCF7FD552ADD] (Simulator)&quot;,&quot;iPhone 6 (9.3) [2F0810F6-C73B-4BA4-93BA-06D4B6D96BDA] (Simulator)&quot;,&quot;iPhone 6 Plus (9.2) [9A840B78-E6CE-4D18-BE83-16B590411641] (Simulator)&quot;,&quot;iPhone 6 Plus (9.3) [27C6557A-B09D-4D8A-9846-DA8FE0A8E8D5] (Simulator)&quot;,&quot;iPhone 6s (9.2) [E7F5B8A5-0E85-404F-A4D4-191D63E7EC1B] (Simulator)&quot;,&quot;iPhone 6s (9.3) [6F702911-13C2-472C-9ECD-BADD4385CB77] (Simulator)&quot;,&quot;iPhone 6s (9.3) + Apple Watch - 38mm (2.2) [B63FFAA4-00A4-473B-9462-3664F41F9001] (Simulator)&quot;,&quot;iPhone 6s Plus (9.2) [58837F78-511A-4F0B-9DDF-782E3B9935BD] (Simulator)&quot;,&quot;iPhone 6s Plus (9.3) [C31003C6-DCE2-414D-AD7F-376F6FA995B0] (Simulator)&quot;,&quot;iPhone 6s Plus (9.3) + Apple Watch - 42mm (2.2) [E3154768-CA23-45CC-90E5-2D0386A57B7D] (Simulator)&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>问题在于，我设置<code>iOS Settings</code>时，将<code>Force Device</code>设置为”iPhone 6”，将<code>Platform Version</code>设置为“8.4”，但是经过组合，<code>iPhone 6 (8.4)</code>并不在可用的模拟器设备列表中。</p>
+<p>再来看日志中提示的可用设备，发现“iPhone 6”设备对应的<code>Platform Version</code>只有“9.2”和“9.3”。然后回到<code>iOS Settings</code>，发现<code>Platform Version</code>的下拉框可选项就没有“9.2”和“9.3”，最新的一个可选版本也就是“8.4”。</p>
+<p><img src="/images/Appium_iOS_Settings_bug.jpg" alt="Appium iOS Settings bug"></p>
+<p>这应该是<code>Appium app</code>的一个bug吧。不过好在<code>Platform Version</code>参数虽然是通过下拉框选择，但是也可以在框内直接填写内容。于是我在<code>Platform Version</code>设置框内填写为“9.3”，然后再次启动时，发现iOS模拟器就可以正常启动了。</p>
+<h2 id="To-be-continued-…"><a href="#To-be-continued-…" class="headerlink" title="To be continued …"></a>To be continued …</h2><p>现在，我们已经成功地通过Appium Inspector调用模拟器并运行iOS应用，接下来，我们就要开始尝试编写自动化测试用例了。</p>
+<p>在下一篇文章中，我们将对Appium Inspector的功能进行熟悉，通过Inspector来查看iOS应用的UI元素信息，并尝试采用脚本语言与UI进行交互操作。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
+</div>
+
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/" title="从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用">https://debugtalk.com/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Appium/" rel="tag"># Appium</a>
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/AppiumBooster/" rel="tag"># AppiumBooster</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/build-app-automated-test-platform-from-0-to-1-backgroud-introduction/" rel="next" title="从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划">
+                <i class="fa fa-chevron-left"></i> 从0到1搭建移动App功能自动化测试平台（0）：背景介绍和平台规划
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-interrogate-iOS-UI/" rel="prev" title="从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件">
+                从0到1搭建移动App功能自动化测试平台（2）：操作iOS应用的控件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS应用安装包的基础知识"><span class="nav-number">1.</span> <span class="nav-text">iOS应用安装包的基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备-app文件"><span class="nav-number">2.</span> <span class="nav-text">准备.app文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟器中运行iOS应用"><span class="nav-number">3.</span> <span class="nav-text">模拟器中运行iOS应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经历的一个坑"><span class="nav-number">4.</span> <span class="nav-text">经历的一个坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#To-be-continued-…"><span class="nav-number">5.</span> <span class="nav-text">To be continued …</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

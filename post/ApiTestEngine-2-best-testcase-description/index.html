@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
+
+  
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+  <meta name="description" content="在《ApiTestEngine 演进之路（1）搭建基础框架》一文中，我们完成了ApiTestEngine基础框架的搭建，并实现了简单接口的测试功能。 接下来，我们就针对复杂类型的接口（例如包含签名校验等机制），通过对接口的业务参数和技术细节进行分离，实现简洁优雅的接口测试用例描述。 传统的测试用例编写方式对于在自动化测试中将测试数据与代码实现进行分离的好处，我之前已经讲过多次，这里不再重复。 测试">
+<meta name="keywords" content="HttpRunner">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式">
+<meta property="og:url" content="https://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在《ApiTestEngine 演进之路（1）搭建基础框架》一文中，我们完成了ApiTestEngine基础框架的搭建，并实现了简单接口的测试功能。 接下来，我们就针对复杂类型的接口（例如包含签名校验等机制），通过对接口的业务参数和技术细节进行分离，实现简洁优雅的接口测试用例描述。 传统的测试用例编写方式对于在自动化测试中将测试数据与代码实现进行分离的好处，我之前已经讲过多次，这里不再重复。 测试">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式">
+<meta name="twitter:description" content="在《ApiTestEngine 演进之路（1）搭建基础框架》一文中，我们完成了ApiTestEngine基础框架的搭建，并实现了简单接口的测试功能。 接下来，我们就针对复杂类型的接口（例如包含签名校验等机制），通过对接口的业务参数和技术细节进行分离，实现简洁优雅的接口测试用例描述。 传统的测试用例编写方式对于在自动化测试中将测试数据与代码实现进行分离的好处，我之前已经讲过多次，这里不再重复。 测试">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式 | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-07-07 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-07T00:00:00+08:00">2017-07-07</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/HttpRunner/" itemprop="url" rel="index"><span itemprop="name">HttpRunner</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在<a href="https://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a>一文中，我们完成了<a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code></a>基础框架的搭建，并实现了简单接口的测试功能。</p>
+<p>接下来，我们就针对复杂类型的接口（例如包含签名校验等机制），通过对接口的业务参数和技术细节进行分离，实现简洁优雅的接口测试用例描述。</p>
+<h2 id="传统的测试用例编写方式"><a href="#传统的测试用例编写方式" class="headerlink" title="传统的测试用例编写方式"></a>传统的测试用例编写方式</h2><p>对于在自动化测试中将<code>测试数据</code>与<code>代码实现</code>进行分离的好处，我之前已经讲过多次，这里不再重复。</p>
+<p>测试数据与代码实现分离后，简单的接口还好，测试用例编写不会有什么问题；但是当面对复杂一点的接口（例如包含签名校验等机制）时，我们编写自动化测试用例还是会比较繁琐。</p>
+<p>我们从一个最常见的案例入手，看下编写自动化测试用例的过程，相信大家看完后就会对上面那段话有很深的感受。</p>
+<p>以API接口服务（<code>Mock Server</code>）的创建新用户功能为例，该接口描述如下：</p>
+<blockquote>
+<p>请求数据：<br>Url: <a href="http://127.0.0.1:5000/api/users/1000" target="_blank" rel="noopener">http://127.0.0.1:5000/api/users/1000</a><br>Method: POST<br>Headers: {“content-type”: “application/json”, “Random”: “A2dEx”, “Authorization”: “47f135c33e858f2e3f55156ae9f78ee1”}<br>Body: {“name”: “user1”, “password”: “123456”}</p>
+<p>预期的正常响应数据：<br>Status_Code: 201<br>Headers: {‘Date’: ‘Fri, 23 Jun 2017 07:05:41 GMT’, ‘Content-Length’: ‘54’, ‘Content-Type’: ‘application/json’, ‘Server’: ‘Werkzeug/0.12.2 Python/2.7.13’}<br>Body: {“msg”: “user created successfully.”, “success”: true, “uuid”: “JsdfwerL”}</p>
+</blockquote>
+<p>其中，请求<code>Headers</code>中的<code>Random</code>字段是一个5位长的随机字符串，<code>Authorization</code>字段是一个签名值，签名方式为<code>TOKEN+RequestBody+Random</code>拼接字符串的<code>MD5</code>值。更具体的，<code>RequestBody</code>要求字典的<code>Key</code>值按照由小到大的排序方式。接口请求成功后，返回的是一个<code>JSON</code>结构，里面的<code>success</code>字段标识请求成功与否的状态，如果成功，<code>uuid</code>字段标识新创建用户的唯一ID。</p>
+<p>相信只要是接触过接口测试的同学对此应该都会很熟悉，这也是后台系统普遍采用的签名校验方式。在具体的系统中，可能字符串拼接方式或签名算法存在差异，但是模式基本上都是类似的。</p>
+<p>那么面对这样一个接口，我们会怎样编写接口测试用例呢？</p>
+<p>首先，请求的数据是要有的，我们会先准备一个可用的账号，例如<code>{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}</code>。</p>
+<p>然后，由于接口存在签名校验机制，因此我们除了要知道服务器端使用的TOKEN（假设为<code>debugtalk</code>）外，还要准备好<code>Random</code>字段和<code>Authorization</code>字段。<code>Random</code>字段好说，我们随便生成一个，例如<code>A2dEx</code>；<code>Authorization</code>字段就会复杂不少，需要我们按照规定先将<code>RequestBody</code>根据字典的<code>Key</code>值进行排序，得到<code>{&quot;name&quot;: &quot;user1&quot;, &quot;password&quot;: &quot;123456&quot;}</code>，然后与<code>TOKEN</code>和<code>Random</code>字段拼接字符串得到<code>debugtalk{&quot;password&quot;: &quot;123456&quot;, &quot;name&quot;: &quot;user1&quot;}A2dEx</code>，接着再找一个<code>MD5</code>工具，计算得到签名值<code>a83de0ff8d2e896dbd8efb81ba14e17d</code>。</p>
+<p>最后，我们才可以完成测试用例的编写。假如我们采用<code>YAML</code>编写测试用例，那么用例写好后应该就是如下样子。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">create</span> <span class="string">user</span> <span class="string">which</span> <span class="string">does</span> <span class="string">not</span> <span class="string">exist</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/users/1000</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            authorization:</span> <span class="string">a83de0ff8d2e896dbd8efb81ba14e17d</span></span><br><span class="line"><span class="attr">            random:</span> <span class="string">A2dEx</span></span><br><span class="line"><span class="attr">    data:</span></span><br><span class="line"><span class="attr">        name:</span> <span class="string">user1</span></span><br><span class="line"><span class="attr">        password:</span> <span class="number">123456</span></span><br><span class="line"><span class="attr">    response:</span></span><br><span class="line"><span class="attr">        status_code:</span> <span class="number">201</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">        body:</span></span><br><span class="line"><span class="attr">            success:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">            msg:</span> <span class="string">user</span> <span class="string">created</span> <span class="string">successfully.</span></span><br><span class="line"><span class="attr">            uuid:</span> <span class="string">JsdfwerL</span></span><br></pre></td></tr></table></figure>
+
+<p>该测试用例可以在<code>ApiTestEngine</code>中正常运行，我们也可以采用同样的方式，对系统的所有接口编写测试用例，以此实现项目的接口自动化测试覆盖。</p>
+<p>但问题在于，每个接口通常会对应多条测试用例，差异只是在于请求的数据会略有不同，而测试用例量越大，我们人工去准备测试数据的工作量也就越大。更令人抓狂的是，我们的系统接口不是一直不变的，有时候会根据业务需求的变化进行一些调整，相应地，我们的测试数据也需要进行同步更新，这样一来，所有相关的测试用例数据就又得重新计算一遍（任意字段数据产生变化，签名值就会大不相同）。</p>
+<p>可以看出，如果是采用这种方式编写维护接口测试用例，人力和时间成本都会非常高，最终的结果必然是接口自动化测试难以在实际项目中得以开展。</p>
+<h2 id="理想的用例描述方式"><a href="#理想的用例描述方式" class="headerlink" title="理想的用例描述方式"></a>理想的用例描述方式</h2><p>在上面案例中，编写接口测试用例时之所以会很繁琐，主要是因为接口存在签名校验机制，导致我们在准备测试数据时耗费了太多时间在这上面。</p>
+<p>然而，对于测试人员来说，接口的业务功能才是需要关注的，至于接口采用什么签名校验机制这类技术细节，的确不应耗费过多时间和精力。所以，我们的接口测试框架应该设法将接口的技术细节实现和业务参数进行拆分，并能自动处理与技术细节相关的部分，从而让业务测试人员只需要关注业务参数部分。</p>
+<p>那要怎么实现呢？</p>
+<p>在开始实现之前，我们不妨借鉴<code>BDD</code>（行为驱动开发）的思想，先想下如何编写接口测试用例的体验最友好，换句话说，就是让业务测试人员写用例写得最爽。</p>
+<p>还是上面案例的接口测试用例，可以看出，最耗时的地方主要是计算签名校验值部分。按理说，签名校验算法我们是已知的，要是可以在测试用例中直接调用签名算法函数就好了。</p>
+<p>事实上，这也是各种模板语言普遍采用的方式，例如<code>Jinja2</code>模板语言，可以在<code>{% %}</code>中执行函数语句，在<code>{{ }}</code>中可以调用变量参数。之前我在设计[<code>AppiumBooster</code>][AppiumBooster]时也采用了类似的思想，可以通过<code>${config.TestEnvAccount.UserName}</code>的方式在测试用例中引用预定义的全局变量。</p>
+<p>基于该思路，假设我们已经实现了<code>gen_random_string</code>这样一个生成指定位数的随机字符串的函数，以及<code>gen_md5</code>这样一个计算签名校验值的函数，那么我们就可以尝试采用如下方式来描述我们的测试用例：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">create</span> <span class="string">user</span> <span class="string">which</span> <span class="string">does</span> <span class="string">not</span> <span class="string">exist</span></span><br><span class="line"><span class="attr">    variables:</span></span><br><span class="line"><span class="attr">        - TOKEN:</span> <span class="string">debugtalk</span></span><br><span class="line"><span class="attr">        - random:</span> <span class="string">$&#123;gen_random_string(5)&#125;</span></span><br><span class="line"><span class="attr">        - json:</span> <span class="string">&#123;"name":</span> <span class="string">"user"</span><span class="string">,</span> <span class="string">"password"</span><span class="string">:</span> <span class="string">"123456"</span><span class="string">&#125;</span></span><br><span class="line"><span class="attr">        - authorization:</span> <span class="string">$&#123;gen_md5($TOKEN,</span> <span class="string">$json,</span> <span class="string">$random)&#125;</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="attr">http://127.0.0.1:5000/api/users/1000</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Content-Type:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            authorization:</span> <span class="string">$authorization</span></span><br><span class="line"><span class="attr">            random:</span> <span class="string">$random</span></span><br><span class="line"><span class="attr">        json:</span> <span class="string">$json</span></span><br><span class="line"><span class="attr">    extractors:</span></span><br><span class="line"><span class="attr">        user_uuid:</span> <span class="string">content.uuid</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"status_code"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="number">201</span><span class="string">&#125;</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">&#123;"check":</span> <span class="string">"content.success"</span><span class="string">,</span> <span class="string">"comparator"</span><span class="string">:</span> <span class="string">"eq"</span><span class="string">,</span> <span class="string">"expected"</span><span class="string">:</span> <span class="literal">true</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在如上用例中，用到了两种转义符：</p>
+<ul>
+<li><code>$</code>作为变量转义符，<code>$var</code>将不再代表的是普遍的字符串，而是<code>var</code>变量的值；</li>
+<li><code>${}</code>作为函数的转义符，<code>${}</code>内可以直接填写函数名称及调用参数，甚至可以包含变量。</li>
+</ul>
+<p>为什么会选择采用这种描述方式？（<code>Why？</code>）</p>
+<p>其实这也是我经过大量思考和实践之后，才最终确定的描述方式。如果真要讲述这个思路历程。。。还是不细说了，此处可省下一万字。（主要的思路无非就是要实现转义的效果，并且表达要简洁清晰，因此必然会用到特殊字符；而特殊字符在<code>YAML</code>中大多都已经有了特定的含义，排除掉不可用的之后，剩下的真没几个了，然后再借鉴其它框架常用的符号，所以说最终选择<code>$</code>和<code>${}</code>也算是必然。）</p>
+<p>可以确定的是，这种描述方式的好处非常明显，不仅可以实现复杂计算逻辑的函数调用，还可以实现变量的定义和引用。</p>
+<p>除了转义符，由于接口测试中经常需要对结果中的特定字段进行提取，作为后续接口请求的参数，因此我们实现了<code>extractors</code>这样一个结果提取器，只要返回结果是JSON类型，就可以将其中的任意字段进行提取，并保存到一个变量中，方便后续接口请求进行引用。</p>
+<p>另外，为了更好地实现对接口响应结果的校验，我们废弃了先前的方式，实现了独立的结果校验器<code>validators</code>。这是因为，很多时候在比较响应结果时，并不能简单地按照字段值是否相等来进行校验，除此之外，我们可能还需要检查某个字段的长度是否为指定位数，元素列表个数是否大于某个数值，甚至某个字符串是否满足正则匹配等等。</p>
+<p>相信你们肯定会想，以上这些描述方式的确是很简洁，但更多地感觉是在臆想，就像开始说的<code>gen_random_string</code>和<code>gen_md5</code>函数，我们只是假设已经定义好了。就算描述得再优雅再完美，终究也还只是<code>YAML/JSON</code>文本格式而已，要怎样才能转换为执行的代码呢？</p>
+<p>这就要解决<code>How？</code>的问题了。</p>
+<p>嗯，这就是用例模板引擎的核心了，也算是<code>ApiTestEngine</code>最核心的功能特性。</p>
+<p>更具体的，从技术实现角度，主要分为三大块：</p>
+<ul>
+<li>如何在用例描述（<code>YAML/JSON</code>）中实现函数的定义和调用</li>
+<li>如何在用例描述中实现参数的定义和引用，包括用例内部和用例集之间</li>
+<li>如何在用例描述中实现预期结果的描述和测试结果的校验</li>
+</ul>
+<p>这三大块内容涉及到较多的技术实现细节，我们将在后续的文章中结合代码逐个深入进行讲解。</p>
+<h2 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a>阅读更多</h2><ul>
+<li><a href="https://debugtalk.com/post/ApiTestEngine-api-test-best-practice/">《接口自动化测试的最佳工程实践（ApiTestEngine）》</a></li>
+<li><a href="https://debugtalk.com/post/ApiTestEngine-0-setup-CI-test/">《ApiTestEngine 演化之路（0）开发未动，测试先行》</a></li>
+<li><a href="https://debugtalk.com/post/ApiTestEngine-1-setup-basic-framework/">《ApiTestEngine 演进之路（1）搭建基础框架》</a></li>
+<li><a href="https://github.com/debugtalk/ApiTestEngine" target="_blank" rel="noopener"><code>ApiTestEngine</code> GitHub源码</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
+</div>
+
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/" title="ApiTestEngine 演进之路（2）探索优雅的测试用例描述方式">https://debugtalk.com/post/ApiTestEngine-2-best-testcase-description/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HttpRunner/" rel="tag"># HttpRunner</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/300-lines-python-code-api-test-framework/" rel="next" title="300 行 Python 代码打造实用接口测试框架">
+                <i class="fa fa-chevron-left"></i> 300 行 Python 代码打造实用接口测试框架
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/ApiTestEngine-3-define-functions-in-yaml-testcases/" rel="prev" title="ApiTestEngine 演进之路（3）测试用例中实现 Python 函数的定义">
+                ApiTestEngine 演进之路（3）测试用例中实现 Python 函数的定义 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统的测试用例编写方式"><span class="nav-number">1.</span> <span class="nav-text">传统的测试用例编写方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理想的用例描述方式"><span class="nav-number">2.</span> <span class="nav-text">理想的用例描述方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阅读更多"><span class="nav-number">3.</span> <span class="nav-text">阅读更多</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

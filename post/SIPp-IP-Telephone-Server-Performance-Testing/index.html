@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
+
+  
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+  <meta name="description" content="背景知识介绍IP电话IP电话是指在IP网络上打电话。所谓“IP网络”就是“使用IP协议的分组交换网”的简称。常见的IP电话有VoIP（Voice over IP），Internet Telephony 和 VON（Voice over Net）。 IP电话网关IP电话网关（IP Telepathy Gateway），是公用电话网（即公用电路交换电话网，又称传统电话网或电信网）与IP网络的接口设备，">
+<meta name="keywords" content="SIP,IP 电话">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 SIPp 对基于 SIP 协议的 IP 电话通信服务器进行性能测试">
+<meta property="og:url" content="https://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="背景知识介绍IP电话IP电话是指在IP网络上打电话。所谓“IP网络”就是“使用IP协议的分组交换网”的简称。常见的IP电话有VoIP（Voice over IP），Internet Telephony 和 VON（Voice over Net）。 IP电话网关IP电话网关（IP Telepathy Gateway），是公用电话网（即公用电路交换电话网，又称传统电话网或电信网）与IP网络的接口设备，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://debugtalk.com/images/20140511201122_SIP_Simple_Session.png">
+<meta property="og:image" content="https://debugtalk.com/images/20140511201122_SIPp_Operating_Principle.jpg">
+<meta property="og:image" content="https://debugtalk.com/images/20140511201122_XML_Invoke_CSV.jpg">
+<meta property="og:image" content="https://debugtalk.com/images/20140511201122_Network_Topology_Map.gif">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 SIPp 对基于 SIP 协议的 IP 电话通信服务器进行性能测试">
+<meta name="twitter:description" content="背景知识介绍IP电话IP电话是指在IP网络上打电话。所谓“IP网络”就是“使用IP协议的分组交换网”的简称。常见的IP电话有VoIP（Voice over IP），Internet Telephony 和 VON（Voice over Net）。 IP电话网关IP电话网关（IP Telepathy Gateway），是公用电话网（即公用电路交换电话网，又称传统电话网或电信网）与IP网络的接口设备，">
+<meta name="twitter:image" content="https://debugtalk.com/images/20140511201122_SIP_Simple_Session.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>使用 SIPp 对基于 SIP 协议的 IP 电话通信服务器进行性能测试 | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">使用 SIPp 对基于 SIP 协议的 IP 电话通信服务器进行性能测试
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-05-11 00:00:00" itemprop="dateCreated datePublished" datetime="2014-05-11T00:00:00+08:00">2014-05-11</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景知识介绍"><a href="#背景知识介绍" class="headerlink" title="背景知识介绍"></a>背景知识介绍</h2><h3 id="IP电话"><a href="#IP电话" class="headerlink" title="IP电话"></a>IP电话</h3><p>IP电话是指在IP网络上打电话。所谓“IP网络”就是“使用IP协议的分组交换网”的简称。<br>常见的IP电话有VoIP（Voice over IP），Internet Telephony 和 VON（Voice over Net）。</p>
+<h3 id="IP电话网关"><a href="#IP电话网关" class="headerlink" title="IP电话网关"></a>IP电话网关</h3><p>IP电话网关（IP Telepathy Gateway），是公用电话网（即公用电路交换电话网，又称传统电话网或电信网）与IP网络的接口设备，其作用包含两个方面：</p>
+<ul>
+<li>在电话呼叫阶段和呼叫释放阶段进行电话信令的转换</li>
+<li>在通话期间进行话音编码的转换</li>
+</ul>
+<p>IP电话网关的出现，实现了PC机用户之间的IP电话通话（无需经过IP电话网关），PC机用户与固定电话用户的IP电话通话（仅需经过IP电话网关1次），以及固定电话用户之间的IP电话通话（需要经过IP电话网关2次）。</p>
+<h3 id="IP电话所需要的几种应用协议"><a href="#IP电话所需要的几种应用协议" class="headerlink" title="IP电话所需要的几种应用协议"></a>IP电话所需要的几种应用协议</h3><p>在IP电话的通信中，至少需要两种应用协议，即信令协议和传送协议。<br>其中，<strong>信令协议</strong>的作用是帮助主叫者在因特网上找到被叫用户。在公用电话网中，电话交换机根据用户所拨打的号码就能够通过合适的路由找到被叫用户，并在主叫和被叫之间建立一条电路连接。这些都是依靠电话信令（Signaling）实现的。我们听到的振铃音、忙音或一些录音提示，以及打完电话挂机释放连接，都是由电话信令来处理的。现在电话网使用的信令是7号信令SS7。利用IP网络打电话同样也需要IP网络能够识别某种信令。但由于IP电话往往要经过已有的公用电话网，因此IP电话的信令必须在功能上与原有的7号信令相兼容，这样才能使IP网络和公用电话网上的两种信令能够互相转换，从而做到互操作。现有的与信令有关的协议为H.323和SIP，本文只介绍SIP协议。<br>话音分组的<strong>传送协议</strong>，其作用是使用来进行电话通信的话音数据能够以时延敏感属性在因特网中传送。常见的传送协议为RTP。</p>
+<h3 id="SIP协议"><a href="#SIP协议" class="headerlink" title="SIP协议"></a>SIP协议</h3><p>SIP协议，即会话发起协议（Session Initiation Protocol），是使用文本方式的客户服务器协议。<br>SIP系统只有两种构件，即用户代理（user agent）和网络服务器（network server）。<br>用户代理包含两个程序，即用户代理客户端UAC（User Agent Client）和用户代理服务器UAS（User Agent Server）；前者用来发起呼叫，后者用来接受呼叫。<br>网络服务器分为代理服务器（proxy server）和重定向服务器（redirect server）。代理服务器接受来自主叫用户的呼叫请求（实际上是来自用户代理客户端UAC的呼叫请求），并将其转发给被叫用户或下一跳代理服务器；若转发给下一跳代理服务器，则下一跳代理服务器再把呼叫请求转发给被叫用户（实际上是转发给用户代理服务器UAS）。重定向服务器不接受呼叫，它通过响应告诉客户下一跳代理服务器的地址，由客户按此地址向下一跳代理服务器重新发送呼叫请求。<br>SIP的会话共有三个阶段：建立会话、通信和终止会话。图1给出了一个简单的SIP会话的例子。其中建立会话阶段和终止会话阶段都是使用SIP协议，而中间的通信阶段是使用如RTP这样的传送实时话音分组的协议。</p>
+<p>{: .center}<br><img src="/images/20140511201122_SIP_Simple_Session.png" alt="SIP_Simple_Session"><br>图1 SIP的简单会话过程</p>
+<p>在图1中，主叫方（Tesla）先向被叫方（Marconi）发出INVITE报文，这个报文中含有双方的地址信息以及一些其它信息（如通话时话音编码方式等）；被叫方收到请求后，会返回180 Ringing的状态码，并处于振铃状态；若被叫方接受呼叫请求，则返回200 OK的状态码；主叫方再发送ACK报文作为确认（类似于TCP建立连接时的三次握手），然后双方便完成连接，可以进行通话了；通话过程中，双方中的任何一方都可以发送BYE报文以终止会话。如上便是SIP会话的全过程。</p>
+<h2 id="SIPp工具介绍"><a href="#SIPp工具介绍" class="headerlink" title="SIPp工具介绍"></a>SIPp工具介绍</h2><h3 id="SIPp软件简介"><a href="#SIPp软件简介" class="headerlink" title="SIPp软件简介"></a>SIPp软件简介</h3><p>如下是SIPp官方网站上关于SIPp的介绍。</p>
+<blockquote>
+<p>SIPp is a free Open Source test tool / traffic generator for the SIP protocol. It includes a few basic SipStone user agent scenarios (UAC and UAS) and establishes and releases multiple calls with the INVITE and BYE methods. It can also reads custom XML scenario files describing from very simple to complex call flows. It features the dynamic display of statistics about running tests (call rate, round trip delay, and message statistics), periodic CSV statistics dumps, TCP and UDP over multiple sockets or multiplexed with retransmission management and dynamically adjustable call rates.<br>SIPp can be used to test various real SIP equipment like SIP proxies, B2BUAs, SIP media servers, SIP/x gateways, SIP PBX, … It is also very useful to emulate thousands of user agents calling your SIP system.</p>
+</blockquote>
+<h3 id="SIPp的安装（Windows）"><a href="#SIPp的安装（Windows）" class="headerlink" title="SIPp的安装（Windows）"></a>SIPp的安装（Windows）</h3><p>SIPp几乎可以运行在所有UNIX平台上，HPUX、Tru64、Linux (RedHat, Debian, FreeBSD)和Solaris/SunOS。并且，SIPp已被移植到Windows平台。</p>
+<ul>
+<li>在Linux/Unix平台上，SIPp采用源代码的形式进行提供，需要通过编译源代码的方式进行安装。</li>
+<li>在Windows平台上，SIPp提供了预编译的可执行文件，可以直接进行安装；也可以通过在Windows系统中安装CYGWIN模拟Linux环境，然后通过编译源代码的方式进行安装。</li>
+</ul>
+<p>通常情况下，在Windows平台中通过预编译可执行文件可以快速完成安装，操作简单且成功率高，但该种方式存在局限性，主要有如下几点：</p>
+<ul>
+<li>Windows预编译版本的功能存在删减，不支持PCAP（语音）和密码验证功能；</li>
+<li>Windows的预编译版本较为滞后，例如当前SIPp的最新版本为3.4，而Windows的最新预编译版本为3.2；</li>
+<li>相比于Linux/Unix平台，SIPp在Windows平台上运行不够稳定，特别是并发量较大时可能会出现问题，因此不适宜进行压力测试。</li>
+</ul>
+<h3 id="SIPp的工作原理"><a href="#SIPp的工作原理" class="headerlink" title="SIPp的工作原理"></a>SIPp的工作原理</h3><p>对于电话而言，每台电话机既是客户端（可拨打电话）也是服务端（可接听电话）。同理，SIPp模拟用户代理，也有两种工作模式：UAC和UAS。</p>
+<p>SIPp中具有场景（scenario）的概念，它是一个XML格式的文件，其作用是用来描述SIP协议通讯过程。具体地，UAC和UAS分别对应一个场景文件：uac.xml用于描述客户端的呼叫，uas.xml用于描述服务端的响应。在SIPp工具中，已经内置了许多场景文件，可直接使用；测试人员也可参照场景文件的格式要求，自定义编写场景文件。</p>
+<p>另外，SIPp采用了数据与场景分离的设计，从而使工具的使用更加灵活。其中，数据包括IP地址、端口号、电话号码、用户名等内容。通常，测试数据保存在CSV文件中，如data.csv。</p>
+<p>SIPp是通过命令行的方式操作调用的。例如，在利用SIPp模拟UAC发起呼叫时，可在cmd窗口中运行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sipp -sn uac 172.31.89.4:5060 -r 1 -rp 3000 -inf data.csv -p 7098 -i 172.31.89.242 -s 8001 -sf uac_onecall.xml –m 1000 –l 900</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，如果每次都在命令行中输入命令进行运行，效率将十分低下；因此，可以将配置好的命令保存在bat批处理文件中，方便测试时直接调用。</p>
+<h3 id="SIPp的常用工作模式"><a href="#SIPp的常用工作模式" class="headerlink" title="SIPp的常用工作模式"></a>SIPp的常用工作模式</h3><p>SIPp具有三种常用工作模式：</p>
+<ul>
+<li>当SIPp作为UAC时，可向已有电话终端（电话机或运行在电脑上的虚拟终端）发起呼叫；</li>
+<li>当SIPp作为UAS时，可接收到现有电话终端（电话机或运行在电脑上的虚拟终端）发起的呼叫；</li>
+<li>SIPp还可同时作为UAC和UAS，并使用UAC向UAS发起呼叫，以此来对代理服务器进行测试。</li>
+</ul>
+<p>图2是对第三种模式的描述。</p>
+<p>{: .center}<br><img src="/images/20140511201122_SIPp_Operating_Principle.jpg" alt="SIPp_Operating_Principle"><br>图2 SIPp工作原理</p>
+<p>在该种模式下，需先运行服务端UAS，然后再运行客户端UAC。接下来，UAC便参照uac.xml场景文件的描述，发起呼叫；而UAS则参照uas.xml场景文件的描述，对呼叫进行响应；整个通讯过程遵循SIP协议，在本文的1.4节已经进行了介绍。</p>
+<h2 id="SIPp的使用"><a href="#SIPp的使用" class="headerlink" title="SIPp的使用"></a>SIPp的使用</h2><h3 id="SIPp的配置文件"><a href="#SIPp的配置文件" class="headerlink" title="SIPp的配置文件"></a>SIPp的配置文件</h3><p>通过本文2.3节的介绍可知，使用SIPp时会涉及到5个文件：uac.xml, uas.xml, data.csv, uac.bat, uas.bat。</p>
+<p>其用途简要说明如下：</p>
+<ul>
+<li>uac.xml：用于描述客户端UAC的SIP信号流程；</li>
+<li>uas.xml：用于描述服务端UAS的SIP信号流程；</li>
+<li>data.csv：存储数据的文件，方便在uac.xml和uas.xml中引入的相应数据；</li>
+<li>uac.bat：存储SIPp命令及参数，便于执行时直接调用，模拟UAC的呼叫；</li>
+<li>uas.bat：存储SIPp命令及参数，便于执行时直接调用，模拟UAS的响应。</li>
+</ul>
+<p>由于uac.xml和uas.xml类似，uac.bat和uas.bat类似，本文只对uac.xml、uac.bat和data.csv三个文件进行讲解。</p>
+<h3 id="uac-xml"><a href="#uac-xml" class="headerlink" title="uac.xml"></a>uac.xml</h3><p>SIPp默认自带的uac.xml内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE scenario SYSTEM "sipp.dtd"&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">scenario</span> <span class="attr">name</span>=<span class="string">"Basic Sipstone UAC"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- In client mode (sipp placing calls), the Call-ID MUST be         --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- generated by sipp. To do so, use [call_id] keyword.              --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">send</span> <span class="attr">retrans</span>=<span class="string">"500"</span>&gt;</span></span><br><span class="line">    &lt;![CDATA[</span><br><span class="line"></span><br><span class="line">      INVITE sip:[service]@[remote_ip]:[remote_port] SIP/2.0</span><br><span class="line">      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]</span><br><span class="line">      From: sipp &lt;sip:sipp@[local_ip]:[local_port]&gt;;tag=[call_number]</span><br><span class="line">      To: sut &lt;sip:[service]@[remote_ip]:[remote_port]&gt;</span><br><span class="line">      Call-ID: [call_id]</span><br><span class="line">      CSeq: 1 INVITE</span><br><span class="line">      Contact: sip:sipp@[local_ip]:[local_port]</span><br><span class="line">      Max-Forwards: 70</span><br><span class="line">      Subject: Performance Test</span><br><span class="line">      Content-Type: application/sdp</span><br><span class="line">      Content-Length: [len]</span><br><span class="line"></span><br><span class="line">      v=0</span><br><span class="line">      o=user1 53655765 2353687637 IN IP[local_ip_type] [local_ip]</span><br><span class="line">      s=-</span><br><span class="line">      c=IN IP[media_ip_type] [media_ip]</span><br><span class="line">      t=0 0</span><br><span class="line">      m=audio [media_port] RTP/AVP 0</span><br><span class="line">      a=rtpmap:0 PCMU/8000</span><br><span class="line"></span><br><span class="line">    ]]&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">send</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">recv</span> <span class="attr">response</span>=<span class="string">"100"</span> <span class="attr">optional</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">recv</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">recv</span> <span class="attr">response</span>=<span class="string">"180"</span> <span class="attr">optional</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">recv</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- By adding rrs="true" (Record Route Sets), the route sets         --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- are saved and used for following messages sent. Useful to test   --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- against stateful SIP proxies/B2BUAs.                             --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">recv</span> <span class="attr">response</span>=<span class="string">"200"</span> <span class="attr">rtd</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">recv</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- Packet lost can be simulated in any send/recv message by         --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- by adding the 'lost = "10"'. Value can be [1-100] percent.       --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">send</span>&gt;</span></span><br><span class="line">    &lt;![CDATA[</span><br><span class="line"></span><br><span class="line">      ACK sip:[service]@[remote_ip]:[remote_port] SIP/2.0</span><br><span class="line">      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]</span><br><span class="line">      From: sipp &lt;sip:sipp@[local_ip]:[local_port]&gt;;tag=[call_number]</span><br><span class="line">      To: sut &lt;sip:[service]@[remote_ip]:[remote_port]&gt;[peer_tag_param]</span><br><span class="line">      Call-ID: [call_id]</span><br><span class="line">      CSeq: 1 ACK</span><br><span class="line">      Contact: sip:sipp@[local_ip]:[local_port]</span><br><span class="line">      Max-Forwards: 70</span><br><span class="line">      Subject: Performance Test</span><br><span class="line">      Content-Length: 0</span><br><span class="line"></span><br><span class="line">    ]]&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">send</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- This delay can be customized by the -d command-line option       --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- or by adding a 'milliseconds = "value"' option here.             --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">pause</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- The 'crlf' option inserts a blank line in the statistics report. --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">send</span> <span class="attr">retrans</span>=<span class="string">"500"</span>&gt;</span></span><br><span class="line">    &lt;![CDATA[</span><br><span class="line"></span><br><span class="line">      BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0</span><br><span class="line">      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]</span><br><span class="line">      From: sipp &lt;sip:sipp@[local_ip]:[local_port]&gt;;tag=[call_number]</span><br><span class="line">      To: sut &lt;sip:[service]@[remote_ip]:[remote_port]&gt;[peer_tag_param]</span><br><span class="line">      Call-ID: [call_id]</span><br><span class="line">      CSeq: 2 BYE</span><br><span class="line">      Contact: sip:sipp@[local_ip]:[local_port]</span><br><span class="line">      Max-Forwards: 70</span><br><span class="line">      Subject: Performance Test</span><br><span class="line">      Content-Length: 0</span><br><span class="line"></span><br><span class="line">    ]]&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">send</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">recv</span> <span class="attr">response</span>=<span class="string">"200"</span> <span class="attr">crlf</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">recv</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- definition of the response time repartition table (unit is ms)   --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ResponseTimeRepartition</span> <span class="attr">value</span>=<span class="string">"10, 20, 30, 40, 50, 100, 150, 200"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- definition of the call length repartition table (unit is ms)     --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">CallLengthRepartition</span> <span class="attr">value</span>=<span class="string">"10, 50, 100, 500, 1000, 5000, 10000"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">scenario</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如该文件所示，UAC首先发送INVITE请求，按照预期，UAC将依次接收100、180和200状态码，然后UAC再次发送ACK进行确认，从而完成通信连接的建立；最后，UAC发送BYE请求，结束通话，从而断开通信连接。</p>
+<h3 id="data-csv"><a href="#data-csv" class="headerlink" title="data.csv"></a>data.csv</h3><p>在data.csv文件中，第一行描述数据的读取方式，如顺序读取（SEQUENTIAL）、随机读取（RANDOM），或者自定义方式（USER）。<br>从第二行开始，每行描述一次呼叫时使用的数据；如果每次呼叫时调用的参数有多个，那么就可用分号（”;”）进行分离，并可在XML文件中进行调用，每行的数据从左到右依次为[field0], [field1], …。</p>
+<p>csv文件的编写示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SEQUENTIAL</span><br><span class="line">#注释将被忽略</span><br><span class="line">Sarah;sipphone32</span><br><span class="line">Bob;sipphone12</span><br><span class="line">#This line too</span><br><span class="line">Fred;sipphone94</span><br></pre></td></tr></table></figure>
+
+<p>XML调用CSV的具体方式如图3所示。</p>
+<p>{: .center}<br><img src="/images/20140511201122_XML_Invoke_CSV.jpg" alt="XML_Invoke_CSV"><br>图3 XML调用CSV的原理</p>
+<h3 id="uac-bat"><a href="#uac-bat" class="headerlink" title="uac.bat"></a>uac.bat</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sipp -sn uac 172.31.89.4:5060 -r 1 -rp 3000 -inf data.csv -p 7098 -i 172.31.89.242 -s 8001 -sf uac_onecall.xml –m 1000 –l 900</span><br></pre></td></tr></table></figure>
+
+<p>各个参数说明：</p>
+<ul>
+<li>172.31.89.4:5060：远端地址和端口（在xml脚本中用[remote_ip]，[remote_port]引用）</li>
+<li>-r 1 -rp 3000：每三秒钟（3000毫秒）发起一个呼叫</li>
+<li>-inf data.csv：引入数据配置文件</li>
+<li>-p 7098：本地端口（在xml脚本中用[local_port]引用）</li>
+<li>-i 172.31.89.242：本地地址（在xml脚本中用[local_ip]引用）</li>
+<li>-s 8001：被叫号码（在xml脚本中用[service]引用）</li>
+<li>-sf uac_onecall.xml：引用xml脚本文件，根据需要模拟的呼叫流程编写</li>
+<li>-sn uac :执行默认的uac流程，如需执行自己编写的流程文件，命令中应不含此参数</li>
+<li>-m 1000:发送1000次呼叫后停止并退出。</li>
+<li>-l 900 :最大同时保持呼叫量，默认值为3*caps值呼叫时长，当因种种原因导致现存呼叫总数达到此值时，SIPp将停止产生新的呼叫，等待现存呼叫总数低于此值时才继续产生呼叫。</li>
+<li>-trace_err跟踪所有错误消息，并把错误消息保存到文件场景文件描述的 {fileName}_{pid}_errors.log 文件中</li>
+<li>-trace_screen 当程序结束时候打印统计信息并弹出屏幕（如果在后台运行的话）</li>
+</ul>
+<h2 id="使用SIPp对基于SIP协议的网络电话进行性能测试"><a href="#使用SIPp对基于SIP协议的网络电话进行性能测试" class="headerlink" title="使用SIPp对基于SIP协议的网络电话进行性能测试"></a>使用SIPp对基于SIP协议的网络电话进行性能测试</h2><h3 id="测试内容"><a href="#测试内容" class="headerlink" title="测试内容"></a>测试内容</h3><ul>
+<li>测试某通信服务器在400组并发呼叫过程中的CPU负载峰值和内存占用率。</li>
+</ul>
+<h3 id="测试场景分析"><a href="#测试场景分析" class="headerlink" title="测试场景分析"></a>测试场景分析</h3><p>呼叫发起端：湖北省公安厅的两台测试机，每台测试机模拟出等量的电话终端，向十堰市公安局的物理电话机发起呼叫。<br>电话接收端：十堰市公安局的400台物理电话机。<br>网络环境：湖北省公安信息网。</p>
+<p>测试环境的网络拓扑图如图4所示。</p>
+<p>{: .center}<br><img src="/images/20140511201122_Network_Topology_Map.gif" alt="Network_Topology_Map"><br>图4 被测系统的网络拓扑图</p>
+<h3 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h3><p>利用SIPp测试工具模拟电话终端，向物理电话机终端发起呼叫，保持呼叫16秒后，SIPp终止呼叫。<br>在测试过程中，通过命令的方式监控并记录通信服务器的CPU负载峰值和内存占用率。</p>
+<h3 id="测试步骤"><a href="#测试步骤" class="headerlink" title="测试步骤"></a>测试步骤</h3><p>（1）配置SIPp测试工具：在湖北省公安厅的两台测试机上分别配置SIPp的场景文件（uacTest.xml，详见附录），数据文件（CallNumber.csv，详见附录）和测试控制文件（test.bat，详见附录）。<br>（2）开启通信服务器的资源监控：远程登录至十堰市公安局网络电话通信服务器，执行资源监控命令，开启对通信服务器CPU负载和内存的监控。<br>（3）执行测试：在湖北省公安厅的两台测试机上同时执行SIPp控制文件（bat文件）。<br>（4）获取测试结果：测试完毕后，导出被测通信服务器的资源监控结果，提取出并发测试期间中的资源监控结果。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>电子工业出版社 计算机网络（第5版）谢希仁 编著。</li>
+<li><a href="http://sipp.sourceforge.net/" target="_blank" rel="noopener">http://sipp.sourceforge.net/</a></li>
+</ul>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p>test.bat</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sipp -sf uac.xml -inf CallNumber.csv -i 10.XX.XX.151 -p 5061 -s 96018702 -m 1 -r 1 10.XX.XX.114:5060 -trace_err</span><br></pre></td></tr></table></figure>
+
+<p>uacTest.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE scenario SYSTEM "sipp.dtd"&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">scenario</span> <span class="attr">name</span>=<span class="string">"Basic Sipstone UAC"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- In client mode (sipp placing calls), the Call-ID MUST be         --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- generated by sipp. To do so, use [call_id] keyword.              --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">send</span> <span class="attr">retrans</span>=<span class="string">"500"</span>&gt;</span></span><br><span class="line">    &lt;![CDATA[</span><br><span class="line"></span><br><span class="line">      INVITE sip:[field0]@[remote_ip]:[remote_port] SIP/2.0</span><br><span class="line">      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]</span><br><span class="line">      From: "[service]" &lt;sip:[service]@[remote_ip]&gt;;tag=[call_number]</span><br><span class="line">      To: "[field0]" &lt;sip:[field0]@[remote_ip]&gt;</span><br><span class="line">      Call-ID: [call_id]</span><br><span class="line">      CSeq: 1 INVITE</span><br><span class="line">      Contact: sip:[service]@[local_ip]:[local_port]</span><br><span class="line">      Max-Forwards: 70</span><br><span class="line">      Subject: Performance Test</span><br><span class="line">      Content-Type: application/sdp</span><br><span class="line">      Content-Length: [len]</span><br><span class="line"></span><br><span class="line">      v=0</span><br><span class="line">      o=- 1 2 IN IP[local_ip_type] [local_ip]</span><br><span class="line">      s=-</span><br><span class="line">      c=IN IP[media_ip_type] [media_ip]</span><br><span class="line">      t=0 0</span><br><span class="line">      m=audio [media_port] RTP/AVP 0 8 18 101</span><br><span class="line">      a=rtpmap:18 G729/8000</span><br><span class="line"></span><br><span class="line">    ]]&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">send</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">recv</span> <span class="attr">response</span>=<span class="string">"100"</span> <span class="attr">optional</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">recv</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">recv</span> <span class="attr">response</span>=<span class="string">"180"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">recv</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- Set Ring Time   --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">pause</span> <span class="attr">milliseconds</span>=<span class="string">"8000"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- Abort Call   --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">send</span> <span class="attr">retrans</span>=<span class="string">"500"</span>&gt;</span></span><br><span class="line">    &lt;![CDATA[</span><br><span class="line"></span><br><span class="line">      CANCEL sip:[field0]@[remote_ip]:[remote_port] SIP/2.0</span><br><span class="line">      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]</span><br><span class="line">      From: "[service]" &lt;sip:[service]@[remote_ip]&gt;;tag=[call_number]</span><br><span class="line">      To: "[field0]" &lt;sip:[field0]@[remote_ip]&gt;</span><br><span class="line">      Call-ID: [call_id]</span><br><span class="line">      CSeq: 1 CANCEL</span><br><span class="line"></span><br><span class="line">    ]]&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">send</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- By adding rrs="true" (Record Route Sets), the route sets         --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- are saved and used for following messages sent. Useful to test   --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- against stateful SIP proxies/B2BUAs.                             --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">recv</span> <span class="attr">response</span>=<span class="string">"200"</span> <span class="attr">rtd</span>=<span class="string">"true"</span>&gt;</span><span class="tag">&lt;/<span class="name">recv</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- Packet lost can be simulated in any send/recv message by         --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- by adding the 'lost = "10"'. Value can be [1-100] percent.       --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">send</span>&gt;</span></span><br><span class="line">    &lt;![CDATA[</span><br><span class="line"></span><br><span class="line">      ACK sip:[service]@[remote_ip]:[remote_port] SIP/2.0</span><br><span class="line">      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]</span><br><span class="line">      From: sipp &lt;sip:sipp@[local_ip]:[local_port]&gt;;tag=[call_number]</span><br><span class="line">      To: sut &lt;sip:[service]@[remote_ip]:[remote_port]&gt;[peer_tag_param]</span><br><span class="line">      Call-ID: [call_id]</span><br><span class="line">      CSeq: 1 ACK</span><br><span class="line">      Contact: sip:sipp@[local_ip]:[local_port]</span><br><span class="line">      Max-Forwards: 70</span><br><span class="line">      Subject: Performance Test</span><br><span class="line">      Content-Length: 0</span><br><span class="line"></span><br><span class="line">    ]]&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">send</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- This delay can be customized by the -d command-line option       --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- or by adding a 'milliseconds = "value"' option here.             --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">pause</span> <span class="attr">milliseconds</span>=<span class="string">"8000"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- The 'crlf' option inserts a blank line in the statistics report. --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">send</span> <span class="attr">retrans</span>=<span class="string">"500"</span>&gt;</span></span><br><span class="line">    &lt;![CDATA[</span><br><span class="line"></span><br><span class="line">      BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0</span><br><span class="line">      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]</span><br><span class="line">      From: sipp &lt;sip:sipp@[local_ip]:[local_port]&gt;;tag=[call_number]</span><br><span class="line">      To: sut &lt;sip:[service]@[remote_ip]:[remote_port]&gt;[peer_tag_param]</span><br><span class="line">      Call-ID: [call_id]</span><br><span class="line">      CSeq: 2 BYE</span><br><span class="line">      Contact: sip:sipp@[local_ip]:[local_port]</span><br><span class="line">      Max-Forwards: 70</span><br><span class="line">      Subject: Performance Test</span><br><span class="line">      Content-Length: 0</span><br><span class="line"></span><br><span class="line">    ]]&gt;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">send</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">recv</span> <span class="attr">response</span>=<span class="string">"200"</span> <span class="attr">crlf</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">recv</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- definition of the response time repartition table (unit is ms)   --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ResponseTimeRepartition</span> <span class="attr">value</span>=<span class="string">"10, 20, 30, 40, 50, 100, 150, 200"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- definition of the call length repartition table (unit is ms)     --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">CallLengthRepartition</span> <span class="attr">value</span>=<span class="string">"10, 50, 100, 500, 1000, 5000, 10000"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">scenario</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>CallNumber.csv</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SEQUENTIAL</span><br><span class="line">96038000;</span><br><span class="line">96038001;</span><br><span class="line">96038002;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
+</div>
+
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/" title="使用 SIPp 对基于 SIP 协议的 IP 电话通信服务器进行性能测试">https://debugtalk.com/post/SIPp-IP-Telephone-Server-Performance-Testing/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SIP/" rel="tag"># SIP</a>
+          
+            <a href="/tags/IP-电话/" rel="tag"># IP 电话</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/loadrunner-get-system-time/" rel="next" title="LoadRunner 中获取当前系统时间">
+                <i class="fa fa-chevron-left"></i> LoadRunner 中获取当前系统时间
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/Introspection-on-WebService-Test/" rel="prev" title="基于WSDL或SOAP的WebService测试方法--对原理的思考">
+                基于WSDL或SOAP的WebService测试方法--对原理的思考 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景知识介绍"><span class="nav-number">1.</span> <span class="nav-text">背景知识介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IP电话"><span class="nav-number">1.1.</span> <span class="nav-text">IP电话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP电话网关"><span class="nav-number">1.2.</span> <span class="nav-text">IP电话网关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP电话所需要的几种应用协议"><span class="nav-number">1.3.</span> <span class="nav-text">IP电话所需要的几种应用协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SIP协议"><span class="nav-number">1.4.</span> <span class="nav-text">SIP协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SIPp工具介绍"><span class="nav-number">2.</span> <span class="nav-text">SIPp工具介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SIPp软件简介"><span class="nav-number">2.1.</span> <span class="nav-text">SIPp软件简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SIPp的安装（Windows）"><span class="nav-number">2.2.</span> <span class="nav-text">SIPp的安装（Windows）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SIPp的工作原理"><span class="nav-number">2.3.</span> <span class="nav-text">SIPp的工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SIPp的常用工作模式"><span class="nav-number">2.4.</span> <span class="nav-text">SIPp的常用工作模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SIPp的使用"><span class="nav-number">3.</span> <span class="nav-text">SIPp的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SIPp的配置文件"><span class="nav-number">3.1.</span> <span class="nav-text">SIPp的配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uac-xml"><span class="nav-number">3.2.</span> <span class="nav-text">uac.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data-csv"><span class="nav-number">3.3.</span> <span class="nav-text">data.csv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uac-bat"><span class="nav-number">3.4.</span> <span class="nav-text">uac.bat</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用SIPp对基于SIP协议的网络电话进行性能测试"><span class="nav-number">4.</span> <span class="nav-text">使用SIPp对基于SIP协议的网络电话进行性能测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试内容"><span class="nav-number">4.1.</span> <span class="nav-text">测试内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试场景分析"><span class="nav-number">4.2.</span> <span class="nav-text">测试场景分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试方法"><span class="nav-number">4.3.</span> <span class="nav-text">测试方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试步骤"><span class="nav-number">4.4.</span> <span class="nav-text">测试步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附录"><span class="nav-number">6.</span> <span class="nav-text">附录</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

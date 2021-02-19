@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
+
+  
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+  <meta name="description" content="从版本 1.4 开始，测试用例分层机制已进行重新设计，本文内容不再适用。  背景描述在 HttpRunner 中，测试用例引擎最大的特色就是支持 YAML/JSON 格式的用例描述形式。 采用 YAML/JSON 格式编写维护测试用例，优势还是很明显的：  相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力； 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，">
+<meta name="keywords" content="HttpRunner">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HttpRunner 的测试用例分层机制（已过期）">
+<meta property="og:url" content="https://debugtalk.com/post/HttpRunner-testcase-layer/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="从版本 1.4 开始，测试用例分层机制已进行重新设计，本文内容不再适用。  背景描述在 HttpRunner 中，测试用例引擎最大的特色就是支持 YAML/JSON 格式的用例描述形式。 采用 YAML/JSON 格式编写维护测试用例，优势还是很明显的：  相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力； 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://debugtalk.com/images/httprunner-testcase-layer-1.jpeg">
+<meta property="og:image" content="https://debugtalk.com/images/httprunner-testcase-layer-2.jpeg">
+<meta property="og:image" content="https://debugtalk.com/images/httprunner-testcase-layer-3.jpeg">
+<meta property="og:image" content="https://debugtalk.com/images/httprunner-testcase-layer-4.jpeg">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HttpRunner 的测试用例分层机制（已过期）">
+<meta name="twitter:description" content="从版本 1.4 开始，测试用例分层机制已进行重新设计，本文内容不再适用。  背景描述在 HttpRunner 中，测试用例引擎最大的特色就是支持 YAML/JSON 格式的用例描述形式。 采用 YAML/JSON 格式编写维护测试用例，优势还是很明显的：  相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力； 相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，">
+<meta name="twitter:image" content="https://debugtalk.com/images/httprunner-testcase-layer-1.jpeg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/HttpRunner-testcase-layer/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HttpRunner 的测试用例分层机制（已过期） | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/HttpRunner-testcase-layer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">HttpRunner 的测试用例分层机制（已过期）
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-23 00:00:00" itemprop="dateCreated datePublished" datetime="2017-12-23T00:00:00+08:00">2017-12-23</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/" itemprop="url" rel="index"><span itemprop="name">1. OpenSource</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/1-OpenSource/HttpRunner/" itemprop="url" rel="index"><span itemprop="name">HttpRunner</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>从版本 1.4 开始，测试用例分层机制已进行重新设计，本文内容不再适用。</p>
+</blockquote>
+<h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>在 <code>HttpRunner</code> 中，测试用例引擎最大的特色就是支持 <code>YAML/JSON</code> 格式的用例描述形式。</p>
+<p>采用 <code>YAML/JSON</code> 格式编写维护测试用例，优势还是很明显的：</p>
+<ul>
+<li>相比于表格形式，具有更加强大的灵活性和更丰富的信息承载能力；</li>
+<li>相比于代码形式，减少了不必要的编程语言语法重复，并最大化地统一了用例描述形式，提高了用例的可维护性。</li>
+</ul>
+<p>以最常见的登录注销为例，我们的测试用例通常会描述为如下形式：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- config:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">demo-login-logoff</span></span><br><span class="line"><span class="attr">    variable_binds:</span></span><br><span class="line"><span class="attr">        - UserName:</span> <span class="string">test001</span></span><br><span class="line"><span class="attr">        - Password:</span> <span class="number">123456</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        base_url:</span> <span class="attr">http://xxx.debugtalk.com</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Accept:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            User-Agent:</span> <span class="string">iOS/10.3</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">Login</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="string">/api/v1/Account/Login</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        json:</span></span><br><span class="line"><span class="attr">            UserName:</span> <span class="string">$UserName</span></span><br><span class="line"><span class="attr">            Pwd:</span> <span class="string">$Password</span></span><br><span class="line"><span class="attr">            VerCode:</span> <span class="string">""</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["status_code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.IsSuccess",</span> <span class="literal">True</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.Code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">Logoff</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="string">/api/v1/Account/LoginOff</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["status_code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.IsSuccess",</span> <span class="literal">True</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.Code",</span> <span class="number">200</span><span class="string">]</span></span><br></pre></td></tr></table></figure>
+
+<p>相信大家已经对该种用例描述形式十分熟悉了。不过，该种描述形式的问题在于，接口通常会出现在多个测试场景中，而每次都需要对接口进行定义描述，包括请求的URL、Header、Body、以及预期响应值等，这就会产生大量的重复。</p>
+<p>例如，在某个项目中存在三个测试场景：</p>
+<ul>
+<li>场景A：注册新账号（<code>API_1/2</code>）、登录新注册的账号（<code>API_3/4/5</code>）、查看登录状态（<code>API_6</code>）；</li>
+<li>场景B：登录已有账号（<code>API_3/4/5</code>）、注销登录（<code>API_7/8</code>）；</li>
+<li>场景C：注销登录（<code>API_7/8</code>）、查看登录状态（<code>API_6</code>）、注册新账号（<code>API_1/2</code>）。</li>
+</ul>
+<p>按照常规的接口测试用例编写方式，我们需要创建3个场景文件，然后在各个文件中分别描述三个测试场景相关的接口信息。示意图如下所示。</p>
+<p><img src="/images/httprunner-testcase-layer-1.jpeg" alt></p>
+<p>在本例中，接口（<code>API_1/2/6</code>）在场景A和场景C中都进行了定义；接口（<code>API_3/4/5</code>）在场景A和场景B中都进行了定义；接口（<code>API_7/8</code>）在场景B和场景C中都进行了定义。可以预见，当测试场景增多以后，接口定义描述的维护就会变得非常困难和繁琐。</p>
+<h2 id="接口的分层定义描述"><a href="#接口的分层定义描述" class="headerlink" title="接口的分层定义描述"></a>接口的分层定义描述</h2><p>那要如何进行优化呢？</p>
+<p>其实也很简单，在编程语言中，如果出现重复代码块，我们通常会将其封装为类或方法，然后在需要时进行调用，以此来消除重复。同样地，我们也可以将项目的API进行统一定义，里面包含API的请求和预期响应描述，然后在测试场景中进行引用即可。</p>
+<p>示意图如下所示。</p>
+<p><img src="/images/httprunner-testcase-layer-2.jpeg" alt></p>
+<p>具体地，我们可以约定将项目的所有API接口定义放置在 <code>api</code> 目录下，并在 <code>api</code> 目录中按照项目的系统模块来组织接口的定义；同时，将测试场景放置到 <code>testcases</code> 目录中。</p>
+<p>此时测试用例文件的目录结构如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">✗ tree tests</span><br><span class="line">tests</span><br><span class="line">├── api</span><br><span class="line">│   └── v1</span><br><span class="line">│       ├── Account.yml</span><br><span class="line">│       ├── BusinessTrip.yml</span><br><span class="line">│       ├── Common.yml</span><br><span class="line">│       └── Leave.yml</span><br><span class="line">├── debugtalk.py</span><br><span class="line">└── testcases</span><br><span class="line">    ├── scenario_A.yml</span><br><span class="line">    ├── scenario_B.yml</span><br><span class="line">    └── scenario_C.yml</span><br></pre></td></tr></table></figure>
+
+<p>而对于API接口的定义，与之前的描述方式基本一致，只做了两点调整：</p>
+<ul>
+<li>接口定义块（<code>block</code>）的标识为 <code>api</code>；</li>
+<li>接口定义块中包含 <code>def</code> 字段，形式为 <code>api_name(*args)</code> ，作为接口的唯一标识ID；需要注意的是，即使 <code>api</code> 没有参数，也需要带上括号，<code>api_name()</code>；这和编程语言中定义函数是一样的。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- api:</span></span><br><span class="line"><span class="attr">    def:</span> <span class="string">api_v1_Account_Login_POST($UserName,</span> <span class="string">$Password)</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="string">/api/v1/Account/Login</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">POST</span></span><br><span class="line"><span class="attr">        json:</span></span><br><span class="line"><span class="attr">            UserName:</span> <span class="string">$UserName</span></span><br><span class="line"><span class="attr">            Pwd:</span> <span class="string">$Password</span></span><br><span class="line"><span class="attr">            VerCode:</span> <span class="string">""</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["status_code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.IsSuccess",</span> <span class="literal">True</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.Code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- api:</span></span><br><span class="line"><span class="attr">    def:</span> <span class="string">api_v1_Account_LoginOff_GET()</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        url:</span> <span class="string">/api/v1/Account/LoginOff</span></span><br><span class="line"><span class="attr">        method:</span> <span class="string">GET</span></span><br><span class="line"><span class="attr">    validators:</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["status_code",</span> <span class="number">200</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.IsSuccess",</span> <span class="literal">True</span><span class="string">]</span></span><br><span class="line"><span class="attr">        - eq:</span> <span class="string">["content.Code",</span> <span class="number">200</span><span class="string">]</span></span><br></pre></td></tr></table></figure>
+
+<p>有了接口的定义描述后，我们编写测试场景时就可以直接引用接口定义了。</p>
+<p>同样是背景描述中的登录注销场景，测试用例就描述为变为如下形式。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- config:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">demo</span></span><br><span class="line"><span class="attr">    variable_binds:</span></span><br><span class="line"><span class="attr">        - UserName:</span> <span class="string">test001</span></span><br><span class="line"><span class="attr">        - Password:</span> <span class="number">123456</span></span><br><span class="line"><span class="attr">    request:</span></span><br><span class="line"><span class="attr">        base_url:</span> <span class="attr">http://xxx.debugtalk.com</span></span><br><span class="line"><span class="attr">        headers:</span></span><br><span class="line"><span class="attr">            Accept:</span> <span class="string">application/json</span></span><br><span class="line"><span class="attr">            User-Agent:</span> <span class="string">iOS/10.3</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">Login</span></span><br><span class="line"><span class="attr">    api:</span> <span class="string">api_v1_Account_Login_POST($UserName,</span> <span class="string">$Password)</span></span><br><span class="line"></span><br><span class="line"><span class="attr">- test:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">Logoff</span></span><br><span class="line"><span class="attr">    api:</span> <span class="string">api_v1_Account_LoginOff_GET()</span></span><br></pre></td></tr></table></figure>
+
+<p>不难看出，对API接口进行分层定义后，我们在测试用例场景中引用接口定义时，与编程语言里面调用函数的形式基本完全一样，只需要指定接口的名称，以及所需传递的参数值；同样的，即使没有参数，也需要带上括号。</p>
+<p>实现接口的分层定义描述后，我们就可以避免接口的重复定义。但是，我们回过头来看之前的案例，发现仍然会存在一定的重复。</p>
+<p><img src="/images/httprunner-testcase-layer-3.jpeg" alt></p>
+<p>如上图所示，场景A和场景C都包含了注册新账号（<code>API_1/2</code>）和查看登录状态（<code>API_6</code>），场景A和场景B都包含了登录已有账号（<code>API_3/4/5</code>），场景B和场景C都包含了注销登录（<code>API_7/8</code>）。</p>
+<p>虽然我们已经将接口的定义描述抽离出来，避免了重复的定义；但是在实际业务场景中，某些功能（例如登录、注销）会在多个场景中重复出现，而该功能又涉及到多个接口的组合调用，这同样也会出现大量的重复。</p>
+<h2 id="接口的模块化封装"><a href="#接口的模块化封装" class="headerlink" title="接口的模块化封装"></a>接口的模块化封装</h2><p>玩过积木的同学可能就会想到，我们也可以将系统的常用功能封装为模块（suite），只需要在模块中定义一次，然后就可以在测试场景中重复进行引用，从而避免了模块功能的重复描述。</p>
+<p><img src="/images/httprunner-testcase-layer-4.jpeg" alt></p>
+<p>具体地，我们可以约定将项目的所有模块定义放置在 <code>suite</code> 目录下，并在 <code>suite</code> 目录中按照项目的功能来组织模块的定义。</p>
+<p>后续，我们在 <code>testcases</code> 目录中描述测试场景时，就可同时引用接口定义和模块定义了；模块和接口的混合调用，必将为我们编写测试场景带来极大的灵活性。</p>
+<p>此时测试用例文件的目录结构如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">✗ tree tests</span><br><span class="line">tests</span><br><span class="line">├── api</span><br><span class="line">│   └── v1</span><br><span class="line">│       ├── Account.yml</span><br><span class="line">│       ├── BusinessTrip.yml</span><br><span class="line">│       ├── Common.yml</span><br><span class="line">│       └── Leave.yml</span><br><span class="line">├── debugtalk.py</span><br><span class="line">├── suite</span><br><span class="line">│   ├── BusinessTravelApplication</span><br><span class="line">│   │   ├── approve-application.yml</span><br><span class="line">│   │   ├── executive-application.yml</span><br><span class="line">│   │   ├── reject-application.yml</span><br><span class="line">│   │   └── submit-application.yml</span><br><span class="line">│   └── LeaveApplication</span><br><span class="line">│       ├── approve.yml</span><br><span class="line">│       ├── cancel.yml</span><br><span class="line">│       └── submit-application.yml</span><br><span class="line">└── testcases</span><br><span class="line">    ├── scenario_A.yml</span><br><span class="line">    ├── scenario_B.yml</span><br><span class="line">    └── scenario_C.yml</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，我们在组织测试用例描述的文件目录结构时，遵循约定大于配置的原则：</p>
+<ul>
+<li>API接口定义必须放置在 <code>api</code> 目录下</li>
+<li>模块定义必须放置在 <code>suite</code> 目录下</li>
+<li>测试场景文件必须放置在 <code>testcases</code> 目录下</li>
+<li>相关的函数定义放置在 <code>debugtalk.py</code> 中</li>
+</ul>
+<p>至此，我们实现了测试用例的 <code>接口-模块-场景</code> 分层，从而彻底避免了重复定义描述。</p>
+<h2 id="脚手架工具"><a href="#脚手架工具" class="headerlink" title="脚手架工具"></a>脚手架工具</h2><p>得益于约定大于配置的原则，在 <code>HttpRunner</code> 中实现了一个脚手架工具，可以快速创建项目的目录结构。该想法来源于 <code>Django</code> 的 <code>django-admin.py startproject project_name</code>。</p>
+<p>使用方式也与 <code>Django</code> 类似，只需要通过 <code>--startproject</code> 指定新项目的名称即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ hrun --startproject helloworld</span><br><span class="line">INFO:root: Start to create new project: /Users/Leo/MyProjects/helloworld</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/api</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/suite</span><br><span class="line">INFO:root:      created folder: /Users/Leo/MyProjects/helloworld/tests/testcases</span><br><span class="line">INFO:root:      created file: /Users/Leo/MyProjects/helloworld/tests/debugtalk.py</span><br></pre></td></tr></table></figure>
+
+<p>运行之后，就会在指定的目录中生成新项目的目录结构，接下来，我们就可以按照测试用例的 <code>接口-模块-场景</code> 分层原则往里面添加用例描述信息了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果看到这里你还不明白测试用例分层的必要性，那也没关系，测试用例分层不是必须的，你还是可以按照之前的方式组织测试用例。不过当你某一天发现需要进行分层管理时，你会发现它就在那里，很实用。</p>
+<p>最后，在 <code>HttpRunner</code> 项目的 <a href="https://github.com/HttpRunner/HttpRunner/tree/master/examples/HelloWorld" target="_blank" rel="noopener"><code>examples/HelloWorld</code></a> 目录中，包含了一份完整的分层测试用例示例，相信会对大家有所帮助。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
+</div>
+
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/HttpRunner-testcase-layer/" title="HttpRunner 的测试用例分层机制（已过期）">https://debugtalk.com/post/HttpRunner-testcase-layer/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HttpRunner/" rel="tag"># HttpRunner</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/HttpRunner-validator-optimization/" rel="next" title="HttpRunner 的结果校验器优化">
+                <i class="fa fa-chevron-left"></i> HttpRunner 的结果校验器优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/my-2017-summary/" rel="prev" title="我的 2017 年终总结">
+                我的 2017 年终总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景描述"><span class="nav-number">1.</span> <span class="nav-text">背景描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口的分层定义描述"><span class="nav-number">2.</span> <span class="nav-text">接口的分层定义描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口的模块化封装"><span class="nav-number">3.</span> <span class="nav-text">接口的模块化封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脚手架工具"><span class="nav-number">4.</span> <span class="nav-text">脚手架工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

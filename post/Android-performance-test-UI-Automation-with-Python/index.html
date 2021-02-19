@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
+
+  
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+  <meta name="description" content="在进行Android App持续集成性能测试的时候，需要自动化实现UI层面的一些操作，常见的几种场景包括：  测试帧率时，需要模拟滑屏、拖拽操作； 初次安装app后启动应用时，需要点击按钮跳过协议页面； 从Android M(6.0)开始，首次启动应用时会进行系统权限校验，需要勾选checkbox以及点击按钮； 模拟点击按钮登录用户账号；  这些场景虽然看上去互不相关，但是从测试的角度，UI层面的">
+<meta name="keywords" content="Python,UI,Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android App持续集成性能测试：使用Python实现UI自动化">
+<meta property="og:url" content="https://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="在进行Android App持续集成性能测试的时候，需要自动化实现UI层面的一些操作，常见的几种场景包括：  测试帧率时，需要模拟滑屏、拖拽操作； 初次安装app后启动应用时，需要点击按钮跳过协议页面； 从Android M(6.0)开始，首次启动应用时会进行系统权限校验，需要勾选checkbox以及点击按钮； 模拟点击按钮登录用户账号；  这些场景虽然看上去互不相关，但是从测试的角度，UI层面的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://debugtalk.com/images/uiautomatorviewer.png">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android App持续集成性能测试：使用Python实现UI自动化">
+<meta name="twitter:description" content="在进行Android App持续集成性能测试的时候，需要自动化实现UI层面的一些操作，常见的几种场景包括：  测试帧率时，需要模拟滑屏、拖拽操作； 初次安装app后启动应用时，需要点击按钮跳过协议页面； 从Android M(6.0)开始，首次启动应用时会进行系统权限校验，需要勾选checkbox以及点击按钮； 模拟点击按钮登录用户账号；  这些场景虽然看上去互不相关，但是从测试的角度，UI层面的">
+<meta name="twitter:image" content="https://debugtalk.com/images/uiautomatorviewer.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Android App持续集成性能测试：使用Python实现UI自动化 | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Android App持续集成性能测试：使用Python实现UI自动化
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-04-17 00:00:00" itemprop="dateCreated datePublished" datetime="2016-04-17T00:00:00+08:00">2016-04-17</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在进行Android App持续集成性能测试的时候，需要自动化实现UI层面的一些操作，常见的几种场景包括：</p>
+<ul>
+<li>测试帧率时，需要模拟滑屏、拖拽操作；</li>
+<li>初次安装app后启动应用时，需要点击按钮跳过协议页面；</li>
+<li>从<code>Android M</code>(6.0)开始，首次启动应用时会进行系统权限校验，需要勾选checkbox以及点击按钮；</li>
+<li>模拟点击按钮登录用户账号；</li>
+</ul>
+<p>这些场景虽然看上去互不相关，但是从测试的角度，UI层面的操作应该都可以归为两类：控件定位和执行动作。</p>
+<p>本文将从测试的角度出发，介绍Android UI实现自动化测试的基本方法，并着重讲解通过Python操作Android UI的一般性流程。后续，我会在单独的博客文章中介绍UI操作在Android App持续集成性能测试中的应用。</p>
+<h2 id="先说uiautomator"><a href="#先说uiautomator" class="headerlink" title="先说uiautomator"></a>先说uiautomator</h2><p>要对Android的UI实现自动化操作，首先想到的就是Google官方的<code>UI Automator</code>，通过这个工具，可以很好地实现Android UI自动化。</p>
+<p><code>UI Automator</code>是一个从Android 4.3 (API level 18) 引入的测试框架，它提供了一套丰富的API，可以在不依赖于目标app内部实现机制的基础上，方便地创建自动化测试用例，实现用户对Android UI各种界面交互操作的模拟。</p>
+<p>对于<code>UI Automator</code>的使用介绍，我从创建测试用例和执行测试两部分进行。</p>
+<p>首先是创建测试用例，流程大致如下：</p>
+<ul>
+<li>采用JUnit Library创建Java Project</li>
+<li>将<code>Android-sdk</code>中的<code>android.jar</code>和<code>uiautomator.jar</code>添加进项目</li>
+<li>使用<code>UI Automator</code>提供的API编写测试用例，实现对UI界面操作的定制场景，例如点击按钮、滑动屏幕等</li>
+<li>将项目编译生成jar文件，例如memorytest.jar</li>
+</ul>
+<p>创建好了测试用例，那要怎样执行呢？</p>
+<p>从Android 4.3开始，系统中就自带了<code>uiautomator</code>命令，命令的路径为<code>/system/bin/uiautomator</code>。</p>
+<p>由于<code>uiautomator</code>命令是运行在Android设备中的，因此需先要将编译好的jar文件push到Android设备中，导入目录为<code>/data/local/tmp/</code>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  adb push memorytest.jar /data/local/tmp/</span><br></pre></td></tr></table></figure>
+
+<p>完成以上准备工作后，就可以在Android的Terminal中执行了<code>uiautomator</code>命令了。</p>
+<p>详细的<code>uiautomator</code>命令用法可参考官方文档，这里只列出最常用的一种方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  adb shell</span><br><span class="line">shell@hammerhead:/ $ uiautomator runtest memorytest.jar -c com.uc.util.TestCases<span class="comment">#slideScreen -e pkgName com.UCMobile</span></span><br></pre></td></tr></table></figure>
+
+<p>在如上示例中，<code>memorytest.jar</code>是我们之前编译好的测试用例jar文件名，<code>com.uc.util.TestCases#slideScreen</code>是Java工程中的类名和方法名，<code>-e</code>后面是传入测试类的<code>name-value</code>参数。</p>
+<p>这里就不再对<code>UI Automator</code>进行过多介绍，后续我会再针对<code>UI Automator</code>单独写一篇更加详细的教程。</p>
+<h2 id="Python调用uiautomator"><a href="#Python调用uiautomator" class="headerlink" title="Python调用uiautomator"></a>Python调用uiautomator</h2><p>通常，我们的持续集成性能测试代码是采用Python编写的，那如何通过Python调用uiautomator呢？</p>
+<p>如果沿用上面介绍的流程，Python调用uiautomator实现自动化测试应该也会采用同样的思路：</p>
+<p>首先，需要在Java Project使用<code>UI Automator API</code>编写UI测试场景，编译生成jar文件，并将这个文件导入到Python项目中。</p>
+<p>然后，在Python测试代码中，调用<code>uiautomator</code>命令前需要先将jar文件push到Android设备。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jar_file_path = os.path.join(_project_root_path, <span class="string">"resource/jar/memorytest.jar"</span>)</span><br><span class="line">cmdexec.push(jar_file_path, <span class="string">'/data/local/tmp/'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>接下来，就可以在Python中组装测试命令，并将命令传到Android设备中进行执行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmd = <span class="string">"uiautomator runtest memorytest.jar -c com.uc.util.TestCases#slideScreen -e pkgName com.UCMobile"</span></span><br><span class="line">cmdexec.sendShellCommand(cmd, timeout_time=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+<p>需要说明的是，上面代码中的<code>cmdexec</code>是一个封装类的实例，主要实现的是通过adb与Android设备进行交互，例如push/pull文件、执行Android shell命令等。</p>
+<p>经过这么一个流程，可能大家都会感觉到实现起来太过复杂。特别地，如果需要增加一个测试场景，就又要到Java项目中添加测试代码，重新编译为jar文件，并将新的jar文件添加到Python项目中，或者替换原有jar文件。这还不算完，同样地，在Python项目中也需要针对新增的测试场景进行相应的编码。</p>
+<p>难道就没有更便捷的方式么？</p>
+<p>幸运的是，之前已经有人针对这个痛点填了坑，并在GitHub上进行了开源，项目名称是<code>xiaocong/uiautomator</code>（为了便于与Google官方的uiautomator进行区分，后面统一采用pyuiautomator进行描述）。它实现的功能很明确，从项目简介就一目了然。</p>
+<blockquote>
+<p>Python wrapper of Android uiautomator test tool.</p>
+</blockquote>
+<p>该工具以<code>Python package</code>的形式存在，可通过<code>pip</code>在测试机（PC）上进行安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install uiautomator</span><br></pre></td></tr></table></figure>
+
+<p>安装完毕后，无需在Android设备上安装任何东西，只要设备通过adb与主机相连，就可以在主机中通过Python操作Android设备的UI控件。</p>
+<p>如下是简单的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> uiautomator <span class="keyword">import</span> device <span class="keyword">as</span> d</span><br><span class="line"></span><br><span class="line"><span class="comment"># Turn on screen</span></span><br><span class="line">d.screen.on()</span><br><span class="line"></span><br><span class="line"><span class="comment"># press back key</span></span><br><span class="line">d.press.back()</span><br><span class="line"></span><br><span class="line"><span class="comment"># click (x, y) on screen</span></span><br><span class="line">d.click(x, y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># check unchecked checkbox</span></span><br><span class="line">checkbox = d(className=<span class="string">'android.widget.CheckBox'</span>, checked=<span class="string">'false'</span>)</span><br><span class="line">checkbox.click()</span><br><span class="line"></span><br><span class="line"><span class="comment"># click button with text 'Next'</span></span><br><span class="line">d(text=<span class="string">"Clock"</span>).click()</span><br><span class="line">button = d(className=<span class="string">'android.widget.Button'</span>, text=<span class="string">'Next'</span>)</span><br><span class="line">button.click()</span><br><span class="line"></span><br><span class="line"><span class="comment"># swipe from (sx, sy) to (ex, ey)</span></span><br><span class="line">d.swipe(sx, sy, ex, ey)</span><br></pre></td></tr></table></figure>
+
+<p>更详细的使用方法可参考<a href="https://github.com/xiaocong/uiautomator" target="_blank" rel="noopener">项目文档</a>。</p>
+<p>通过这种方式，我们就可以极大地简化Python操作UI控件的方式，不用再对照着<code>UI Automator API</code>使用Java编写测试用例，也不用再反复编译jar文件，省去了同一个测试场景需要维护两套代码的麻烦，整个过程也更加Pythonic。</p>
+<p>当然，<code>pyuiautomator</code>也并非完美，毕竟它不是Google官方维护的，从我实际使用的经历来看，有时候也会存在一些问题。这里先不展开，后续会单独写一篇博客。不过，总的来说，<code>pyuiautomator</code>还是非常值得使用的，它的确可以大大简化测试工作量。</p>
+<p>现在继续本文的主题，我们怎么采用<code>pyuiautomator</code>来进行UI控件操作呢？</p>
+<p>其实从上面的示例代码中就可以看到，UI控件的操作分为两步，首先是对目标控件进行定位，然后是对定位的控件执行动作。</p>
+<h2 id="定位控件"><a href="#定位控件" class="headerlink" title="定位控件"></a>定位控件</h2><p>在UI中，每个控件都有许多属性，例如<code>class</code>、<code>text</code>、<code>index</code>等等。我们要想对某一个控件进行操作，必然需要先对目标控件进行选择。</p>
+<p>在上面的<code>pyuiautomator</code>用法示例中，已经包含了控件选择的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">checkbox = d(className=<span class="string">'android.widget.CheckBox'</span>, checked=<span class="string">'false'</span>)</span><br><span class="line">button = d(className=<span class="string">'android.widget.Button'</span>, text=<span class="string">'Next'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在这两行代码中，分别实现了对checkbox和button的选择。基本原则就是，通过指定的控件属性，可以唯一确定目标控件。</p>
+<p>那么，我们怎么知道目标控件有哪些属性，以及对应的属性值是什么呢？</p>
+<p>Google官方提供了两个工具，<code>hierarchyviewer</code>和<code>uiautomatorviewer</code>，这两个工具都位于<code>&lt;android-sdk&gt;/tools/</code>目录下。关于这两个工具的区别及其各自的特点，本文不进行详细介绍，我们当前只需要知道，在查看控件属性方面，这两个工具实现的功能完全相同，界面也完全相同，我们任选其一即可。</p>
+<p>{: .center}<br><img src="/images/uiautomatorviewer.png" alt="uiautomatorviewer"></p>
+<p>通过这个工具，我们可以查看到当前设备屏幕中的UI元素信息：</p>
+<ul>
+<li>当前Android设备屏幕中显示的UI元素的详细属性信息</li>
+<li>当前Android设备屏幕中所有UI元素的层级关系结构</li>
+</ul>
+<p>需要强调的是，工具每执行一次dump，获取到的UI信息仅限于当前屏幕中前端（foreground）显示的内容。</p>
+<p>获得UI元素的信息后，由于UI控件是以树形结构进行存储，而且每个控件都存在index属性值，因此，理论上讲，通过层级结构和index属性就能唯一指定任意UI控件。</p>
+<p>然而，这并不是最佳实践。因为通常情况下，UI布局的树形结构层级较多，通过层级关系进行指定时会造成书写极为复杂，而且从代码中很难一眼看出指定的是哪个控件。不信？看下这个例子就能体会了。如下代码对应的就是上图中红色方框的控件，可以看出，要是寻找每个控件都要从顶级节点开始，要将根节点到目标控件的路径找出来，这也是一个很大的工作量，而且很容易出错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">d(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.LinearLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.view.View&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.view.View&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.FrameLayout&apos;)</span><br><span class="line">  .child(className=&apos;android.widget.TextView&apos;)</span><br></pre></td></tr></table></figure>
+
+<p>在实际应用中，我们更多地是采用控件的属性信息来定位控件，一般情况下，采用属性值<code>text</code>就能唯一确定目标控件了。例如同样是对上图中的红色方框进行定位，如下代码就足够了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d(text=&apos;UC头条有新消息，点击刷新&apos;)</span><br></pre></td></tr></table></figure>
+
+<p>不过，经常会出现目标控件的<code>text</code>属性值为空的情况，这个时候我们一般就会采用<code>class</code>属性和部分层级关系组合的方式。同样是上图中的红色方框，我们也可以使用如下方式进行定位。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d(className=&apos;android.widget.FrameLayout&apos;).child(className=&apos;android.widget.TextView&apos;)</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，同一个控件，我们可以采用多种方式进行定位。具体选择何种定位方式，可以参考如下准则：</p>
+<ul>
+<li>定位方式应保证定位准确</li>
+<li>定位方式应尽可能简洁</li>
+<li>定位方式应尽可能稳定，即使屏幕界面出现变化，定位方式也不会失效</li>
+</ul>
+<p>这里说到了定位方式的准确性，那要如何进行验证呢？技巧是，采用<code>.count</code>和<code>.info</code>属性值即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d(text=<span class="string">'UC头条有新消息，点击刷新'</span>).count</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d(text=<span class="string">'UC头条有新消息，点击刷新'</span>).info</span><br><span class="line">&#123;<span class="string">u'contentDescription'</span>: <span class="literal">None</span>, <span class="string">u'checked'</span>: <span class="literal">False</span>, <span class="string">u'clickable'</span>: <span class="literal">True</span>, <span class="string">u'scrollable'</span>: <span class="literal">False</span>, <span class="string">u'text'</span>: <span class="string">u'UC\u5934\u6761\u6709\u65b0\u6d88\u606f\uff0c\u70b9\u51fb\u5237\u65b0'</span>, <span class="string">u'packageName'</span>: <span class="string">u'com.UCMobile.projectscn1098RHEAD'</span>, <span class="string">u'selected'</span>: <span class="literal">False</span>, <span class="string">u'enabled'</span>: <span class="literal">True</span>, <span class="string">u'bounds'</span>: &#123;<span class="string">u'top'</span>: <span class="number">1064</span>, <span class="string">u'left'</span>: <span class="number">42</span>, <span class="string">u'right'</span>: <span class="number">1038</span>, <span class="string">u'bottom'</span>: <span class="number">1136</span>&#125;, <span class="string">u'className'</span>: <span class="string">u'android.widget.TextView'</span>, <span class="string">u'focusable'</span>: <span class="literal">False</span>, <span class="string">u'focused'</span>: <span class="literal">False</span>, <span class="string">u'checkable'</span>: <span class="literal">False</span>, <span class="string">u'resourceName'</span>: <span class="literal">None</span>, <span class="string">u'longClickable'</span>: <span class="literal">False</span>, <span class="string">u'visibleBounds'</span>: &#123;<span class="string">u'top'</span>: <span class="number">1064</span>, <span class="string">u'left'</span>: <span class="number">42</span>, <span class="string">u'right'</span>: <span class="number">1038</span>, <span class="string">u'bottom'</span>: <span class="number">1136</span>&#125;, <span class="string">u'childCount'</span>: <span class="number">0</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当<code>.count</code>属性值为1，<code>.info</code>属性值的内容与目标控件的属性值一致时，就可以确定我们采用的定位方式是准确的。</p>
+<h2 id="控件操作"><a href="#控件操作" class="headerlink" title="控件操作"></a>控件操作</h2><p>定位到具体的控件后，操作就比较容易了。</p>
+<p>在<code>pyuiautomator</code>中，对<code>UI Automator</code>的UI操作动作进行了封装，常用的操作动作有：</p>
+<ul>
+<li>.click()</li>
+<li>.long_click()</li>
+<li>.swipe</li>
+<li>.drag</li>
+</ul>
+<p>更多的操作可根据我们测试场景的实际需求，查询<code>pyuiautomator</code>文档找到合适的方法。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>看到这里，相信大家对Android UI自动化测试已经有了基本的认识。由于篇幅关系，我没有将所有内容都包含进来，而是打算后续分多个专题以单独博文的形式进行展开（不知不觉就给自己埋下了坑^_^）。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="http://developer.android.com/tools/testing-support-library/index.html#UIAutomator" target="_blank" rel="noopener">http://developer.android.com/tools/testing-support-library/index.html#UIAutomator</a></li>
+<li><a href="https://github.com/xiaocong/uiautomator" target="_blank" rel="noopener">https://github.com/xiaocong/uiautomator</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
+</div>
+
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/" title="Android App持续集成性能测试：使用Python实现UI自动化">https://debugtalk.com/post/Android-performance-test-UI-Automation-with-Python/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/UI/" rel="tag"># UI</a>
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/python-functional-programming-getting-started/" rel="next" title="Python 的函数式编程 -- 从入门到⎡放弃⎦">
+                <i class="fa fa-chevron-left"></i> Python 的函数式编程 -- 从入门到⎡放弃⎦
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/Android-CPU-lock-frequency/" rel="prev" title="对 Android 设备 CPU 进行锁频">
+                对 Android 设备 CPU 进行锁频 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#先说uiautomator"><span class="nav-number">1.</span> <span class="nav-text">先说uiautomator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python调用uiautomator"><span class="nav-number">2.</span> <span class="nav-text">Python调用uiautomator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定位控件"><span class="nav-number">3.</span> <span class="nav-text">定位控件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控件操作"><span class="nav-number">4.</span> <span class="nav-text">控件操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

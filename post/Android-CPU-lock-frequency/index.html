@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
+
+  
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+  <meta name="description" content="本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。 CPU频率首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。 基于此需求，当前电子设备的CPU都会">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对 Android 设备 CPU 进行锁频">
+<meta property="og:url" content="https://debugtalk.com/post/Android-CPU-lock-frequency/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。 CPU频率首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。 基于此需求，当前电子设备的CPU都会">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="对 Android 设备 CPU 进行锁频">
+<meta name="twitter:description" content="本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。 CPU频率首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。 基于此需求，当前电子设备的CPU都会">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/Android-CPU-lock-frequency/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>对 Android 设备 CPU 进行锁频 | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Android-CPU-lock-frequency/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">对 Android 设备 CPU 进行锁频
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-04-18 00:00:00" itemprop="dateCreated datePublished" datetime="2016-04-18T00:00:00+08:00">2016-04-18</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文对Android设备CPU的状态查看方法和锁频（lock frequency）方法进行详细介绍。这有什么用？作为测试工程师，你值得了解。</p>
+<h2 id="CPU频率"><a href="#CPU频率" class="headerlink" title="CPU频率"></a>CPU频率</h2><p>首先说下CPU的频率。我们都知道，CPU的工作频率越高，运算就越快，但能耗也更高。然而很多时候，设备并不需要那么高的计算性能，这个时候，我们就希望能降低CPU的工作频率，追求较低的能耗，以此实现更长的待机时间。</p>
+<p>基于此需求，当前电子设备的CPU都会存在多个工作频率，并能根据实际场景进行CPU频率的自动切换，以此达到平衡计算性能与能耗的目的。</p>
+<h2 id="锁频的用途"><a href="#锁频的用途" class="headerlink" title="锁频的用途"></a>锁频的用途</h2><p>那么为什么需要锁频呢？</p>
+<p>对于普通用户来说，可能对这些场景比较熟悉：</p>
+<ul>
+<li>在家用笔记本电脑玩游戏的时候，电脑连着电源，不在乎能耗，只想要尽可能高的性能，这个时候就选择高性能模式，即保持CPU在最高频率工作。</li>
+<li>旅行途中使用笔记本电脑，靠电池供电，希望电脑能待机尽可能久，这时就选择省电模式，即CPU保持在最低频率运行。</li>
+</ul>
+<p>作为一名测试工程师，我们在进行软件测试的时候，为了让测试结果真实反映软件本身的效率，从控制变量法的角度，我们希望测试结果尽量不受到硬件本身的影响。这个时候，我们就可以尝试对设备的CPU进行锁频，即保证在测试的过程中，硬件设备的CPU运行在一个恒定的频率。</p>
+<p>说到这里先埋个伏笔，在chromium官方测试库中，部分测试场景在初始化测试环境时，就会将设备所有CPU的频率调到最高状态，后续我会单独以一篇博客的形式对那部分的源码进行分析。对于等不及的朋友，可以先去看下源码，源码路径为<code>pylib/perf/PerfControl.SetHighPerfMode</code>。</p>
+<h2 id="查看CPU状态信息"><a href="#查看CPU状态信息" class="headerlink" title="查看CPU状态信息"></a>查看CPU状态信息</h2><p>在修改CPU的状态之前，我们需要先查看CPU的属性和状态信息，这样才能有针对性地进行正确的设置。</p>
+<p>对于CPU的状态，我们通常会关注两类信息，一是整体层面的，即CPU运行的核数；二是细节层面的，即各个CPU的工作状态，包括所处工作模式、频率大小等。</p>
+<p>在Android系统中，CPU相关的信息存储在<code>/sys/devices/system/cpu</code>目录的文件中，我们可以通过读取该目录下的特定文件获得当前设备的CPU状态信息，也可以通过对该目录下的特定文件进行写值，实现对CPU频率等状态信息的更改。</p>
+<p>本文以<code>Nexus 5</code>（系统版本5.1.1）为例，后面的例子均以该设备为例。不同的机型和Android系统版本可能会存在一些差异，请知悉。</p>
+<p>在<code>/sys/devices/system/cpu</code>目录中，文件结构如下所示。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 01:36 cpu0</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 21:06 cpu1</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 21:07 cpu2</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 21:07 cpu3</span><br><span class="line">-rw------- root     root         4096 1970-01-17 10:27 cpuctl</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpufreq</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpuidle</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 kernel_max</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 offline</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 online</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 possible</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 power</span><br><span class="line">-r--r--r-- root     root         4096 1970-01-17 10:27 present</span><br><span class="line">-rw-r--r-- root     root         4096 1970-01-17 10:27 uevent</span><br></pre></td></tr></table></figure>
+
+<h3 id="1、view-overall-cpu-info"><a href="#1、view-overall-cpu-info" class="headerlink" title="1、view overall cpu info"></a>1、view overall cpu info</h3><p>在<code>possible</code>文件中，存储的是当前设备可用的CPU，显示形式以数字的形式。例如<code>0-3</code>代表的就是当前设备总共有4个核，编号分别为0，1，2，3。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat possible</span><br><span class="line">0-3</span><br></pre></td></tr></table></figure>
+
+<p>在<code>online</code>文件中，存储的是当前设备正在运行的CPU。因为有时候设备不需要很高的性能，就可以将部分CPU关闭。不过需要注意的是，不管什么时候，<code>CPU0</code>始终都会处于运行状态。<code>online</code>文件的存储格式与<code>possible</code>类似，如果只有部分CPU运行，且CPU编号不连续的时候，会以逗号进行隔开；例如，<code>0,2</code>表示当前CPU0和CPU2处于运行状态。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat online</span><br><span class="line">0,2</span><br></pre></td></tr></table></figure>
+
+<p>对应的，<code>offline</code>文件标示的是当前设备处于关闭状态的CPU，这和<code>online</code>作为互补，并集刚好就是设备的所有CPU，即<code>possible</code>文件中的内容。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat offline</span><br><span class="line">1,3</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、view-specified-cpu-info"><a href="#2、view-specified-cpu-info" class="headerlink" title="2、view specified cpu info"></a>2、view specified cpu info</h3><p>接下来，我们要获取到特定CPU的信息，就需要进入到对应的文件夹，例如，<code>cpu0/</code>对应的就是CPU0的信息。</p>
+<p>在<code>/sys/devices/system/cpu/cpu0</code>目录中，文件结构如下所示。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll cpu0</span><br><span class="line">drwxr-xr-x root     root              2016-01-20 01:37 cpufreq</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 cpuidle</span><br><span class="line">-r-------- root     root         4096 1970-01-17 10:27 crash_notes</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:36 online</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 power</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 rq-stats</span><br><span class="line">lrwxrwxrwx root     root              1970-01-17 10:27 subsystem</span><br><span class="line">drwxr-xr-x root     root              1970-01-17 10:27 topology</span><br><span class="line">-rw-r--r-- root     root         4096 1970-01-17 10:27 uevent</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>online</code>文件的内容表示当前CPU是否处于运行状态，若处于运行状态，则内容为1，否则为0；这个和上面讲到的<code>/sys/devices/system/cpu/online</code>能进行对应。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/online</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>在<code>cpu0/cpufreq/</code>目录下，存储的就是与CPU0的频率相关的信息，文件结构如下所示。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ ll cpu0/cpufreq/</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:57 UV_mV_table</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 affected_cpus</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 cpu_utilization</span><br><span class="line">-r-------- root     root         4096 2016-01-20 01:57 cpuinfo_cur_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 02:00 cpuinfo_max_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:39 cpuinfo_min_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 cpuinfo_transition_latency</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 related_cpus</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:39 scaling_available_frequencies</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 scaling_available_governors</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:50 scaling_cur_freq</span><br><span class="line">-r--r--r-- root     root         4096 2016-01-20 01:57 scaling_driver</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 01:50 scaling_governor</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 08:29 scaling_max_freq</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 08:29 scaling_min_freq</span><br><span class="line">-rw-r--r-- root     root         4096 2016-01-20 02:52 scaling_setspeed</span><br></pre></td></tr></table></figure>
+
+<p>在这个目录中，我们需要关注的文件比较多。</p>
+<p>首先是<code>scaling_available_governors</code>和<code>scaling_governor</code>。这里的<code>governor</code>大家可以理解为CPU的工作模式，<code>scaling_available_governors</code>中存储了当前CPU支持的所有工作模式，而<code>scaling_governor</code>存储的是CPU当前所处的工作模式。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/cpufreq/scaling_available_governors</span><br><span class="line">impulse dancedance smartmax interactive conservative ondemand userspace powersave Lionheart bioshock performance</span><br><span class="line"></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu $ cat cpu0/cpufreq/scaling_governor</span><br><span class="line">performance</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，<code>Nexus 5</code>支持非常多的工作模式，这里只对几个常见的模式进行简单说明。</p>
+<ul>
+<li>performance：最高性能模式，即使系统负载非常低，cpu也在最高频率下运行。</li>
+<li>powersave：省电模式，与performance模式相反，cpu始终在最低频率下运行。</li>
+<li>ondemand：CPU频率跟随系统负载进行变化。</li>
+<li>userspace：可以简单理解为自定义模式，在该模式下可以对频率进行设定。</li>
+</ul>
+<p>对于各种模式对应的含义和策略，在此不进行展开，大家有兴趣的可以自行搜索。</p>
+<p>然后是CPU的工作频率范围，对应的文件有<code>cpuinfo_max_freq</code>、<code>cpuinfo_min_freq</code>、<code>scaling_max_freq</code>、<code>scaling_min_freq</code>。</p>
+<p>以<code>cpuinfo_</code>为前缀的表示CPU硬件支持的频率范围，反映的是CPU自身的特性，与CPU的工作模式无关。而以<code>scaling_</code>为前缀的表示CPU在当前工作模式下的频率范围。</p>
+<p>那么，当前CPU工作的频率是多少，我们要怎么查看呢？</p>
+<p>查看<code>cpuinfo_cur_freq</code>或<code>scaling_cur_freq</code>即可。<code>cpuinfo_cur_freq</code>代表通过硬件实际上读到的频率值，而<code>scaling_cur_freq</code>则是软件当前的设置值，多数情况下这两个值是一致的，但是也有可能因为硬件的原因，有微小的差异。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat cpuinfo_cur_freq</span><br><span class="line">1574400</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_cur_freq</span><br><span class="line">1574400</span><br></pre></td></tr></table></figure>
+
+<h2 id="更改CPU状态信息"><a href="#更改CPU状态信息" class="headerlink" title="更改CPU状态信息"></a>更改CPU状态信息</h2><p>最后回到我们本文的主题，如何对CPU的频率进行设定呢？</p>
+<p>这也和CPU信息查看对应，分为对CPU整体运行情况的设置，和对特定CPU工作模式的设定。</p>
+<p>在此，有两点需要特别进行说明。</p>
+<p>首先，对于高通的CPU，存在一个系统服务，叫作<code>mpdecision service</code>。当这个系统服务处于运行状态时，我们无法对CPU的状态信息进行更改。因此，如果我们要更改高通CPU的工作模式，第一步要做的就是终止<code>mpdecision</code>系统服务。</p>
+<p>操作起来也很简单，在Android shell里面执行如下命令即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop mpdecision</span><br></pre></td></tr></table></figure>
+
+<p>第二点需要注意的是，如果我们想要实现对特定CPU的工作状态进行设置，就必须将<code>scaling_governor</code>设置为<code>userspace</code>，只有这样，我们才能对<code>scaling_setspeed</code>进行设置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed</span><br><span class="line">&lt;unsupported&gt;</span><br><span class="line"></span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # echo userspace &gt; scaling_governor</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_setspeed</span><br><span class="line">1574400</span><br></pre></td></tr></table></figure>
+
+<h3 id="1、set-overall-cpu-info"><a href="#1、set-overall-cpu-info" class="headerlink" title="1、set overall cpu info"></a>1、set overall cpu info</h3><p>从宏观层面，我们可以对CPU运行的核数进行设置，即可实现对特定CPU的开启和关闭。当然，我们在前面已经说过，CPU0始终会处于运行状态，因此我们无法将CPU0进行关闭。</p>
+<p>设置的方式很简单，就是往<code>/sys/devices/system/cpu/cpu[i]/online</code>文件中写值即可，写1时开启指定CPU，写0时关闭指定CPU。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> turn off cpu1</span></span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu1 # echo 0 &gt; online</span><br><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu1 # cat online</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、set-specified-cpu-info"><a href="#2、set-specified-cpu-info" class="headerlink" title="2、set specified cpu info"></a>2、set specified cpu info</h3><p>在对特定CPU的频率进行设定前，我们需要知道的是，CPU并不能工作在任意频率下，我们只能将CPU的频率设定为它支持的数值。</p>
+<p>通过查看<code>scaling_available_frequencies</code>，我们可以获得当前CPU支持的频率值。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq # cat scaling_available_frequencies</span><br><span class="line">300000 422400 652800 729600 883200 960000 1036800 1190400 1267200 1497600 1574400 1728000 1958400 2265600</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们就可以对CPU的工作频率进行设置了。</p>
+<p>如何进行设置呢？刚开始的时候，我觉得将特定的频率值写入<code>scaling_setspeed</code>或<code>scaling_cur_freq</code>就可以了，通过Google搜索得到的方法中也是这种方式。</p>
+<p>但经过尝试，发现并不可行。为什么会这样？我也还没有找到答案，希望知道原因的朋友能告诉我。</p>
+<p>最后经过尝试，发现通过同时将<code>scaling_max_freq</code>和<code>scaling_min_freq</code>设置为目标频率值，就可以成功地对CPU频率完成设置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> before setting</span></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ cat scaling_cur_freq</span><br><span class="line">1574400</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> setting</span></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ echo 1728000 &gt; scaling_min_freq</span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ echo 1728000 &gt; scaling_max_freq</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> after setting</span></span><br><span class="line">shell@hammerhead:/sys/devices/system/cpu/cpu0/cpufreq $ cat scaling_cur_freq</span><br><span class="line">1728000</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
+</div>
+
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/Android-CPU-lock-frequency/" title="对 Android 设备 CPU 进行锁频">https://debugtalk.com/post/Android-CPU-lock-frequency/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/Android-performance-test-UI-Automation-with-Python/" rel="next" title="Android App持续集成性能测试：使用Python实现UI自动化">
+                <i class="fa fa-chevron-left"></i> Android App持续集成性能测试：使用Python实现UI自动化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/traps-in-sql-null/" rel="prev" title="SQL语句中关于NULL的那些坑">
+                SQL语句中关于NULL的那些坑 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU频率"><span class="nav-number">1.</span> <span class="nav-text">CPU频率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁频的用途"><span class="nav-number">2.</span> <span class="nav-text">锁频的用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看CPU状态信息"><span class="nav-number">3.</span> <span class="nav-text">查看CPU状态信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、view-overall-cpu-info"><span class="nav-number">3.1.</span> <span class="nav-text">1、view overall cpu info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、view-specified-cpu-info"><span class="nav-number">3.2.</span> <span class="nav-text">2、view specified cpu info</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更改CPU状态信息"><span class="nav-number">4.</span> <span class="nav-text">更改CPU状态信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、set-overall-cpu-info"><span class="nav-number">4.1.</span> <span class="nav-text">1、set overall cpu info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、set-specified-cpu-info"><span class="nav-number">4.2.</span> <span class="nav-text">2、set specified cpu info</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

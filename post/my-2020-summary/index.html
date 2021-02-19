@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
+
+  
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+  <meta name="description" content="一年没写博客了，时而想起曾经立下的「日更」「周更」的 flag，羞愧不已，然后又埋头写代码去了。但不管怎样，一年一度的年终总结是必不可少的，趁着春节在家的空闲时间，我强迫自己戒掉代码，对自己的 2020 这一年进行总结回顾。 在 2019 年终总结中，我写到「想清楚这些之后，也就没啥好纠结的了，还是过段时间去成都吧」；出乎意料的是，这个计划超前实现了。在 2020 年 6 月，我终于离开了工作和生">
+<meta name="keywords" content="年终总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的 2020 年终总结">
+<meta property="og:url" content="https://debugtalk.com/post/my-2020-summary/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="一年没写博客了，时而想起曾经立下的「日更」「周更」的 flag，羞愧不已，然后又埋头写代码去了。但不管怎样，一年一度的年终总结是必不可少的，趁着春节在家的空闲时间，我强迫自己戒掉代码，对自己的 2020 这一年进行总结回顾。 在 2019 年终总结中，我写到「想清楚这些之后，也就没啥好纠结的了，还是过段时间去成都吧」；出乎意料的是，这个计划超前实现了。在 2020 年 6 月，我终于离开了工作和生">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://debugtalk.com/images/feishu-spot-bonus.png">
+<meta property="og:image" content="https://debugtalk.com/images/enroll-team.png">
+<meta property="og:image" content="https://debugtalk.com/images/bye-shenzhen.png">
+<meta property="og:image" content="https://debugtalk.com/images/xjg-3.jpeg">
+<meta property="og:updated_time" content="2021-02-19T05:55:37.850Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的 2020 年终总结">
+<meta name="twitter:description" content="一年没写博客了，时而想起曾经立下的「日更」「周更」的 flag，羞愧不已，然后又埋头写代码去了。但不管怎样，一年一度的年终总结是必不可少的，趁着春节在家的空闲时间，我强迫自己戒掉代码，对自己的 2020 这一年进行总结回顾。 在 2019 年终总结中，我写到「想清楚这些之后，也就没啥好纠结的了，还是过段时间去成都吧」；出乎意料的是，这个计划超前实现了。在 2020 年 6 月，我终于离开了工作和生">
+<meta name="twitter:image" content="https://debugtalk.com/images/feishu-spot-bonus.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/my-2020-summary/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>我的 2020 年终总结 | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/my-2020-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">我的 2020 年终总结
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-02-18 00:00:00" itemprop="dateCreated datePublished" datetime="2021-02-18T00:00:00+08:00">2021-02-18</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/5-Growth/" itemprop="url" rel="index"><span itemprop="name">5. Growth</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/5-Growth/年终总结/" itemprop="url" rel="index"><span itemprop="name">年终总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一年没写博客了，时而想起曾经立下的「日更」「周更」的 flag，羞愧不已，然后又埋头写代码去了。但不管怎样，一年一度的年终总结是必不可少的，趁着春节在家的空闲时间，我强迫自己戒掉代码，对自己的 2020 这一年进行总结回顾。</p>
+<p>在 2019 年终总结中，我写到「想清楚这些之后，也就没啥好纠结的了，还是过段时间去成都吧」；出乎意料的是，这个计划超前实现了。在 2020 年 6 月，我终于离开了工作和生活了 9 年的广州深圳，跟家人一起来到了成都，并打算在成都定居了。总的来说，到成都以后，工作内容和节奏没太大变化，但生活质量和幸福感得到了极大的提升，我也挺满意当前的状态。</p>
+<p>接下来还是按照既往的年终总结模式，回顾下这一年的工作、生活和个人思考，并适当做一些新年展望吧。</p>
+<h2 id="工作"><a href="#工作" class="headerlink" title="工作"></a>工作</h2><p>在工作方面，今年最大的变化是从深圳飞书部门转岗到了成都互娱研发部门，中间也经历了一些转岗的波折和外部面试寻找新机会的尝试。</p>
+<h3 id="飞书（深圳）"><a href="#飞书（深圳）" class="headerlink" title="飞书（深圳）"></a>飞书（深圳）</h3><p>首先是在飞书期间，我的工作内容基本上算是 2019 年的延续。只不过随着外部形势的变化，飞书的业务重心从海外向国内做了较多的倾斜，特别是在国内大客户私有化部署上投入了更多的资源。而我作为私有化部署性能验收方向的 owner，工作重心自然也都投入到性能验收方面了。具体工作事项比较多且杂，我就不一一赘述了，最终实现的效果就是将绝大多数性能验收工作进行了自动化：对于任意 KA 私有化环境，只需要给定租户 admin 账号，即可批量生成租户下所有测试账号在所有子产品线的相关压测数据，一键启动实现精准流量比例控制下的混合场景性能压测，并在压测结束后完成相关基础组件核心性能指标和压测结果数据的采集汇总和统计，压测所需投入的人力和耗时都压缩到了最低。</p>
+<p>除了提升性能验收的效率外，当时还有一项重点工作是保障飞书第一家私有化部署的客户小米集团完成验收交付，我也自然地成为了一个「苦逼」乙方，需要对接小米 QA 部门及时响应甲方爸爸的各种需求。当时有一个比较有意思的插曲，就是小米 QA 部门必须要求获取接口信息以便他们自己能进行压测验证，否则就不给验收通过（这个要求不过分）；字节的安全部门要求不能对外提供接口信息，安全高于一切（这个要求也很合理）。而我们作为业务部门夹在中间就很头疼了，两边都很强势都没有商量的余地，那我们到底要怎么做才能在遵守公司安全合规要求的前提下满足客户的需求，消除合同风险呢？事实证明，办法总比困难多。最终经过探索实践，我基于开源的 Locust + Boomer 封装了一套私有化压测工具，在无需对已有的 golang 压测脚本做调整的情况下，将压测脚本和压测工具整体编译生成一个可执行的二进制文件，再经过安全加固后交付给小米 QA 部门；他们无需再编写压测脚本（也无法获取接口参数细节），最多只需要在配置文件里面调整下接口的流量比例，即可通过一条命令将压测工具进行启动，然后在 Locust Web 界面里面进行压测验证工作。这套方案很好地满足了客户需求，也被顺利地推广到了其它 ToB 业务线（People）；我也收获到了比较多的认可，包括加薪和 Spot Bonus 奖励，也算得上是一个 happy ending 了。</p>
+<p><img src="/images/feishu-spot-bonus.png" alt></p>
+<h3 id="转岗经历"><a href="#转岗经历" class="headerlink" title="转岗经历"></a>转岗经历</h3><p>在飞书工作和发展都挺好的，为什么会选择离开呢？当时 leader 和 leader 的 leader 都有找我深入地进行过沟通，也都问了我这个问题。其实我也很不想离开飞书团队，但选择离开更多的还是基于现实因素。回顾前两年的年终总结，我都有提到过深圳的房价压力，不是上不了车，而是深深地感到不值，已然高位的房价和其对应的居住品质、教育、医疗资源严重不匹配，性价比太低了。再加上在字节跳动工作一年了，平时工作中的合作伙伴大多都是在北京上海（异地），以及疫情期间在家办公了近两个月，我越发地觉得工作地点对我自己本身的工作并没有多大的影响，既然如此，我为何不转岗到成都的字节跳动呢？</p>
+<p>明确想法后，我罗列了三种转到成都的途径。一个是 base 转到成都，但仍然在当前飞书团队。跟 leader 沟通过后，leader 同意了这种方案，并为我去做了尽力争取。可惜的是从 HR 的角度，这种方案不太利于组织管理，不能开这个口子，而且长期脱离团队也存在比较大的稳定性风险。</p>
+<p>第二个方案是转岗到 People 团队，当时字节也只有 People 业务线在成都有研发团队。因为之前做飞书私有化的时候跟 People 团队有过较多交流，我也推广了我的私有化压测方案，因此对方是欢迎接收的。但因为 People 跟飞书同属一个大部门，要转过去可能会面临着同时要兼顾既有岗位工作和新岗位工作的尴尬处境，再加上我自身对于 People 的业务类型不是很喜欢，因此我比较犹豫。</p>
+<p>第三个方案就是跳槽了，这是我最不想选择的方案，因为我才在字节待了一年，不想那么快换工作。只是迫于当时的形势，我也看了下成都的其它大厂机会，主要是是腾讯的几个产品，包括王者荣耀、腾讯云和企业微信。但由于腾讯不能同时面试多个业务线，因此我在开始面试之前先联系到了各个产品的质量线 leader，打算详细了解情况和匹配度后再决定面试部门。王者荣耀那边名气很大，传说中年终奖很多，但我之前一直没做过游戏相关，自己平时也不玩游戏，因此就简单聊了下作罢。腾讯云那边看岗位描述还挺有意向的，大多都是容器化云平台相关的，不过聊的时候感觉气场不太合拍，也放弃了。对比下来，企业微信是最合适的选择，方向对口、wxg 光环、业务前景喜人，于是我就正式投递了企业微信，开始了「漫长」的面试。说是漫长，主要是轮数很多，业务部门 3 轮技术面 + wxg 面委会 3 轮技术面 + 1 轮 HR 面，但总体耗时也还好，在对方 leader 的给力推进下，七轮面试差不多半个月就搞完了。我也终于见识了传说中的 wxg 面试，果真名不虚传，基本上每轮技术面都要先写代码，甚至有一轮面试一上来就给了三道题，要求 40 分钟内写完。还好我已经习惯了这种形式，代码这块儿没遇到太大问题，项目经历也聊得不错，最终顺利拿到了 offer。</p>
+<p>正当我在纠结要转岗到 People 还是跳槽去企业微信的时候，字节互娱研发（IES）的抖音某业务线（后面简称抖音 S 业务）在成都开设研发部门了，第一时间就有两位 IES 部门的好友同事（GLL 和 HY，都是之前通过 MSTC 大会认识的）给我转发了该消息。不过初步设立的岗位只有业务线开发岗，没有质量方向相关岗位。说到这里非常感谢莉莉的热心张罗，帮我先后联系了抖音 S 业务线服务端负责人和 IES 质量负责人 XBB，以及非常感谢 HY 的大力推荐，感谢 BB 的认可，最终 IES QA 在成都的招聘计划提前了，我也有幸成为了 IES 在成都的第一位测试开发。哦对了，为啥没有考虑跳槽到企业微信呢？最大的原因还是在字节才一年，不想跳槽太频繁；特别是这一年见了很多大佬，无不是之前都在某大厂干了十来年，有所积累和成就的，而我也非常喜欢字节的企业文化，期望能在字节长久发展。接下来就是走正式的转岗流程，退租，搬家，自驾到成都，这些后面再细说。</p>
+<p>转岗到互娱研发后，首先非常震惊的是 QA 部门很大，内部方向也很多。为了帮助我快速了解整体情况，HY 特别有心地帮我联系了各个方向的负责人，然后让我出差到北京、上海、杭州等城市跟各方向负责人当面聊了一遍，熟悉业务的同时也混个脸熟。具体工作方向方面，虽然 IES 在成都的业务方向是抖音 S 业务，但测试开发相对独立，不局限于抖音 S 业务。当时给我的自由度也很高，可以跟着 HY 一起做国际化机架相关的，也可以找新的独立方向。从发展前景来看，单独立新的方向可能会有更多的机会，但经过短暂的考虑后，我还是决定加入 HY 的专项测试团队一起做国际化机架项目。原因很简单，一个是之前跟 HY 团队已经有过密切的合作，他们在做的国际化机架项目具有很多有挑战的点，能满足我个人的技术成长诉求；另一个原因就是在跟HY团队初步接触后，被他们的热情给深深打动了，跟团队成员相处也很融洽。下图是刚转岗时HY拉的一个关怀群，让各个子方向的 owner 帮助我快速融入。</p>
+<p><img src="/images/enroll-team.png" alt></p>
+<h3 id="抖音（成都）"><a href="#抖音（成都）" class="headerlink" title="抖音（成都）"></a>抖音（成都）</h3><p>国际化机架在 <a href="https://debugtalk.com/post/my-2019-summary/">2019 年终总结</a>的「全球化测试」部分已经做了较多的介绍，这里就不再重复。恰好在个人角色从合作团队转向内部团队成员后，我发现当时机架项目还存在缺乏统一测试调度服务、各专项测试 agent 分散的现状，于是很自然地我就先投入到了这部分的建设。总体思路跟之前在飞书的设计方案类似，除了改良之前设计的不足之处外，主要是从项目长远发展的角度，对技术选型做了调整，server 部分（之前由另一位同事使用 Java 开发）和 worker 部分（之前由我使用 Python 开发）都调整为了 Golang，开发框架也都与字节内部技术栈进行了对齐。我也借此机会，使用 Golang 从零开始开发了一套生产级别的分布式系统，熟悉了字节内部的 TCE 云平台、SCM 打包平台、MS 监控平台、Ginex HTTP 框架、Kitex RPC 框架等研发组件。得益于近半年对 Golang 的高频使用，我对 Golang 的熟练度获得了大幅提升，开发效率基本赶上了我使用 Python 的水平，这也算是近半年最大的收获之一了。说到这里，我想说虽然 Python/Ruby 这种动态语言（之前我的主力编程语言）运行很方便，但使用 Golang 这种静态语言时只需要按照思路一顿梭哈、随意重构、只要 IDE 没有报错提示的情况下基本就能运行正确的感觉太爽了。是的，我的主力编程语言已经切换为 Golang 了。</p>
+<p>当然了，今年在测试调度服务方面的工作肯定不仅局限于使用 Golang 将 Task Server/Worker 重写了一遍，而是跟机架整体项目全方位进行了深度融合，并且以 ToB 的标准进行了设计和迭代。在 IaaS 层，Task Worker 整合了所有设备资源，包括 Darwin/Linux/Windows/Android/iOS 等，并初步提供了一些基础能力，实现了对设备的调用操作；在 PaaS 层，Task Server 实现了通用的任务调度能力，并对接了众多字节跳动基础设施，对外提供了统一的 OpenAPI，简化了用户的接入成本；在 SaaS 层，业务方基于 PaaS/IaaS 层的基础能力，就不用再关注设备和任务调度方面的细节，可以更专注于专项测试能力本身的建设。非常开心的是，整个大机架项目（名字先不透露，我做的工作仅占其中一小部分）最终在公司内部通过了 ToB 立项，后续将对外开放提供商业化服务。我有幸能参与到整个项目从 0 到 1 的建设，接下来应该也会全力投入到该项目，期待项目能做大做强，早日扬帆出海。</p>
+<p>转岗到成都后，我很自然地承担起了成都测开岗位的技术面试工作；同时，我也有幸晋升为了二面面试官，会参与到专项测试团队的技术二面。在这里不禁感慨下，成都测试开发岗位真的好难招人。主要原因是成都本地互联网公司普遍都较小，里面基本都只有测试岗位，即使一些有测试开发 title 的人大多数也都是干着测试的事情，最多就是写点自动化脚本，不具备完善的工程开发能力；而少数大厂在成都的分部，里面的人都很稳定，很少跳槽，例如我就了解到成都腾讯，里面有大把一待就是近十年的人。也是因为这个原因，这半年抖音 S 业务线都入职 XX 个测试人员了，我们测试开发团队才只有两个人，发出去的 X 个 offer 也都是应届生（大多数都是同时拿了其它大厂后端开发岗的 offer）。后面如果你们有谁想到成都发展的，请务必联系我啊。</p>
+<p>除了国内的技术面试工作外，我今年还参与了一些海外外包的面试工作；是的，我所在的专项测试团队是一个国际化团队，需要招聘分布在主流国家地区的海外外包。虽然自己的英语口语听力严重退化，但当时也是抱着「锻炼英语口语，体验全球各地英语口音」的想法，将海外面试写进了自己的 OKR，先硬着头皮上，经过近半年累计十来场的面试，总算「基本适应」了。当然了，一开始并没那么顺利。在首场独立面试之前，为了先找回点感觉，我先使用「开言英语」练习英语听力和口语，每天 30-60 分钟的样子，坚持了近 2 个月。还记得当时第一场面试，作为面试官，我应该是比面试者还紧张得多；在面试开始前两个小时，就开始有些「瑟瑟发抖」的感觉；对方是个德裔的荷兰人，面试过程中我听力完全不够用，口语表达也捉襟见肘，一个小时下来我感觉自己基本瘫了。即使是现在，所谓的「基本适应」也是有很多限制条件的，例如印度这种口音 Hard 模式我还是不敢挑战的，而北美这种英语母语国家，自由问答交流环节（面试结束后，通常会问候选人有啥想了解的），我也很难招架得住；相比下来，俄罗斯、韩国这类都是非英语母语的会温和不少，一般遇到这种类型的候选人我相对就不怎么紧张了。</p>
+<h2 id="生活"><a href="#生活" class="headerlink" title="生活"></a>生活</h2><p>伴随工作变迁，今年在生活方面最大的变化也是从深圳转到了成都。我之前是从广州到的深圳，为什么不考虑回广州呢？说来也奇怪，2016 年从广州去深圳的时候，深圳的房价已经很高了，当时我就想的是在深圳待几年以后再回广州。结果今年离开深圳时，却基本没有纠结，毫不犹豫地选择到成都定居。互联网就业环境方面，成都的确比广州还是差挺多的，特别是缺少微信总部这样的机会；但近些年成都的大厂多了不少（虽然都是分部），包括字节跳动多个业务线研发团队的入住，也能满足我自身的职业发展了。而抛开就业方面，成都的其它方面对我具有更大的吸引力，毕竟作为土生土长的重庆（四川）人，成都的美食更合口味，离重庆更近，跟家人和同学相聚也更方便。</p>
+<p>目标明确后，离开深圳时心情格外的轻松，下图是自驾离开深圳，途径前海收费站发的朋友圈。当时我老婆也在她的公众号发了一篇文章，《<a href="https://mp.weixin.qq.com/s?__biz=MzA5ODIzMDU0Nw==&mid=2649603749&idx=1&sn=4493b9faa79c7cc9a6cd0fc7eeb88e86" target="_blank" rel="noopener">在告别深圳的路上，我说成都的夕阳也那么美，你说是的</a>》，里面也记录了很多我们在深圳的美好回忆。</p>
+<p><img src="/images/bye-shenzhen.png" alt></p>
+<p>在文章开头说到，转岗到成都后，工作内容和节奏没太大变化，但生活质量和幸福感得到了极大的提升。</p>
+<p>首先，提升最明显的方面在于居住品质。在深圳的时候，每个月房租加上物业水电费花费接近八千，感觉花的已经挺多了，但也只能租到七十来平米、装修简陋、楼龄老旧的小两房。虽然地段是挺好的，但居住体验真的不咋地。特别是还遇到个虚伪的房东，满嘴的吃亏是福、南无阿弥陀佛（信佛），一副对钱无所谓的样子，实际上想的是吃亏的绝对不能是自己，设施老旧后要找他维修也是极不情愿的样子，最后在我们退租时两个月的押金一万四千多硬是一分钱都没退（之前签约了两年，提前退租不退押金也合法，只是有些气）。当然了，遇到的房东只能算是个例，不能以偏概全，但实际经历还是让自己对深圳少了一分留念。来到成都后，因为成都限购的原因，我们还没有购房资格，因此需要先租房。但选择明显就好了太多。同样是在公司附近（步行上下班），比较不错的小区环境，非常齐全且品质较高的家具家电配套，三房，只需要深圳月租一半的价格。房东人也非常好，相处起来很是愉快。</p>
+<p>哦对了，影响居住品质的还有一个重要因素就是停车。回想起之前在深圳的停车经历真是一把辛酸泪。在龙海家园、深康村居住的时候，经常需要早起去挪车，甚至有时回去比较晚完全找不到车位，只有停在别的车前面，然后半夜被电话叫起来挪车；在信和自由广场租房的时候，小区不给租户办理停车卡，最终不得已在中介的指点下，买烟疏通隔壁小区的保安，将车停在隔壁小区路面上，每次要开个车也很是麻烦。而回到成都后，停车的痛苦就再也不存在了，轻轻松松租了一个地下固定停车位，我也终于体验到了随时回家都有车位的幸福感。</p>
+<p>除了当前实实在在居住品质的改变，幸福感的提升还包括具有了更多选择的可能性。之前在年终总结中也说过，其实以当前自己的收入水平，要在深圳买房也是可以的，但真的只能勉强上车，地段、小区品质不敢奢求太多，更别说对好学位的追求了。而到成都以后，顿时多了很多选择。同样是 500-600 万，在深圳南山只能买两房老破小，而在成都 top 板块的高端小区兼学区房，都是可以买得起的。这半年我们周末也花了很多时间看房，着实开了不少眼界，「新风、地暖、中央空调」标配三大件、带私家花园的叠拼别墅、2.0 容积率大平层、两梯两户私家电梯入户、铝合金钢挂石材外立面、玻璃钻石切面、中英双语管家服务、主动式物业服务，与之相应的，8-10 块每平米的物业费。这些在深圳闻所未闻想都不敢想，在成都居然都可以作为选择的对象了。不过，成都当前二手房挂的偏高，不满五年还有 5.3％ 的增值税，能买到新房是最好的；而高新区的新盘竞争也挺激烈的，拼顺位拼社保时长拼摇号运气，300 万以下总价的神盘基本上没指望进摇号池，好地段好学区 400 万以上总价的盘抢的也很厉害，今年万科公园五号还炸出了 101 岁的刚需代持者。总之还是挺难的，但不管再怎么难，至少还有可能还有希望还有选择，这比起无奈的佛系已经好太多了，不是么？</p>
+<p>不知不觉地，小坚果今年已经三岁了。非常庆幸的是，小坚果胃口很好，身体倍儿棒，这一年健健康康的，基本上没有生病。这一年，小坚果的表达能力强了很多，会一本正经地讲故事了，表达的时候还多了一些连接词，例如「不是的」「我小时候」「然后」「因为」。并且偶尔会冒出一些很新奇的表达，「我肚肚饿到糖了」、「起雾了就是 whoops」、「谢，什么谢，螃蟹的 xie 么」，让我们颇是惊喜。同时，他开始有自己的主见了，自己想唱歌的时候不让我们说话，只能他唱；衣服鞋袜必须要自己脱，要是一不小心帮他脱了，就哭得昏天黑地，必须要给他重新穿上，让他自己重新再做一遍才行。这跟我小时候简直像极了，当年要是父母走在我前面，我也耍浑不干，说路被走过了。</p>
+<p>这一年，小坚果也有了不少改变。他的性格一直都很温和，不争不抢的，玩具被其它小朋友拿走后也默不作声（内心可能也会很难过）；但坚果妈告诉他，如果心里不情愿的话，就要勇敢拒绝，守卫自己的东西；结果他后面在被大哥哥抢玩具的时候，还真的硬刚，把玩具抢回来了。哦对了，他的数数能力也增长了很多。早上上班前我经常会跟他玩一会儿火车轨道之类的游戏，为了能顺利出门，就会让他自己说还要玩几圈。以前他只会说三圈，四圈；后来估计是长记性了，就会说 14 圈，甚至 60 圈，越来越不好忽悠了😂。</p>
+<p><img src="/images/xjg-3.jpeg" alt></p>
+<h2 id="成长-amp-思考"><a href="#成长-amp-思考" class="headerlink" title="成长 &amp; 思考"></a>成长 &amp; 思考</h2><p>说完了工作和生活，再来记录下这一年一些零散的想法。</p>
+<p>互联网行业相比于传统行业，有一个很大的特点就是节奏很快，相应地，我也可以很明显地感觉到互联网从业者会更加浮躁。在空闲的时候，有时候我会逛逛「脉脉」匿名区，看下各个互联网公司的八卦。在里面经常会感受到一些焦虑，「35 岁危机」、「晋升」、「加薪」、「跳槽」都是很高频的话题；最近在快手上市股价猛涨以后，也看到一些提问，怎么能在早期加入下一个快手，实现财务自由。说实话，早几年的时候我也有过这些想法，也幻想过要是再早几年加入字节跳动的话该多好。这就像很多炒币或买房的人，经常会说要是早知道比特币要翻那么多倍，深圳房价要涨那么厉害，早些年买入的话就好了。</p>
+<p>然而，世上没有如果，这种幻想除了浪费时间外，一点意义都没有。而且我也深刻地认识到一个问题，很多时候不是缺少机会，运气也只占一部分因素，而是在机会到来时，我们是否有相应的认知去识别机会，是否有匹配的能力去抓住机会。就以字节跳动为例，最佳的加入时间应该是在 2015 年以前，就算那时我在北京工作，也有幸知道这家公司，但以自己当时的能力，能否面试通过进入字节呢（多半是面试机会都没有）？就算面试通过了，能否拿到期权呢（低阶岗位，基本也没有）？假如当时真有能力可以拿到期权，那多半也是可以拿到其它大厂的 offer，那以当时的整体形势，是否愿意加入一个小公司，而放弃其它大厂的工作机会呢？</p>
+<p>其实，抛开远的不说，就在我 2019 年换工作的时候，也错过了「暴富」的机会。在「<a href="https://debugtalk.com/post/dji-graduated/">写在大疆毕业之际</a>」中，我当时经历了 offer 选择的纠结，OPPO、蚂蚁金服、Shopee、字节跳动，最终我经过深思熟虑，选择了字节跳动。而 Shopee，则在近一年的时间内，股价从当时 26 美金涨到了当前的 270 美金，翻了十多倍，之前授予的股票当前市值差不多达到了 600 万人民币。另一个是发生在身边的例子。一位关系不错的同事（工位就挨着我），在 2020 年初的时候从飞书离职，跳槽去了蚂蚁金服，薪资涨了一大波儿，也拿了不少蚂蚁的期权；结果在蚂蚁待了几个月，因为实在受不了长期出差，就跳槽去了快手；当时因为蚂蚁马上要上市了，市场一片看好，因此跟快手谈 offer 的时候溢价能力很高，又涨了一拨儿，而且谈 offer 时快手是按照 300 亿美金的估值算的期权价格（8 美金一股）。后来的事情大家都知道了，蚂蚁金服 IPO 被迫中断，市场预期大幅降低，而快手上市后，市值突破万亿人民币，我同事的年薪总包相比从字节离职时也翻了几倍。上次跟我这同事聊天时，他回想起自己的经历也感叹太神了，刚好都踩在了点上；我也非常替他开心，送他两个字，牛逼！再回到我在 2019 年换工作的时候，假如当时蚂蚁金服没有临时冻结 HC，以我当时想直接回成都的心态，估计多半就选择成都蚂蚁金服了，那就又是另一个悲伤的故事了。</p>
+<p>所以说，世事难料啊，没有那么多如果。当前网络上流传着一句话，我深以为然，「你永远赚不到你认知之外的钱」。既然如此，我们与其去焦虑，幻想一些虚无缥缈的东西，还不如脚踏实地做好手头的工作，提升自身的专业能力和认知水平，那么在下一次真有机会来临的时候，我们才有可能不再错过。而且再退一步想，我们身处互联网行业，其实已经享受到非常多的行业红利了，人还是知足常乐的好；比起「财务自由」这种跟买彩票中头奖一样的极小概率事件，工作顺心、家庭和睦、身体健康才更实际，也更重要。</p>
+<h2 id="健康"><a href="#健康" class="headerlink" title="健康"></a>健康</h2><p>年龄大了以后，说到健康的问题，总是稍显沉重了些。</p>
+<p>今年受疫情的影响，年初的时候我在家办公了近两个月。工作方面虽然没受啥影响，倒是整天家里蹲，体重涨了好多。然后这一年基本上也没怎么运动（想起去年的新年展望又啪啪打脸），体重就再也没降下去，维持到一百四十多斤了。果不其然，年底在公司年度体检时，查出了轻度脂肪肝，再次给我敲响了警钟。</p>
+<p>今年还有一个身边的事例对我触动挺大的。当时从深圳转岗回到成都时，到一位同事家做客吃饭，还见过同事的父亲，当时都还觉得挺好的；结果几个月后，就听说了噩耗，同事父亲身体不舒服，去医院检查发现是癌症晚期，然后没过多久人就走了。当时我挺难接受这么个事实的，伤痛的同时，也不禁感叹生命的脆弱和健康的宝贵。</p>
+<p>虽然说对健康问题有了更多的重视，但今年在实际行动方面还做的很不够。仅有的行动就是给自己和家人又多买了几份重疾险和医疗险，提升了保额；同时我也打算给自己买几份寿险，万一自己哪天真的遭遇不测后，至少能保证家人的生活不受太大影响。当然了，保险只是作为对最坏情况的保障，最好是永远都用不到的好，健康主要还是得靠良好的生活习惯和日常锻炼，新的一年必须得落实到行动了。</p>
+<h2 id="新年展望"><a href="#新年展望" class="headerlink" title="新年展望"></a>新年展望</h2><p>不知不觉地，2020 年终总结又写了这么多。说来惭愧，一年没写文章了，上一次博客公众号发文还是 2019 年终总结。也是因为太久没写了，手生得厉害，这篇年终总结写得磕磕绊绊，横跨了整个春节假期。不过回顾下来，发现 2020 年竟然经历了那么多事情，通过文字记录下来留点回忆也挺好的。</p>
+<p>最后再展望下 2021 年吧。</p>
+<p>1、工作方面，持续在当前全球化数字体验监测平台项目深耕，期待自己的技术深度能有更大的提升；同时期待项目能顺利推进，早日实现商业化盈利。</p>
+<p>2、个人成长方面，埋头写代码的同时，也多关注下外部方案和商业化的东西，全面提升自己的技术视野；多申请几个技术专利吧。</p>
+<p>3、生活方面，期待摇中心仪楼盘，早日把购房问题搞定了。</p>
+<p>4、健康方面，跟家人一起保持良好的生活习惯，早睡早起；日常锻炼也得提上日程，体重争取降到 130 斤以下。</p>
+<p>5、输入与输出相结合，系统性学习，勤思考，多输出，坚持博客创作。</p>
+<h2 id="往年记录"><a href="#往年记录" class="headerlink" title="往年记录"></a>往年记录</h2><ul>
+<li><a href="https://debugtalk.com/post/my-2019-summary/">《我的 2019 年终总结》</a></li>
+<li><a href="https://debugtalk.com/post/my-2018-summary/">《我的 2018 年终总结》</a></li>
+<li><a href="https://debugtalk.com/post/my-2017-summary/">《我的 2017 年终总结》</a></li>
+<li><a href="https://debugtalk.com/post/my-2016-summary/">《我的 2016 年终总结》</a></li>
+</ul>
+<h2 id="内推岗位"><a href="#内推岗位" class="headerlink" title="内推岗位"></a>内推岗位</h2><p>最后再打个小广告。当前我所在的团队正大力招聘测试开发工程师，特别是成都这边，HC 多多。岗位工作内容在我文中提到了一些，大家如有兴趣可以参考如下岗位 JD，或者找我详细了解更多信息。</p>
+<ul>
+<li>JD: <a href="https://job.toutiao.com/s/JojBoqE" target="_blank" rel="noopener">https://job.toutiao.com/s/JojBoqE</a></li>
+<li>Email: lilong.129#bytedance.com</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
+</div>
+
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/my-2020-summary/" title="我的 2020 年终总结">https://debugtalk.com/post/my-2020-summary/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/年终总结/" rel="tag"># 年终总结</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/algorithm-linked-list/" rel="next" title="数据结构与算法: 链表">
+                <i class="fa fa-chevron-left"></i> 数据结构与算法: 链表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作"><span class="nav-number">1.</span> <span class="nav-text">工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#飞书（深圳）"><span class="nav-number">1.1.</span> <span class="nav-text">飞书（深圳）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转岗经历"><span class="nav-number">1.2.</span> <span class="nav-text">转岗经历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抖音（成都）"><span class="nav-number">1.3.</span> <span class="nav-text">抖音（成都）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生活"><span class="nav-number">2.</span> <span class="nav-text">生活</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成长-amp-思考"><span class="nav-number">3.</span> <span class="nav-text">成长 &amp; 思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#健康"><span class="nav-number">4.</span> <span class="nav-text">健康</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新年展望"><span class="nav-number">5.</span> <span class="nav-text">新年展望</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#往年记录"><span class="nav-number">6.</span> <span class="nav-text">往年记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内推岗位"><span class="nav-number">7.</span> <span class="nav-text">内推岗位</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

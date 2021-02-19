@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=7.0.1" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true,"dimmer":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+
+
+  
+
+<script>
+  (function(i,s,o,g,r,a,m){i["SlardarMonitorObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date;a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://i.snssdk.com/slardar/sdk.js?bid=debugtalk","Slardar");
+</script>
+<script>
+  window.Slardar('config', {
+    sampleRate: 1,
+    bid: 'debugtalk',
+    ignoreAjax: [],
+    ignoreStatic: [],
+    hookFetch: true,
+    enableSizeStats: true
+  });
+  window.Slardar('send', 'pageview');
+</script>
+
+  <meta name="description" content="最近因为工作原因，我又拾起了老本行，开始做Web性能测试。之前虽然做过三四年的性能测试，但是在博客和开源项目方面都没有什么输出，一直是一个很大的遗憾。因此，近期打算围绕服务端性能测试的话题，将自己在这方面的经历进行整理。并且，最近使用的性能测试工具Locust感觉挺不错的，只是其功能比较单薄，特别是在性能指标监控和测试报告图表方面比较缺失，因此也打算在Locust的基础上做二次开发，打造一款自己用">
+<meta name="keywords" content="Locust">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漫谈服务端性能测试">
+<meta property="og:url" content="https://debugtalk.com/post/locustplus-talk-about-performance-test/index.html">
+<meta property="og:site_name" content="DebugTalk">
+<meta property="og:description" content="最近因为工作原因，我又拾起了老本行，开始做Web性能测试。之前虽然做过三四年的性能测试，但是在博客和开源项目方面都没有什么输出，一直是一个很大的遗憾。因此，近期打算围绕服务端性能测试的话题，将自己在这方面的经历进行整理。并且，最近使用的性能测试工具Locust感觉挺不错的，只是其功能比较单薄，特别是在性能指标监控和测试报告图表方面比较缺失，因此也打算在Locust的基础上做二次开发，打造一款自己用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://debugtalk.com/images/google_search.png">
+<meta property="og:image" content="https://debugtalk.com/images/perftest_tool.png">
+<meta property="og:updated_time" content="2019-07-06T08:12:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="漫谈服务端性能测试">
+<meta name="twitter:description" content="最近因为工作原因，我又拾起了老本行，开始做Web性能测试。之前虽然做过三四年的性能测试，但是在博客和开源项目方面都没有什么输出，一直是一个很大的遗憾。因此，近期打算围绕服务端性能测试的话题，将自己在这方面的经历进行整理。并且，最近使用的性能测试工具Locust感觉挺不错的，只是其功能比较单薄，特别是在性能指标监控和测试报告图表方面比较缺失，因此也打算在Locust的基础上做二次开发，打造一款自己用">
+<meta name="twitter:image" content="https://debugtalk.com/images/google_search.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DebugTalk" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="https://debugtalk.com/post/locustplus-talk-about-performance-test/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>漫谈服务端性能测试 | DebugTalk</title>
+  
+
+
+
+
+  <script async src="//www.googletagmanager.com/gtag/js?id=[object Object]"></script>
+  <script>
+    var host = window.location.hostname;
+    if (host !== "localhost" || !true) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-81639610-1');
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DebugTalk</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">探索一个软件工程师的无限可能</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+  <a href="https://github.com/debugtalk" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/locustplus-talk-about-performance-test/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">漫谈服务端性能测试
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-11-02 00:00:00" itemprop="dateCreated datePublished" datetime="2016-11-02T00:00:00+08:00">2016-11-02</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近因为工作原因，我又拾起了老本行，开始做Web性能测试。之前虽然做过三四年的性能测试，但是在博客和开源项目方面都没有什么输出，一直是一个很大的遗憾。因此，近期打算围绕服务端性能测试的话题，将自己在这方面的经历进行整理。并且，最近使用的性能测试工具Locust感觉挺不错的，只是其功能比较单薄，特别是在性能指标监控和测试报告图表方面比较缺失，因此也打算在Locust的基础上做二次开发，打造一款自己用得顺手的性能测试工具，暂且将其命名为<code>LocustPlus</code>吧。</p>
+<h2 id="简述性能测试"><a href="#简述性能测试" class="headerlink" title="简述性能测试"></a>简述性能测试</h2><p>提起性能测试，可能移动APP的从业人员会感觉比较混淆，因为在客户端（Android、iOS）中也有性能测试专项，主要涉及的是APP的启动时间、内存、包大小、帧率，流量等客户端相关的指标。在本博客之前的文章中，也包含了一些客户端性能测试的内容。需要说明的是，本文所讲解的性能测试都是针对服务器端，尤指Web系统的，与移动APP的性能测试完全是不同的领域。</p>
+<p>那么，什么是服务端的性能测试呢？</p>
+<p>先从大家都熟悉的功能测试说起吧。例如，我们要测试一个搜索功能，那么我们测试时，就会输入搜索关键词，点击搜索按钮，然后再去查看搜索结果，看结果是否跟我们输入的搜索关键词匹配，如果匹配则说明搜索功能实现正确。</p>
+<p><img src="/images/google_search.png" alt="Google Search"></p>
+<p>那如何对该功能进行性能测试呢？</p>
+<p>答案就是，N个人同时进行功能性操作的同时，在确保功能实现正确的前提下，考察服务端应用程序的各项性能指标，以及服务器硬件资源的使用情况。</p>
+<p>当然，这个答案比较简单粗暴，但是它仍然包含了性能测试的基本特点：</p>
+<ul>
+<li>以功能实现正确为前提</li>
+<li>通常有一定的并发用户</li>
+<li>重点考察服务器端在一定并发压力下的性能指标</li>
+</ul>
+<p>最后，再明确下性能测试的目的。通常，对服务器端应用程序开展性能测试，是为了验证软件系统是否能够达到预期的性能指标，同时发现软件系统中存在的性能瓶颈，从而实现优化系统的目的。</p>
+<h2 id="性能测试方法的核心"><a href="#性能测试方法的核心" class="headerlink" title="性能测试方法的核心"></a>性能测试方法的核心</h2><p>根据不同的测试目的，性能测试可以分为多种类型，常见的有如下几类：</p>
+<ul>
+<li>基准测试（Standard Testing）</li>
+<li>负载测试（Load Testing）</li>
+<li>压力测试（Stress Testing）</li>
+<li>疲劳强度测试</li>
+</ul>
+<p>首先说下基准测试。基准测试指的是模拟单个用户执行业务场景时，考察系统的性能指标。严格意义上来讲，基准测试并不能算作性能测试范畴，它跟功能测试并没有太大区别。差异在于，基准测试的目的更多地是关注业务功能的正确性，或者说验证测试脚本的正确性，然后，将基准测试时采集得到的系统性能指标，作为基准测试结果，为后续并发压力测试的性能分析提供参考依据。</p>
+<p>负载测试，主要指的是模拟系统在正常负载压力场景下，考察系统的性能指标。这里说的正常负载，主要是指用户对系统能承受的最大业务负载量的期望值，即预计系统最大应该支持多大用户的并发量。通过负载测试，目的是验证系统是否能满足预期的业务压力场景。</p>
+<p>和负载测试的概念比较接近的是压力测试。通俗地讲，压力测试是为了发现在多大并发压力下系统的性能会变得不可接受，或者出现性能拐点（崩溃）的情况。在加压策略上，压力测试会对被测系统逐步加压，在加压的过程中考察系统性能指标的走势情况，最终找出系统在出现性能拐点时的并发用户数，也就是系统支持的最大并发用户数。</p>
+<p>最后再说下疲劳强度测试。其实疲劳强度测试的加压策略跟负载测试也很接近，都是对系统模拟出系统能承受的最大业务负载量，差异在于，疲劳强度测试更关注系统在长时间运行情况下系统性能指标的变化情况，例如，系统在运行一段时间后，是否会出现事务处理失败、响应时间增长、业务吞吐量降低、CPU/内存资源增长等问题。</p>
+<p>通过对比可以发现，不同的性能测试类型，其本质的差异还是在加压策略上，而采用何种加压策略，就取决于我们实际的测试目的，即期望通过性能测试发现什么问题。明白了这一点，性能测试类型的差异也就不再容易混淆了。</p>
+<blockquote>
+<p>结论要点1：性能测试手段的重点在于加压的方式和策略。</p>
+</blockquote>
+<h2 id="性能瓶颈定位的核心"><a href="#性能瓶颈定位的核心" class="headerlink" title="性能瓶颈定位的核心"></a>性能瓶颈定位的核心</h2><p>在前面频繁地提到了性能指标，那性能指标究竟有哪些，我们在性能测试的过程中需要重点关注哪些指标项呢？</p>
+<p>从维度上划分，性能指标主要分为两大类，分别是业务性能指标和系统资源性能指标。</p>
+<p>业务性能指标可以直观地反映被测系统的实际性能状况，常用的指标项有：</p>
+<ul>
+<li>并发用户数</li>
+<li>事务吞吐率（TPS/RPS）</li>
+<li>事务平均响应时间</li>
+<li>事务成功率</li>
+</ul>
+<p>而系统资源性能指标，主要是反映整个系统环境的硬件资源使用情况，常用的指标包括：</p>
+<ul>
+<li>服务器：CPU利用率、处理器队列长度、内存利用率、内存交换页面数、磁盘IO状态、网卡带宽使用情况等；</li>
+<li>数据库：数据库连接数、数据库读写响应时长、数据库读写吞吐量等；</li>
+<li>网络：网络吞吐量、网络带宽、网络缓冲池大小；</li>
+<li>缓存（Redis）：静态资源缓存命中率、动态数据缓存命中率、缓存吞吐量等；</li>
+<li>测试设备（压力发生器）：CPU利用率、处理器队列长度、内存利用率、内存交换页面数、磁盘IO状态、网卡带宽使用情况等。</li>
+</ul>
+<p>对于以上指标的具体含义我就不在此进行逐一说明了，大家可以自行搜索，务必需要搞清楚每个指标的概念及其意义。可能有些指标在不同的操作系统中的名称有些差异，但是基本都会有对应的指标，其代表的意义也是相通的。例如，处理器队列长度这个指标，在Windows中的指标名称是<code>System\Processor Queue Length</code>，而在Linux系统中则需要看<code>load averages</code>。</p>
+<p>可能对于最后一项（测试设备）有些人不大理解，监控被测系统环境的相关硬件资源使用情况不就好了么，为什么还要关注测试设备本身呢？这是因为测试设备在模拟高并发请求的过程中，设备本身也会存在较高的资源消耗，例如CPU、内存、网卡带宽吃满，磁盘IO读写频繁，处理器排队严重等；当出现这类情况后，测试设备本身就会出现瓶颈，无法产生预期的并发压力，从而我们测试得到的数据也就不具有可参考性了。此处暂不进行展开，后面我会再结合实际案例，通过图表和数据对此详细进行说明。</p>
+<p>需要说明的是，性能指标之间通常都是有密切关联的，单纯地看某个指标往往很难定位出性能瓶颈，这需要我们对各项性能指标的含义了然于胸，然后才能在实际测试的过程中对系统性能状况综合进行分析，找出整个系统真正的瓶颈。举个简单的例子，压力测试时发现服务器端CPU利用率非常高，那这个能说明什么问题呢？是服务端应用程序的算法问题，还是服务器硬件资源配置跟不上呢？光看这一个指标并不能定位出产生问题的真正原因，而如果仅因为这一点，就决定直接去优化程序算法或者升级服务器配置，最后也很难真正地解决问题。</p>
+<blockquote>
+<p>结论要点2：性能瓶颈定位的重点在于性能指标的监控和分析。</p>
+</blockquote>
+<h2 id="引入性能测试工具"><a href="#引入性能测试工具" class="headerlink" title="引入性能测试工具"></a>引入性能测试工具</h2><p>通过前面的讲解，我们已经知道性能测试的主要手段是通过产生模拟真实业务的压力对被测系统进行加压，与此同时监控被测系统的各项性能指标，研究被测系统在不同压力情况下的表现，找出其潜在的性能瓶颈。</p>
+<p>那么，如何对系统进行加压，又如何对系统的指标进行监控呢？这里，就需要引入性能测试工具了。</p>
+<p>当然，我们也可以先看下在不借助性能测试工具的情况下，如何手工地对系统进行性能测试。</p>
+<p>假设现在我们要对前面提到的搜索功能进行负载测试，验证在20个并发用户下搜索功能的事务平均响应时间是否在3秒以内。</p>
+<p>很自然地，我们可以想到测试的必要条件有如下几点：</p>
+<ul>
+<li>20个测试人员，产生业务压力</li>
+<li>1个指挥人员，对20个人员的协调控制，实现并发操作</li>
+<li>1个结果记录人员，对每一个人员的操作耗时进行监控和记录</li>
+<li>若干资源监控人员，实时查看被测系统的各项性能指标，对指标进行汇总、分析</li>
+<li>1个结果统计人员，对20个用户各操作消耗的时长进行汇总，计算其平均值</li>
+</ul>
+<p>可以看出，要通过人工来进行性能测试，操作上极为繁琐，需要投入的资源非常多，而这还仅仅是一个非常简单的场景。设想，如果要测试10000并发，服务器有好几十台，显然，这种情况下是完全不可能通过投入人力就能解决的。这也就是性能测试工具存在的必要性和诞生的背景。</p>
+<h2 id="性能测试工具的基本组成"><a href="#性能测试工具的基本组成" class="headerlink" title="性能测试工具的基本组成"></a>性能测试工具的基本组成</h2><p>当前，市面上已经有了很多性能测试工具，但不管是哪一款，基本都会包含如下几个核心的模块。</p>
+<ul>
+<li>压力生成器（Virtual User Generator）</li>
+<li>结果采集器（Result Collector）</li>
+<li>负载控制器（Controller）</li>
+<li>系统资源监控器（Monitor）</li>
+<li>结果分析器（Analysis）</li>
+</ul>
+<p>原理结构图如下所示：</p>
+<p><img src="/images/perftest_tool.png" alt="Google Search"></p>
+<p>对照前面手工进行性能测试的案例，不难理解，压力发生器对应的是众多测试人员，结果采集器对应的是结果记录人员，负载控制器对应的是指挥人员，资源监控器对应的是若干资源监控人员，结果分析器对应的是结果统计人员。</p>
+<p>其中，压力发生器又是性能测试工具最核心的部分，它主要有两个功能，一是真实模拟用户操作，二是模拟有效并发。</p>
+<p>然而，大多数性能测试工作人员可能都会忽略的是，当前市面上性能测试工具的压力发生器基本都是存在缺陷的。</p>
+<p>先说下模拟真实用户操作。如果熟悉浏览器的工作原理，就会知道浏览器在加载网页的时候，是同时并发多个TCP连接去请求页面对应的HTTP资源，包括HTML、JS、图片、CSS，当前流行的浏览器普遍会并发6-10个连接。然而，性能测试工具在模拟单个用户操作的时候，基本上都是单连接串行加载页面资源。产生的差异在于，假如页面有100个资源，每个HTTP请求的响应时间约为100毫秒，那么浏览器采用6个连接并行加载网页时大概会需要1.7秒（<code>100/6*100</code>毫秒），而测试工具采用单连接串行加载就需要10秒（<code>100*100</code>毫秒），两者结果相差十分巨大。这也解释了为什么有时候我们通过性能测试工具测试得到的响应时间挺长，但是手动用浏览器加载网页时感觉挺快的原因。</p>
+<p>再说下有效并发。什么叫有效并发？有效并发就是我们在测试工具中设置了1000虚拟用户数，实际在服务器端就能产生1000并发压力。然而现实情况是，很多时候由于测试设备自身出现了性能瓶颈，压力发生器产生的并发压力远小于设定值，并且通常测试工具也不会将该问题暴露给测试人员；如果测试人员忽略了这个问题，以为测试得到的结果就是在设定并发压力下的结果，那么最终分析得出的结论也就跟实际情况大相径庭了。不过，我们可以通过保障测试环境不存在瓶颈，使得实际生成的并发压力尽可能地与设定值一致；另一方面，我们也可以通过在测试过程中监控Web层（例如Nginx）的连接数和请求数，查看实际达到服务器端的并发数是否跟我们的设定值一致，以此来反推压力发生器的压力是否有效。</p>
+<p>了解这些缺陷的意义在于，我们可以更清楚测试工具的原理，从而更准确地理解测试结果的真实含义。</p>
+<h2 id="性能测试工具推荐"><a href="#性能测试工具推荐" class="headerlink" title="性能测试工具推荐"></a>性能测试工具推荐</h2><p>经过充分的理论铺垫，现在总算可以进入正题，开始讲解工具部分了。</p>
+<p>在性能测试工具方面，我重点向大家推荐<code>Locust</code>这款开源工具。目前阶段，该款工具在国内的知名度还很低，大多数测试人员可能之前都没有接触过。为了便于理解，我先将<code>Locust</code>与LoadRunner、Jmeter这类大众耳熟能详的性能测试工具进行简单对比。</p>
+<table>
+<thead>
+<tr>
+<th align="left">\</th>
+<th>LoadRunner</th>
+<th>Jmeter</th>
+<th>Locust</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">授权方式</td>
+<td>商业收费</td>
+<td>开源免费</td>
+<td>开源免费</td>
+</tr>
+<tr>
+<td align="left">开发语言</td>
+<td>C/Java</td>
+<td>Java</td>
+<td>Python</td>
+</tr>
+<tr>
+<td align="left">测试脚本形式</td>
+<td>C/Java</td>
+<td>GUI</td>
+<td>Python</td>
+</tr>
+<tr>
+<td align="left">并发机制</td>
+<td>进程/线程</td>
+<td>线程</td>
+<td>协程</td>
+</tr>
+<tr>
+<td align="left">单机并发能力</td>
+<td>低</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td align="left">分布式压力</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td align="left">资源监控</td>
+<td>支持</td>
+<td>不支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td align="left">报告与分析</td>
+<td>完善</td>
+<td>简单图表</td>
+<td>简单图表</td>
+</tr>
+<tr>
+<td align="left">支持二次开发</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+</tbody></table>
+<p>通过对比，大家可能会疑惑，<code>Locust</code>也不怎么样嘛，资源监控也不支持，报告分析能力也这么弱，那为啥还要选择它呢？</p>
+<p>授权方式这个就不说了。虽然LoadRunner是商业软件，价格极其昂贵，但是国内盗版横行，别说个人，就算是大型互联网公司，用正版的也没几个。</p>
+<p>从功能特性的角度来讲，LoadRunner是最全面的，用户群体也是最多的，相应的学习资料也最为丰富。个人建议如果是新接触性能测试，可以先熟悉LoadRunner，借此了解性能测试工具各个模块的概念和功能，在此基础上再转到别的测试工具，也都比较好上手了。不过，LoadRunner只能在Windows平台使用，并且并发效率比较低，单台压力机难以产生较高的并发能力，这也是现在我弃用该款工具的主要原因。</p>
+<p>同样地，Jmeter的并发机制也是基于线程，并发效率存在同样的问题；另外，Jmeter在脚本编写和描述方面是基于GUI操作，个人感觉操作比较繁琐（这个因人而异），因此不是很喜欢。</p>
+<p>那么，我重点推荐的<code>Locust</code>有啥特别的地方呢？</p>
+<p>如果从整体功能上来看的话，<code>Locust</code>的功能的确比较单薄。不过，作为性能测试工具最核心的压力发生器部分，却是非常不错的。抛开官方文档的介绍，个人觉得最赞的有两点。</p>
+<p>首先是模拟用户操作，也就是测试脚本描述方面。Locust采用Pure Python脚本描述，并且HTTP请求完全基于<a href="http://docs.python-requests.org/en/master/" target="_blank" rel="noopener"><code>Requests</code></a>库。用过<code>Requests</code>的都知道，这个库非常简洁易用，但功能十分强大，很多其它编程语言的HTTP库都借鉴了它的思想和模式，如果将其评选为最好用的HTTP库之一（不限语言），应该也不会有太大的争议。除了HTTP(S)协议，Locust也可以测试其它任意协议的系统，只需要采用Python调用对应的库进行请求描述即可。</p>
+<p>另外一点就是并发机制了。Locust的并发机制摒弃了进程和线程，采用协程（<a href="http://xlambda.com/gevent-tutorial/" target="_blank" rel="noopener"><code>gevent</code></a>）的机制。采用多线程来模拟多用户时，线程数会随着并发数的增加而增加，而线程之间的切换是需要占用资源的，IO的阻塞和线程的sleep会不可避免的导致并发效率下降；正因如此，LoadRunner和Jmeter这类采用进程和线程的测试工具，都很难在单机上模拟出较高的并发压力。而协程和线程的区别在于，协程避免了系统级资源调度，由此大幅提高了性能。正常情况下，单台普通配置的测试机可以生产数千并发压力，这是LoadRunner和Jmeter都无法实现的。</p>
+<p>有了一个不错的引擎，外表装饰简陋点也都是可以接受的了。不过虽然Locust功能单薄，特别是在性能指标监控和测试报告图表方面比较缺失，但是Locust的代码结构清晰，核心代码量也只有几百行，可扩展性也非常不错。换言之，Locust的可玩性（<code>hackable</code>）极强，对于一个想深入挖掘性能测试工具原理的人来说，<code>Locust</code>非常适合。</p>
+<p>好了，Locust的介绍暂且到这儿，后续我会再对Locust的使用方法和二次开发进行详细介绍，也算是弥补官方文档的不足吧。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.png" alt="debugtalk wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎关注「DebugTalk」，获取本站最新内容。</div>
+</div>
+
+      </div>
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>debugtalk</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://debugtalk.com/post/locustplus-talk-about-performance-test/" title="漫谈服务端性能测试">https://debugtalk.com/post/locustplus-talk-about-performance-test/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Locust/" rel="tag"># Locust</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/build-ideal-app-automation-test-framework/" rel="next" title="打造心目中理想的自动化测试框架（AppiumBooster）">
+                <i class="fa fa-chevron-left"></i> 打造心目中理想的自动化测试框架（AppiumBooster）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/switch-macOS-web-proxy-in-elegant-way/" rel="prev" title="如何优雅地一键实现 macOS 网络代理切换">
+                如何优雅地一键实现 macOS 网络代理切换 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/xiaojianguo.jpg" alt="debugtalk">
+            
+              <p class="site-author-name" itemprop="name">debugtalk</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">60</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/debugtalk" title="GitHub &rarr; https://github.com/debugtalk" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:mail@debugtalk.com" title="E-Mail &rarr; mailto:mail@debugtalk.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简述性能测试"><span class="nav-number">1.</span> <span class="nav-text">简述性能测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能测试方法的核心"><span class="nav-number">2.</span> <span class="nav-text">性能测试方法的核心</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能瓶颈定位的核心"><span class="nav-number">3.</span> <span class="nav-text">性能瓶颈定位的核心</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入性能测试工具"><span class="nav-number">4.</span> <span class="nav-text">引入性能测试工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能测试工具的基本组成"><span class="nav-number">5.</span> <span class="nav-text">性能测试工具的基本组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能测试工具推荐"><span class="nav-number">6.</span> <span class="nav-text">性能测试工具推荐</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">debugtalk</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1257477005&web_id=1257477005"></script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.1"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.1"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+        // ref: https://github.com/ForbesLindesay/unescape-html
+        var unescapeHtml = function(html) {
+          return String(html)
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, '\'')
+            .replace(/&#x3A;/g, ':')
+            // replace all the other &#x; chars
+            .replace(/&#(\d+);/g, function (m, p) { return String.fromCharCode(p); })
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        };
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                content = unescapeHtml(content);
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
