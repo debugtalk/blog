@@ -1134,192 +1134,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Android-performance-test-start-traffic-uid-stat/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/Android-performance-test-start-traffic-uid-stat/" class="post-title-link" itemprop="url">Android App持续集成性能测试：启动流量（1）</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2016-05-03 00:00:00" itemprop="dateCreated datePublished" datetime="2016-05-03T00:00:00+08:00">2016-05-03</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。</p>
-<p>说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持<code>tcpdump</code>工具，通过<code>tcpdump</code>，我们可以实现非常精准的流量测试。但<code>tcpdump</code>也有个问题，就是它捕捉到的流量是系统层面的，我们很难区分捕捉得到的流量数据是否都是当前apk产生的。</p>
-<p>其实，对于特定apk的整体流量数据，在Android系统中都会存储到对应文件中，我们完全可以通过读取对应文件来获得当前apk的流量信息。</p>
-<h2 id="get-app-UID"><a href="#get-app-UID" class="headerlink" title="get app UID"></a>get app UID</h2><p>与流量相关的状态数据存储在<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下，其中，<code>&lt;UID&gt;</code>表示apk对应的UID。</p>
-<p>关于UID，简单地进行下说明。在Linux系统中，UID表示的是User Identifier，主要用于表示是哪位用户运行了该程序。但在Android系统中，由于Android系统本身就为单用户系统，这时UID就被赋予了新的使命，主要用于实现数据共享。具体地，Android系统为每个应用都分配了一个UID，不同apk的UID几乎都是互不相同的，而对于不同UID的apk，不能共享数据资源。之所以用“几乎”，是因为有时候同一厂家会存在多个产品，并且希望能在多个apk之间实现数据共享，这个时候，便可通过在menifest配置文件中指定相同的sharedUserId，然后在Android系统中安装应用时便会分配相同的UID。</p>
-<p>获取app UID的方式有多种，最简单的方式应该还是从<code>/data/system/packages.list</code>中读取，并通过apk的<code>&lt;PKGNAME&gt;</code>找到对应的UID。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/ # cat /data/system/packages.list | grep com.UCMobile.trunk</span><br><span class="line">com.UCMobile.trunk 10084 0 /data/data/com.UCMobile.trunk default 3003,1028,1015</span><br></pre></td></tr></table></figure>
-
-<p>在这里，10084即是<code>com.UCMobile.trunk</code>的UID。</p>
-<h2 id="获取流量数据"><a href="#获取流量数据" class="headerlink" title="获取流量数据"></a>获取流量数据</h2><p>流量数据分为接收流量（tcp_rcv）和发送流量（tcp_snd）两部分，这两个状态数值我们可以通过读取<code>/proc/uid_stat/&lt;UID&gt;</code>目录下的两个文件得到。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_rcv</span><br><span class="line">3446837</span><br><span class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_snd</span><br><span class="line">134366</span><br></pre></td></tr></table></figure>
-
-<p>通过这种方式，我们就可以读取得到指定apk在当前时刻的累计流量数值。</p>
-<h2 id="获得启动流量数据"><a href="#获得启动流量数据" class="headerlink" title="获得启动流量数据"></a>获得启动流量数据</h2><p>有了前面的基础，我们要测试启动流量就很好实现了。只需要在启动前采集下累计流量数值，然后启动应用，完成启动后再采集一次累计流量数值，前后两次累计数值的差值便是当次启动耗费的流量数。需要注意的是，由于很多时候apk在启动后，会在系统后台异步加载一些数据资源，因此为了保证我们采集到当次启动耗费的全部流量数值，我们在启动应用后最好能等待一段时间。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_snd</span><br><span class="line">15068</span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_rcv</span><br><span class="line">98021</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> start app activity, sleep 10s</span></span><br><span class="line"></span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_snd</span><br><span class="line">23268</span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_rcv</span><br><span class="line">965651</span><br></pre></td></tr></table></figure>
-
-<p>采集到前后两次流量数值后，即可计算得到当次启动耗费的总流量。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当次启动总流量 = (23268 + 965651) - (15068 + 98021) = 875830 bytes</span><br></pre></td></tr></table></figure>
-
-<p>当然，这里的启动还分为好几种，包括首次安装启动、非首次安装启动、覆盖安装启动等。具体的启动方式可根据实际场景来定，但在统计流量的方法方面都是相同的。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文讲解了Android App启动流量测试的一种方法。然而，本次介绍的方法也存在一定局限性，因为<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下的<code>tcp_rcv</code>和<code>tcp_snd</code>文件中都只记录了总值，如果我们只关注总体的流量数值还好，但要是我们希望能测试得到更细化的数据，该方法就没法满足我们的测试需求了。</p>
-<p>举个例子，UC浏览器国际版在启动后，会和美国的服务器进行通讯交互。现在，我们想测试UC浏览器国际版在启动后与美国服务器的通讯流量。</p>
-<p>显然，本文中介绍的方法是没法实现上述例子中的测试需求的。那例子中的场景要怎么测呢？这就还是得用到<code>tcpdump</code>，在下一篇文章中我会再详细进行介绍。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Android-performance-test-start-traffic-tcpdump-wireshark/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1476,6 +1290,192 @@
 <p>针对本文中的测试场景，解析pcap文件的代码实现如下。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> dpkt</span><br><span class="line"><span class="keyword">from</span> pcap2har <span class="keyword">import</span> pcap</span><br><span class="line"><span class="keyword">from</span> pcap2har <span class="keyword">import</span> http</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parsePcapFile</span><span class="params">(pcap_file, target_host)</span>:</span></span><br><span class="line">    <span class="comment"># parse pcap file</span></span><br><span class="line">    dispatcher = pcap.EasyParsePcap(filename=pcap_file)</span><br><span class="line"></span><br><span class="line">    traffic_total = <span class="number">0</span></span><br><span class="line">    traffic_receive_total = <span class="number">0</span></span><br><span class="line">    traffic_send_total = <span class="number">0</span></span><br><span class="line">    url_list = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># stream为tcp数据流，当为长链接时一个tcp流里面可以有多个http请求</span></span><br><span class="line">    <span class="keyword">for</span> stream <span class="keyword">in</span> dispatcher.tcp.flows():</span><br><span class="line">        <span class="comment"># fwd为请求大小，如果小于200则肯定不是正常的HTTP请求，忽略</span></span><br><span class="line">        <span class="keyword">if</span> stream.fwd.caplen &lt; <span class="number">200</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        pointer = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> pointer &lt; len(stream.fwd.data):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                myrequest = http.Request(stream.fwd, pointer) <span class="comment">#解析请求头</span></span><br><span class="line">            <span class="keyword">except</span> dpkt.Error <span class="keyword">as</span> error:  <span class="comment"># if the message failed</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">raise</span></span><br><span class="line"></span><br><span class="line">            pointer += myrequest.data_consumed</span><br><span class="line">            myhead = myrequest.msg.headers</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 请求头大小&lt;200时忽略</span></span><br><span class="line">            <span class="keyword">if</span> myrequest.data_consumed &lt; <span class="number">200</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> myhead[<span class="string">"host"</span>] == target_host:</span><br><span class="line">                traffic_receive_total += stream.rev.caplen</span><br><span class="line">                traffic_send_total += stream.fwd.caplen</span><br><span class="line">                traffic_total += stream.streamlen</span><br><span class="line">                url_list.append(myrequest.fullurl)</span><br><span class="line"></span><br><span class="line">    traffic_data = &#123;</span><br><span class="line">        <span class="string">'total'</span>: traffic_total,</span><br><span class="line">        <span class="string">'tcp_snd'</span>: traffic_send_total,</span><br><span class="line">        <span class="string">'tcp_rcv'</span>: traffic_receive_total,</span><br><span class="line">        <span class="string">'url_list'</span>: url_list</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> traffic_data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    pcap_file = <span class="string">""</span></span><br><span class="line">    target_host = <span class="string">"ucus.ucweb.com"</span></span><br><span class="line">    <span class="keyword">print</span> parsePcapFile(pcap_file, target_host)</span><br><span class="line">    <span class="comment"># output: &#123;'url_list': ['http://ucus.ucweb.com/usquery.php'], 'total': 10022, 'tcp_rcv': 6300, 'tcp_snd': 3722&#125;</span></span><br></pre></td></tr></table></figure>
 
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Android-performance-test-start-traffic-uid-stat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/Android-performance-test-start-traffic-uid-stat/" class="post-title-link" itemprop="url">Android App持续集成性能测试：启动流量（1）</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-05-03 00:00:00" itemprop="dateCreated datePublished" datetime="2016-05-03T00:00:00+08:00">2016-05-03</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文对Android App的启动流量测试进行介绍。这里的启动流量指的是网络流量，即App在启动时发起网络请求和接收网络响应时传输的网络数据量。</p>
+<p>说起流量，也许大家的第一反应就是tcpdump/wireshark这类网络抓包工具。的确，Android系统确实也支持<code>tcpdump</code>工具，通过<code>tcpdump</code>，我们可以实现非常精准的流量测试。但<code>tcpdump</code>也有个问题，就是它捕捉到的流量是系统层面的，我们很难区分捕捉得到的流量数据是否都是当前apk产生的。</p>
+<p>其实，对于特定apk的整体流量数据，在Android系统中都会存储到对应文件中，我们完全可以通过读取对应文件来获得当前apk的流量信息。</p>
+<h2 id="get-app-UID"><a href="#get-app-UID" class="headerlink" title="get app UID"></a>get app UID</h2><p>与流量相关的状态数据存储在<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下，其中，<code>&lt;UID&gt;</code>表示apk对应的UID。</p>
+<p>关于UID，简单地进行下说明。在Linux系统中，UID表示的是User Identifier，主要用于表示是哪位用户运行了该程序。但在Android系统中，由于Android系统本身就为单用户系统，这时UID就被赋予了新的使命，主要用于实现数据共享。具体地，Android系统为每个应用都分配了一个UID，不同apk的UID几乎都是互不相同的，而对于不同UID的apk，不能共享数据资源。之所以用“几乎”，是因为有时候同一厂家会存在多个产品，并且希望能在多个apk之间实现数据共享，这个时候，便可通过在menifest配置文件中指定相同的sharedUserId，然后在Android系统中安装应用时便会分配相同的UID。</p>
+<p>获取app UID的方式有多种，最简单的方式应该还是从<code>/data/system/packages.list</code>中读取，并通过apk的<code>&lt;PKGNAME&gt;</code>找到对应的UID。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/ # cat /data/system/packages.list | grep com.UCMobile.trunk</span><br><span class="line">com.UCMobile.trunk 10084 0 /data/data/com.UCMobile.trunk default 3003,1028,1015</span><br></pre></td></tr></table></figure>
+
+<p>在这里，10084即是<code>com.UCMobile.trunk</code>的UID。</p>
+<h2 id="获取流量数据"><a href="#获取流量数据" class="headerlink" title="获取流量数据"></a>获取流量数据</h2><p>流量数据分为接收流量（tcp_rcv）和发送流量（tcp_snd）两部分，这两个状态数值我们可以通过读取<code>/proc/uid_stat/&lt;UID&gt;</code>目录下的两个文件得到。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_rcv</span><br><span class="line">3446837</span><br><span class="line">shell@hammerhead:/ $ cat /proc/uid_stat/10084/tcp_snd</span><br><span class="line">134366</span><br></pre></td></tr></table></figure>
+
+<p>通过这种方式，我们就可以读取得到指定apk在当前时刻的累计流量数值。</p>
+<h2 id="获得启动流量数据"><a href="#获得启动流量数据" class="headerlink" title="获得启动流量数据"></a>获得启动流量数据</h2><p>有了前面的基础，我们要测试启动流量就很好实现了。只需要在启动前采集下累计流量数值，然后启动应用，完成启动后再采集一次累计流量数值，前后两次累计数值的差值便是当次启动耗费的流量数。需要注意的是，由于很多时候apk在启动后，会在系统后台异步加载一些数据资源，因此为了保证我们采集到当次启动耗费的全部流量数值，我们在启动应用后最好能等待一段时间。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_snd</span><br><span class="line">15068</span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10084/tcp_rcv</span><br><span class="line">98021</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> start app activity, sleep 10s</span></span><br><span class="line"></span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_snd</span><br><span class="line">23268</span><br><span class="line">root@hammerhead:/ # cat /proc/uid_stat/10142/tcp_rcv</span><br><span class="line">965651</span><br></pre></td></tr></table></figure>
+
+<p>采集到前后两次流量数值后，即可计算得到当次启动耗费的总流量。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当次启动总流量 = (23268 + 965651) - (15068 + 98021) = 875830 bytes</span><br></pre></td></tr></table></figure>
+
+<p>当然，这里的启动还分为好几种，包括首次安装启动、非首次安装启动、覆盖安装启动等。具体的启动方式可根据实际场景来定，但在统计流量的方法方面都是相同的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文讲解了Android App启动流量测试的一种方法。然而，本次介绍的方法也存在一定局限性，因为<code>/proc/uid_stat/&lt;UID&gt;/</code>目录下的<code>tcp_rcv</code>和<code>tcp_snd</code>文件中都只记录了总值，如果我们只关注总体的流量数值还好，但要是我们希望能测试得到更细化的数据，该方法就没法满足我们的测试需求了。</p>
+<p>举个例子，UC浏览器国际版在启动后，会和美国的服务器进行通讯交互。现在，我们想测试UC浏览器国际版在启动后与美国服务器的通讯流量。</p>
+<p>显然，本文中介绍的方法是没法实现上述例子中的测试需求的。那例子中的场景要怎么测呢？这就还是得用到<code>tcpdump</code>，在下一篇文章中我会再详细进行介绍。</p>
 
           
         

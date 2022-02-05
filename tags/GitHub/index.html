@@ -130,7 +130,7 @@
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="DebugTalk">
-<meta property="og:url" content="https://debugtalk.com/tags/GitHub/index.html">
+<meta property="og:url" content="https://debugtalk.com/tags/Github/index.html">
 <meta property="og:site_name" content="DebugTalk">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
@@ -143,7 +143,7 @@
 
 
 
-  <link rel="canonical" href="https://debugtalk.com/tags/GitHub/">
+  <link rel="canonical" href="https://debugtalk.com/tags/Github/">
 
 
 
@@ -153,7 +153,7 @@
   };
 </script>
 
-  <title>标签: GitHub | DebugTalk</title>
+  <title>标签: Github | DebugTalk</title>
   
 
 
@@ -435,7 +435,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h2>GitHub<small>标签</small>
+        <h2>Github<small>标签</small>
         </h2>
       </div>
 
@@ -447,69 +447,17 @@
 
       <h3 class="post-title">
         
-          <a class="post-title-link" href="/post/clean-sensitive-data-from-git-history-commits/" itemprop="url">
+          <a class="post-title-link" href="/post/How-to-install-a-package-from-Github-that-has-other-github-dependencies/" itemprop="url">
             
-              <span itemprop="name">【GIT技巧】清除历史提交记录中的敏感信息</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-03-17T00:00:00+08:00" content="2017-03-17">
-          03-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/post/head-first-git-authority-verification/" itemprop="url">
-            
-              <span itemprop="name">深入浅出 Git 权限校验</span>
+              <span itemprop="name">How to install a package from Github that has other github dependencies ?</span>
             
           </a>
         
       </h3>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2016-06-15T00:00:00+08:00" content="2016-06-15">
-          06-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-          <a class="post-title-link" href="/post/trap-in-GitHub-authority-verification/" itemprop="url">
-            
-              <span itemprop="name">GitHub 权限校验失败给我的启发</span>
-            
-          </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2016-06-14T00:00:00+08:00" content="2016-06-14">
-          06-14
+        <time class="post-time" itemprop="dateCreated" datetime="2017-08-05T00:00:00+08:00" content="2017-08-05">
+          08-05
         </time>
       </div>
 
@@ -1327,6 +1275,80 @@
           }
 
           // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+on
           $(".local-search-pop-overlay").remove();
           $('body').css('overflow', '');
 

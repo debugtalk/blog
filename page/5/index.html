@@ -884,303 +884,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/head-first-locust-advanced-script/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/head-first-locust-advanced-script/" class="post-title-link" itemprop="url">深入浅出开源性能测试工具 Locust（脚本增强）</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2017-02-22 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-22T00:00:00+08:00">2017-02-22</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在<a href="/post/head-first-locust-user-guide/">《深入浅出开源性能测试工具Locust（使用篇）》</a>一文中，罗列了编写性能测试脚本时常用的几类脚本增强的场景，本文是对应的代码示例。</p>
-<h2 id="关联"><a href="#关联" class="headerlink" title="关联"></a>关联</h2><p>在某些请求中，需要携带之前从Server端返回的参数，因此在构造请求时需要先从之前的Response中提取出所需的参数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_session</span><span class="params">(html)</span>:</span></span><br><span class="line">        tree = etree.HTML(html)</span><br><span class="line">        <span class="keyword">return</span> tree.xpath(<span class="string">"//div[@class='btnbox']/input[@name='session']/@value"</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">    @task(10)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        html = self.client.get(<span class="string">'/login'</span>).text</span><br><span class="line">        username = <span class="string">'user@compay.com'</span></span><br><span class="line">        password = <span class="string">'123456'</span></span><br><span class="line">        session = self.get_session(html)</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: username,</span><br><span class="line">            <span class="string">'password'</span>: password,</span><br><span class="line">            <span class="string">'session'</span>: session</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/login'</span>, data=payload)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="参数化"><a href="#参数化" class="headerlink" title="参数化"></a>参数化</h2><h3 id="循环取数据，数据可重复使用"><a href="#循环取数据，数据可重复使用" class="headerlink" title="循环取数据，数据可重复使用"></a>循环取数据，数据可重复使用</h3><blockquote>
-<p>所有并发虚拟用户共享同一份测试数据，各虚拟用户在数据列表中循环取值。<br>例如，模拟3用户并发请求网页，总共有100个URL地址，每个虚拟用户都会依次循环加载这100个URL地址；加载示例如下表所示。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>\</th>
-<th>vuser1</th>
-<th>vuser2</th>
-<th>vuser3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>iteration1</td>
-<td>url1</td>
-<td>url1</td>
-<td>url1</td>
-</tr>
-<tr>
-<td>iteration2</td>
-<td>url2</td>
-<td>url2</td>
-<td>url2</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-<tr>
-<td>iteration100</td>
-<td>url100</td>
-<td>url100</td>
-<td>url100</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_start</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_visit</span><span class="params">(self)</span>:</span></span><br><span class="line">        url = self.locust.share_data[self.index]</span><br><span class="line">        print(<span class="string">'visit url: %s'</span> % url)</span><br><span class="line">        self.index = (self.index + <span class="number">1</span>) % len(self.locust.share_data)</span><br><span class="line">        self.client.get(url)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line">    share_data = [<span class="string">'url1'</span>, <span class="string">'url2'</span>, <span class="string">'url3'</span>, <span class="string">'url4'</span>, <span class="string">'url5'</span>]</span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="保证并发测试数据唯一性，不循环取数据"><a href="#保证并发测试数据唯一性，不循环取数据" class="headerlink" title="保证并发测试数据唯一性，不循环取数据"></a>保证并发测试数据唯一性，不循环取数据</h3><blockquote>
-<p>所有并发虚拟用户共享同一份测试数据，并且保证虚拟用户使用的数据不重复。<br>例如，模拟3用户并发注册账号，总共有9个账号，要求注册账号不重复，注册完毕后结束测试；加载示例如下表所示。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>\</th>
-<th>vuser1</th>
-<th>vuser2</th>
-<th>vuser3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>iteration1</td>
-<td>account1</td>
-<td>account2</td>
-<td>account3</td>
-</tr>
-<tr>
-<td>iteration2</td>
-<td>account4</td>
-<td>account6</td>
-<td>account5</td>
-</tr>
-<tr>
-<td>iteration3</td>
-<td>account7</td>
-<td>account9</td>
-<td>account8</td>
-</tr>
-<tr>
-<td>N/A</td>
-<td>-</td>
-<td>—</td>
-<td>-</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_register</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = self.locust.user_data_queue.get()</span><br><span class="line">        <span class="keyword">except</span> queue.Empty:</span><br><span class="line">            print(<span class="string">'account data run out, test ended.'</span>)</span><br><span class="line">            exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'register with user: &#123;&#125;, pwd: &#123;&#125;'</span>\</span><br><span class="line">            .format(data[<span class="string">'username'</span>], data[<span class="string">'password'</span>]))</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: data[<span class="string">'username'</span>],</span><br><span class="line">            <span class="string">'password'</span>: data[<span class="string">'password'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/register'</span>, data=payload)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line"></span><br><span class="line">    user_data_queue = queue.Queue()</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"username"</span>: <span class="string">"test%04d"</span> % index,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"pwd%04d"</span> % index,</span><br><span class="line">            <span class="string">"email"</span>: <span class="string">"test%04d@debugtalk.test"</span> % index,</span><br><span class="line">            <span class="string">"phone"</span>: <span class="string">"186%08d"</span> % index,</span><br><span class="line">        &#125;</span><br><span class="line">        user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="保证并发测试数据唯一性，循环取数据"><a href="#保证并发测试数据唯一性，循环取数据" class="headerlink" title="保证并发测试数据唯一性，循环取数据"></a>保证并发测试数据唯一性，循环取数据</h3><blockquote>
-<p>所有并发虚拟用户共享同一份测试数据，保证并发虚拟用户使用的数据不重复，并且数据可循环重复使用。<br>例如，模拟3用户并发登录账号，总共有9个账号，要求并发登录账号不相同，但数据可循环使用；加载示例如下表所示。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>\</th>
-<th>vuser1</th>
-<th>vuser2</th>
-<th>vuser3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>iteration1</td>
-<td>account1</td>
-<td>account2</td>
-<td>account3</td>
-</tr>
-<tr>
-<td>iteration2</td>
-<td>account4</td>
-<td>account6</td>
-<td>account5</td>
-</tr>
-<tr>
-<td>iteration3</td>
-<td>account7</td>
-<td>account9</td>
-<td>account8</td>
-</tr>
-<tr>
-<td>iteration4</td>
-<td>account1</td>
-<td>account2</td>
-<td>account3</td>
-</tr>
-<tr>
-<td>iteration5</td>
-<td>account4</td>
-<td>account5</td>
-<td>account6</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-</tbody></table>
-<p>该种场景的实现方式与上一种场景基本相同，唯一的差异在于，每次使用完数据后，需要再将数据放入队列中。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_register</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = self.locust.user_data_queue.get()</span><br><span class="line">        <span class="keyword">except</span> queue.Empty:</span><br><span class="line">            print(<span class="string">'account data run out, test ended.'</span>)</span><br><span class="line">            exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'register with user: &#123;&#125;, pwd: &#123;&#125;'</span>\</span><br><span class="line">            .format(data[<span class="string">'username'</span>], data[<span class="string">'password'</span>]))</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: data[<span class="string">'username'</span>],</span><br><span class="line">            <span class="string">'password'</span>: data[<span class="string">'password'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/register'</span>, data=payload)</span><br><span class="line">        self.locust.user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line"></span><br><span class="line">    user_data_queue = queue.Queue()</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"username"</span>: <span class="string">"test%04d"</span> % index,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"pwd%04d"</span> % index,</span><br><span class="line">            <span class="string">"email"</span>: <span class="string">"test%04d@debugtalk.test"</span> % index,</span><br><span class="line">            <span class="string">"phone"</span>: <span class="string">"186%08d"</span> % index,</span><br><span class="line">        &#125;</span><br><span class="line">        user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/head-first-locust-user-guide/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1434,6 +1137,303 @@
 <p>如果我们也想在<code>Locust</code>的基础上进行二次开发，那要怎么开始呢？</p>
 <p>毫无疑问，阅读<code>Locust</code>的项目源码是必不可少的第一步。可能对于很多人来说，阅读开源项目源码是一件十分困难的事情，不知道如何着手，在知乎上也看到好多关于如何阅读开源项目源码的提问。事实上，<code>Locust</code>项目的代码结构清晰，核心代码量也比较少，十分适合阅读学习。哪怕只是想体验下阅读开源项目源码，或者说想提升下自己的<code>Python</code>技能，<code>Locust</code>也是个不错的选择。</p>
 <p>在下一篇文章中，我将对<code>Locust</code>源码进行解析，《深入浅出开源性能测试工具Locust（源码篇）》，敬请期待！</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/head-first-locust-advanced-script/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/head-first-locust-advanced-script/" class="post-title-link" itemprop="url">深入浅出开源性能测试工具 Locust（脚本增强）</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-22 00:00:00" itemprop="dateCreated datePublished" datetime="2017-02-22T00:00:00+08:00">2017-02-22</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在<a href="/post/head-first-locust-user-guide/">《深入浅出开源性能测试工具Locust（使用篇）》</a>一文中，罗列了编写性能测试脚本时常用的几类脚本增强的场景，本文是对应的代码示例。</p>
+<h2 id="关联"><a href="#关联" class="headerlink" title="关联"></a>关联</h2><p>在某些请求中，需要携带之前从Server端返回的参数，因此在构造请求时需要先从之前的Response中提取出所需的参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_session</span><span class="params">(html)</span>:</span></span><br><span class="line">        tree = etree.HTML(html)</span><br><span class="line">        <span class="keyword">return</span> tree.xpath(<span class="string">"//div[@class='btnbox']/input[@name='session']/@value"</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">    @task(10)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        html = self.client.get(<span class="string">'/login'</span>).text</span><br><span class="line">        username = <span class="string">'user@compay.com'</span></span><br><span class="line">        password = <span class="string">'123456'</span></span><br><span class="line">        session = self.get_session(html)</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: username,</span><br><span class="line">            <span class="string">'password'</span>: password,</span><br><span class="line">            <span class="string">'session'</span>: session</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/login'</span>, data=payload)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="参数化"><a href="#参数化" class="headerlink" title="参数化"></a>参数化</h2><h3 id="循环取数据，数据可重复使用"><a href="#循环取数据，数据可重复使用" class="headerlink" title="循环取数据，数据可重复使用"></a>循环取数据，数据可重复使用</h3><blockquote>
+<p>所有并发虚拟用户共享同一份测试数据，各虚拟用户在数据列表中循环取值。<br>例如，模拟3用户并发请求网页，总共有100个URL地址，每个虚拟用户都会依次循环加载这100个URL地址；加载示例如下表所示。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>vuser1</th>
+<th>vuser2</th>
+<th>vuser3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iteration1</td>
+<td>url1</td>
+<td>url1</td>
+<td>url1</td>
+</tr>
+<tr>
+<td>iteration2</td>
+<td>url2</td>
+<td>url2</td>
+<td>url2</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>iteration100</td>
+<td>url100</td>
+<td>url100</td>
+<td>url100</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_start</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_visit</span><span class="params">(self)</span>:</span></span><br><span class="line">        url = self.locust.share_data[self.index]</span><br><span class="line">        print(<span class="string">'visit url: %s'</span> % url)</span><br><span class="line">        self.index = (self.index + <span class="number">1</span>) % len(self.locust.share_data)</span><br><span class="line">        self.client.get(url)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line">    share_data = [<span class="string">'url1'</span>, <span class="string">'url2'</span>, <span class="string">'url3'</span>, <span class="string">'url4'</span>, <span class="string">'url5'</span>]</span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="保证并发测试数据唯一性，不循环取数据"><a href="#保证并发测试数据唯一性，不循环取数据" class="headerlink" title="保证并发测试数据唯一性，不循环取数据"></a>保证并发测试数据唯一性，不循环取数据</h3><blockquote>
+<p>所有并发虚拟用户共享同一份测试数据，并且保证虚拟用户使用的数据不重复。<br>例如，模拟3用户并发注册账号，总共有9个账号，要求注册账号不重复，注册完毕后结束测试；加载示例如下表所示。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>vuser1</th>
+<th>vuser2</th>
+<th>vuser3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iteration1</td>
+<td>account1</td>
+<td>account2</td>
+<td>account3</td>
+</tr>
+<tr>
+<td>iteration2</td>
+<td>account4</td>
+<td>account6</td>
+<td>account5</td>
+</tr>
+<tr>
+<td>iteration3</td>
+<td>account7</td>
+<td>account9</td>
+<td>account8</td>
+</tr>
+<tr>
+<td>N/A</td>
+<td>-</td>
+<td>—</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_register</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = self.locust.user_data_queue.get()</span><br><span class="line">        <span class="keyword">except</span> queue.Empty:</span><br><span class="line">            print(<span class="string">'account data run out, test ended.'</span>)</span><br><span class="line">            exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'register with user: &#123;&#125;, pwd: &#123;&#125;'</span>\</span><br><span class="line">            .format(data[<span class="string">'username'</span>], data[<span class="string">'password'</span>]))</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: data[<span class="string">'username'</span>],</span><br><span class="line">            <span class="string">'password'</span>: data[<span class="string">'password'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/register'</span>, data=payload)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line"></span><br><span class="line">    user_data_queue = queue.Queue()</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"username"</span>: <span class="string">"test%04d"</span> % index,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"pwd%04d"</span> % index,</span><br><span class="line">            <span class="string">"email"</span>: <span class="string">"test%04d@debugtalk.test"</span> % index,</span><br><span class="line">            <span class="string">"phone"</span>: <span class="string">"186%08d"</span> % index,</span><br><span class="line">        &#125;</span><br><span class="line">        user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="保证并发测试数据唯一性，循环取数据"><a href="#保证并发测试数据唯一性，循环取数据" class="headerlink" title="保证并发测试数据唯一性，循环取数据"></a>保证并发测试数据唯一性，循环取数据</h3><blockquote>
+<p>所有并发虚拟用户共享同一份测试数据，保证并发虚拟用户使用的数据不重复，并且数据可循环重复使用。<br>例如，模拟3用户并发登录账号，总共有9个账号，要求并发登录账号不相同，但数据可循环使用；加载示例如下表所示。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>vuser1</th>
+<th>vuser2</th>
+<th>vuser3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iteration1</td>
+<td>account1</td>
+<td>account2</td>
+<td>account3</td>
+</tr>
+<tr>
+<td>iteration2</td>
+<td>account4</td>
+<td>account6</td>
+<td>account5</td>
+</tr>
+<tr>
+<td>iteration3</td>
+<td>account7</td>
+<td>account9</td>
+<td>account8</td>
+</tr>
+<tr>
+<td>iteration4</td>
+<td>account1</td>
+<td>account2</td>
+<td>account3</td>
+</tr>
+<tr>
+<td>iteration5</td>
+<td>account4</td>
+<td>account5</td>
+<td>account6</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>该种场景的实现方式与上一种场景基本相同，唯一的差异在于，每次使用完数据后，需要再将数据放入队列中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> locust <span class="keyword">import</span> TaskSet, task, HttpLocust</span><br><span class="line"><span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBehavior</span><span class="params">(TaskSet)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @task</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_register</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = self.locust.user_data_queue.get()</span><br><span class="line">        <span class="keyword">except</span> queue.Empty:</span><br><span class="line">            print(<span class="string">'account data run out, test ended.'</span>)</span><br><span class="line">            exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'register with user: &#123;&#125;, pwd: &#123;&#125;'</span>\</span><br><span class="line">            .format(data[<span class="string">'username'</span>], data[<span class="string">'password'</span>]))</span><br><span class="line">        payload = &#123;</span><br><span class="line">            <span class="string">'username'</span>: data[<span class="string">'username'</span>],</span><br><span class="line">            <span class="string">'password'</span>: data[<span class="string">'password'</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        self.client.post(<span class="string">'/register'</span>, data=payload)</span><br><span class="line">        self.locust.user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebsiteUser</span><span class="params">(HttpLocust)</span>:</span></span><br><span class="line">    host = <span class="string">'https://debugtalk.com'</span></span><br><span class="line">    task_set = UserBehavior</span><br><span class="line"></span><br><span class="line">    user_data_queue = queue.Queue()</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"username"</span>: <span class="string">"test%04d"</span> % index,</span><br><span class="line">            <span class="string">"password"</span>: <span class="string">"pwd%04d"</span> % index,</span><br><span class="line">            <span class="string">"email"</span>: <span class="string">"test%04d@debugtalk.test"</span> % index,</span><br><span class="line">            <span class="string">"phone"</span>: <span class="string">"186%08d"</span> % index,</span><br><span class="line">        &#125;</span><br><span class="line">        user_data_queue.put_nowait(data)</span><br><span class="line"></span><br><span class="line">    min_wait = <span class="number">1000</span></span><br><span class="line">    max_wait = <span class="number">3000</span></span><br></pre></td></tr></table></figure>
+
 
           
         
