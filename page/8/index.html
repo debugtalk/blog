@@ -423,6 +423,209 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/cheat-in-wechat-moments-voting-activity/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/cheat-in-wechat-moments-voting-activity/" class="post-title-link" itemprop="url">微信朋友圈投票活动的刷票案例分析</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-04-04 00:00:00" itemprop="dateCreated datePublished" datetime="2016-04-04T00:00:00+08:00">2016-04-04</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/案例分析/" itemprop="url" rel="index"><span itemprop="name">案例分析</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>现阶段，在微信朋友圈举办的投票活动层出不穷，相信已经有不少同学对此不胜其烦，因为总会时不时地冒出个人（亲戚、朋友、or whatever）来请你帮TA投票。</p>
+<p>本文倒没有打算从道德或者情感层面来探讨这个问题，我所感兴趣的是，当前大多数投票活动其实都是存在明显漏洞的，通过简单的技术手段就可以实现“刷票”。</p>
+<h2 id="案例描述"><a href="#案例描述" class="headerlink" title="案例描述"></a>案例描述</h2><p>这里就有一个案例。</p>
+<p>某美发网上商城（以下简称S商城）在微信平台上举办了一场在线投票活动，微信用户可通过活动链接访问到投票页面，对喜欢的发型师作品进行投票；每个微信帐号每天只能给单个作品投1张选票。</p>
+<p>投票活动页面如下图所示：</p>
+<p><img src="/images/voteRobot_01.png" alt="vote activity overview"></p>
+<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><p>表面上看，S商城已经对投票活动进行了反作弊处理，因为限制了每个微信用户每天只能投一张票。如果用户都是正常地通过微信访问这个投票服务进行投票的话，的确是能起到预期效果的。</p>
+<p>然而，如果查看投票页面的原始地址，即按住页面向下拖动，会发现屏幕顶端显示为”本网页由XXX提供”，需要注意的是，这里的”XXX”并不是”mp.weixin.qq.com”，而是S商城的域名。也就是说，这个投票活动的程序是运行在S商城的服务器上面的。</p>
+<p>基于以上分析，可以推断出用户投票操作的网络拓扑结构示意图应该是这样的：</p>
+<p><img src="/images/voteRobot_02.png" alt="vote system network structure"></p>
+<p>微信用户访问投票页面时，微信服务器只是进行了请求转发，具体的投票计数与校验都是在S商城的服务器上的。</p>
+<p>那么，S商城是怎么来区分投票用户的呢？</p>
+<p>这里就涉及到微信公众平台<code>OpenID</code>的概念了。官方对<code>OpenID</code>的解释是：加密后的微信号，每个用户对每个公众号的OpenID是唯一的。</p>
+<p>要验证这一点也很容易，只需要通过采用多个微信账号进行投票，并对投票过程进行网络抓包，查看POST中的参数就可以证实。</p>
+<p>基于这一点，微信公众平台在转发投票请求时，会在POST参数中包含用户的<code>OpenID</code>；S商城在接收到投票的POST请求后，通过查询当前<code>OpenID</code>是否在当天已经投过票，就可以阻止单一用户重复投票的行为了。</p>
+<p>然而，这里面却存在一个很大的漏洞！</p>
+<p>S商城只能判断<code>OpenID</code>是否出现了重复，但是却无法校验<code>OpenID</code>的有效性，因为它是无法调用微信服务器来对这个<code>OpenID</code>进行校验的。</p>
+<h2 id="VoteRobot实现"><a href="#VoteRobot实现" class="headerlink" title="VoteRobot实现"></a>VoteRobot实现</h2><p>明确了这个漏洞后，要实现刷票就很简单了。</p>
+<ul>
+<li>采用微信用户正常地进行一次投票操作，对设备进行网络抓包，获取到投票过程中HTTP层面的请求参数和响应内容；</li>
+<li>使用Fiddler（或Python脚本）构造投票的HTTP POST请求，保持各参数与真实投票时抓取到的参数内容一致；</li>
+<li>随机生成不同的<code>OpenID</code>参数，重复进行POST请求。</li>
+</ul>
+<p>如果要实现批量刷票，或者刷票自动化操作，那么就可以将刷票请求通过Python脚本来实现；甚至，采用LoadRunner也是可以的。</p>
+<p>运行<code>VoteRobot.py</code>，输出日志如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">======== Start to vote zpid(38), Total votes: 3</span><br><span class="line">1 tickets has been voted, the next ticket will be voted after 35 seconds.</span><br><span class="line">2 tickets has been voted, the next ticket will be voted after 31 seconds.</span><br><span class="line">3 tickets has been voted, the next ticket will be voted after 10 seconds.</span><br><span class="line">======== Voting Ended!</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，通常自动化刷票时最好有个随机的时间间隔，并且，最好能动态模拟不同的设备，即修改<code>User-Agent</code>，否则，服务端可以较为容易地识别作弊行为。</p>
+<h2 id="作弊与反作弊？"><a href="#作弊与反作弊？" class="headerlink" title="作弊与反作弊？"></a>作弊与反作弊？</h2><p>看到这里，也许有的同学心中窃喜，以后投票都可以采用这种方式“刷票”了么？</p>
+<p>很遗憾，当然不是。</p>
+<p>其实本文中案例的漏洞是很低级的，只是，当前的确还存在不少比例的投票活动是采用这种模式。</p>
+<p>要判断一个投票活动是否可以采用这种方式来作弊也很简单。采用本文中的方法，若查看到活动的网址是非微信官方的，而且整个投票过程也没有额外的校验，那么实现作弊的可能性就很大了；再通过抓包看下通讯交互过程，并用网络请求工具修改参数后重新请求下，即可验证是否真的可以作弊了。</p>
+<p>另外，也许有人想问了，网络中的投票活动就没法杜绝“刷票”行为了么？</p>
+<p>答案是，完全杜绝的确很难。听说过12306的黄牛党没？听说过Apple Store专业给应用刷榜单的没？听说过“网络水军”、“五毛党”没？</p>
+<p>不过，活动举办方可以通过一些手段，大大提高作弊的门槛。例如，当前有不少活动就采用了如下方式：</p>
+<ul>
+<li>要求投票用户先关注活动举办方的公众号，然后调用微信官方的投票功能；</li>
+<li>要求投票用户在投票活动举办方的网站上进行注册（手机号验证、实名验证）</li>
+</ul>
+<p>不管采用这两种方式中的哪一种，本文中的“刷票”方法就完全失效了。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/render-multi-level-table-in-webpage/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2306,463 +2509,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/blackbox-testing-method-equivalence-partitioning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/blackbox-testing-method-equivalence-partitioning/" class="post-title-link" itemprop="url">黑盒测试用例设计技术--等价类划分法</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2015-03-18 00:00:00" itemprop="dateCreated datePublished" datetime="2015-03-18T00:00:00+08:00">2015-03-18</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/功能测试/" itemprop="url" rel="index"><span itemprop="name">功能测试</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本文通过案例的形式，详细讲解黑盒测试用例设计技术中的等价类划分法。</p>
-<p>等价类划分是一种典型的黑盒测试方法，其原理是把程序的输入域划分成若干部分（子集），然后从每一个子集中选取少数具有代表性的数据作为测试用例。</p>
-<p>通过等价类划分，可以在尽可能覆盖所有测试路径的前提下，大幅度减少测试用例的数目。</p>
-<p>本文的主要内容有：</p>
-<ul>
-<li>等价类的概念介绍</li>
-<li>划分等价类的原则</li>
-<li>根据等价类设计测试用例的方法</li>
-<li>案例演示</li>
-</ul>
-<h2 id="划分等价类"><a href="#划分等价类" class="headerlink" title="划分等价类"></a>划分等价类</h2><p>等价类是指某个输入域的子集合。在该子集合中，各个输入数据对于揭露程序中的错误都是等效的。并合理的假设，测试某等价类的代表值就等于对这一类其它值的测试。</p>
-<p>等价类划分有两种不同的情况：</p>
-<ul>
-<li>有效等价类：指对于程序的规格说明来说是合理的、有意义的输入数据构成的集合。</li>
-<li>无效等价类：指对程序的规格说明是不合理的或无意义的输入数据所构成的集合。对于具体的问题，无效等价类至少应有一个，也可能有多个。</li>
-</ul>
-<p>在设计测试用例时，要同时考虑有效等价类和无效等价类，以此验证软件在正常操作和异常操作时是否都能正常运行。</p>
-<p>确定等价类的6条原则：</p>
-<p>１、在输入条件规定了取值范围或取值的个数的情况下，可以确立一个有效等价类和两个无效等价类。</p>
-<ul>
-<li>例1：输入值是学生成绩，输入形式为文本框，要求的输入范围是0～100<ul>
-<li>有效等价类：0&lt;=输入成绩&lt;=100；</li>
-<li>无效等价类1：输入成绩&lt;0；</li>
-<li>无效等价类2：输入成绩&gt;100</li>
-</ul>
-</li>
-</ul>
-<p>２、在输入条件规定了输入值的集合或者规定了“必须如何”的条件的情况下，可以确立一个有效等价类和一个无效等价类。</p>
-<ul>
-<li>例2：输入值是人员性别，输入形式为文本框，要求输入的内容必须在集合{男,女}中<ul>
-<li>有效等价类：性别＝’男’ 或者 ‘女’</li>
-<li>无效等价类：性别＝’人妖’</li>
-</ul>
-</li>
-</ul>
-<p>３、在输入条件是一个布尔量的情况下，可以确立一个有效等价类和一个无效等价类。</p>
-<ul>
-<li>例3：输入值是状态标识位“是否完成”，输入形式为单选下拉框，选择范围为{是,否}<ul>
-<li>有效等价类：选项＝’是’ 或者 ‘否’</li>
-<li>无效等价类：未进行选择操作</li>
-</ul>
-</li>
-</ul>
-<p>４、在规定了输入数据的一组值（假设Ｎ个），并且程序要对每一个输入值进行处理的情况下，可以确立Ｎ个有效等价类和一个无效等价类。</p>
-<ul>
-<li>例4：输入值是人员性别，输入形式为文本框，要求输入的内容必须在集合{男,女}中；不同的性别选择将跳转至不同的处理页面<ul>
-<li>有效等价类1：性别＝’男’</li>
-<li>有效等价类2：性别＝’女’</li>
-<li>无效等价类：性别＝’人妖’</li>
-</ul>
-</li>
-</ul>
-<p>５、在规定了输入数据必须遵守的规则的情况下，可以确立一个有效等价类（符合条件）和若干无效等价类（从各个角度违反规则）。</p>
-<ul>
-<li>例5：输入值是人员性别，输入形式为单选下拉框，要求输入的内容必须在集合{男,女}中；<ul>
-<li>有效等价类：性别＝’男’ 或者 ‘女’</li>
-<li>无效等价类1：未选择人员性别</li>
-<li>无效等价类2：在浏览器开发工具中将人员性别的属性值更改为’人妖’</li>
-</ul>
-</li>
-</ul>
-<p>６、在确知已划分的等价类中各元素在程序处理中的方式不同的情况下，则应再将该等价类划分为更小的等价类。</p>
-<ul>
-<li>例6：在例2（输入值是人员性别，输入形式为文本框，要求输入的内容必须在集合{男,女}中）的基础上，不同的性别选择将跳转至不同的处理页面<ul>
-<li>有效等价类：性别＝’男’ 或者 ‘女’<ul>
-<li>有效等价类细分1：性别＝’男’</li>
-<li>有效等价类细分2：性别＝’女’</li>
-</ul>
-</li>
-<li>无效等价类：性别＝’人妖’</li>
-</ul>
-</li>
-</ul>
-<h2 id="列出等价类表"><a href="#列出等价类表" class="headerlink" title="列出等价类表"></a>列出等价类表</h2><table>
-<thead>
-<tr>
-<th align="center">输入条件</th>
-<th align="center">有效等价类</th>
-<th align="center">无效等价类</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">…</td>
-<td align="center">…</td>
-<td align="center">…</td>
-</tr>
-</tbody></table>
-<h2 id="确定测试用例"><a href="#确定测试用例" class="headerlink" title="确定测试用例"></a>确定测试用例</h2><p>根据已列出的等价类表，按照如下步骤确定测试用例：<br>1）为每个等价类规定一个唯一的编号<br>2）设计一个新的测试用例，使其尽可能多地覆盖尚未覆盖的有效等价类。重复这一步，最后使得所有有效等价类均被测试用例所覆盖。<br>3）设计一个新的测试用例，使其只覆盖一个无效等价类。重复这一步，使所有无效等价类均被覆盖。</p>
-<h2 id="Example1"><a href="#Example1" class="headerlink" title="Example1"></a>Example1</h2><blockquote>
-<p>某程序具有如下功能：输入3个正数a、b、c，分别作为三边的边长构成三角形，输出这3个数所构成的三角形类型。<br>用等价类划分方法为该程序进行测试用例设计。</p>
-</blockquote>
-<h3 id="划分等价类-1"><a href="#划分等价类-1" class="headerlink" title="划分等价类"></a>划分等价类</h3><p>分析思路：<br>步骤一、要求输入3个数，且3个数都为正数；参照规则5，划分为一个有效等价类和三个无效等价类。</p>
-<ul>
-<li>有效等价类（1）：a&gt;0; b&gt;0; c&gt;0;</li>
-<li>无效等价类（2）：a&lt;=0</li>
-<li>无效等价类（3）：b&lt;=0</li>
-<li>无效等价类（4）：c&lt;=0</li>
-</ul>
-<p>步骤二、在有效等价类（1）的基础上，参照规则6，对该等价类进行细分；考察3个数能否构成三角形，参照规则5，划分为一个有效等价类和三个无效等价类。</p>
-<ul>
-<li>有效等价类（5）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a</li>
-<li>无效等价类（6）：a&gt;0; b&gt;0; c&gt;0; a+b&lt;=c</li>
-<li>无效等价类（7）：a&gt;0; b&gt;0; c&gt;0; b+c&lt;=a</li>
-<li>无效等价类（8）：a&gt;0; b&gt;0; c&gt;0; a+c&lt;=b</li>
-</ul>
-<p>步骤三、在有效等价类（5）的基础上，参照规则6，对该等价类进行细分；考察3个数能否构成等边三角形，参照规则2，划分为一个有效等价类和一个无效等价类。</p>
-<ul>
-<li>有效等价类（9）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; a=b=c</li>
-<li>无效等价类（10）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; a!=b 或 b!=c 或 c!=a</li>
-</ul>
-<p>步骤四、在无效等价类（10）的基础上，参照规则6，对该等价类进行细分；考察3个数能否构成等腰三角形，参照规则4，划分为三个有效等价类和一个无效等价类。</p>
-<ul>
-<li>有效等价类（11）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; a=b!=c</li>
-<li>有效等价类（12）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; b=c!=a</li>
-<li>有效等价类（13）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; c=a!=b</li>
-<li>无效等价类（14）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; a!=b; a!=c; b!=c</li>
-</ul>
-<h3 id="设计测试用例"><a href="#设计测试用例" class="headerlink" title="设计测试用例"></a>设计测试用例</h3><table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="center">[a,b,c]</th>
-<th align="center">覆盖等价类</th>
-<th align="center">预期输出结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center">覆盖有效等价类</td>
-<td align="center">–</td>
-</tr>
-<tr>
-<td align="center">1</td>
-<td align="center">[6,6,6]</td>
-<td align="center">（1）（5）（9）</td>
-<td align="center">等边三角形</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center">[3,3,5]</td>
-<td align="center">（1）（5）（10）（11）</td>
-<td align="center">等腰三角形</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center">[3,4,4]</td>
-<td align="center">（1）（5）（10）（12）</td>
-<td align="center">等腰三角形</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center">[4,5,4]</td>
-<td align="center">（1）（5）（10）（13）</td>
-<td align="center">等腰三角形</td>
-</tr>
-<tr>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center">覆盖无效等价类</td>
-<td align="center">–</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center">[3,4,5]</td>
-<td align="center">（1）（5）（14）</td>
-<td align="center">一般三角形</td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="center">[-1,3,2]</td>
-<td align="center">（2）</td>
-<td align="center">不能构成三角形</td>
-</tr>
-<tr>
-<td align="center">7</td>
-<td align="center">[3,-1,2]</td>
-<td align="center">（3）</td>
-<td align="center">不能构成三角形</td>
-</tr>
-<tr>
-<td align="center">8</td>
-<td align="center">[3,2,-1]</td>
-<td align="center">（4）</td>
-<td align="center">不能构成三角形</td>
-</tr>
-<tr>
-<td align="center">9</td>
-<td align="center">[1,2,3]</td>
-<td align="center">（1）（6）</td>
-<td align="center">不能构成三角形</td>
-</tr>
-<tr>
-<td align="center">10</td>
-<td align="center">[3,1,2]</td>
-<td align="center">（1）（7）</td>
-<td align="center">不能构成三角形</td>
-</tr>
-<tr>
-<td align="center">11</td>
-<td align="center">[1,3,2]</td>
-<td align="center">（1）（8）</td>
-<td align="center">不能构成三角形</td>
-</tr>
-</tbody></table>
-<h2 id="Example2"><a href="#Example2" class="headerlink" title="Example2"></a>Example2</h2><hr>
-<blockquote>
-<p>某程序具有如下功能：文本框要求输入日期信息，日期限定在1990年1月~2049年12月，并规定日期由6位数字字符组成，前4位表示年，后2位表示月；程序需对输入的日期有效性进行校验。<br>用等价类划分方法为该程序的“日期检查功能”设计测试用例。</p>
-</blockquote>
-<h3 id="划分等价类-2"><a href="#划分等价类-2" class="headerlink" title="划分等价类"></a>划分等价类</h3><p>步骤一、要求输入6个数字字符yyyynn；参照规则5，划分为一个有效等价类和三个无效等价类。</p>
-<ul>
-<li>有效等价类（1）：输入6个数字字符</li>
-<li>无效等价类（2）：输入6个字符，存在非数字的情况</li>
-<li>无效等价类（3）：输入少于6个字符</li>
-<li>无效等价类（4）：输入多于6个字符</li>
-</ul>
-<p>步骤二、在有效等价类（1）的基础上，参照规则6，对该等价类进行细分；考察6个数是否满足日期格式要求，1990&lt;=yyyy&lt;=2049，01&lt;=nn&lt;=12，参照规则，划分为一个有效等价类和四个无效等价类。</p>
-<ul>
-<li>有效等价类（5）：日期格式满足要求，1990&lt;=yyyy&lt;=2049，01&lt;=nn&lt;=12</li>
-<li>无效等价类（6）：yyyy不满足要求，yyyy&lt;1990</li>
-<li>无效等价类（7）：yyyy不满足要求，yyyy&gt;2049</li>
-<li>无效等价类（8）：nn不满足要求，nn&lt;01</li>
-<li>无效等价类（9）：nn不满足要求，nn&gt;12</li>
-</ul>
-<h3 id="设计测试用例-1"><a href="#设计测试用例-1" class="headerlink" title="设计测试用例"></a>设计测试用例</h3><table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="center">yyyynn</th>
-<th align="center">覆盖等价类</th>
-<th align="center">预期输出结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center">覆盖有效等价类</td>
-<td align="center">–</td>
-</tr>
-<tr>
-<td align="center">1</td>
-<td align="center">199307</td>
-<td align="center">（1）（5）</td>
-<td align="center">日期格式有效</td>
-</tr>
-<tr>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center">覆盖无效等价类</td>
-<td align="center">–</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center">19June</td>
-<td align="center">（2）</td>
-<td align="center">日期格式无效</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center">19Jun</td>
-<td align="center">（3）</td>
-<td align="center">日期格式无效</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center">19June2</td>
-<td align="center">（4）</td>
-<td align="center">日期格式无效</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center">198805</td>
-<td align="center">（6）</td>
-<td align="center">日期格式无效</td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="center">205005</td>
-<td align="center">（7）</td>
-<td align="center">日期格式无效</td>
-</tr>
-<tr>
-<td align="center">7</td>
-<td align="center">198800</td>
-<td align="center">（8）</td>
-<td align="center">日期格式无效</td>
-</tr>
-<tr>
-<td align="center">8</td>
-<td align="center">199513</td>
-<td align="center">（9）</td>
-<td align="center">日期格式无效</td>
-</tr>
-</tbody></table>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2811,7 +2557,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-count">95</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3113,7 +2859,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

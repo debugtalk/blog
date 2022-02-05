@@ -423,6 +423,263 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/use-pyenv-manage-multiple-python-virtualenvs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/use-pyenv-manage-multiple-python-virtualenvs/" class="post-title-link" itemprop="url">使用 pyenv 管理多个 Python 版本依赖环境</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-03-25 00:00:00" itemprop="dateCreated datePublished" datetime="2017-03-25T00:00:00+08:00">2017-03-25</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/2-Programming/" itemprop="url" rel="index"><span itemprop="name">2. Programming</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/2-Programming/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>从接触Python以来，一直都是采用<a href="https://virtualenv.pypa.io/en/stable/" target="_blank" rel="noopener"><code>virtualenv</code></a>和<a href="https://pypi.python.org/pypi/virtualenvwrapper" target="_blank" rel="noopener"><code>virtualenvwrapper</code></a>来管理不同项目的依赖环境，通过<code>workon</code>、<code>mkvirtualenv</code>等命令进行虚拟环境切换，很是愉快。</p>
+<p>然而，最近想让项目能兼容更多的Python版本，例如至少同时兼容<code>Python2.7</code>和<code>Python3.3+</code>，就发现采用之前的方式行不通了。</p>
+<p>最大的问题在于，在本地计算机同时安装<code>Python2.7</code>和<code>Python3</code>后，即使分别针对两个Python版本安装了<code>virtualenv</code>和<code>virtualenvwrapper</code>，也无法让两个Python版本的<code>workon</code>、<code>mkvirtualenv</code>命令同时生效。另外一方面，要想在本地计算机安装多个Python版本，会发现安装的成本都比较高，实现方式也不够优雅。</p>
+<p>幸运地是，针对该痛点，已经存在一个比较成熟的方案，那就是<a href="https://github.com/pyenv/pyenv" target="_blank" rel="noopener"><code>pyenv</code></a>。</p>
+<p>如下是官方的介绍。</p>
+<blockquote>
+<p>pyenv lets you easily switch between multiple versions of Python. It’s simple, unobtrusive, and follows the UNIX tradition of single-purpose tools that do one thing well.</p>
+</blockquote>
+<blockquote>
+<p>This project was forked from <a href="https://github.com/rbenv/rbenv" target="_blank" rel="noopener">rbenv</a> and <a href="https://github.com/rbenv/ruby-build" target="_blank" rel="noopener">ruby-build</a>, and modified for Python.</p>
+</blockquote>
+<p>本文就针对<code>pyenv</code>最核心的功能进行介绍。</p>
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>如果要讲解<code>pyenv</code>的工作原理，基本上采用一句话就可以概括，那就是：修改系统环境变量<code>PATH</code>。</p>
+<p>对于系统环境变量<code>PATH</code>，相信大家都不陌生，里面包含了一串由冒号分隔的路径，例如<code>/usr/local/bin:/usr/bin:/bin</code>。每当在系统中执行一个命令时，例如<code>python</code>或<code>pip</code>，操作系统就会在<code>PATH</code>的所有路径中从左至右依次寻找对应的命令。因为是依次寻找，因此排在左边的路径具有更高的优先级。</p>
+<p>而<code>pyenv</code>做的，就是在<code>PATH</code>最前面插入一个<code>$(pyenv root)/shims</code>目录。这样，<code>pyenv</code>就可以通过控制<code>shims</code>目录中的Python版本号，来灵活地切换至我们所需的Python版本。</p>
+<p>如果还想了解更多细节，可以查看<a href="https://github.com/pyenv/pyenv" target="_blank" rel="noopener"><code>pyenv</code></a>的文档介绍及其源码实现。</p>
+<h2 id="环境初始化"><a href="#环境初始化" class="headerlink" title="环境初始化"></a>环境初始化</h2><p><code>pyenv</code>的安装方式包括多种，重点推荐采用<a href="https://github.com/pyenv/pyenv-installer" target="_blank" rel="noopener"><code>pyenv-installer</code></a>的方式，原因主要有两点：</p>
+<ul>
+<li>通过<code>pyenv-installer</code>可一键安装<code>pyenv</code>全家桶，后续也可以很方便地实现一键升级；</li>
+<li><code>pyenv-installer</code>的安装方式基于<code>GitHub</code>，可保证总是使用到最新版本的<code>pyenv</code>，并且<code>Python</code>版本库也是最新最全的。</li>
+</ul>
+<h3 id="install-amp-amp-config"><a href="#install-amp-amp-config" class="headerlink" title="install &amp;&amp; config"></a>install &amp;&amp; config</h3><p>通过如下命令安装<code>pyenv</code>全家桶。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash</span><br></pre></td></tr></table></figure>
+
+<p>内容除了包含<code>pyenv</code>以外，还包含如下插件：</p>
+<ul>
+<li><code>pyenv-doctor</code></li>
+<li><code>pyenv-installer</code></li>
+<li><code>pyenv-update</code></li>
+<li><code>pyenv-virtualenv</code></li>
+<li><code>pyenv-which-ext</code></li>
+</ul>
+<p>安装完成后，<code>pyenv</code>命令还没有加进系统的环境变量，需要将如下内容加到<code>~/.zshrc</code>中，然后执行<code>source ~/.zshrc</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export PATH=$HOME/.pyenv/bin:$PATH</span><br><span class="line">eval &quot;$(pyenv init -)&quot;</span><br><span class="line">eval &quot;$(pyenv virtualenv-init -)&quot;</span><br></pre></td></tr></table></figure>
+
+<p>完成以上操作后，<code>pyenv</code>就安装完成了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv -v</span><br><span class="line">pyenv 1.0.8</span><br></pre></td></tr></table></figure>
+
+<p>如果不确定<code>pyenv</code>的环境是否安装正常，可以通过<code>pyenv doctor</code>命令对环境进行检测。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv doctor</span><br><span class="line">Cloning /Users/Leo/.pyenv/plugins/pyenv-doctor/bin/.....</span><br><span class="line">Installing python-pyenv-doctor...</span><br><span class="line"></span><br><span class="line">BUILD FAILED (OS X 10.12.3 using python-build 20160602)</span><br><span class="line"></span><br><span class="line">Last 10 log lines:</span><br><span class="line">checking for memory.h... yes</span><br><span class="line">checking for strings.h... yes</span><br><span class="line">checking for inttypes.h... yes</span><br><span class="line">checking for stdint.h... yes</span><br><span class="line">checking for unistd.h... yes</span><br><span class="line">checking openssl/ssl.h usability... no</span><br><span class="line">checking openssl/ssl.h presence... no</span><br><span class="line">checking for openssl/ssl.h... no</span><br><span class="line">configure: error: OpenSSL development header is not installed.</span><br><span class="line">make: *** No targets specified and no makefile found.  Stop.</span><br><span class="line">Problem(s) detected while checking system.</span><br></pre></td></tr></table></figure>
+
+<p>通过检测，可以发现本地环境可能存在的问题，例如，从以上输出可以看出，本地的<code>OpenSSL development header</code>还没有安装。根据提示的问题，逐一进行修复，直到检测不再出现问题为止。</p>
+<h3 id="update"><a href="#update" class="headerlink" title="update"></a>update</h3><p>通过<code>pyenv update</code>命令，可以更新<code>pyenv</code>全家桶的所有内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv update</span><br><span class="line">Updating /Users/Leo/.pyenv...</span><br><span class="line">From https://github.com/yyuu/pyenv</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-doctor...</span><br><span class="line">From https://github.com/yyuu/pyenv-doctor</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-installer...</span><br><span class="line">From https://github.com/yyuu/pyenv-installer</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-update...</span><br><span class="line">From https://github.com/yyuu/pyenv-update</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-virtualenv...</span><br><span class="line">From https://github.com/yyuu/pyenv-virtualenv</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br><span class="line">Updating /Users/Leo/.pyenv/plugins/pyenv-which-ext...</span><br><span class="line">From https://github.com/yyuu/pyenv-which-ext</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">Already up-to-date.</span><br></pre></td></tr></table></figure>
+
+<h2 id="pyenv的核心使用方法"><a href="#pyenv的核心使用方法" class="headerlink" title="pyenv的核心使用方法"></a>pyenv的核心使用方法</h2><p><code>pyenv</code>的主要功能如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv -h</span><br><span class="line">Usage: pyenv &lt;command&gt; [&lt;args&gt;]</span><br><span class="line"></span><br><span class="line">Some useful pyenv commands are:</span><br><span class="line">   commands    List all available pyenv commands</span><br><span class="line">   local       Set or show the local application-specific Python version</span><br><span class="line">   global      Set or show the global Python version</span><br><span class="line">   shell       Set or show the shell-specific Python version</span><br><span class="line">   install     Install a Python version using python-build</span><br><span class="line">   uninstall   Uninstall a specific Python version</span><br><span class="line">   rehash      Rehash pyenv shims (run this after installing executables)</span><br><span class="line">   version     Show the current Python version and its origin</span><br><span class="line">   versions    List all Python versions available to pyenv</span><br><span class="line">   which       Display the full path to an executable</span><br><span class="line">   whence      List all Python versions that contain the given executable</span><br><span class="line"></span><br><span class="line">See `pyenv help &lt;command&gt;&apos; for information on a specific command.</span><br><span class="line">For full documentation, see: https://github.com/yyuu/pyenv#readme</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看所有可安装的Python版本"><a href="#查看所有可安装的Python版本" class="headerlink" title="查看所有可安装的Python版本"></a>查看所有可安装的<code>Python</code>版本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv install --list</span><br><span class="line">Available versions:</span><br><span class="line">  2.1.3</span><br><span class="line">  ...</span><br><span class="line">  2.7.12</span><br><span class="line">  2.7.13</span><br><span class="line">  ...</span><br><span class="line">  3.5.3</span><br><span class="line">  3.6.0</span><br><span class="line">  3.6-dev</span><br><span class="line">  3.6.1</span><br><span class="line">  3.7-dev</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，如果是采用<code>brew</code>命令安装的<code>pyenv</code>，可能会发现<code>Python</code>版本库中没有最新的<code>Python</code>版本。所以建议还是通过<code>GitHub</code>源码方式安装<code>pyenv</code>。</p>
+<h3 id="安装指定版本的Python环境"><a href="#安装指定版本的Python环境" class="headerlink" title="安装指定版本的Python环境"></a>安装指定版本的<code>Python</code>环境</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv install 3.6.0</span><br><span class="line">Downloading Python-3.6.0.tar.xz...</span><br><span class="line">-&gt; https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz</span><br><span class="line">Installing Python-3.6.0...</span><br><span class="line">Installed Python-3.6.0 to /Users/Leo/.pyenv/versions/3.6.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看当前系统中所有可用的Python版本"><a href="#查看当前系统中所有可用的Python版本" class="headerlink" title="查看当前系统中所有可用的Python版本"></a>查看当前系统中所有可用的<code>Python</code>版本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv versions</span><br><span class="line">* system (set by /Users/Leo/.pyenv/version)</span><br><span class="line">  2.7.13</span><br><span class="line">  3.6.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="切换Python版本"><a href="#切换Python版本" class="headerlink" title="切换Python版本"></a>切换<code>Python</code>版本</h3><p><code>pyenv</code>可以从三个维度来管理<code>Python</code>环境，简称为：<code>当前系统</code>、<code>当前目录</code>、<code>当前shell</code>。这三个维度的优先级从左到右依次升高，即<code>当前系统</code>的优先级最低、<code>当前shell</code>的优先级最高。</p>
+<p>如果想修改系统全局的Python环境，可以采用<code>pyenv global PYTHON_VERSION</code>命令。该命令执行后会在<code>$(pyenv root)</code>目录（默认为<code>~/.pyenv</code>）中创建一个名为<code>version</code>的文件（如果该文件已存在，则修改该文件的内容），里面记录着系统全局的Python版本号。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv global 2.7.13</span><br><span class="line">$ cat ~/.pyenv/version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv version</span><br><span class="line">2.7.13 (<span class="built_in">set</span> by /Users/Leo/.pyenv/version)</span><br><span class="line"></span><br><span class="line">$ pyenv global 3.6.0</span><br><span class="line">$ cat ~/.pyenv/version</span><br><span class="line">3.6.0</span><br><span class="line">$ pyenv version</span><br><span class="line">3.6.0 (<span class="built_in">set</span> by /Users/Leo/.pyenv/version)</span><br></pre></td></tr></table></figure>
+
+<p>通常情况下，对于特定的项目，我们可能需要切换不同的Python环境，这个时候就可以通过<code>pyenv local PYTHON_VERSION</code>命令来修改<code>当前目录</code>的Python环境。命令执行后，会在当前目录中生成一个<code>.python-version</code>文件（如果该文件已存在，则修改该文件的内容），里面记录着当前目录使用的Python版本号。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ cat ~/.pyenv/version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv <span class="built_in">local</span> 3.6.0</span><br><span class="line">$ cat .python-version</span><br><span class="line">3.6.0</span><br><span class="line">$ cat ~/.pyenv/version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv version</span><br><span class="line">3.6.0 (<span class="built_in">set</span> by /Users/Leo/MyProjects/.python-version)</span><br><span class="line">$ pip -V</span><br><span class="line">pip 9.0.1 from /Users/Leo/.pyenv/versions/3.6.0/lib/python3.6/site-packages (python 3.6)</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，当前目录中的<code>.python-version</code>配置优先于系统全局的<code>~/.pyenv/version</code>配置。</p>
+<p>另外一种情况，通过执行<code>pyenv shell PYTHON_VERSION</code>命令，可以修改<code>当前shell</code>的Python环境。执行该命令后，会在当前<code>shell session</code>（Terminal窗口）中创建一个名为<code>PYENV_VERSION</code>的环境变量，然后在<code>当前shell</code>的任意目录中都会采用该环境变量设定的Python版本。此时，<code>当前系统</code>和<code>当前目录</code>中设定的Python版本均会被忽略。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="variable">$PYENV_VERSION</span></span><br><span class="line"></span><br><span class="line">$ pyenv shell 3.6.0</span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$PYENV_VERSION</span></span><br><span class="line">3.6.0</span><br><span class="line">$ cat .python-version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv version</span><br><span class="line">3.6.0 (<span class="built_in">set</span> by PYENV_VERSION environment variable)</span><br></pre></td></tr></table></figure>
+
+<p>顾名思义，<code>当前shell</code>的Python环境仅在当前shell中生效，重新打开一个新的shell后，该环境也就失效了。如果想在<code>当前shell</code>中取消shell级别的Python环境，采用<code>unset</code>命令重置<code>PYENV_VERSION</code>环境变量即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cat .python-version</span><br><span class="line">2.7.13</span><br><span class="line">$ pyenv version</span><br><span class="line">3.6.0 (<span class="built_in">set</span> by PYENV_VERSION environment variable)</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">unset</span> PYENV_VERSION</span><br><span class="line">$ pyenv version</span><br><span class="line">2.7.13 (<span class="built_in">set</span> by /Users/Leo/MyProjects/.python-version)</span><br></pre></td></tr></table></figure>
+
+<h2 id="管理多个依赖库环境"><a href="#管理多个依赖库环境" class="headerlink" title="管理多个依赖库环境"></a>管理多个依赖库环境</h2><p>经过以上操作，我们在本地计算机中就可以安装多个版本的<code>Python</code>运行环境，并可以按照实际需求进行灵活地切换。然而，很多时候在同一个<code>Python</code>版本下，我们仍然希望能根据项目进行环境分离，就跟之前我们使用<code>virtualenv</code>一样。</p>
+<p>在<code>pyenv</code>中，也包含这么一个插件，<a href="https://github.com/pyenv/pyenv-virtualenv" target="_blank" rel="noopener"><code>pyenv-virtualenv</code></a>，可以实现同样的功能。</p>
+<p>使用方式如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv virtualenv PYTHON_VERSION PROJECT_NAME</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>PYTHON_VERSION</code>是具体的Python版本号，例如，<code>3.6.0</code>，<code>PROJECT_NAME</code>是我们自定义的项目名称。比较好的实践方式是，在<code>PROJECT_NAME</code>也带上Python的版本号，以便于识别。</p>
+<p>现假设我们有<code>XDiff</code>这么一个项目，想针对<code>Python 2.7.13</code>和<code>Python 3.6.0</code>分别创建一个虚拟环境，那就可以依次执行如下命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv virtualenv 3.6.0 py36_XDiff</span><br><span class="line">$ pyenv virtualenv 2.7.13 py27_XDiff</span><br></pre></td></tr></table></figure>
+
+<p>创建完成后，通过执行<code>pyenv virtualenvs</code>命令，就可以看到本地所有的项目环境。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv virtualenvs</span><br><span class="line">  2.7.13/envs/py27_XDiff (created from /Users/Leo/.pyenv/versions/2.7.13)</span><br><span class="line">* 3.6.0/envs/py36_XDiff (created from /Users/Leo/.pyenv/versions/3.6.0)</span><br><span class="line">  py27_XDiff (created from /Users/Leo/.pyenv/versions/2.7.13)</span><br><span class="line">  py36_XDiff (created from /Users/Leo/.pyenv/versions/3.6.0)</span><br></pre></td></tr></table></figure>
+
+<p>通过这种方式，在同一个Python版本下我们也可以创建多个虚拟环境，然后在各个虚拟环境中分别维护依赖库环境。</p>
+<p>例如，<code>py36_XDiff</code>虚拟环境位于<code>/Users/Leo/.pyenv/versions/3.6.0/envs</code>目录下，而其依赖库位于<code>/Users/Leo/.pyenv/versions/3.6.0/lib/python3.6/site-packages</code>中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pip -V</span><br><span class="line">pip 9.0.1 from /Users/Leo/.pyenv/versions/3.6.0/lib/python3.6/site-packages (python 3.6)</span><br></pre></td></tr></table></figure>
+
+<p>后续在项目开发过程中，我们就可以通过<code>pyenv local XXX</code>或<code>pyenv activate PROJECT_NAME</code>命令来切换项目的<code>Python</code>环境。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜  MyProjects pyenv <span class="built_in">local</span> py27_XDiff</span><br><span class="line">(py27_XDiff) ➜  MyProjects pyenv version</span><br><span class="line">py27_XDiff (<span class="built_in">set</span> by /Users/Leo/MyProjects/.python-version)</span><br><span class="line">(py27_XDiff) ➜  MyProjects python -V</span><br><span class="line">Python 2.7.13</span><br><span class="line">(py27_XDiff) ➜  MyProjects pip -V</span><br><span class="line">pip 9.0.1 from /Users/Leo/.pyenv/versions/2.7.13/envs/py27_XDiff/lib/python2.7/site-packages (python 2.7)</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，切换环境后，<code>pip</code>命令对应的目录也随之改变，即始终对应着当前的Python虚拟环境。</p>
+<p>对应的，采用<code>pyenv deactivate</code>命令退出当前项目的<code>Python</code>虚拟环境。</p>
+<p>如果想移除某个项目环境，可以通过如下命令实现。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pyenv uninstall PROJECT_NAME</span><br></pre></td></tr></table></figure>
+
+<p>以上便是日常开发工作中常用的<code>pyenv</code>命令，基本可以满足绝大多数依赖库环境管理方面的需求。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/clean-sensitive-data-from-git-history-commits/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2618,209 +2875,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/Jenkins-CI-Automation-Test/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/Jenkins-CI-Automation-Test/" class="post-title-link" itemprop="url">使用 Jenkins 实现持续集成构建检查</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2016-08-14 00:00:00" itemprop="dateCreated datePublished" datetime="2016-08-14T00:00:00+08:00">2016-08-14</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/" itemprop="url" rel="index"><span itemprop="name">4. ToolsNotes</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/4-ToolsNotes/Jenkins/" itemprop="url" rel="index"><span itemprop="name">Jenkins</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>通过<a href="/post/iOS-Android-Packing-with-Jenkins/">《使用Jenkins搭建iOS/Android持续集成打包平台》</a>和<a href="/post/iOS-Android-Packing-with-Jenkins-details/">《关于持续集成打包平台的Jenkins配置和构建脚本实现细节》</a>两篇文章，我们已经在原理概念和实践操作两个层面掌握了如何搭建一个完整的持续集成打包平台。</p>
-<p>不过，在实际使用过程中，发现有时候还会存在一个问题。研发同学提交新的代码后，Jenkins端可以成功执行构建，并生成安装包；然而在将安装包安装至移动设备时，却发现有时候会出现无法成功安装，或者安装后出现启动闪退的情况。</p>
-<p>为了及时发现该类问题，我们还需要对每次构建生成的安装包进行检查。本文便是对构建检查涉及到的方法进行介绍。</p>
-<h2 id="构建生成-app"><a href="#构建生成-app" class="headerlink" title="构建生成.app"></a>构建生成<code>.app</code></h2><p>为了降低问题的复杂度，我们可以选择在模拟器中运行构建生成的安装包。之前在<a href="/post/build-app-automated-test-platform-from-0-to-1-Appium-inspector-iOS-simulator/">《从0到1搭建移动App功能自动化测试平台（1）：模拟器中运行iOS应用》</a>也讲解过，要在模拟器中运行iOS应用，需要在Xcode中编译时选择模拟器类型，并且编译生成的文件后缀为<code>.app</code>。</p>
-<p>对应的，构建生成<code>.app</code>的命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build .app file from source code</span></span><br><span class="line">xcodebuild \    <span class="comment"># xctool</span></span><br><span class="line">  -workspace <span class="variable">$&#123;WORKSPACE_PATH&#125;</span> \</span><br><span class="line">  -scheme <span class="variable">$&#123;SCHEME&#125;</span> \</span><br><span class="line">  -configuration <span class="variable">$&#123;CONFIGURATION&#125;</span> \</span><br><span class="line">  -sdk <span class="variable">$&#123;SDK&#125;</span> \</span><br><span class="line">  -derivedDataPath <span class="variable">$&#123;OUTPUT_FOLDER&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>xcodebuild/xctool参数说明</strong>：</p>
-<ul>
-<li><code>-workspace</code>：需要打包的workspace，后面接的文件一定要是<code>.xcworkspace</code>结尾的；</li>
-<li><code>-scheme</code>：需要打包的Scheme，一般与<code>$project_name</code>相同；</li>
-<li><code>-sdk</code>：区分iphone device和Simulator，可通过<code>xcodebuild -showsdks</code>获取，例如<code>iphonesimulator9.3</code>。</li>
-<li><code>-configuration</code>：需要打包的配置文件，我们一般在项目中添加多个配置，适合不同的环境，Release/Debug；</li>
-<li><code>-derivedDataPath</code>：指定编译结果文件的存储路径；例如，指定<code>-derivedDataPath build_outputs</code>时，将在项目根目录下创建一个<code>build_outputs</code>文件夹，生成的<code>.app</code>文件将位于<code>build_outputs/Build/Products/${CONFIGURATION}-iphoneos</code>中。</li>
-</ul>
-<p>同样地，这里也可以使用<code>xctool</code>代替<code>xcodebuild</code>。</p>
-<p>这里使用到的命令和参数基本上和<a href="/post/iOS-Android-Packing-with-Jenkins-details/">《关于持续集成打包平台的Jenkins配置和构建脚本实现细节》</a>一文中的大致相同，唯一需要特别注意的是<code>-sdk</code>参数。因为是要在模拟器中运行，因此<code>-sdk</code>参数要设置为<code>iphonesimulator</code>，而非<code>iphoneos</code>。</p>
-<p>命令成功执行后，就会在指定的<code>${OUTPUT_FOLDER}</code>目录中生成<code>${SCHEME}.app</code>文件，这也就是我们构建生成的产物。另外，熟悉<code>iOS</code>的同学都知道，<code>.app</code>文件其实是一个文件夹，为了实现更好的存储，我们也可以额外地再做一步操作，将<code>.app</code>文件夹压缩转换为<code>.zip</code>格式，而且Appium也是支持读取<code>.zip</code>格式的安装包的。</p>
-<p>至此，适用于iOS模拟器运行的构建产物已准备就绪。这里涉及到的脚本实现已更新至<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" rel="noopener">【debugtalk/JenkinsTemplateForApp】</a>。</p>
-<h2 id="实现构建检查"><a href="#实现构建检查" class="headerlink" title="实现构建检查"></a>实现构建检查</h2><p>那要怎样对构建生成的产物进行检查呢？</p>
-<p>最简单的方式，就是在iOS模拟器中运行构建生成的<code>.app</code>，并执行一组基本的自动化测试用例。在执行过程中，如果出现无法成功安装，或者安装成功后启动出现闪退，或者自动化测试用例执行失败等异常情况，则说明我们最新提交的代码存在问题，需要通知研发同学及时进行修复。</p>
-<p>而这些实现方式，其实我在<a href="/tags/F0T1/">《从0到1搭建移动App功能自动化测试平台》</a>系列文章中都已经进行了详细讲解，并形成了一套较为成熟的自动化测试框架，【<a href="https://github.com/debugtalk/AppiumBooster" target="_blank" rel="noopener">debugtalk/AppiumBooster</a>】。</p>
-<p>在此基础上，我们无需再做其它工作，只需要按照<code>debugtalk/AppiumBooster</code>的要求在表格中编写一组基本的自动化测试用例，即可采用如下方式执行构建检查。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> <span class="variable">$&#123;AppiumBooster_Folder&#125;</span></span><br><span class="line">$ ruby run.rb -p <span class="string">"<span class="variable">$&#123;OUTPUT_FOLDER&#125;</span>/<span class="variable">$&#123;SCHEME&#125;</span>.app.zip"</span> --disable_output_color &gt; test_result.log</span><br></pre></td></tr></table></figure>
-
-<p>在如上命令中，通过<code>-p</code>参数指定构建生成的安装包，然后就可以在iOS模拟器中运行事先编写好的自动化测试用例，从而实现构建检查。</p>
-<p>在这里，我们还可以通过<code>--disable_output_color</code>开关将输出日志的颜色关闭。<del>之所以实现这么一个功能，是因为在Jenkins中本来也无法显示颜色，但是如果还将Terminal中有颜色的日志内容输出到Jenkins中，就会出现一些额外的字符，比较影响日志的美观。</del></p>
-<p>现在，我们已经分别实现了代码构建和构建检查这两个核心的操作环节，而要执行最终的持续集成，我们还需要做最后一项工作，即在Jenkins中将这两个环节串联起来。</p>
-<h2 id="Jenkins配置"><a href="#Jenkins配置" class="headerlink" title="Jenkins配置"></a>Jenkins配置</h2><p>关于Jenkins的相关基础概念、实施流程和配置细节，我在<a href="/tags/Jenkins/">之前的文章</a>中已经讲解得非常详细了。在此我就只进行一点补充。</p>
-<p>要实现在构建完成后再运行一些额外的脚本，例如我们的构建检查命令，需要使用到Jenkins的一个插件，<code>Post-Build Script Plug-in</code>。</p>
-<p>安装完该插件后，在Jenkins配置界面的<code>Post-build Actions</code>栏目中，<code>Add post-build action</code>选项列表中就会多出<code>Execute a set of scripts</code>选项。选择该项后，会出现如下配置界面。</p>
-<p><img src="/images/Jenkins_Post_build_Actions_Execute_shell_menu.jpg" alt="Jenkins Post_build_Actions Execute_shell menu"></p>
-<p>选择<code>Execute shell</code>后，会出现一个文本框，然后我们就可以将构建检查的命令填写到里面。</p>
-<p><img src="/images/Jenkins_Post_build_Actions_Execute_shell.jpg" alt="Jenkins Post_build_Actions Execute_shell"></p>
-<p>在这里我们用到了<code>${AppiumBooster_Folder}</code>参数，该参数也需要通过<code>String Parameter</code>来进行定义，用于指定<code>AppiumBooster</code>项目的路径。</p>
-<p><img src="/images/Jenkins_String_Parameter.jpg" alt="Jenkins String Parameter"></p>
-<p>最后，为了便于将执行自动化测试用例的日志和执行构建的日志分开，我们将执行自动化测试用例的日志写入到了<code>test_result.log</code>文件中。然后，在<code>Archives build artifacts</code>中就可以通过<code>${AppiumBooster_Folder}/test_result.log</code>将执行构建检查的日志收集起来，并展示到每次构建的页面中。</p>
-<p>延续一贯的<code>开箱即用</code>原则，我将使用Jenkins实现持续集成构建检查涉及到的Jenkins配置也做成了一套模板，并更新到【<a href="https://github.com/debugtalk/JenkinsTemplateForApp" target="_blank" rel="noopener">debugtalk/JenkinsTemplateForApp</a>】中了，供大家参考。</p>
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>至此，通过<a href="/tags/Jenkins/">本系列的几篇文章</a>，关于如何使用Jenkins实现移动APP持续集成的相关内容应该都已经覆盖得差不多了。</p>
-<p>不过，由于我个人的近期工作主要集中在iOS部分，因此在讲解的过程中都是以iOS为主。后续在将工作重心移到Android部分后，我会再在<code>DebugTalk</code>的这几篇文章中更新Android部分的内容。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2869,7 +2923,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-count">95</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3171,7 +3225,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

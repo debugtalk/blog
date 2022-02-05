@@ -423,6 +423,463 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/blackbox-testing-method-equivalence-partitioning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="debugtalk">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/xiaojianguo.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DebugTalk">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/post/blackbox-testing-method-equivalence-partitioning/" class="post-title-link" itemprop="url">黑盒测试用例设计技术--等价类划分法</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2015-03-18 00:00:00" itemprop="dateCreated datePublished" datetime="2015-03-18T00:00:00+08:00">2015-03-18</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/功能测试/" itemprop="url" rel="index"><span itemprop="name">功能测试</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文通过案例的形式，详细讲解黑盒测试用例设计技术中的等价类划分法。</p>
+<p>等价类划分是一种典型的黑盒测试方法，其原理是把程序的输入域划分成若干部分（子集），然后从每一个子集中选取少数具有代表性的数据作为测试用例。</p>
+<p>通过等价类划分，可以在尽可能覆盖所有测试路径的前提下，大幅度减少测试用例的数目。</p>
+<p>本文的主要内容有：</p>
+<ul>
+<li>等价类的概念介绍</li>
+<li>划分等价类的原则</li>
+<li>根据等价类设计测试用例的方法</li>
+<li>案例演示</li>
+</ul>
+<h2 id="划分等价类"><a href="#划分等价类" class="headerlink" title="划分等价类"></a>划分等价类</h2><p>等价类是指某个输入域的子集合。在该子集合中，各个输入数据对于揭露程序中的错误都是等效的。并合理的假设，测试某等价类的代表值就等于对这一类其它值的测试。</p>
+<p>等价类划分有两种不同的情况：</p>
+<ul>
+<li>有效等价类：指对于程序的规格说明来说是合理的、有意义的输入数据构成的集合。</li>
+<li>无效等价类：指对程序的规格说明是不合理的或无意义的输入数据所构成的集合。对于具体的问题，无效等价类至少应有一个，也可能有多个。</li>
+</ul>
+<p>在设计测试用例时，要同时考虑有效等价类和无效等价类，以此验证软件在正常操作和异常操作时是否都能正常运行。</p>
+<p>确定等价类的6条原则：</p>
+<p>１、在输入条件规定了取值范围或取值的个数的情况下，可以确立一个有效等价类和两个无效等价类。</p>
+<ul>
+<li>例1：输入值是学生成绩，输入形式为文本框，要求的输入范围是0～100<ul>
+<li>有效等价类：0&lt;=输入成绩&lt;=100；</li>
+<li>无效等价类1：输入成绩&lt;0；</li>
+<li>无效等价类2：输入成绩&gt;100</li>
+</ul>
+</li>
+</ul>
+<p>２、在输入条件规定了输入值的集合或者规定了“必须如何”的条件的情况下，可以确立一个有效等价类和一个无效等价类。</p>
+<ul>
+<li>例2：输入值是人员性别，输入形式为文本框，要求输入的内容必须在集合{男,女}中<ul>
+<li>有效等价类：性别＝’男’ 或者 ‘女’</li>
+<li>无效等价类：性别＝’人妖’</li>
+</ul>
+</li>
+</ul>
+<p>３、在输入条件是一个布尔量的情况下，可以确立一个有效等价类和一个无效等价类。</p>
+<ul>
+<li>例3：输入值是状态标识位“是否完成”，输入形式为单选下拉框，选择范围为{是,否}<ul>
+<li>有效等价类：选项＝’是’ 或者 ‘否’</li>
+<li>无效等价类：未进行选择操作</li>
+</ul>
+</li>
+</ul>
+<p>４、在规定了输入数据的一组值（假设Ｎ个），并且程序要对每一个输入值进行处理的情况下，可以确立Ｎ个有效等价类和一个无效等价类。</p>
+<ul>
+<li>例4：输入值是人员性别，输入形式为文本框，要求输入的内容必须在集合{男,女}中；不同的性别选择将跳转至不同的处理页面<ul>
+<li>有效等价类1：性别＝’男’</li>
+<li>有效等价类2：性别＝’女’</li>
+<li>无效等价类：性别＝’人妖’</li>
+</ul>
+</li>
+</ul>
+<p>５、在规定了输入数据必须遵守的规则的情况下，可以确立一个有效等价类（符合条件）和若干无效等价类（从各个角度违反规则）。</p>
+<ul>
+<li>例5：输入值是人员性别，输入形式为单选下拉框，要求输入的内容必须在集合{男,女}中；<ul>
+<li>有效等价类：性别＝’男’ 或者 ‘女’</li>
+<li>无效等价类1：未选择人员性别</li>
+<li>无效等价类2：在浏览器开发工具中将人员性别的属性值更改为’人妖’</li>
+</ul>
+</li>
+</ul>
+<p>６、在确知已划分的等价类中各元素在程序处理中的方式不同的情况下，则应再将该等价类划分为更小的等价类。</p>
+<ul>
+<li>例6：在例2（输入值是人员性别，输入形式为文本框，要求输入的内容必须在集合{男,女}中）的基础上，不同的性别选择将跳转至不同的处理页面<ul>
+<li>有效等价类：性别＝’男’ 或者 ‘女’<ul>
+<li>有效等价类细分1：性别＝’男’</li>
+<li>有效等价类细分2：性别＝’女’</li>
+</ul>
+</li>
+<li>无效等价类：性别＝’人妖’</li>
+</ul>
+</li>
+</ul>
+<h2 id="列出等价类表"><a href="#列出等价类表" class="headerlink" title="列出等价类表"></a>列出等价类表</h2><table>
+<thead>
+<tr>
+<th align="center">输入条件</th>
+<th align="center">有效等价类</th>
+<th align="center">无效等价类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+</tbody></table>
+<h2 id="确定测试用例"><a href="#确定测试用例" class="headerlink" title="确定测试用例"></a>确定测试用例</h2><p>根据已列出的等价类表，按照如下步骤确定测试用例：<br>1）为每个等价类规定一个唯一的编号<br>2）设计一个新的测试用例，使其尽可能多地覆盖尚未覆盖的有效等价类。重复这一步，最后使得所有有效等价类均被测试用例所覆盖。<br>3）设计一个新的测试用例，使其只覆盖一个无效等价类。重复这一步，使所有无效等价类均被覆盖。</p>
+<h2 id="Example1"><a href="#Example1" class="headerlink" title="Example1"></a>Example1</h2><blockquote>
+<p>某程序具有如下功能：输入3个正数a、b、c，分别作为三边的边长构成三角形，输出这3个数所构成的三角形类型。<br>用等价类划分方法为该程序进行测试用例设计。</p>
+</blockquote>
+<h3 id="划分等价类-1"><a href="#划分等价类-1" class="headerlink" title="划分等价类"></a>划分等价类</h3><p>分析思路：<br>步骤一、要求输入3个数，且3个数都为正数；参照规则5，划分为一个有效等价类和三个无效等价类。</p>
+<ul>
+<li>有效等价类（1）：a&gt;0; b&gt;0; c&gt;0;</li>
+<li>无效等价类（2）：a&lt;=0</li>
+<li>无效等价类（3）：b&lt;=0</li>
+<li>无效等价类（4）：c&lt;=0</li>
+</ul>
+<p>步骤二、在有效等价类（1）的基础上，参照规则6，对该等价类进行细分；考察3个数能否构成三角形，参照规则5，划分为一个有效等价类和三个无效等价类。</p>
+<ul>
+<li>有效等价类（5）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a</li>
+<li>无效等价类（6）：a&gt;0; b&gt;0; c&gt;0; a+b&lt;=c</li>
+<li>无效等价类（7）：a&gt;0; b&gt;0; c&gt;0; b+c&lt;=a</li>
+<li>无效等价类（8）：a&gt;0; b&gt;0; c&gt;0; a+c&lt;=b</li>
+</ul>
+<p>步骤三、在有效等价类（5）的基础上，参照规则6，对该等价类进行细分；考察3个数能否构成等边三角形，参照规则2，划分为一个有效等价类和一个无效等价类。</p>
+<ul>
+<li>有效等价类（9）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; a=b=c</li>
+<li>无效等价类（10）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; a!=b 或 b!=c 或 c!=a</li>
+</ul>
+<p>步骤四、在无效等价类（10）的基础上，参照规则6，对该等价类进行细分；考察3个数能否构成等腰三角形，参照规则4，划分为三个有效等价类和一个无效等价类。</p>
+<ul>
+<li>有效等价类（11）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; a=b!=c</li>
+<li>有效等价类（12）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; b=c!=a</li>
+<li>有效等价类（13）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; c=a!=b</li>
+<li>无效等价类（14）：a&gt;0; b&gt;0; c&gt;0; a+b&gt;c; a+c&gt;b; b+c&gt;a; a!=b; a!=c; b!=c</li>
+</ul>
+<h3 id="设计测试用例"><a href="#设计测试用例" class="headerlink" title="设计测试用例"></a>设计测试用例</h3><table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">[a,b,c]</th>
+<th align="center">覆盖等价类</th>
+<th align="center">预期输出结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">覆盖有效等价类</td>
+<td align="center">–</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">[6,6,6]</td>
+<td align="center">（1）（5）（9）</td>
+<td align="center">等边三角形</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">[3,3,5]</td>
+<td align="center">（1）（5）（10）（11）</td>
+<td align="center">等腰三角形</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">[3,4,4]</td>
+<td align="center">（1）（5）（10）（12）</td>
+<td align="center">等腰三角形</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">[4,5,4]</td>
+<td align="center">（1）（5）（10）（13）</td>
+<td align="center">等腰三角形</td>
+</tr>
+<tr>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">覆盖无效等价类</td>
+<td align="center">–</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">[3,4,5]</td>
+<td align="center">（1）（5）（14）</td>
+<td align="center">一般三角形</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">[-1,3,2]</td>
+<td align="center">（2）</td>
+<td align="center">不能构成三角形</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">[3,-1,2]</td>
+<td align="center">（3）</td>
+<td align="center">不能构成三角形</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">[3,2,-1]</td>
+<td align="center">（4）</td>
+<td align="center">不能构成三角形</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center">[1,2,3]</td>
+<td align="center">（1）（6）</td>
+<td align="center">不能构成三角形</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center">[3,1,2]</td>
+<td align="center">（1）（7）</td>
+<td align="center">不能构成三角形</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center">[1,3,2]</td>
+<td align="center">（1）（8）</td>
+<td align="center">不能构成三角形</td>
+</tr>
+</tbody></table>
+<h2 id="Example2"><a href="#Example2" class="headerlink" title="Example2"></a>Example2</h2><hr>
+<blockquote>
+<p>某程序具有如下功能：文本框要求输入日期信息，日期限定在1990年1月~2049年12月，并规定日期由6位数字字符组成，前4位表示年，后2位表示月；程序需对输入的日期有效性进行校验。<br>用等价类划分方法为该程序的“日期检查功能”设计测试用例。</p>
+</blockquote>
+<h3 id="划分等价类-2"><a href="#划分等价类-2" class="headerlink" title="划分等价类"></a>划分等价类</h3><p>步骤一、要求输入6个数字字符yyyynn；参照规则5，划分为一个有效等价类和三个无效等价类。</p>
+<ul>
+<li>有效等价类（1）：输入6个数字字符</li>
+<li>无效等价类（2）：输入6个字符，存在非数字的情况</li>
+<li>无效等价类（3）：输入少于6个字符</li>
+<li>无效等价类（4）：输入多于6个字符</li>
+</ul>
+<p>步骤二、在有效等价类（1）的基础上，参照规则6，对该等价类进行细分；考察6个数是否满足日期格式要求，1990&lt;=yyyy&lt;=2049，01&lt;=nn&lt;=12，参照规则，划分为一个有效等价类和四个无效等价类。</p>
+<ul>
+<li>有效等价类（5）：日期格式满足要求，1990&lt;=yyyy&lt;=2049，01&lt;=nn&lt;=12</li>
+<li>无效等价类（6）：yyyy不满足要求，yyyy&lt;1990</li>
+<li>无效等价类（7）：yyyy不满足要求，yyyy&gt;2049</li>
+<li>无效等价类（8）：nn不满足要求，nn&lt;01</li>
+<li>无效等价类（9）：nn不满足要求，nn&gt;12</li>
+</ul>
+<h3 id="设计测试用例-1"><a href="#设计测试用例-1" class="headerlink" title="设计测试用例"></a>设计测试用例</h3><table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">yyyynn</th>
+<th align="center">覆盖等价类</th>
+<th align="center">预期输出结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">覆盖有效等价类</td>
+<td align="center">–</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">199307</td>
+<td align="center">（1）（5）</td>
+<td align="center">日期格式有效</td>
+</tr>
+<tr>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center">覆盖无效等价类</td>
+<td align="center">–</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">19June</td>
+<td align="center">（2）</td>
+<td align="center">日期格式无效</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">19Jun</td>
+<td align="center">（3）</td>
+<td align="center">日期格式无效</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">19June2</td>
+<td align="center">（4）</td>
+<td align="center">日期格式无效</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">198805</td>
+<td align="center">（6）</td>
+<td align="center">日期格式无效</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">205005</td>
+<td align="center">（7）</td>
+<td align="center">日期格式无效</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">198800</td>
+<td align="center">（8）</td>
+<td align="center">日期格式无效</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">199513</td>
+<td align="center">（9）</td>
+<td align="center">日期格式无效</td>
+</tr>
+</tbody></table>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/WebService-Test-Based-On-HTTP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2257,206 +2714,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://debugtalk.com/post/LoadRunner-SOAP-WebService/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="debugtalk">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/xiaojianguo.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DebugTalk">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/post/LoadRunner-SOAP-WebService/" class="post-title-link" itemprop="url">LoadRunner 基于 SOAP 的 WebService 测试方法</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2013-08-06 00:00:00" itemprop="dateCreated datePublished" datetime="2013-08-06T00:00:00+08:00">2013-08-06</time>
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/" itemprop="url" rel="index"><span itemprop="name">3. Testing</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/3-Testing/性能测试/" itemprop="url" rel="index"><span itemprop="name">性能测试</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在《LoadRunner基于WSDL的WebService测试方法》一文中，<code>52test.org</code>基于案例<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx" target="_blank" rel="noopener">天气预报WebService服务</a>，详细讲解了在只获悉WSDL的情况下，如何采用LoadRunner对WebService进行测试。</p>
-<p>然而，在实际项目中基于WSDL来测试WebService的情况并不多，WSDL并不是WebService测试的最佳选择。</p>
-<p>最主要的原因还是因为WSDL文档过于复杂。在案例（天气预报WebService服务）中，WeatherWebService虽然只包含5个接口，但是其WSDL对应的XML文档多达近500行；而实际项目中，被测系统往往包含上百个WebService接口，其WSDL文档的规模可想而知。</p>
-<p>而且，WSDL文档包含的信息过于全面，其中大部分信息对于WebService测试是没有必要的。虽然采用LoadRunner导入WSDL后可以清晰地看见所有接口函数，但是每次都要在上百个接口中选择被测接口也是一件很麻烦的事情。特别是对WebService进行性能测试时，往往只需要选择少数典型的接口。</p>
-<p>那么，除了WSDL，还有什么更好的方式呢？</p>
-<p>答案就是SOAP。</p>
-<p>SOAP是Simple Object Access Protocol的缩写，从字面上就可以知道它是一种通信协议。在这里我们不对SOAP进行详细讲解，大家有兴趣的话可以参看之前发布的《测试工程师的自我修养–理解WebService》一文。</p>
-<p>采用SOAP对WebService进行测试时，大家只需要知道它以WSDL定义的形式对WebService的调用方式进行了具体描述，包括调用的具体WebService接口名称、参数名称和参数数值。每一个SOAP报文对应了一个WebService接口的调用方式，在其中包含相应的测试数据后，完全可以把它等同于WebService测试用例。</p>
-<p>这对于测试人员来说真是再适合不过了。特别是对于新接触WebService的测试人员来说，对WebService的调用方式及其合法参数可能不是很清楚，这时如果能获取到被测接口的SOAP报文，那么测试工作将可以大大简化了。正因如此，在实际项目中，基于SOAP对WebService进行测试的方法应用得更为普遍。</p>
-<p>本文将继续在天气预报WebService服务的案例基础上，详细讲解如何采用LoadRunner基于SOAP对WebService进行测试。</p>
-<p>需要说明的是，本文只针对测试脚本的开发展开描述，对测试场景的设计暂不进行讨论。</p>
-<p>本文中采用的LoadRunner版本为V11.0，不同版本可能会存在一定差异。</p>
-<h2 id="获取SOAP报文"><a href="#获取SOAP报文" class="headerlink" title="获取SOAP报文"></a>获取SOAP报文</h2><p>基于SOAP对WebService进行测试，第一步当然是要先获取到被测接口的SOAP报文，通常可在被测系统的接口设计说明文档（如果有的话）中查询得到，也可直接找开发人员获取。</p>
-<p>从测试WebService接口的角度来说，SOAP报文应该至少包含哪些要素呢？</p>
-<p>在本文的演示案例中，以接口getWeatherbyCityName为例，大家在<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx?op=getWeatherbyCityName" target="_blank" rel="noopener">getWeatherbyCityName的介绍页面</a>中可以看到，getWeatherbyCityName支持SOAP 1.1和SOAP 1.2。本文采用SOAP 1.1进行演示。</p>
-<p>采用SOAP 1.1的请求报文如下所示：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST /WebServices/WeatherWebService.asmx HTTP/1.1</span><br><span class="line">Host: webservice.webxml.com.cn</span><br><span class="line">Content-Type: text/xml; charset=utf-8</span><br><span class="line">Content-Length: length</span><br><span class="line">SOAPAction: "http://WebXml.com.cn/getWeatherbyCityName"</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xmlns:xsd</span>=<span class="string">"http://www.w3.org/2001/XMLSchema"</span> <span class="attr">xmlns:soap</span>=<span class="string">"http://schemas.xmlsoap.org/soap/envelope/"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">getWeatherbyCityName</span> <span class="attr">xmlns</span>=<span class="string">"http://WebXml.com.cn/"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">theCityName</span>&gt;</span>string<span class="tag">&lt;/<span class="name">theCityName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">getWeatherbyCityName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>将上面这段xml代码保存至一个xml文件，如getWeatherbyCityName.xml，即得到测试所需的SOAP报文。</p>
-<p>在报文头中，我们还获取到两个重要信息：</p>
-<ul>
-<li>Service的URL为<code>/WebServices/WeatherWebService.asmx</code>，加上被测系统的域名后得到完整的URL为<a href="http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx" target="_blank" rel="noopener">http://webservice.webxml.com.cn/WebServices/WeatherWebService.asmx</a></li>
-<li>SOAPAction: “<a href="http://WebXml.com.cn/getWeatherbyCityName&quot;" target="_blank" rel="noopener">http://WebXml.com.cn/getWeatherbyCityName&quot;</a></li>
-</ul>
-<h2 id="在LoadRunner中导入SOAP报文"><a href="#在LoadRunner中导入SOAP报文" class="headerlink" title="在LoadRunner中导入SOAP报文"></a>在LoadRunner中导入SOAP报文</h2><p>在LoadRunner的Web Services协议中，点击【Import SOAP】，加载之前准备好的SOAP报文，即xml文件；加载完成后，在URL和SOAP Action中分别填入获取得到的地址信息；在Response Parameter中填写存储返回内容的参数名称；如下图所示。</p>
-<p><img src="/images/130806_01.png" alt></p>
-<p>点击【OK】后，便能在脚本界面中生成一个soap_request函数，如下图所示。</p>
-<p><img src="/images/130806_02.png" alt></p>
-<p>通过上图可知，SOAP报文中的全部内容已成功转换为LoadRunner的soap_request函数。</p>
-<h2 id="回放脚本，查看结果"><a href="#回放脚本，查看结果" class="headerlink" title="回放脚本，查看结果"></a>回放脚本，查看结果</h2><p>将脚本中的字段theCityName赋值为“广州”；在“Run-time Settings”中打开日志“Extended log”，勾选“Parameter substitution”和“Data returned by server”。运行脚本后，查看“Replay Log”，如下图所示。</p>
-<p><img src="/images/130806_03.png" alt></p>
-<p>在这里如果将脚本回放得到的结果与在浏览器中调用返回的结果进行对比，会发现内容并不一致。在LoadRunner脚本中将theCityName更改为“深圳”、“上海”等城市后重新回放脚本，会发现内容仍然不一致，且LoadRunner每次回放得到的结果都相同。</p>
-<p>回顾报文中的Content-Type信息可知，请求报文与响应报文的编码均为UTF-8。因此可以猜想该问题是由于LoadRunner脚本中的编码不为UTF-8造成的，从而使得脚本中的设置的汉字theCityName不被服务商所识别。</p>
-<p>对LR脚本中需传送的汉字进行编码转换，即将脚本中的汉字转换为UTF-8，转换方法如下图所示：</p>
-<p><img src="/images/130806_04.png" alt></p>
-<p>重新回放脚本，查看Replay Log。再次对比LoadRunner的Replay Log和浏览器的返回页面可知，LoadRunner对Web Service实现了正确的调用。</p>
-<p>通过该案例可知，调用WebService时需要保证输入参数的编码与WebService服务的编码一致，只有这样才能返回正确的结果，这一点需要在调试脚本时格外注意。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2505,7 +2762,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-count">95</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2807,7 +3064,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
