@@ -4,8 +4,6 @@ title: About
 permalink: about/
 ---
 
-![](myPhoto.jpg)
-
 ## 关于我
 
 中文名 `李隆`，英文名 `Leo Lee`，网络 ID `debugtalk`。
@@ -63,8 +61,9 @@ permalink: about/
 
 ## Contact
 
-- 微信公众号：DebugTalk
-- Email: mail#debugtalk.com
+- 微信公众号: `DebugTalk`
+- Email: `mail#debugtalk.com`
+- 个人微信号: `leolee023`（添加时请注明来意）
 
 
 [1]: /post/SDET-Value-Measurement
